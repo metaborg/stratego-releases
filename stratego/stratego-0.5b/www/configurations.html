@@ -1,0 +1,128 @@
+
+<!--
+
+Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+02111-1307, USA.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+
+   <title>Stratego: Configurations</title>
+
+   <link rel=stylesheet type="text/css" href="style.css" title="style">
+
+</head>
+
+<body>
+
+<hr>
+    <h1>Working Configurations</h1>
+<hr>
+
+    Succesful compilation of the Stratego distribution has been
+    reported on the following configurations:
+
+<dl>
+
+      <dt> x86/Linux
+      <dd>
+	<pre>
+> uname -a
+Linux loempia 2.2.5-15 #1 Mon Apr 19 23:00:46 EDT 1999 i686 unknown
+> gcc -v
+Reading specs from /usr/lib/gcc-lib/i386-redhat-linux/egcs-2.91.66/specs
+gcc version egcs-2.91.66 19990314/Linux (egcs-1.1.2 release)
+> ulimit -s
+8192
+	</pre>
+
+
+      <dt> Sun/Sparc
+      <dd>
+	<pre>
+> gcc -v:
+Reading specs from
+/usr/local/gnu/lib/gcc-lib/sparc-sun-solaris2.6/2.8.1/specs
+gcc version 2.8.1
+
+> ulimit -s unlimited
+	</pre>
+
+      <dt> HP-Unix
+      <dd>
+	<pre>
+> gcc -v  
+Reading specs from /cadappl/gcc/2.95.1/HP-UX_B.11.00/lib/gcc-lib/hppa2.0w-hp-hpux11.00/2.95.1/specs
+gcc version 2.95.1 19990816 (release)
+> uname -a
+HP-UX hpas10 B.11.00 A 9000/820 2008135391 two-user license
+> ulimit
+4194303
+	</pre>
+
+      <dt> NetBSD
+      <dd>
+	<pre>
+  js:p0@dek[562]> which -a gcc
+  /usr/local/bin/gcc
+  /usr/bin/gcc
+  js:p0@dek[563]> /usr/local/bin/gcc -v
+  Reading specs from /usr/local/lib/gcc-lib/i386-unknown-netbsd1.4.1/2.95.2/specs
+  gcc version 2.95.2 19991024 (release)
+  js:p0@dek[564]> /usr/bin/gcc -v
+  Using builtin specs.
+  gcc version egcs-2.91.66 19990314 (egcs-1.1.2 release)
+  js:p0@dek[565]> uname -a
+  NetBSD dek 1.4.1 NetBSD 1.4.1 (GENERIC) #0: Thu Jul 15 18:35:33 MEST 1999     fvdl@struis:/usr/src/sys/arch/i386/compile/GENERIC i386
+  js:p0@dek[567]> ulimit
+  unlimited
+  js:p0@dek[568]> limit
+  cputime         unlimited
+  filesize        unlimited
+  datasize        1024MB
+  stacksize       2MB
+  coredumpsize    1MB
+  memoryuse       114MB
+  memorylocked    38MB
+  maxproc         80
+  descriptors     64
+	</pre>
+
+</dl>
+
+<hr>
+    <h1>Problematic Configurations</h1>
+<hr>
+
+    Installation problems have been reported for the following
+    configurations:
+
+<dl>
+
+</dl>
+
+	If you tried to install Stratego on your machine and succeeded
+	or failed and the configuration is not listed above, please
+	send me (visser@acm.org) information about the configuration and the problems
+	you encountered.
+
+<hr>
+</body>
+</html>
+

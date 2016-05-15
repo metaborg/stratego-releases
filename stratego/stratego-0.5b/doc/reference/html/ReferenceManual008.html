@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Declaring Constructors with Signatures
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual007.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual009.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.3&nbsp;&nbsp; Declaring Constructors with Signatures</H3>	<blockquote><hr>
+	Constructors are declared by means of signatures
+	<hr></blockquote><BR>
+<BR>
+	A signature is of the form
+<PRE>
+  signature
+    sorts Sort ... Sort
+    operations OpDecl ... OpDecl
+</PRE>	
+	A constructor declaration of the form 
+<PRE>
+  C : Sort
+</PRE>	declares a nullary constructor (a constant) <CODE>C</CODE> of type
+	<CODE>Sort</CODE>. A declaration of the form
+<PRE>
+  C : Sort1 * ... * Sortn -&gt; Sort
+</PRE>	declares an <I>n</I>-ary constructor <CODE>C</CODE> that takes a tuple of
+	terms <CODE>(t1,...,tn)</CODE> where <CODE>ti</CODE> is of sort
+	<CODE>Sorti</CODE> into a term <CODE>C(t1,...,tn)</CODE> of sort
+	<CODE>Sort</CODE>.<BR>
+<BR>
+	Predefined sorts are <CODE>String</CODE> denoting strings of
+	characters between double quotes, and <CODE>Int</CODE> denoting
+	natural numbers in decimal notation.<BR>
+<BR>
+	For example, the following signature describes a language
+	of lambda expressions.
+<PRE>
+signature
+  sorts Exp
+  operations
+    Var    : String -&gt; Exp 
+    Apply  : Exp * Exp -&gt; Exp
+    Lambda : String * Exp -&gt; Exp
+</PRE>	Terms with variables are only used in a specification.
+	Transformations apply only to ground terms.<BR>
+<BR>
+	nullary constructors that are not declared are variables<BR>
+<BR>
+	(At this point typechecking is not done by the implementation.
+	It is nonetheless important to write signatures because the
+	definition of the congruence operators is derived from them.)<BR>
+<BR>
+	derivation of congruence operators<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 11: Syntax of Signatures</DIV><BR>
+<A NAME="Fig:Stratego-Signatures.sdf"></A><BR>
+	<PRE>module Stratego-Signatures
+exports
+  %%sorts BSig SortDecl OpDecl Type
+  context-free syntax
+    "signature"  BSig*       -&gt; BSpec    {cons("Signature")}
+    "sorts"      SortDecl*   -&gt; BSig     {cons("Sorts")}
+    "operations" OpDecl*     -&gt; BSig     {cons("Operations")}
+
+    Identifier ("(" {Identifier ","}* ")")? 
+                             -&gt; SortDecl {cons("Sort")}
+
+    Identifier ":" Type      -&gt; OpDecl   {cons("OpDecl")}
+    Term                     -&gt; Type     {cons("ConstType")}
+    {Term "*"}* "-&gt;" Term    -&gt; Type     {cons("FunType")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV>
+
+<HR>
+<A HREF="ReferenceManual007.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual009.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

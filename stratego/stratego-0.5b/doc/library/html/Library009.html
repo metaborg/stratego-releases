@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  INTEGERS
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library008.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library010.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.1.1&nbsp;&nbsp;  INTEGERS</H3><PRE>
+module integers
+strategies
+
+  is-int = prim("_ST_is_int")
+
+  minus = prim("_ST_minus")
+  plus  = prim("_ST_plus")
+
+  add   = prim("_ST_add")
+  subt  = prim("_ST_subt")
+  mul   = prim("_ST_mul")
+  div   = prim("_ST_div")
+  mod   = prim("_ST_mod")
+  
+  geq   = prim("_ST_geq")
+  gt    = prim("_ST_gt")
+  lt    = not(geq)
+  leq   = not(gt)
+
+  max   = prim("_ST_max")
+  min   = prim("_ST_min")
+
+  int   = prim("_ST_int")
+</PRE>
+	<HR>
+<A HREF="Library008.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library010.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,141 @@
+\section{Terms}
+
+\subsection{Representing Programs by means of Terms}
+
+	\begin{abstract}
+
+	Programs are represented by means of first-order terms.
+
+	\end{abstract}
+
+	The abstract syntax of programs to be transformed is represented
+	by means of terms (Figure~\ref{Fig:Stratego-Terms.sdf}).
+
+	a constructor is an identifier
+
+	constructor application \verb|Succ(Zero())|
+
+	constant (parentheses) \verb|Succ(Zero)|
+
+	strings \verb|App(Abs("x", "x"), Var("y"))|
+	
+	natural number \verb|App(Abs(Var(1)), Var(2))|
+
+	\paragraph{Lists}
+
+	lists abbreviations for Cons/Nil lists
+
+	\verb+[a,b,c|[]]+ $\equiv$ \verb|[a,b,c]|
+
+	\paragraph{Tuples}
+
+	tuples are abbreviations for ...
+
+	\paragraph{ATerms}
+
+	Stratego terms are implemented by means of ATerms
+
+	\newpage
+
+	\begin{boxedfigure}{Stratego-Terms.sdf}{Syntax of terms}
+
+	\inputverbatim{\sdfdir/Stratego-Terms.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Representing Constructors and Constants}
+
+	\begin{abstract}
+
+	The symbols are divided into identifiers, natural numbers and
+	strings.
+
+	\end{abstract}
+
+	Figure~\ref{Fig:Stratego-Lexicals.sdf} defines the syntax of
+	the lexical tokens of Stratego.
+
+	Identifiers start with a letter and are followed by zero or
+	more letters, digits, underscores, primes or dashes. An
+	identifier may not be followed by any of these characters.
+
+	A natural number is a string of one or more decimal digits.
+
+	A string is list of characters enclosed by double quotes.
+
+	Figure~\ref{Fig:Stratego-Lexicals.sdf} also defines the
+	keywords of Stratego, i.e., the words that cannot be used as
+	identifiers.
+
+	\newpage
+
+	\begin{boxedfigure}{Stratego-Lexicals.sdf}{The syntax of
+	lexicals}
+
+	\inputverbatim{\sdfdir/Stratego-Lexicals.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Declaring Constructors with Signatures}
+
+	\begin{abstract}
+
+	Constructors are declared by means of signatures
+
+	\end{abstract}
+
+	A signature is of the form
+\begin{verbatim}
+  signature
+    sorts Sort ... Sort
+    operations OpDecl ... OpDecl
+\end{verbatim}
+	
+	A constructor declaration of the form 
+\begin{verbatim}
+  C : Sort
+\end{verbatim}
+	declares a nullary constructor (a constant) \verb|C| of type
+	\verb|Sort|. A declaration of the form
+\begin{verbatim}
+  C : Sort1 * ... * Sortn -> Sort
+\end{verbatim}
+	declares an $n$-ary constructor \verb|C| that takes a tuple of
+	terms \verb|(t1,...,tn)| where \verb|ti| is of sort
+	\verb|Sorti| into a term \verb|C(t1,...,tn)| of sort
+	\verb|Sort|.
+
+	Predefined sorts are \verb|String| denoting strings of
+	characters between double quotes, and \verb|Int| denoting
+	natural numbers in decimal notation.
+
+	For example, the following signature describes a language
+	of lambda expressions.
+\begin{verbatim}
+signature
+  sorts Exp
+  operations
+    Var    : String -> Exp 
+    Apply  : Exp * Exp -> Exp
+    Lambda : String * Exp -> Exp
+\end{verbatim}
+
+	Terms with variables are only used in a specification.
+	Transformations apply only to ground terms.
+
+	nullary constructors that are not declared are variables
+
+	(At this point typechecking is not done by the implementation.
+	It is nonetheless important to write signatures because the
+	definition of the congruence operators is derived from them.)
+
+	derivation of congruence operators
+
+	\newpage
+
+	\begin{boxedfigure}{Stratego-Signatures.sdf}{Syntax of Signatures}
+
+	\inputverbatim{\sdfdir/Stratego-Signatures.sdf}
+
+	\end{boxedfigure}
+

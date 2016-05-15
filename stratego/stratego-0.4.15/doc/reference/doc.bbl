@@ -1,0 +1,83 @@
+\begin{thebibliography}{10}
+
+\bibitem{WWW-XT}
+http://www.cs.uu.nl/$\sim$visser/xt/.
+
+\bibitem{WWW-Stratego}
+www.stratego-language.org.
+
+\bibitem{JV99}
+Patricia Johann and Eelco Visser.
+\newblock Warm fusion in {Stratego}: {A} case study in the generation of
+  program transformation systems.
+\newblock Technical report, Department of Computer Science, Universiteit
+  Utrecht, Utrecht, The Netherlands, 1999.
+
+\bibitem{JV2000}
+Patricia Johann and Eelco Visser.
+\newblock Warm fusion in {Stratego}: {A} case study in the generation of
+  program transformation systems.
+\newblock {\em Annals of Mathematics and Artificial Intelligence}, 2000.
+\newblock (Accepted for publication).
+
+\bibitem{LV97}
+Bas Luttik and Eelco Visser.
+\newblock Specification of rewriting strategies.
+\newblock In M.~P.~A. Sellink, editor, {\em 2nd International Workshop on the
+  Theory and Practice of Algebraic Specifications (ASF+SDF'97)}, Electronic
+  Workshops in Computing, Berlin, November 1997. Springer-Verlag.
+
+\bibitem{Vis99}
+Eelco Visser.
+\newblock Strategic pattern matching.
+\newblock In P.~Narendran and M.~Rusinowitch, editors, {\em Rewriting
+  Techniques and Applications (RTA'99)}, volume 1631 of {\em Lecture Notes in
+  Computer Science}, pages 30--44, Trento, Italy, July 1999. Springer-Verlag.
+
+\bibitem{Vis99.compiler}
+Eelco Visser.
+\newblock {\em The {Stratego} Compiler}.
+\newblock Department of Computer Science, Universiteit Utrecht, Utrecht, The
+  Netherlands, 1999.
+
+\bibitem{Vis99.lib}
+Eelco Visser.
+\newblock {\em The {Stratego} Library}.
+\newblock Department of Computer Science, Universiteit Utrecht, Utrecht, The
+  Netherlands, 1999.
+
+\bibitem{Vis99.refman}
+Eelco Visser.
+\newblock {\em The {Stratego} Reference Manual}.
+\newblock Department of Computer Science, Universiteit Utrecht, Utrecht, The
+  Netherlands, 1999.
+
+\bibitem{Vis99.Tutorial}
+Eelco Visser.
+\newblock {\em The {Stratego} Tutorial}.
+\newblock Department of Computer Science, Universiteit Utrecht, Utrecht, The
+  Netherlands, 1999.
+
+\bibitem{Vis2000}
+Eelco Visser.
+\newblock Language independent traversals for program transformation.
+\newblock In {\em Workshop on Generic Programming}, 2000.
+\newblock (Accepted for publication).
+
+\bibitem{VB98}
+Eelco Visser and Zine-el-Abidine Benaissa.
+\newblock A core language for rewriting.
+\newblock {\em Electronic Notes in Theoretical Computer Science}, 15, September
+  1998.
+\newblock In C.~Kirchner and H.~Kirchner, editors, Proceedings of the Second
+  International Workshop on Rewriting Logic and its Applications (WRLA'98),
+  Pont-{\`a}-Mousson, France.
+
+\bibitem{VBT98}
+Eelco Visser, Zine-el-Abidine Benaissa, and Andrew Tolmach.
+\newblock Building program optimizers with rewriting strategies.
+\newblock {\em ACM SIGPLAN Notices}, 34(1):13--26, January 1999.
+\newblock Proceedings of the International Conference on Functional Programming
+  (ICFP'98).
+
+\end{thebibliography}

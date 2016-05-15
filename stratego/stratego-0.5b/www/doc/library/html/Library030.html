@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  RENAME: Renaming Bound Variables
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library029.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library031.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>6.1.2&nbsp;&nbsp;  RENAME: Renaming Bound Variables</H3>	<blockquote><hr><BR>
+<BR>
+	Renaming of bound variables is determined by the shape of
+	variables and binding constructs. Three generic strategies
+	are defined that cater for different complexities of binding
+	constructs.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	Variable binding constructs protect variables from clashing
+	with variables in other parts of a program when their names
+	are the same. To prevent the introduction of name clashes
+	during program transformation it can be useful to give 
+	all variable bindings a unique name. This module defines three
+	generic strategies for bound variable renaming all based on
+	the same idea, but dealing with increasingly complex variable
+	binding models.<BR>
+<BR>
+	Renaming depends <EM>only</EM> on the shape of variable bindings
+	and variable occurences. Other language constructs are irrelevant.<BR>
+<BR>
+	In the generic strategies the following assumptions about
+	binding constructs are made: (1)
+	There is a subtree that covers the scope in which the
+	variables are bound. (2) variables are atomic, i.e., do not
+	contain subterms that are
+	variables or binding constructs.<BR>
+<BR>
+	Approach: indicate shape of variable occurences and variable
+	binders<BR>
+<BR>
+	The strategy <CODE>rename(isvar, mkvar, bnd)</CODE> renames all
+	bound variables in a term to fresh variables;<BR>
+<BR>
+	Parameters:<BR>
+<BR>
+ 	isvar: Succeeds if applied to a variable<BR>
+<BR>
+ 	newvar: Takes a string and builds a variable<BR>
+<BR>
+ 	bnd: Maps a binding construct to the list of bound variables<BR>
+<BR>
+ 	apply(a, b, c): reconstruct the binding construct with fresh
+ 	variables;<BR>
+<BR>
+	- a should be applied to the subterm containing the
+	variable(s)<BR>
+<BR>
+	- b should be applied to the subterms in which the variables
+	are bound<BR>
+<BR>
+	- c should be applied to the subterms in which the variables
+	are not bound;<BR>
+<BR>
+<PRE>
+module rename
+imports simple-traversal tuple list env-traversal
+rules
+
+  RnVar(isvar) :
+    (t, env) -&gt; &lt;isvar(split(id, !env); lookup)&gt; t
+
+  RnBinding(bndvrs) :
+    (t, env1) -&gt; (t, env1, env2)
+    where &lt;bndvrs&gt; t =&gt; xs; map(new) =&gt; ys; 
+          &lt;conc&gt;(&lt;zip(id)&gt;(xs,ys), env1) =&gt; env2
+
+  DistBinding(s) :
+    (t, env1, env2) -&gt; &lt;all( \x -&gt; &lt;s&gt;(x, env2)\ )&gt; t
+
+strategies
+
+  // renaming bound variables assuming that variables are bound
+  // in all subterms of a binding construct
+  // variable declarations in binding constructs are assumed to
+  // have the same shape as variable uses 
+
+  rename(isvar, bndvars) = 
+    \ t -&gt; (t, []) \ ;
+    rec x(env-alltd(RnVar(isvar)
+                    &lt;+ RnBinding(bndvars);
+                       DistBinding(x)))
+
+rules
+
+  DistBinding(s, boundin) :
+    (t, env1, env2) -&gt; &lt;boundin(\x -&gt; &lt;s&gt;(x, env2)\
+                               ,\x -&gt; &lt;s&gt;(x, env1)\
+                               ,id)&gt; t
+
+strategies
+
+  // renaming while making a distinction between subterms
+  // in which the variables are bound or not
+  // variables at binding sites are assumed to have
+  // the same shape as other variable occurences
+
+  rename(isvar, bndvars, boundin) = 
+    \ t -&gt; (t, []) \ ;
+    rec x(env-alltd(RnVar(isvar)
+                    &lt;+ RnBinding(bndvars);
+                       DistBinding(x, boundin)))
+
+rules
+
+  RnBinding(bndvrs, paste) :
+    (t, env1) -&gt; (&lt;paste(!ys)&gt; t, env1, env2)
+    where &lt;bndvrs&gt; t =&gt; xs; map(new) =&gt; ys; 
+          &lt;conc&gt;(&lt;zip(id)&gt;(xs,ys), env1) =&gt; env2
+
+
+strategies
+
+  rename(isvar, bndvars, boundin, paste) = 
+    \ t -&gt; (t, []) \ ;
+    rec x(env-alltd(RnVar(isvar)
+                    &lt;+ RnBinding(bndvars, paste);
+                       DistBinding(x, boundin)))
+</PRE><DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 6.1: Example: Untyped lambda calculus</DIV><BR>
+<A NAME="Fig:"></A>
+<PRE>
+signature
+  sorts Exp
+  constructors
+    Abs : String * Exp -&gt; Exp
+    Var : String -&gt; Exp
+rules
+
+  Bnd : Abs(x, e) -&gt; [x]
+
+strategies
+
+  ern_apply(nwvars, bndvars, ubndvars) =
+ Abs(nwvars; Hd, bndvars)
+
+  erename = rename''(Var, Bnd, ern_apply)
+</PRE><DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 6.2: Example: Typed lambda calculus</DIV><BR>
+<A NAME="Fig:"></A>
+<PRE>
+signature
+  sorts Exp
+  constructors
+    Abs    : String * Type * Exp -&gt; Exp
+    Var    : String * Type -&gt; Exp
+    Letrec : List(Fdec) * Exp -&gt; Exp
+    Fdec   : String * Type * Exp -&gt; Fdec
+rules
+
+  Bnd : Abs(x, t, e) -&gt; [x]
+  Bnd : Letrec(fdecs, e) -&gt; &lt;map(Name)&gt; fdecs
+
+  Name : Fdec(f, t, e) -&gt; f
+
+strategies
+
+  is-var(s) = Var(s, id)
+
+  ern_apply(nwvars, bndvars, ubndvars) =
+ Abs(nwvars; Hd, bndvars) +
+ Letrec(split(id,nwvars); zip(f(bndvars)), bndvars)
+
+  f(bndvars) : (Fdec(f, t, e), g) -&gt; Fdec(g, t, &lt;bndvars&gt; e)
+
+  erename = rename''(is-var, Bnd, ern_apply)
+</PRE><DIV ALIGN=center><HR SIZE=2></DIV><BR>
+
+	<HR>
+<A HREF="Library029.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library031.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

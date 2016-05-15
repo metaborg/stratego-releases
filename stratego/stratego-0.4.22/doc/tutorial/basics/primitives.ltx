@@ -1,0 +1,87 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\chapter{Primitives}
+
+\subsection{Adding Basic Transformations with Primitives}
+
+	not all transformations can be expressed by means of rules
+
+	- arithmetic
+
+	- file I/O
+
+	- external processes
+
+	to accomodate such non-standard transformations, Stratego
+	provides the possibility to define \emph{primitives}, i.e.,
+	strategies that are implemented in a foreign language.
+
+	the Stratego Library defines a wide range of primitives.
+
+	See \emph{The Stratego Library} \cite{Vis99.lib} for the
+	declaration of the primitives.
+
+	Here we will discuss the usage of the most frequently used
+	ones.
+
+\subsection{Calculating with Arithmetic Primitives}
+
+\subsection{File Input and Output with IO Primitives}
+
+\subsection{Using IOWRAP}
+
+	\paragraph{Commandline Options}
+	
+	The generated transformer supports the following command line options:
+\begin{description}
+
+	\item[-silent] Prevents the output of the ATerm version message.
+
+	\item[-i file] Read the term from \verb|file|. In absence of
+	this option input is read from \verb|stdin|.
+
+	\item[-o file] Write the transformed term to \verb|file|. In
+	absence of this option output is written to \verb|stdout|.
+
+	\item[-help $|$ -h] Show a usage message.
+
+	\item[-stats] Shows the use-count of the rules in the specification.
+\end{description}
+
+	\paragraph{Output of Programs using IOWRAP}
+
+\begin{verbatim}
+> prop-main -i prop.trm
+
+Or(Or(Atom("A"),Or(Not(Atom("B")),Not(Atom("C")))),Not(Atom("D")))
+
+  statistics      : 0.00 seconds, 19 steps
+  rewriting succeeded
+\end{verbatim}
+
+	The output tells us (1) some information about the version of
+	the ATerm library, (2) the transformed term, (3) some
+	statistics about duration of the transformation (don't put too
+	much significance to the number of steps), and (4) that
+	rewriting succeeded. If rewriting fails the output would read
+\begin{verbatim}
+  rewriting failed
+\end{verbatim}
+
+\clearpage

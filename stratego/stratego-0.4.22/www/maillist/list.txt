@@ -1,0 +1,54 @@
+Ade Azurat <ade@cs.uu.nl>
+Andrew Tolmach <apt@cs.pdx.edu>
+Arthur Baars <aibaars@cs.uu.nl>
+Atze Dijkstra <atze@cs.uu.nl>
+Bas Luttik <luttik@wins.uva.nl>
+Bernhard Gramlich <gramlich@logic.at>
+Conal Elliott <conal@microsoft.com>
+Eelco Visser <visser@cs.uu.nl>
+Emir Pasalic <pasalic@cse.ogi.edu>
+Erik Meijer <erik@cs.uu.nl>
+Gopalan Nadathur <gopalan@cs.uchicago.edu>
+Helene Kirchner <Helene.Kirchner@loria.fr>
+Claude Kirchner <Claude.Kirchner@loria.fr>
+Ivan Sanabria-Piretti <Ivan.Sanabria@comlab.ox.ac.uk>
+Jan Heering <jan@cwi.nl>
+Jan Kort <kort@wins.uva.nl>
+Jeroen Scheerder <js@cwi.nl>
+John Reppy <jhr@research.bell-labs.com>
+Joost Visser <Joost.Visser@cwi.nl>
+Jurriaan Hage <jur@cs.uu.nl>
+Karina Olmos <olmos@natlab.research.philips.com>
+Lambert Meertens <lambert@kestrel.edu>
+Magne Haveraaen <Magne.Haveraaen@ii.uib.no>
+Mathijs Kuiper <MKuiper@factory.ordina.nl>
+Mark van den Brand <Mark.van.den.Brand@cwi.nl>
+Merijn de Jonge <M.de.Jonge@cwi.nl>
+Oege de Moor <oege@comlab.ox.ac.uk>
+Otto Bagge <otto@ii.uib.no>
+Patricia Johann <pjohann@abacus.bates.edu>
+Patrik Jansson <patrikj@cs.chalmers.se>
+Paul Klint <paulk@cwi.nl>
+Pieter Olivier <olivierp@wins.uva.nl>
+Pierre Weiss <Pierre.Weis@inria.fr>
+Pierre-Etienne Moreau <Pierre-Etienne.Moreau@loria.fr>
+Pim Kars <pim@cs.uu.nl>
+Ralf Laemmel <Ralf.Laemmel@cwi.nl>
+#Ramin Monajemi <rmo@lucent.com>
+Richard Kieburtz <dick@cse.ogi.edu>
+Robin Peterson <peterson@europa.com>
+Ronald van Haalen <haalen@lucent.com>
+Tobias Kuipers <Tobias.Kuipers@cwi.nl>
+Zine-El-abidine Benaissa <benaissa@cse.ogi.edu>
+
+Armijn Hemel <aehemel@cs.uu.nl>
+Arne de Bruijn <arbruijn@cs.uu.nl>
+Cees Pierik <cpierik@cs.uu.nl>
+Danny van Velzen <dvelzen@students.cs.uu.nl>
+Eelco Dolstra <edolstra@students.cs.uu.nl> 
+Erwan Le Thenaff <erwan.le.thenaff@philips.com>
+Erwin Jansen <ehmjanse@cs.uu.nl>
+Hedzer Westra <hhwestra@cs.uu.nl>
+Orlando Moreira <moreira@natlab.research.philips.com>
+Stefan Hartsuiker <sahartsu@cs.uu.nl>
+Steven Anker <sanker@cs.uu.nl>

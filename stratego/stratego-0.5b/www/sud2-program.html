@@ -1,0 +1,234 @@
+
+<!--
+
+Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+02111-1307, USA.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+
+   <title>Stratego: </title>
+
+   <link rel=stylesheet type="text/css" href="style.css" title="style">
+
+</head>
+
+<body>
+
+<hr>
+<center>
+    <h1><a href="sud2.html">Second Stratego Users Day</a></h1>
+    <h3>February 8, 2001, Universiteit Utrecht</h3>
+    <h3><a href="http://www.stratego-language.org/">www.stratego-language.org</a></h3>
+    <h3>Program</h3>
+</center>
+<hr>
+
+
+10:00 <em>coffee</em><p>
+
+10:15 <em>opening</em><p>
+
+<b>Session 1: Language Design</b> (chair Eelco Visser)<p>
+
+10:30 <em>Towards Typeful Stratego</em>
+by Ralf Laemmel (CWI, VU)
+<p>
+
+11:30 <em>Functional Stratego</em>
+by Eelco Dolstra (Universiteit Utrecht)
+<p>
+
+12:15 <em>lunch</em><p>
+
+<b>Session 2: Programming Techniques</b> (chair Joost Visser)<p>
+
+13:45 <em>Ready, Steady, Stratego. Running Stratego Specifications 
+      with StrategoScript </em> by Eelco Visser (Universiteit
+Utrecht)<p>
+
+14:30 <em>break</em><p>
+
+<b>Session 3: Tools</b> (chair Ralf Laemmel)<p>
+
+14:45 <em>XT Capita Selecta</em>
+by Merijn de Jonge and Joost Visser (CWI)
+<p>
+
+15:45 <em>break</em><p>
+
+<b>Session 4: Applications</b> (chair Merijn de Jonge)<p>
+
+16:00 <em>SDL Documentation Generation</em>
+by Ronald van Halen (Lucent Technologies)
+
+<p>
+16:30 <em>CobolX: Transformations for Improving COBOL Programs</em>
+by Hedzer Westra (Universiteit Utrecht)
+
+<p>
+17:00 <em>CodeBoost: A Framework for Transforming C++ Programs</em>
+by Otto Skrove Bagge (University of Bergen, Norway)
+
+<p>
+17:30 <em>Optimizing Pan Programs</em>
+by Arne de Bruijn (Universiteit Utrecht)
+
+<p>
+18:00 <em>closing</em>
+
+<p>
+19:00 <em>dinner</em>
+<hr>
+<h2>Abstracts</h2>
+<hr>
+
+<b>Towards Typeful Stratego</b><p>
+
+by Ralf Laemmel (CWI, VU)
+<p>
+
+Stratego and the underlying system S are as yet untyped. We propose a
+type system which covers the essence of system S. In addition to
+system S, a generic traversal primitive for folding the children of a
+term is considered. This primitive is essential for type-changing
+traversal strategies. The type system w hich we propose is based on
+certain signature-independent generic types. We also have to introduce
+a few constructs which enable us to rephrase untyped Stratego programs
+in a typeful manner. The type system we propose is based on certain
+signature-independent generic types.
+
+
+<hr>
+<b>Functional Stratego</b><p>
+
+by Eelco Dolstra (Universiteit Utrecht)
+<p>
+
+Stratego is a domain-specific language intended for the construction
+of program transformation systems.  To that end, the language has a
+number of interesting features; notably, first class pattern matching
+and generic traversal mechanisms.  The question arises whether and how
+such features can be implemented in functional programming languages
+and Haskell in particular.  In a rewrite system it is essential that
+one can easily recover from pattern match failure, so that alternative
+rewrite rules can be tried.  Typical functional languages do not
+support this very well since local pattern match failure leads to
+global divergence.  This article shows how to solve this problem by
+adding a choice operator to a simple functional language.  It seems
+that this approach is not only useful to strategic programming, but is
+also more powerful than previous proposals to extend Haskell's pattern
+matching, such as views, patterns guards, and transformational
+patterns.  Furthermore, we discuss how the generic programming
+techniques can be employed to implement generic traversals.
+
+<hr>
+<b>Ready, Steady, Stratego. Running Stratego Specifications with
+StrategoScript</b><p>
+
+by Eelco Visser (Universiteit Utrecht)
+
+<p>
+
+A key problem in the development of Stratego specifications has been
+the slow turn around time of the Stratego compiler. To alleviate this
+problem StrategoScript provides instanteneous execution of
+specification through an interpreter. In this talk I present
+StrategoScript by means of a couple of examples and discusses its
+implementation in Stratego.
+
+
+<hr>
+<b>XT capita selecta</b><p>
+
+by Merijn de Jonge and Joost Visser (CWI)
+<p>
+
+XT is a bundle of program-transformation tools. Stratego is part of
+this bundle, and is used as implementation language for many tools
+throughout its packages.<p>  Giving special attention to the role of
+Stratego, we discuss a selection of our XT experiences. These range
+from the construction of meta-tools to support Stratego programming,
+through Stratego techniques applied in constructing some of XT's
+constituents, to projects where XT (including Stratego and tools
+programmed in Stratego) has been applied to program-transformation
+problems.
+
+<hr>
+<b>SDL Documentation Generation</b><p>
+
+by Ronald van Halen (Lucent Technologies)
+
+<p>
+
+Part of the operation of Lucent Technologies 5ESS telephone exchange
+is described using an SDL dialect (Specification and Description
+Language).  SDL describes the behaviour using statemachines. This
+description can be a textual or a graphical one, but Lucent only uses
+the textual description.  Commercial tools are not available to
+interpret these SDL models, because a proprietary dialect (AT&T SDL)
+is used.  By using Stratego and the XT toolset, a tool has been
+created that transforms the textual SDL code into a graphical
+representation of a statemachine.  Stratego was used to collect the
+statenames and transitions from the textual description.  The XT tool
+set and a graph drawing program were used to visualize the
+statemachine. The resulting graph shows the transitions between the
+states.  This makes it easier to understand the behaviour of the code,
+because a graphical representation of the code is given, which
+abstracts from the details contained in the textual format.
+
+
+<p>
+
+<hr>
+<b>CobolX: Transformations for Improving COBOL Programs</b><p>
+
+by Hedzer Westra (Universiteit Utrecht)
+
+<p>
+
+There is a huge amount of legacy COBOL-code still being used today,
+e.g. at bank computer systems.  Manual maintenance of this code is too
+expensive. Therefore, it is desirable to automate all kinds of routine
+modifications.  An important requirement in such modifications is the
+preservation of comments and the original layout of the program.
+CobolX is an environment for implementing transformations on COBOL
+programs.  The environment is built using the Transformation Tools
+(XT) package, which provides tools for parsing (SDF/SGLR),
+transformation (Stratego) and pretty printing (GPP).  Since COBOL is a
+complex language, it is necessary to generate all kinds of tools from
+the syntax definition, since hand coding would not be feasible. The XT
+package provides grammar tools for generating signatures and
+pretty-print tables from syntax definitions. These tools were adapted
+to support layout preservation.  As a first case study, the picture
+scaling transformation has been implemented. Picture scaling involves
+propagating information about the affected variables and then scaling
+picture declarations and constants.
+
+<p>
+
+<hr>
+<b>CodeBoost: A Framework for Transforming C++ Programs</b><p>
+
+by Otto Skrove Baggen (University of Bergen, Norway)
+
+
+<hr>
+</body>
+</html>

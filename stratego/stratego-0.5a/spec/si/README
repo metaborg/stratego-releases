@@ -1,0 +1,44 @@
+--------------------------------------------------------------------------
+
+StrategoScript
+
+SI: The Stratego Interpreter
+
+--------------------------------------------------------------------------
+Applications
+
+- learning about strategies
+
+- writing top-level scripts to combine components
+
+- provide access to a library of transformations
+  user can define transformation by using definitions from 
+  a pre-processed library; fast load time
+
+--------------------------------------------------------------------------
+Example
+
+#!/bin/sh stratego
+
+stratego script
+imports script6
+> !Plus(Succ(Zero()), Succ(Zero()))
+> B
+> A
+--------------------------------------------------------------------------
+Syntax
+
+module StrategoScript
+imports Stratego
+exports
+  sorts Script
+  context-free syntax
+    "stratego" "script" Command* -> Script
+    Decl                         -> Command
+    ">" Strategy                 -> Command
+    ":dump"   String             -> Command
+    ":load"   String             -> Command
+
+A Decl is one of the sections that can occur in a normal Stratego module,
+i.e., strategies, rules, overlays, or imports.
+--------------------------------------------------------------------------

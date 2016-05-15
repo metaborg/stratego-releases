@@ -1,0 +1,63 @@
+ Release 0.4.11 of the Stratego compiler is now available from 
+
+	http://www.cs.uu.nl/~visser/stratego/
+
+ SUMMARY of CHANGES
+
+ - new syntax for term construction/deconstruction
+ - commandline options: -o and --ast
+
+ LANGUAGE
+
+ * Generic term construction and deconstruction is now captured in syntax
+   in the form f#(xs). This denotes a constructor application of f to
+   the list of arguments xs. This can be used for example in the decomposition
+   rule of a generic syntacticy unification algorithm (see module unification.r
+   in the library):
+   
+     UfDecompose : 
+        ([(f#(xs), f#(ys)) | ps], sbs) -> 
+        (<conc>(<zip(id)>(xs, ys), ps), sbs)
+
+   The syntax is currently implemented as follows:
+
+	?f#(xs)  ==  ?(f, xs) <= explode-term
+	!f#(xs)  ==  <mkterm> (f, xs)
+	s1#(s2)  ==  explode-term; (s1, s2); mkterm
+
+ LIBRARY
+
+ * Declared constructors in the library. There should be
+   no more warnings.
+
+ * Module env-traversal/r defines several traversals that propagate
+   environments through a traversal.
+
+ * Module basic.r defines many new loop constructs (while-do, for, 
+   repeat-until, etc.)
+
+ * Module substitution: strategy subs' has been renamed to subs.
+
+ DOCUMENTATION
+
+ * The slides from the users day tutorial are available from the
+   documentation page.
+
+ COMPILER
+
+ * Use the -o option to name the target to compile to.
+
+     sc -i spec -o target
+
+   This is especially useful in case the -m option is used as well to
+   name the executable after the strategy:
+
+     sc -i spec -m strat -o strat
+
+ * Use the --ast option to let the compiler produce the abstract syntax
+   tree of the specification. This could be useful for other tools.
+
+ RUN-TIME SYSTEM
+
+ * For some obscure reason the run-time system allocated a lot of static
+   memory for stacks. This has been greatly reduced.

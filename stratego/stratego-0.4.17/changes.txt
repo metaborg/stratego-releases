@@ -1,0 +1,36 @@
+	* spec/slib/spec/substitution.r: Refactored the definition of
+	substitution and marked all old definitions (subs etc.) as
+	obsolete. Wrote an explanation of the different versions of
+	the strategy. There are now two parameters for indicating
+	variable shape; one for that maps a variable to whatever	
+	the domain of the substitution is and another that indicates
+	the shape of a variable and the actual name of the variable
+	(for the purpose of renaming).
+
+	* spec/opt/optimization.r: Repaired rule to correctly use
+	|tsubs|.
+
+	* spec/slib/spec/rename.r: Removed |boxedfigure| environment
+	from documentation. (Should add more documentation.)
+
+	* spec/front/spec-to-sdefs.r: Adapted |ExpOverlay| to new
+	definition substitution.
+
+	* spec/front/normalize-spec.r: Refactored definition of
+	|vars-to-consts| and removed obsolete code.
+
+	* spec/front/inlining.r: Changed Cons syntax to [|]. Changed
+	explicit use of library strategy subs to use of ssubs.
+
+	* spec/front/Makefile.am: Added extract and inline to CLEANFILES.
+
+	* spec/lib/stratlib.r: Removed obsolete code for renaming and
+	refactored definitions of |tsubs| and |ssubs| to use the
+	|substitute| strategy.
+
+	* spec/slib/spec/unification.r: Moved definition of |in|
+	(occurrence testing) to this module from substitution.r
+
+	* reconf: Now creates the dependency files that are included in
+	Makefile.am's, but that shouldn't be included in the CVS
+	repository because that would memoize wrong dependencies.

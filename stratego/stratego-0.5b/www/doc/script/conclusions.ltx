@@ -1,0 +1,29 @@
+%\section{Concluding Remarks}
+
+  \paragraph{Known Limitations}
+
+	\begin{itemize}
+
+	\item Overlays and signatures in scripts not supported
+
+	\item Nullary constructors in scripts should be explicitly
+	made into constructors using parentheses, e.g. use Zero(), not
+	Zero
+
+	\item Only one module at a time can be imported
+
+	\item Imports are not cached; if you import a module that was
+	already imported before it will be completely imported again
+
+	\item There may be constructs that are not supported yet
+
+	\end{itemize}
+
+	Immediate future work will consist in overcoming the
+	limitations above. An additional possibilities is to compile
+	scripts. 
+
+  \paragraph{Acknowledgements}
+
+	Thanks to Christophe Ringeissen for inspiring me to write
+	the interpreter by showing his Elan interpreter.

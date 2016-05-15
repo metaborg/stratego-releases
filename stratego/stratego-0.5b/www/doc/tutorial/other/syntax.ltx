@@ -1,0 +1,67 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\chapter{Connecting to the Real World}
+	
+\subsection{Connecting Stratego to Outside Components}
+
+	Interfacing with the real world
+
+	building parsers
+
+	constructing abstract syntax
+
+	from abstract syntax to text
+
+	building pretty-printers
+
+\subsection{Exchanging Terms between Components}
+
+	more on ATerms
+
+	binary format for terms (BAF)
+
+\subsection{Connecting Parsers to Stratego Programs}
+
+	\paragraph{LEX/YACC}
+
+	Parsers based on LEX/YACC can be used by instructing the
+	parser to build ATerms. This can be done via the ATerm build
+	operations in the ATerm library.
+
+	\paragraph{SDF2}
+
+	Parser generated from SDF2 definitions create parse trees
+	represented in the AsFix2 format (a subtype of the ATerm
+	format).
+
+	\paragraph{Imploding Syntax Trees}
+	
+	The utility \verb|implode-asfix| can be used to translate
+	concrete parse trees in AsFix2 to abstract syntax trees.
+	
+\subsection{Connecting Pretty-printers to Stratego Programs}
+
+	\paragraph{Generic Pretty-Printing Framework}
+
+	Merijn de Jonge developed a framework for pretty-printing
+	based on the box language. The Stratego library defines a
+	signature for the box language that can be used to generated
+	input for box formatters.
+
+

@@ -1,0 +1,5 @@
+[SDef("main",[],Scope(["a_0","b_0","c_0"],Choice(
+
+Scope(["d_0"],Seq(MatchFunA(Fun("F",2),[],[],Down(0,MatchVars(["a_0"],[0],Up(Down(1,MatchVars(["d_0"],[1],Up(Accept(Id)))))))),Build(Var("a_0")))),
+
+Scope(["e_0"],Seq(MatchFunA(Fun("F",2),[],[],Down(0,MatchVars(["e_0"],[0],Up(Down(1,MatchFunA(Fun("G",2),[],[1],Down(0,MatchVars(["c_0"],[0,1],Up(Down(1,MatchVars(["b_0"],[1,1],Up(Up(Accept(Id)))))))))))))),Build(Var("c_0")))))))]

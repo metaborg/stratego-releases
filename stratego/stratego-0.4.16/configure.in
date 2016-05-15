@@ -1,0 +1,127 @@
+# $Id: configure.in,v 1.35 2000/06/25 08:35:39 visser Exp $
+
+# Copyright (C) 1998, 1999, 2000 Eelco Visser <visser@acm.org>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+AC_INIT(src/rts/stratego.c)
+AM_INIT_AUTOMAKE(stratego,0.4.16)
+
+AC_ARG_WITH(aterm, [  --with-aterm            Specify location of aterm library, default: \$prefix], ATERM=$withval, ATERM="$prefix")
+
+AC_REVISION($Id: configure.in,v 1.35 2000/06/25 08:35:39 visser Exp $)
+
+AC_PROG_CC
+AC_PROG_RANLIB
+AC_PROG_YACC
+AM_PROG_LEX
+AC_PROG_INSTALL
+
+changequote(,)dnl
+case $VERSION in
+ [0-9]*.[0-9]*[a-z])  DIST_ALPHA="README-alpha";;
+ [0-9]*.[0-9]*.[0-9]*) DIST_ALPHA="README-alpha";;
+ *) DIST_ALPHA=;;
+esac
+changequote([, ])dnl
+AC_SUBST(DIST_ALPHA)
+
+AC_SUBST(ATERM)
+
+AC_OUTPUT( \
+	Makefile \
+	README \
+	check-dist \
+	\
+	src/Makefile
+	src/back/Makefile \
+	src/opt/Makefile \
+	src/sc/Makefile \
+	src/sc/sc \
+	src/front/Makefile \
+	src/pp/Makefile \
+	src/post/Makefile \
+	src/syn/Makefile \
+	src/match/Makefile \
+	src/rts/Makefile \
+	src/slib/Makefile \
+	src/slib/src/Makefile \
+	src/slib/spec/Makefile \
+	\
+	spec/Makefile \
+	spec/rts/Makefile \
+	spec/slib/Makefile \
+	spec/slib/src/Makefile \
+	spec/slib/spec/Makefile \
+	spec/back/Makefile \
+	spec/front/Makefile \
+	spec/match/Makefile \
+	spec/opt/Makefile \
+	spec/post/Makefile \
+	spec/sc/Makefile \
+	spec/sc/sc \
+	spec/sig/Makefile \
+	spec/form/Makefile \
+	spec/lib/Makefile \
+	spec/pp/Makefile \
+	spec/syn/Makefile \
+	spec/test/Makefile \
+	\
+	www/Makefile \
+	\
+	doc/Makefile \
+	doc/library/Makefile \
+	doc/compiler/Makefile \
+	doc/compiler/intro/Makefile \
+	doc/compiler/intro/xmpl/Makefile \
+	doc/reference/Makefile \
+	doc/tutorial/Makefile \
+	doc/tutorial/basics/Makefile \
+	doc/tutorial/main/Makefile \
+	doc/tutorial/install/Makefile \
+	doc/tutorial/xmpl/Makefile \
+	doc/tutorial/intro/Makefile \
+	doc/tutorial/slides/Makefile \
+	\
+	share/Makefile \
+	share/bib/Makefile \
+	share/tex/Makefile \
+	share/tex/logo/Makefile \
+	share/tex/version.ltx \
+	share/emacs/Makefile \
+	\
+	test/Makefile \
+	test/parser/Makefile \
+	test/memo/Makefile \
+	test/overloading/Makefile \
+	test/sieve/Makefile \
+	test/options/Makefile \
+	test/lists/Makefile \
+	test/syntax/Makefile \
+	test/pack/Makefile \
+	test/static/Makefile \
+	test/unify/Makefile \
+	test/control/Makefile \
+	test/numbers/Makefile \
+	\
+	bench/Makefile \
+	bench/prop/Makefile \
+	\
+	xmpl/Makefile \
+	xmpl/prop/Makefile \
+	\
+	rpm/Makefile \
+)

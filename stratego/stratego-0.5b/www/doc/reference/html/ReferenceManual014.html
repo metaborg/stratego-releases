@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Carrying Information along a Traversal
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual013.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual015.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.6&nbsp;&nbsp; Carrying Information along a Traversal</H3>	<blockquote><hr>
+	Environment distribution and threading congruences
+	<hr></blockquote><BR>
+<BR>
+	Distributing congruences: for each constructor c there is a
+	corresponding distributing congruence operator <CODE>c^D</CODE>
+	defined according to the following scheme:<BR>
+<BR>
+<PRE>
+  Pair(t1,e) -- s1 --&gt; t1'    ...    Pair(tn,e) -- sn --&gt; tn'
+  -----------------------------------------------------------
+  Pair(F(t1,....,tn),e) -- F^D(s1,...,sn) --&gt; F(t1',...,tn')
+</PRE>	Threading congruences: for each constructor c there is a
+	corresponding threading congruence operator <CODE>c^T</CODE> defined
+	according to the following scheme:<BR>
+<BR>
+<PRE>
+  Pair(t1,e1) -- s1 --&gt; Pair(t1',e2) ... Pair(tn,en) -- sn --&gt; Pair(tn',e')
+  -------------------------------------------------------------------------
+  Pair(F(t1,....,tn),e1) -- F^T(s1,...,sn) --&gt; Pair(F(t1',...,tn'),e')
+</PRE>	
+<H5> Implementation</H5> 	These congruences can be generated at compile time by need,
+ 	i.e., whenever there is a call to <CODE>D(F)</CODE> or <CODE>T(F)</CODE>,
+ 	the instantation of the schemes above should be
+ 	generated. This can be done during needed definition
+ 	computation.<BR>
+<BR>
+<PRE>
+ c^D(s1,...,sn) : Pair(c(x1,...,xn),env) -&gt; c(y1,...,yn)
+        where &lt;s1&gt; Pair(x1,env) =&gt; y1;
+              ...;
+              &lt;sn&gt; Pair(xn, envn) =&gt; yn
+</PRE><PRE>
+ c^T(s1,...,sn) : Pair(c(x1,...,xn),e1) -&gt; Pair(c(y1,...,yn), e-last)
+        where &lt;s1&gt; Pair(x1,e1) =&gt; Pair(y1,e2);
+              ...
+              &lt;sn&gt; Pair(xn, en) =&gt; Pair(yn, e-last)
+</PRE>
+<HR>
+<A HREF="ReferenceManual013.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual015.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

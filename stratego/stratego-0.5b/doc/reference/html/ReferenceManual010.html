@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ The Primitives of Transformation are Matching and 
+	Building Patterns
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual009.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual011.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.2&nbsp;&nbsp; The Primitives of Transformation are Matching and 
+	Building Patterns</H3>	<blockquote><hr>
+	Rewrite rules are defined in terms of more primitive actions,
+	i.e., matching terms against patterns and building
+	instantiations of patterns.
+	<hr></blockquote><BR>
+<BR>
+	a strategy transforms a term<BR>
+<BR>
+	there is always a term that is the subject of transformation<BR>
+<BR>
+	a term pattern is a term with variables<BR>
+<BR>
+	
+<H5> Match</H5>	<CODE>?t</CODE> matches the subject term against the pattern <CODE>t</CODE><BR>
+<BR>
+	if <CODE>t</CODE> is a ground term, this entails that the subject
+	term is equal to <CODE>t</CODE><BR>
+<BR>
+	if <CODE>t</CODE> contains variables, this means that the subject
+	term corresponds to <CODE>t</CODE> as far as the pattern goes. at
+	the positions where <CODE>t</CODE> has variables any term can
+	occur. the variable are bound to the terms at the
+	corresponding positions in the subject term.<BR>
+<BR>
+	Example: <CODE>?App(Abs(x, e1), e2)</CODE><BR>
+<BR>
+	
+<H5> Build</H5>	<CODE>!t</CODE> builds an instantiation of the term pattern <CODE>t</CODE>, i.e.,
+	the subject term is replaced by (an instantiation of) <CODE>t</CODE>.<BR>
+<BR>
+	if <CODE>t</CODE> contains no variables then the subject term is replaced
+	by <CODE>t</CODE><BR>
+<BR>
+	if <CODE>t</CODE> contains variables then the subject term is
+	replaced by <CODE>t</CODE>, where the variables in <CODE>t</CODE> are
+	replaced by there bindings<BR>
+<BR>
+	Example: <CODE>!Let(x, e2, e1)</CODE><BR>
+<BR>
+	
+<H5> Transformation Rules</H5>	A transformation rule first matches the subject term against a
+	pattern and then replaces it with the instantiatio of another
+	pattern. This can be formulated as the sequential composition
+	of a match and a build. For example,<BR>
+<BR>
+<PRE>
+  strategies
+    Beta = ?App(Abs(x, e1), e2); !Let(x, e2, e1)
+</PRE>	
+<H5> Scope</H5>	In the definition above the variables <CODE>x</CODE>, <CODE>e1</CODE> and
+	<CODE>e2</CODE> are implicitly scoped by definition<BR>
+<BR>
+	variable scope: <CODE>{x1,...,xn: s}</CODE><BR>
+<BR>
+	For example, definition with explicit scope
+<PRE>
+  strategies
+    Beta = {x, e1, e2: ?App(Abs(x, e1), e2); !Let(x, e2, e1)}
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 13: Syntax of match and build primitives</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Match-Build
+exports
+  context-free syntax
+    "?" Term                            -&gt; Strat {cons("Match")}
+    "!" Term                            -&gt; Strat {cons("Build")}
+    "{" {Identifier ","}+ ":" Strat "}" -&gt; Strat {cons("Scope")}
+    "where" "(" Strat ")"               -&gt; Strat {cons("Where")}
+    "_"                                 -&gt; Term {cons("Wld")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual009.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual011.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

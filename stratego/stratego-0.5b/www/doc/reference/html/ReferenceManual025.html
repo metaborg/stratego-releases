@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ As Patterns
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual024.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="ReferenceManual019.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<HR>
+
+<H3>5.6&nbsp;&nbsp; As Patterns</H3>	As patterns of the form x @ t can be used to deconstruct a
+	term using pattern matching and at the same time bind the
+	entire term to the variable x. For example, given the rule<BR>
+<BR>
+<PRE>
+       rules
+         R : F(x, y @ G(A, z)) -&gt; H(x, y, z)
+</PRE> 	we have that<BR>
+<BR>
+<PRE>
+       &lt;R&gt; F(B,G(A,C)) =&gt; H(B,G(A,C),C)
+</PRE><HR>
+<A HREF="ReferenceManual024.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="ReferenceManual019.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+</BODY>
+</HTML>

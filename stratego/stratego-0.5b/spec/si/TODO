@@ -1,0 +1,62 @@
+bootstrapping/installation
+
+  - directory in ../src
+  - bootinstall
+  - paths in stratego script?
+
+syntax
+
+  - rules in lets?
+
+evaluation
+
+  - Build: fail when variables not in scope or not defined (NULL)
+  - traversal: some
+  - App in Build (by desugaring)
+
+preprocessing
+
+  - imports: call pack-stratego
+  - overlays
+  - signatures
+  - congruences
+
+  -> refactor the compiler front-end such that the intepreter and the compiler
+     can share the same preprocessing functionality
+
+  - merge strategy and rule definitions!!!
+  - deal with overloading
+
+  - disambiguate overloading by extending operators with their arity
+
+closures
+
+  - local variables need to be renamed and/or values of free variables 
+    in definitions need to be stored with those definitions
+
+applications
+
+  - teaching stratego
+  - scripts for running transformation components
+
+options
+
+  - trace option: print intermediate results (can also be done using
+    echo/debug)
+
+testing
+
+  - set up completeness tests
+
+  - the ultimate test: interpret the interpreter running some simple
+    script
+
+compilation
+
+  - compile stratego scripts; the script can be considered as the main
+    strategy of a specification. (By translation to a module?)
+
+interactive shell
+
+  - call parser
+

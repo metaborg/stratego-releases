@@ -1,0 +1,40 @@
+D/bench////
+D/bin////
+D/build////
+D/doc////
+D/include////
+D/lib////
+D/rpm////
+D/share////
+D/spec////
+D/src////
+D/test////
+D/utils////
+D/www////
+D/xmpl////
+D/interpreter////
+/AUTHORS/1.2/Mon Feb  5 22:01:48 2001//
+/BUGS/1.4/Mon Feb  5 22:01:48 2001//
+/CHANGES/1.1.1.1/Mon Feb  5 22:01:48 2001//
+/COPYING/1.2/Mon Feb  5 22:01:48 2001//
+/INSTALL/1.1/Mon Feb  5 22:01:48 2001//
+/NOTES/1.1/Mon Feb  5 22:01:48 2001//
+/README-alpha/1.1.1.1/Mon Feb  5 22:01:48 2001//
+/THANKS/1.3/Mon Feb  5 22:01:50 2001//
+/TIME/1.2/Mon Feb  5 22:01:50 2001//
+/config.h.in/1.1.1.1/Mon Feb  5 22:01:50 2001//
+/dependencies/1.2/Mon Feb  5 22:01:50 2001//
+/distdiff/1.1/Mon Feb  5 22:01:50 2001//
+/install-sh/1.1/Mon Feb  5 22:01:50 2001//
+/missing/1.1/Mon Feb  5 22:01:50 2001//
+/mkinstalldirs/1.1/Mon Feb  5 22:01:50 2001//
+/reconf/1.3/Mon Feb  5 22:01:50 2001//
+/stdconfigure/1.2/Mon Feb  5 22:01:50 2001//
+/README.in/1.6/Wed Mar 14 20:32:37 2001//
+/aclocal.m4/1.2/Wed Mar 14 20:23:59 2001//
+/ChangeLog/1.101/Thu Mar 15 11:16:28 2001//
+/Makefile.am/1.16/Thu Mar 15 11:17:10 2001//
+/NEWS/1.39/Thu Mar 15 11:17:10 2001//
+/TODO/1.47/Wed Feb  7 10:51:43 2001//
+/configure/1.42/Wed Mar 14 20:23:59 2001//
+/configure.in/1.49/Thu Mar 15 11:17:11 2001//

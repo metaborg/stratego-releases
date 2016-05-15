@@ -1,0 +1,417 @@
+--- /tmp2/org/xt-0.6/stratego/spec/slib/spec/integers.r	Sun Jun  4 16:49:39 2000
++++ spec/slib/spec/integers.r	Mon Mar  5 12:37:25 2001
+@@ -41,4 +41,7 @@
+   min 	= prim("_ST_min")
+ 
+   int   = prim("_ST_int")
++
++  int-to-string = prim("_ST_int_to_string")
++  string-to-int = prim("_ST_string_to_int")
+ \end{code}
+--- /tmp2/org/xt-0.6/stratego/spec/slib/spec/reals-test.r	Sun Jun  4 21:50:36 2000
++++ spec/slib/spec/reals-test.r	Mon Mar  5 12:56:31 2001
+@@ -8,7 +8,10 @@
+ 	id-test;
+ 	cos-test;
+ 	sin-test;
+-	sqrt-test
++	sqrt-test;
++	real-to-string-test;
++	string-to-real-test;
++	real-test
+     )
+ 
+   id-test = 
+@@ -22,3 +25,15 @@
+ 
+   sqrt-test = 
+ 	apply-and-show(!"sqrt-test", sqrt, !1.6)
++
++  real-to-string-test =
++    apply-and-show(!"real-to-string-test", real-to-string, !12345678901234567.0)
++    //apply-and-show(!"real-to-string-test", real-to-string, !1.5e20);
++    //apply-and-show(!"real-to-string-test", real-to-string, !-1.5e-20)
++
++  string-to-real-test =
++    apply-and-show(!"string-to-real-test", string-to-real, !"12345678901234567");
++    apply-and-show(!"string-to-real-test", string-to-real, !"1.2345678901234567e307")
++
++  real-test =
++    apply-and-show(!"real-test", real, !1)
+--- /tmp2/org/xt-0.6/stratego/spec/slib/spec/reals.r	Sat Sep  2 22:36:26 2000
++++ spec/slib/spec/reals.r	Thu Mar  8 13:36:45 2001
+@@ -18,7 +18,7 @@
+ % 02111-1307, USA.
+ 
+ \begin{code}
+-module integers
++module reals
+ strategies
+ 
+   is-real = prim("_ST_is_real")
+@@ -26,4 +26,10 @@
+   cos   = prim("_ST_cos")
+   sin   = prim("_ST_sin")
+   sqrt  = prim("_ST_sqrt")
++  atan2 = prim("_ST_atan2")
++
++  real-to-string = prim("_ST_real_to_string")
++  string-to-real = prim("_ST_string_to_real")
++
++  real  = prim("_ST_real")
+ \end{code}
+--- /tmp2/org/xt-0.6/stratego/spec/slib/spec/string.r	Wed Oct 18 14:06:17 2000
++++ spec/slib/spec/string.r	Mon Mar  5 12:36:48 2001
+@@ -41,6 +41,7 @@
+ 
+   concat-strings = map(explode-string); concat; implode-string
+ 
++(*
+   int-to-string = 
+     rec x(split(sect(mod, !10); sect(add, !48), sect(div, !10); int);
+           (id, ?0; ![] <+ x); MkCons );
+@@ -52,6 +53,7 @@
+     split(!0, id);
+     repeat(S2I2); 
+     S2I1
++*)
+ 
+   escape = 
+     explode-string;
+--- /tmp2/org/xt-0.6/stratego/spec/slib/src/number.c	Mon Oct 30 01:09:53 2000
++++ spec/slib/src/number.c	Mon Mar 12 10:21:56 2001
+@@ -24,6 +24,8 @@
+ #include "stratego.h"
+ #include <stdlib.h>
+ #include <math.h>
++#include <errno.h>
++#include "tuples.h"
+ 
+ /* Integers */
+ 
+@@ -58,23 +60,41 @@
+   else return fail_address; 
+ }
+ 
+-int number_pair(int *k, int *l, double *r1, double *r2)
+-{  
+-  if(ATmatch(Ttop(), "TCons(<int>, TCons(<int>, TNil))", k, l))
+-    return 1; 
+-  else if(ATmatch(Ttop(), "TCons(<real>, TCons(<real>, TNil))", r1, r2))
+-    return 2; 
+-  else if(ATmatch(Ttop(), "TCons(<int>, TCons(<real>, TNil))", k, r2))
+-    { 
+-      *r1 = (double)*k;	
+-      return 3; 
++static int number_pair(int *k, int *l, double *r1, double *r2)
++{
++  ATerm tl, tr;
++  if (!MatchPair(Ttop(), &tl, &tr))
++    return 0;
++  if (ATgetType(tl) == AT_INT)
++    {
++      *k = ATgetInt((ATermInt) tl);
++      if (ATgetType(tr) == AT_INT)
++        {
++          *l = ATgetInt((ATermInt) tr);
++          return 1;
++        }
++      else if (ATgetType(tr) == AT_REAL)
++        {
++          *r1 = (double)*k;
++          *r2 = ATgetReal((ATermReal) tr);
++          return 3;
++        }
+     }
+-  else if(ATmatch(Ttop(), "TCons(<real>, TCons(<int>, TNil))", r1, l))
+-    { 
+-      *r2 = (double)*l;	
+-      return 4; 
++  else if (ATgetType(tl) == AT_REAL)
++    {
++      *r1 = ATgetReal((ATermReal) tl);
++      if (ATgetType(tr) == AT_REAL)
++        {
++          *r2 = ATgetReal((ATermReal) tr);
++          return 2;
++        }
++      else if (ATgetType(tr) == AT_INT)
++        {
++          *r2 = (double)ATgetInt((ATermInt) tr);
++          return 4;
++        }
+     }
+-  else return 0;
++  return 0;
+ }
+ 
+ void *_plus(void)
+@@ -237,59 +257,145 @@
+   return NULL;
+ }
+ 
++static int get_real(double *r)
++{ ATerm t = Ttop();
++  switch (ATgetType(t)) {
++    case AT_INT:
++      *r = (double)ATgetInt((ATermInt) t);
++      return 1;
++    case AT_REAL:
++      *r = ATgetReal((ATermReal) t);
++      return 2;
++    default:
++      return 0;
++  }
++}
++
+ void *_cos(void)
+-{ int k;
+-  double r; 
+-  if(ATmatch(Ttop(), "<int>", &k))
+-    {
+-      r = (double)k;
+-    } 
+-  else if(ATmatch(Ttop(), "<real>", &r))
+-    {
+-      ;
+-    } 
+-  else 
++{ double r;
++  if (!get_real(&r))
+     return fail_address; 
+-
+   Tset((ATerm) ATmakeReal(cos(r)));
+   return NULL; 
+ }
+ 
+ void *_sin(void)
++{ double r;
++  if (!get_real(&r))
++    return fail_address; 
++  Tset((ATerm) ATmakeReal(sin(r)));
++  return NULL;
++}
++
++void *_sqrt(void)
++{ double r;
++  if (!get_real(&r))
++    return fail_address; 
++  Tset((ATerm) ATmakeReal(sqrt(r)));
++  return NULL; 
++}
++
++int real_pair(double *r1, double *r2)
++{ int k, l;
++  int res = number_pair(&k, &l, r1, r2);
++
++  if(res == 0) return 0;
++  if(res == 1) 
++    {
++      *r1 = k;
++      *r2 = l;
++    }
++  return 1;
++}
++
++void *_atan2(void)
++{ double r1, r2;
++  if (!real_pair(&r1, &r2))
++    return fail_address;
++  Tset((ATerm) ATmakeReal(atan2(r1, r2)));
++  return NULL; 
++}
++
++void *_string_to_int(void)
++{ char *s, *p;
++  int k;
++  if(ATmatch(Ttop(), "<str>", &s))
++    {
++      ;
++    }
++  else
++    return fail_address;
++
++  errno = 0;
++  k = strtol(s, &p, 10);
++  if (*p || errno)
++    return fail_address;
++
++  Tset((ATerm) ATmakeInt(k));
++  return NULL;
++}
++
++void *_int_to_string(void)
+ { int k;
+-  double r; 
++  double r;
++  char buf[32];
+   if(ATmatch(Ttop(), "<int>", &k))
+     {
+-      r = (double)k;
+-    } 
++      ;
++    }
+   else if(ATmatch(Ttop(), "<real>", &r))
+     {
++      k = r;
++    }
++  else
++    return fail_address;
++
++  sprintf(buf, "%d", k);
++  Tset((ATerm) ATmakeString(buf));
++  return NULL;
++}
++
++void *_string_to_real(void)
++{ char *s, *p;
++  double r;
++  if(ATmatch(Ttop(), "<str>", &s))
++    {
+       ;
+-    } 
+-  else 
+-    return fail_address; 
++    }
++  else
++    return fail_address;
+ 
+-  Tset((ATerm) ATmakeReal(sin(r)));
++  errno = 0;
++  r = strtod(s, &p);
++  if (*p || errno)
++    return fail_address;
++
++  Tset((ATerm) ATmakeReal(r));
+   return NULL;
+ }
+ 
+-void *_sqrt(void)
++void *_real_to_string(void)
++{ double r;
++  char buf[32];
++  if (!get_real(&r))
++    return fail_address; 
++  sprintf(buf, "%.17g", r);
++  Tset((ATerm) ATmakeString(buf));
++  return NULL;
++}
++
++void *_real(void)
+ { int k;
+   double r; 
+   if(ATmatch(Ttop(), "<int>", &k))
+     {
+-      r = (double)k;
++      Tset((ATerm) ATmakeReal(k));
++      return NULL; 
+     } 
+   else if(ATmatch(Ttop(), "<real>", &r))
+     {
+-      ;
++      return NULL; 
+     } 
+-  else 
++  else
+     return fail_address; 
+-
+-  if(r < 0)
+-    return fail_address; 
+-    
+-  Tset((ATerm) ATmakeReal(sqrt(r)));
+-  return NULL; 
+ }
+--- /tmp2/org/xt-0.6/stratego/spec/slib/src/stratego-lib.h	Mon Oct 30 01:09:53 2000
++++ spec/slib/src/stratego-lib.h	Thu Mar  8 13:35:34 2001
+@@ -56,6 +56,12 @@
+ void *_sqrt(void);
+ void *_sin(void);
+ void *_cos(void);
++void *_string_to_int(void);
++void *_int_to_string(void);
++void *_string_to_real(void);
++void *_real_to_string(void);
++void *_real(void);
++void *_atan2(void);
+ 
+ #define _ST_int()            GO(_int())
+ #define _ST_is_int()         GO(_is_int())
+@@ -78,6 +84,12 @@
+ #define _ST_sqrt()           GO(_sqrt())
+ #define _ST_sin()            GO(_sin())
+ #define _ST_cos()            GO(_cos())
++#define _ST_string_to_int()  GO(_string_to_int())
++#define _ST_int_to_string()  GO(_int_to_string())
++#define _ST_string_to_real() GO(_string_to_real())
++#define _ST_real_to_string() GO(_real_to_string())
++#define _ST_real()           GO(_real())
++#define _ST_atan2()          GO(_atan2())
+ 
+ /* Terms */
+ 
+--- /tmp2/org/xt-0.6/stratego/spec/slib/src/string.c	Wed Jan 19 17:24:15 2000
++++ spec/slib/src/string.c	Thu Mar  8 15:14:43 2001
+@@ -81,7 +81,7 @@
+     {
+     
+      /* more room needed to store imploded string */
+-     if( i >= size )
++     if( i + 1 >= size )
+      {
+         /* double the allocated buffer */
+         size *= 2;
+@@ -102,6 +102,8 @@
+   if( size > 1024 )
+   {
+      size = i + 1;
++     if (size < 1024)
++     	size = 1024;
+      str = (char*)realloc( str, size);
+   }
+   Tset((ATerm) ATmakeString(str));
+--- /tmp2/org/xt-0.6/stratego/spec/slib/src/tuples.c	Mon Jun 12 16:05:33 2000
++++ spec/slib/src/tuples.c	Thu Mar  8 17:36:23 2001
+@@ -23,26 +23,24 @@
+ 
+ ATbool MatchPair(ATerm pair, ATerm *left, ATerm *right)
+ {
+-  Tpush();
+-  Tset(pair);
+-  MatchFunFC("TCons", 2, &&mkterm_fail);
+-  Arg(0);
+-  *left = Ttop();
+-  Tpop();
+-  Arg(1);
+-  MatchFunFC("TCons", 2, &&mkterm_fail);
+-  Arg(0);
+-  *right = Ttop();
+-  Tpop();
+-  Arg(1);
+-  MatchFunFC("TNil", 0, &&mkterm_fail);
+-  Tpop();
+-  Tpop();
+-  Tpop();
++  static AFun tcons = 0, tnil = 0;
++  if (!tcons) {
++    tcons = ATmakeAFun("TCons", 2, 0);
++    tnil = ATmakeAFun("TNil", 0, 0);
++  }
++  if (!t_is_appl(pair) || ATgetAFun((ATermAppl) pair) != tcons)
++    return ATfalse;
++
++  *left = ATgetArgument(pair, 0);
++  pair = ATgetArgument(pair, 1);  
++  if (!t_is_appl(pair) || ATgetAFun((ATermAppl) pair) != tcons)
++    return ATfalse;
++
++  *right = ATgetArgument(pair, 0);
++  pair = ATgetArgument(pair, 1);  
++  if (!t_is_appl(pair) || ATgetAFun((ATermAppl) pair) != tnil)
++    return ATfalse;
+   return ATtrue;
+- mkterm_fail:
+-  Tpop();
+-  return ATfalse;
+ }
+ 
+ ATbool MatchTriple(ATerm triple, ATerm *one, ATerm *two, ATerm *three)

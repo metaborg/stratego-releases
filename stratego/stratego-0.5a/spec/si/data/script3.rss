@@ -1,0 +1,1 @@
+TCons([Rules([RDef("A",[],Rule(Op("F",[Var("x")]),Op("G",[Var("x")]),Id))]),Eval(AM(BA(Call(SVar("repeat"),[Call(SVar("A"),[])]),Op("F",[Op("F",[Op("B",[])])])),Var("t"))),Dump("data/script3.sim")],TCons(TNil,TNil))

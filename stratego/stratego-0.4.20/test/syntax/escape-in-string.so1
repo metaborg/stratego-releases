@@ -1,0 +1,1 @@
+[SDef("main",[],Choice(Seq(Match(Str("\\")),Build(Str("\\\""))),Choice(Build(Str("\\")),Build(Op("Cons",[Op("TNil",[]),Op("TNil",[])])))))]

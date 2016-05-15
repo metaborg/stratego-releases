@@ -1,0 +1,28 @@
+#!/bin/sh -v
+
+top_srcdir=.
+version=stratego-0.4.21
+
+make dist           > ${top_srcdir}/check-dist.dist.log 2>&1
+
+# install distribution
+
+cp ${version}.tar.gz /tmp
+cd /tmp
+tar zxf ${version}.tar.gz
+cd ${version}
+
+# test distribution
+
+./configure --prefix=`pwd` \
+            --with-aterm=/home/visser/res/xt \
+                    > ${top_srcdir}/check-dist.conf.log 2>&1
+PATH=`pwd`/bin:$PATH
+
+make                > ${top_srcdir}/check-dist.make.log 2>&1
+make install        > ${top_srcdir}/check-dist.inst.log 2>&1
+cd test
+make check          > ${top_srcdir}/check-dist.check.log 2>&1
+cd ../spec
+make bootstrap      > ${top_srcdir}/check-dist.boot.log 2>&1
+

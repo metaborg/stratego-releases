@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+
+   <title>Stratego: Version 0.4.21</title>
+
+   <link rel=stylesheet type="text/css" href="../style.css" title="style">
+
+</head>
+
+<body>
+
+<hr>
+    <h1>Version 0.4.21</h1>
+<hr>
+
+ released: November 6, 2000
+
+
+<h3>
+      COMPILER
+</h3>
+
+<ul>
+
+  <li> 	Handling of real constants in compiler was not correct because of
+   erroneous use of ATmatch; replacedby ATgetType.
+    <p>
+
+  <li> 	
+  Threading congruences were not defined for 0-ary constructors.
+    <p>
+
+  <li> 	
+  Since version 0.4.18 building of constructor applications with more
+   than 6 arguments was broken. (Thanks Otto Bagge for solving this.)
+    <p>
+
+  <li> 	
+  The header files in the Stratego run-time system and the library
+   that are not directly included by programs are now installed at
+   $(prefix)/include/stratego in order to avoid name clashes with other
+   packages. (Thanks Otto Bagge for the suggestion)
+    <p>
+
+</ul>
+
+<h3>
+ LIBRARY
+</h3>
+
+<ul>
+      <li> list-misc: thread-map threads an environment through a list and
+   applies a strategy to each element paired with the environment.
+	<p>
+
+      <li> pack-modules: Bugs in option handling fixed by Merijn de Jonge.
+	<p>
+
+      <li> list-basic: Strategies at_last, at_tail, at_suffix, and at_end have
+   been renamed to at-last, at-tail, at-suffix and at-end. The old
+   version are still available, but print a message that the strategy
+   is obsolete.
+	<p>
+</ul>
+
+<h3>
+ UTILITIES
+</h3>
+
+<ul>
+      <li>
+The utilities directory utils/ in the distribution has been removed
+   because it was causing problems in building the distribution. The
+   utilities will possibly be distributed as a separate package.
+</ul>
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,18 @@
+STRATEGO THANKS file
+
+Stratego has originally been written by Eelco Visser. Many people
+further contributed to Stratego by reporting problems, suggesting
+various improvements or submitting actual code. Here is a list of
+these people. Help me keep it complete and exempt of errors.
+	
+	Bas Luttik 
+	Zino Benaissa
+	Andrew Tolmach
+	Patricia Johann
+	Joost Visser
+	Merijn de Jonge
+	Tobias Kuipers
+
+In particular:
+
+	Merijn de Jonge: fixing implementation of _implode_string primitive

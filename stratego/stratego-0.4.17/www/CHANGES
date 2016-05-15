@@ -1,0 +1,1123 @@
+$Id: CHANGES,v 1.1.1.1 1999/11/12 10:51:59 visser Exp $
+
+Tue Nov  2 18:39:47 GMT 1999
+
+ * New setup of the Stratego implementation completed
+ * Makefile for entire implementation
+   with bootstrap target 
+ * Changes in interface to sc:
+   - -i mod instead of just mod
+   - -IL "-Ldir" to pass include directories to gcc
+   - -CL "-Ldir -llib" to pass libraries to gcc
+ * Documentation in doc/
+
+Mon Nov  1 14:44:07 GMT 1999
+
+ * New setup of the Stratego implementation
+
+Mon Nov  1 14:27:36 GMT 1999
+
+ * Treatment of overlays as pseudo signature declarations.
+ * Simplified transformation of variables to constants (when they are)
+ * Added -CC (compile C code only) and -h, -?, --help flags to sc
+ * sc: Any number of -I options can now be specified
+ * Using new option processing mode: collect options of a kind
+
+Sat Oct 23 18:55:48 BST 1999
+
+ * Added table operations (interface to ATerm tables) to the primitives
+ * <explode-term> f(t1,...,tn) -> ("f", [t1,...,tn])
+ * terms.c: list_to_consnil_shallow
+ * Added identifier without parentheses as possible overlay in trs.grm
+
+Sun Oct  3 20:07:47 BST 1999
+
+ * Added stdio operator to lib/stratego/io.r
+ * Repaired int-to-string; was broken after extension of div to yield
+   real values
+ * Some useful abbreviations in lib/stratego/text.r
+
+Mon Aug 30 11:23:09 BST 1999
+
+ * Added real numbers as primitive datatype.
+ * Primitives for arithmetic have been extended (overloaded) to
+   real numbers. New primitive int maps a real to an integer.
+ * strategy averages in lib/stratego/int-list.r computes the averages
+   of the columns of a list of list of numbers.
+ * string-to-num extends string-to-int by recognizing real numbers of
+   the form [0-9]+[\.][0-9]+.
+ 
+Mon Aug 23 16:18:43 BST 1999
+
+ * Added module int-list (library) for common operation on lists of 
+   integers (e.g., sum, average).
+ * Applying explode-string to a non-string no longer leads to a warning.
+ * Added -pp option to invoke printing of pretty-printed text produced
+   by the box expression in lib/stratego/text.r. The option assumes that
+   the strategy produces text boxes in normal form.
+ * Inclusion of the library module text.r in io.r had several consequences
+   for naming in compiler modules; name-space is becoming full; is it
+   time for a hiding mechanism?
+ * Renamed the "sort" strategies in list-sort to "sort-list" to prevent
+   confusion.
+ * Corrected path to bin in INSTALL
+
+Sun Aug 22 23:50:47 BST 1999
+
+ * Added the "printascii" primitive in prim.[ch] that prints the integers
+   in a list as ascii characters.
+
+Fri Aug 20 17:43:26 BST 1999
+
+ * Adapted implode-asfix to deal with literals injected into alternatives
+   (should be removed by rm-layout)
+
+Tue Aug 17 10:08:00 BST 1999
+
+ * Improved utils/implode-asfix.r so that it can deal with ambiguities
+   in parse trees. This makes it possible to inspect ambiguities at the
+   abstract syntax level.
+
+Mon Aug 16 00:06:47 BST 1999
+
+ * It is no longer a fatal error to try to explode a non-string term;
+   it is just a failure.
+ * Bootstrapping only uses 4 phases now (this is sufficient, isn't it?)
+
+Fri Jul 30 16:22:13 BST 1999
+
+ * Added primitives for opening files. Print looks up the file descriptor
+   for a file in a table.
+
+Thu Jul 29 15:41:05 BST 1999
+
+ * Introduced prim keyword in language that can be used to introduce
+   primitive strategy operators.
+
+   A prim("f") expression is translated to a call to the C function f.
+
+ * Moved the definitions of primitive operators from the compiler 
+   to the library. In this way it becomes much easier to add new
+   primitive operators. Instead of extending the language and
+   bootstrapping, just add a definition
+
+      f = prim("implementation_of_f")
+
+   in an appropriate module and provide the implementation of f in
+   C file that is linked with the strategy library.
+
+   see lib/stratego: integers.r string.r
+
+ * Added primitives for file IO in lib/stratego/io.r. This provides
+   a definition for iowrap(s) that does all the handling of options
+   that was previously done by the default main procedure. The new
+   main procedure provided in strategy-main.c only builds a term
+   consisting of a list of the command-line arguments. These are
+   then unpacked and interpreted by the wrapper. In this manner
+   it becomes much easier to make custom command-line option handling
+   and file IO.
+
+ * Added primitive "call" for execution of external processes. See
+   lib/stratego/exec.r
+
+ * Wrote sc.r; a specification of the Stratego compiler that glues
+   together the components of the compiler.
+
+Thu Jul  1 04:55:42 BST 1999
+
+ - Note: rules for Choice(s, id) -> s are wrong!
+ * Repaired error in needed-defs; MissingDef should be applied to result
+   of previous transformations.
+ * Binary input and output for generated transformers
+ * Changed the implementation of BuildVar[d] in strategy.h to fail in case
+   of an unbound variable instead of exiting.
+
+Wed Jun 16 10:26:33 BST 1999
+
+ * Added primitives is-int and is-string for testing whether a term
+   is an integer or a string constant.
+ * Forgot a case in merging of matching automata
+
+Wed Jun  9 11:44:23 GMT 1999
+
+ * New traversal operator: thread(s) with semantics
+
+      Pair(t1, e1) - s -> Pair(t1',e2) ... Pair(tn, en) - s -> Pair(tn',e')
+      ---------------------------------------------------------------------
+      Pair(f(t1,...,tn), e1) --- thread(s) ---> Pair(f(t1',...,tn'), e')
+
+   used to thread an environment through a traversal. 
+
+ * It is used in the definition of MakeLinear (automaton.r)
+
+ *  New matching automaton generator (automaton.r). Patterns in a choice
+    of strategies guarded by a match are first translated to a matching
+    automaton that defines a pre-order traversal of a tree to match the
+    pattern. The automaton uses the actions Down and Up to traverse the 
+    tree. The automata for a choice are then merged. This is very similar
+    in principle to the old way of doing it, but more elegant. New features:
+ 
+    - special matching instructions (not strictly necessary, but was
+      useful for getting insight
+    - continuation passing style of these instructions (instead of using
+      Seq)
+    - insight: if one automaton wants to do an Up and another a Down (or
+      MatchFun, ...) then the first should also do a Down step followed
+      by an Up step; the first automaton does not want to inspect the
+      subtree, but there is no harm in following the second automaton in
+      actually doing it.
+
+Mon May 31 12:17:34 CEST 1999
+
+ * Implemented the overlay mechanism. Affects: 
+   - syntax
+   - normalization
+   - use-def
+   - specs-to-sdef
+ * Implemented static link mechanism to correctly handle static
+   scopes under recursion. There is an extra stack that keeps track
+   of activation records and static links to enclosing activation
+   records. New operations are Epushd(i, o), Epopd(i, o) and BuildVard(x)
+   and MatchVard(x). The rcs variable in the compiler rules are used
+   to keep track of the static nesting level.
+ * Documented modules normalize-spec, use-def
+ * New module stratego has complete abstract syntax of the language
+
+Tue Mar  9 13:04:08 CET 1999
+
+ * Support for higher-order strategy arguments. Strategy operators can
+   be passed to strategy operators. Partial applications are not
+   supported.
+ * Enhanced handling of sequences in parse trees, these are mapped
+   to tuples (utils/implode-asfix)
+
+Tue Mar  2 09:49:52 CET 1999
+
+ * Created ./configure script in boot/ to configure the Makefile and sc
+   script
+
+Mon Mar  1 09:38:58 CET 1999
+
+ * boot/sc : a script for compiling Stratego specifications
+ * Moved transformation of variables that are unary constructors to
+   normalize-spec.r. Now use-def analysis works correctly. 
+ * Added translation to error messages with explanations.
+ * Documentation of library to lib/stratego
+
+Fri Feb 26 17:19:55 CET 1999
+
+ * design/use-def.r : use-def analysis for term variables in rules
+   and strategies. Purpose is to detect variables that are used in
+   build constructs without a previous match. 
+ - The analysis works,
+   but problem are unary constructors in terms that are parsed as
+   variables. Move the transformation of these variables to constructors
+   to the normalize-spec phase.
+
+Fri Feb 26 13:03:31 CET 1999
+
+ * Added a normalization phase to the frontend that gathers constructor
+   declarations, rule and strategy definitions. Result: triple of
+   constructors, rules and strategies.
+
+Fri Feb 26 11:15:25 CET 1999
+
+ * Better error reporting in case of unbound variables and recursion
+   stack overflow. Reduced the undefined strategy operator situation
+   to an error message.
+ * Introduced a FAIL operator in the library that does not get simplified
+   away.
+ * On final failure (no choice points left) a transformer returns the 
+   top of the stack. This term is printed (currently to the designated
+   output file, but maybe a special error target should be provided).
+   The transformer then exits with error code 1. This in order to
+   make components that indicate that something went wrong, but still
+   want to report what it was.
+ * Added vars.r to repository
+
+Wed Feb 24 17:36:36 CET 1999
+
+ * Improvement in handling of injections in implode-asfix
+
+Mon Feb 15 17:47:52 CET 1999
+
+ * Implemented explode-string primitive
+
+Thu Feb 11 12:40:38 CET 1999
+
+ * new bootstrap
+ * extended makefiles to create distribution directory
+
+Tue Feb  9 15:16:38 CET 1999
+
+ * implode-asfix in utils/ works: translates trees over wflang.sdf to
+   terms complying to the signature of wflang.r.
+ * Documentation in utils/doc
+ * The recursive pattern in xmpl/fusion/wflang-check.r checks the output
+   of this conversion 
+
+ - Problems: 
+   - overloading of strategy operators: sort in list-sort and sort congruence
+     in asfix.r, there is no way to resolve this except actually renaming
+     of the operators (not the congruence).
+   - there seem to be bugs in the matching tree computation; see TODO
+
+Tue Feb  9 10:55:57 CET 1999
+
+ * Added a utils/ directory for general utitilities written in Stratego.
+ * Almost complete initial version of a tool to convert SDF2 parse trees
+   to corresponding abstract syntax trees.
+ * Added an includes mechanism to the parser such that an include
+   directory containing library modules can be specified using the
+   commandline option -include <dir>
+ * Changed syntax to ignore case in term constructors. This means that
+   lowercase and uppercase identifiers can be used as constructors and
+   variables. Unary constructors are distinghuised from variables by looking
+   at the signature declarations. This means that a constructor not declared
+   in the signature will be treated as a variable.
+ - Because of this several missing declarations were added.
+ * vars.r: all variables from a specification (special case of a general
+   collection strategy: make this)
+ * Moved library files in design to design/lib
+
+Thu Dec 31 14:48:38 CET 1998
+
+ * Command line option handling: see rts/option.[hc]. Uniform for
+   all tools. Options handled now are:
+           tool [-silent] [-i file] [-o file] [-stats] [-help|-h]
+ * Bug in rts/trs.lx: whitespace between imports was not ignored
+
+Thu Dec 24 15:09:39 CET 1998
+
+ * Adapted inlining approach to do less inlining, i.e., only operators
+   with arguments and nullary operators corresponding to rules are inlined.
+   As a consequence the frontend no longer produces a single strategy
+   expression, but a list of sdefs.
+ * Code generation for list of SDefs
+ * Repaired bug in code produced for Fail
+ * Updated todo list.
+
+ - There is a bug in MakeLinear
+
+Mon Nov  9 11:17:53 PST 1998
+
+ * Found bug in the transformation that computes the matching 
+   automaton; due to insufficient renormalization of branches,
+   variable cases would be skipped in the ChoiceMerge' phase.
+   Repaired by being more careful about reconstruction; mainly
+   maintain right-associativity of sequences.
+
+   Went from rules with contexts to rules with explicit traversals
+   in conditions; control over order of traversals is important.
+
+ * Discovered while developing numeric expression example. See
+   xmpl/numexp
+
+ * collect strategy creates list of all outermost redexes of a term
+   for some strategy
+
+Tue Nov  3 11:10:47 PST 1998
+
+ * Special implementation for fetch of a matching strategy. Translates
+   tail recursion into a loop. Does not use recursion stack to keep
+   track where it is. Once a matching element is found it jumps to
+   the end of the loop and is done.
+
+ * Special implementation for oncetd of a matching only (i.e., no
+   building) strategy. The specialization does not rebuild the term
+   after inspecting it, since a strategy without builds cannot change
+   the subject term. This should be generalized to arbitrary traversals
+   without builds; but this requires some analysis to determine that
+   the call to one, some or build (often to a recursion variable) does
+   not involve builds.
+
+ * Used pseudo-innermost3 in matching-tree. This strategy normalizes
+   reducts three levels deep, whereas innermost' re-normalizes the
+   reduct completely doing a lot of unnecessary work. Three levels deep
+   is enough for most rules; this fails if there is a rule with right-hand
+   side deeper than threel levels that creates new redices.
+
+ * Added syntax and desugaring for semi-rules. A rule
+   L :: s1 --> s2 where s3 abbreviates the strategy definition
+   L = {x1,...,xn: s1; where(s3); s2}. This is useful for rules
+   that use overlays instead of real patterns.
+
+ * Created new modules design/specialized.r for the specification of
+   exceptions to the normal straightforward translations.
+
+ * Used overlays for the Repeat(s1, s2) pattern in design/specialized.r
+
+Tue Oct 27 09:40:52 PST 1998
+
+ * New syntax: ?t for match(t), !t for build(t)
+ * Introduced term annotation operators @!(l, t) for add annotation with
+   label l and term t and @?(l, t) for match annotation with label
+   l against pattern t. Does work for small examples, but application
+   in innermost leads to garbage collection problems (annotations that
+   get collected while still referenced). The abstract syntax of these
+   operations is: AnnBuild, AnnGet, AnnRemove
+ * Use of innermost' instead of innermost in matching-tree leads to
+   reduction of 50%.
+ * Repaired bug in rts/terms.c; wrong recursive call in list_cong_aux
+ * Removed some dead comments from grammar
+ * Documentation of the compiler now in design/doc/
+
+Fri Oct 23 12:32:52 PDT 1998
+
+ * Renaming of some of the traversals in design/lib.r
+ * Experimenting with traversals in matching-tree to find out where the
+   complexity is. (Probably in the application of ChoiceMerge to merge
+   branches with the same prefix.)
+ * Added some new simplification rules for idempotent application of
+   Where, Not and Test.
+
+Wed Oct 21 14:56:40 PDT 1998
+
+ * Match trees are now working. It is instructive to study the performance
+   of the components with and without this feature. The optimizer and backend
+   do 2 to 3 times better, while the frontend is not affected at all. (The
+   addition of extra asserts may have added a small performance penalty.)
+   This becomes also clear by looking at the mt (for matching-tree) column:
+   it spends only 0.76 in the frontend, but 10.19 in the optimizer and 42.19 
+   in the backend.
+
+   Extend match trees technique to left choices, choices of congruences and
+   combinations of these.
+
+Wed Oct 21 14:01:14 PDT 1998
+
+ * Implemented matching trees (also known as discrimination nets).
+   See design/matching-tree.r. This is an extra component in the
+   compiler pipeline, which is now formed by:
+
+   frontend | optimizer | matching-tree | optimizer | backend | postprocess
+
+   The matching tree transformation improves on the previous Case
+   transformation. The idea of the latter was the following
+
+    Choice(Seq(MatchFun(f), s1), 
+    Choice(Seq(MatchFun(f), s2),
+           Seq(MatchFun(g), s3))) ->
+   
+    Case([(f, Choice(s1, s2)), (g, s3)])
+
+   that is, small matching prefixes are committing, i.e., once you
+   have seen an f you know you don't have to backtrack to try to
+   match it as a g.
+
+   The match tree transformation extends this to the arguments of
+   operators.
+
+ * This version does not yet use the discrimination net transformation.
+   But does use the new implementation of Matching. (With Arg(x))
+   With this feature stable, I can make another attempt at bootstrapping
+   the discrimination net addition.
+
+ * Don't mix up your units! I replaced branches of a choice by an
+   Id instead of fail while merging some branches, i.e.,
+
+	Choice(a, b) -> Choice(F(a, b), Id)
+
+   This is of course wrong, because this means the choice can now always
+   succeed. This took me a while and some peering in the generated abstract
+   machine code to realise. It is time for an automatic checker of the 
+   correctness of the rewrite rules;-)
+
+ * There were some bugs(?) in the abstract machine instructions. Put in
+   more asserts to detect violations. Strange that these problems didn't
+   show up before. For instance, MatchFun didn't distinghuish between strings
+   and constructors. Redefined the kids() instruction
+   by means of other instructions instead of by means of a recursive
+   C function. For some reason the old implementation triggered a problem
+   in the garbage collector.
+
+ * Numbered some of the simplification rules. It is instructive to see
+   in the profile counts which rules are actually used. Very few.
+
+ * Wrote term pretty-printer that deals with tuples. Tuples are internally
+   represented as TCons/TNil lists, but are printed as ( , ..., ).
+
+
+Fri Oct 16 16:43:26 PDT 1998
+
+ * Restricted the application of CongBuild to cases where the
+   branches of the build are only dependend on variables matched
+   in the same branch.
+
+   CongBuild did not work because the variables in MatchVar where
+   not recognisable as such. Solution: keep Var(x) tags around the
+   variable name. (Also necessary to keep renaming to work.)
+   Future: don't translate Match(Var(x)) -> MatchVar(Var(x)).
+
+   In order to make the CongBuild rule applicable at all it was
+   necessary to perform a fusion loop before the other simplifications
+   that lift MatchFuns out of scopes for the purpose of case merging.
+
+   The CongBuild rule does work, but does not seem to be very effective.
+   There are only a few places where it can be applied. 
+
+   This is a special case of traversal fusion. If two similar
+   traversals are applied sequentially, they can be merged into a
+   single traversal. (Basically the map fusion of functional
+   programming generalised to traverals of arbitray datastructures.)
+   However, this kind of fusion becomes problematic in the presence
+   of side-effects (Match). (Consider fusion for strategies without
+   free variables.)
+
+ * Implementation of abstract machine instructions as procedures does
+   not seem to impede the speed of generated components.
+
+Thu Oct 15 16:30:53 PDT 1998
+
+ * Restarted work on warm fusion specification.
+
+ * Reached the limit of capabilities of gcc with current #define approach.
+   Reimplemented abstract machine instructions as procedures instead
+   of as #defines. Seems to speed up C compilation time considerably.
+
+   Problem to be solved: jumping to (failure) continuations from within
+   an instruction. Global jumping seems to mess up the stack. Solution
+   is to have such instructions return the address to jump to or NULL.
+   A wrapper takes care of the jump.
+
+   (Discovery: linked libraries should be specified in reverse order,
+   i.e., library used by other libraries last.;-)
+
+ * Shorter rule for definition of contextual rules.
+
+ * Match-Build fusion: A match followed (with Seq) by a build
+   can be fused. Or, a congruence followed by a build can
+   be fused. Also the other way around. But Match-Build is more
+   common. This merges building up part of the original term in
+   the right-hand side of a rule with the matching of the left-hand
+   side.
+
+ * App(s, t) is no longer eliminated by the desugaring phase, but
+   handled directly by the backend. This creates more opportunities
+   for Match-Build fusion. 
+
+ ! Well, actually Match-Build fusion and keeping App turns out to
+   be more complicated. With Match-Build fusion the problem is that
+   before building the new term it is necessary to know all variables
+   from the match. For instance, consider
+
+      match(((x, y), (xs, ys))); build(Cons(x, xs), Cons(y, ys))
+
+   we cannot fuse these expressions into 
+
+      (match((x, y));   build(Cons(x, xs)), 
+       match((xs, ys)); build(Cons(y, ys)))
+
+   because xs will not be known at the time of building Cons(x, xs).
+
+   But the basic idea is still attractive: reuse the structure that
+   is already on the stack. 
+
+   In this version the fusion transformations are disabled.
+
+ * Tail recursion elimination: pattern repeat(s) (rec x((s; x) <+ s'))
+   can be treated specially. Created specialized compilation
+   rules in compiler.r to handle such exceptions. These are tried
+   before other rules of the compiler. 
+
+   (This optimization does not seem to produce a significant speed-up.
+   Nonetheless it has the benefit that it uses a constant depth term-
+   and choice stack as opposed to a stack that gets as deep as the
+   number of repetitions.)
+
+ * Case merging: Generalized the rules for transforming choices to
+   case statements such that a choice of cases is merged.
+
+ * Added rule counters for each rule. The desugaring phase adds an
+   invocation of the primitive CountRule(f) with f the label of
+   the rule in sequential composition *after* the rule has completely
+   succeeded. A postprocessing component is added to the compiler that
+   extracts the names of the counters and creates initialization code
+   for them. (See desing/postprocess.r)
+
+   Generated transformers print profiling information to stderr
+   including the application count for each rule. (Future work:
+   make this information optional.)
+
+Tue Oct 13 16:34:14 PDT 1998
+ 
+ * Found bug in transformations for Case introduction. Now we have
+   new stable compiler. This optimization gives 2 to 3 times faster
+   components. The bug was caused by applying the Identity elimination
+   rules (I) in the conChoice traversal without a default. Is now
+   try(I). This is tricky stuff.
+
+ * Refined the time measurements printing to include some decimals.
+
+Tue Oct 13 14:21:28 PDT 1998
+
+ * Bootstrapping protocol encoded in design/Makefile. Use make bootstrap
+   to propagate modifications to the compiler.
+
+ * Measuring performance and effects of optimizations on compiler itself.
+   (See design/PERFORMANCE)
+
+ * Extended peephole optimizer with rules for eliminating double labels
+   for the same statement. Is currently not used, because not completely
+   working. Does decrease code size, but probably not signicant for
+   run-time. The problem is interesting as a paradigm for distributing
+   information up and down the tree.
+
+ * Guarded choices. Choices of which all branches with a MatchFun can
+   be treated as a case statement. No need for using the choice stack
+   in these cases. Once one MatchFun has succeeded there is no need
+   to check the others. (Assuming the MatchFuns are disjunct.)
+   As part of this transformation congruences are translated to a sequence
+   of a function match and a congruence with wildcard function symbol.
+   For this purpose introduced Case, CongWld and MatchFunFC constructs.
+
+   (At this point there is some devious bootstrapping phenomenon that
+   keeps this from working.)
+
+ * Found a bug in definition of subs in subs.r. alltd(try(s)) is a vacuous
+   strategy. This turned up in strategy definitions with arguments and
+   multiple definitions. (The only place where substitution is used at
+   the moment.)
+
+ * Wrote a special purpose parser for ATerms. This works much better.
+   There is still a problem with the performance of the ATerm writer
+   that cause too many garbage collects. Probably wrong way of doing
+   output. (See sml/)
+
+ * There where some bugs in the run-time system. There were no asserts
+   for overflow of the recursion and choice stacks. This made it difficult
+   to detect these overflows, which showed up as overflows of the term
+   stack.
+
+ * Stack sensitive strategy for flattening a tree of nested block
+   instructions into a single list of instructions. 
+   (See design/ins-simplification.r)
+
+ * Traversal strategies for list in design/list-basic.r
+
+ * Renaming of SVars changed such that strategy macros with arguments are
+   renamed as well.
+
+Thu Oct  8 16:40:25 PDT 1998
+
+ * Wrote a combinator parser for ATerms. This turns out to be a bad idea. The
+   parser is terribly slow. Next experiment is to build an MLYacc parser.
+
+Wed Oct  7 16:55:18 PDT 1998
+
+ * Implementation of ATerms in SML. See sml/
+   Datatype, parser and pretty-printer done. To finish input and output
+   from file. Possible problem: maximum length of strings in ML. 
+
+Tue Oct  6 20:43:51 PDT 1998
+
+ * Combined the first four components into the frontend.
+   The last two of these, desugaring and inlining, can fail if the
+   the needed-defs transformation fails to find some strategy 
+   definition.
+ * Started experimenting with compilation of rules with multiple
+   interdependent contexts.
+
+Mon Sep 21 13:55:37 PDT 1998
+
+ * Ported instruction pretty-printer to new ATerm library.
+ * Described bootstrapping protocol in README
+
+Mon Sep 21 11:39:38 PDT 1998
+
+ * Created boot/ directory containing the generated C code for the
+   compiler components. To create a compiler on any platform it
+   is now sufficient to have gcc.
+
+Mon Sep 21 10:47:24 PDT 1998
+
+ * Bootstrapped the strategies compiler!
+
+ * Debugged port of run-time system in rts/ 
+ * Added a procedure to the parser that prints a makefile %.r.dep
+   with dependencies for a module %.r. This file can be included in
+   a makefile.
+ * The directory xmpl/test contains small test specifications testi.r 
+   that target various parts of the compiler. make test should succeed
+   if compiler is correct.
+ * Debugged specification of compiler.
+ * Split optimization into simplification rules and more complicated
+   rules. Only simplification rules are used currently.
+
+ * Created first rule for peephole optimization of generated
+   instructions.
+
+Thu Sep 17 17:34:08 PDT 1998
+ 
+ * Ported run-time system to work with new version of ATerm C library;
+   in rts/
+ * Adapted the trs-parser to the library rts/
+ * worked a bit on presentation of specification in design/
+
+(Some of the changes relating to the design before Sep 17 are logged
+in design/CHANGES)
+
+Mon Jul 13 14:09:57 PDT 1998
+
+ * generalized syntax for imports to have list of imported modules
+
+Wed Jul  8 23:28:50 PDT 1998
+
+ * Changed the syntax of the strategy languages as follows:
+   - sequential composition s1 . s2  is now  s1 ; s2
+   - recursion rec x . s   is now  rec x(s)
+   - rules and definitions no longer followed by a ;
+   - an imports can have a list of modules instead of a single
+     module
+
+Thu Jun 25 19:16:31 PDT 1998
+
+ * Almost bootstrapped the frontend component. 
+ * Made makefiles more portable
+
+Wed Jun 24 14:13:31 PDT 1998
+
+ * Split the compilers into components: frontend, inline, optimizer,
+   backend.
+ * seq (new abstract machine implementation)
+   Makefile creates libstrategy.a for use in gcc compiling generated
+   c files
+ * Extended contexts with optional name of traversal strategy to use.
+
+Tue Jun 23 10:28:09 PDT 1998
+
+ * Added literate programming convention to syntax of strategy language.
+   Pieces of code are embedded in \begin{code} \end{code} pairs. A
+   literate file should start with \literate. 
+
+ ! There is a bug in ML-LEX:  backslash cannot be specified as [\\] or as 
+   "\begin". This is apparentlyinterpreted as a control character. Solution: 
+   use [\092], the ascii code of \.
+
+Thu Jun 18 18:08:39 PDT 1998
+
+ * Implementation of new abstract machine in directory seq
+ - strategy.[ch] : implementation of the instructions
+ - strategy-main.c : provides shell around the implementation of a
+   strategy that reads a term from stdin, reduces it and prints the
+   result.
+ - terms.[ch] : some auxiliary functions on terms
+ - debug.[ch] : some functions and macros for debugging
+
+ * TODO
+ - Implementation of primitives for arithmetic etc.
+ - The environment is not saved before a choice. This means that some
+  variables can become instantiated in a failing alternative and then
+  not be restored to unitialized.
+ - The environment is accessed by counting from the top of the
+  stack. That is, a variable that is number n in the current scope is
+  represented by the n-th element from the top of the environment
+  stack. This schema breaks if the environment grows dynamically with
+  recursion and variables from a scope outside the recursion are
+  accessed inside it. For instance,
+   {x, y: match((x, y)) . build(y) . 
+          rec loop . ({t: ... . build(x) . ... . loop})}
+ - Make stack sizes dynamic or at least configurable from the
+  command-line.
+
+ * Repaired some bugs in SML implementation:
+   - added where around translation of application in build
+   - added compilation of primitives for integer arithmetic
+ 
+ * Repaired some bugs in old implementation in toc:
+   - floating point error in profiling when duration 0
+   - added implementation of primitives for integer arithmetic
+   - _op versions of list_to functions for use in parser: a list
+     usded in rewrite rule should be represented by means of
+     Op("Cons", ...) not by Cons(...).
+   - fixed a bug in the import mechanism of the parser
+
+Mon Jun  8 16:25:00 PDT 1998
+
+ * Started work on compiler from strategies to instructions. Based
+   on local backtracking semantics of +
+   The compiler embeds strategies (with some context information, i.e.
+   continuation labels) into instructions. This embedding is refined
+   by the compilation rules.
+
+Wed May  6 16:36:53 PDT 1998
+
+ * Todo: use direct calls to symbolic labels by &s1 instead of
+   using the jump table. According to Andrew this is possible
+   in gcc.
+ * Added counting code in the generated C code. Counted are: number
+   of matches, number of builds, number of rule application. Todo:
+   profiling of individual rules in specification.
+   This provides profiling information of the form:
+
+	rewriting succeeded
+	(11 seconds, 3949 steps, 359 steps/sec, 17721 bms, 1611 bms/sec
+
+   Here bms are builds and matches.
+ * Added garbage collection: After 10000 recursive calls the 
+   garbage collector is called. This can be improved.
+ * Function tuple_cong constructs a tuple congruences, but 
+   distinguishes a singleton tuple. 
+ * In encoding functions distinction is now made between TCons and "TCons".
+ * Changed the parser to %pure mode.
+ * Cleaned up the code for expanding imports. 
+
+Mon May  4 17:01:15 PDT 1998
+
+ * Solved the import problem. But not in LEX or YACC, this seems to
+   be impossible. Instead I simply check the parse tree for a module
+   and expand all Imports(file) structures by parsing file.
+
+Mon May  4 10:17:41 PDT 1998
+
+ * Parser for strategy specifications in LEX & YACC: trs.lx & trs.grm
+ - problem: implement import mechanism; recursive call to the parser
+   does not seem to work.
+ * Restructured C implementation:
+	strategy.h : macros & declarations for abstract machine
+	strategy.c : functions for abstract machine
+	main.c 	   : a main function for use with compiled specifications
+	trs_parser.c : main function for parser
+	debug.h/c  : macros for debugging
+	term_aux.c : some functions for terms (list to cons/nil, etc.)
+
+Thu Apr 30 18:06:28 PDT 1998
+
+ ! The first version of the desugar and optimize pipeline works !
+
+ * Implemented the primitive strategy str_gt for comparing strings.
+ * Found out how to distinguish strings from functions: solved "Cons"/Cons 
+   problem.
+
+Wed Apr 29 17:12:31 PDT 1998
+
+ * Debugged generation of new variables. Problem is not solved
+   but it is now diagnosed.
+
+Tue Apr 28 22:38:28 PDT 1998
+
+ * Introduced single operator Prim(x) for nullary primitives such
+   as new.
+ * Replaced SApp by Label. Label can have arguments.
+ * Removed term arguments to strategy operators (~t). Terms have
+   to be passed on the term stack, for instance by building a
+   tuple of all terms to be passed.
+ * Changed definition of contexts: a topdown pass is done that
+   replaces exactly one occurence of the context pattern.
+ * Added definition of strategy application in term building (TApp) and
+   translation of this to strategy (see contexts.sml)
+ * Removed definition of copy from copy.sml; Only new is a primitive.
+   Renaming of bound variables is done by a strategy. See the 
+   library subs.r
+ * Added merging of strategy definitions with the same label (and
+   thus also rule definitions with the same label).
+ * Added definition of kids: replace an application by a tuple consisting
+   of the arguments of the application.
+ * Updated grammar to the redesigned language: no term arguments of
+   strategies, strategy application in rhs, tuple notation, kinds,
+   rules in strategies now between << and >>, one, etc.
+ * Continued with the cleanup operation; renaming mml into sml etc.
+
+
+ * Implemented new and kids in C preamble: Kids translates the list
+   of arguments into a tuple represented by TCons/TNil.
+ * Implemented one like some
+
+Sun Apr 26 13:02:38 PDT 1998
+
+ * Starting to update the implementation to the new design according
+   to the specification in design/
+ * renamed all .mml files into .sml files
+ * moved all interface files (parsing and stuff) into src
+ * renamed fol.grm etc into trs.grm etc
+ * introduced directory xmpl for example specifications
+ * added ICFP paper to bibliography
+
+Mon Mar 23 11:23:31 PST 1998
+
+ ! I compiled the RML optimizer and ran it on the record example.
+   It seems to work!
+ * To do: we need a let construct to prevent code explosion.
+   Can simply be compiled in the same way as recursive calls.
+ * Fixed bugs caused by the transition to fall-through style;
+   At many positions an explicit goto to success continuation
+   is needed at the end of the code.
+ * S(x) matching: A term S(t) matches with an integer constant i
+   if i > 0 and t matches with i - 1.
+ * When failing in a recursive call the failure should be handled by
+   the caller in the same way as success is handled. Therefore, both
+   the success and the failure continuation are pushed onto the return
+   stack.
+ * A mechanism for synchronisation of the choice stack and lchoice
+   stacks was needed. The method now is as follows: on entering a
+   lchoice (like operation), first a mark (a unique integer) is pushed
+   both on the choice and on the lchoice stacks. When the lhs of the
+   lchoice succeeds, all choices until the mark are popped. This 
+   preempts backtracking under lchoice, where, test and negation. For
+   the latter two this is correct, but for the first to this does not
+   correspond to the operational semantics. But I don't know a better
+   way at this point.
+   An example is: where(A + B) . (fail <+ C)
+ * Generate comments as part of the C code, for ease of identification
+   of the results.
+ * Changed many operations in the preamble from defines to actual
+   procedures. To limit the amount of code presented to gcc.
+ * Made the state global again. This might be a problem if independent
+   strategies are compiled and need to be combined.
+ * Introduced a variable debugging that indicates the level of 
+   debugging desired.
+
+Fri Mar 20 16:43:41 PST 1998
+
+ * Cleaned up C preamble
+ * Improved compilation of matching
+ * Build is now done by calling individual Tmk functions for each subterm.
+ * By default a compiled piece of code continues with the next statement
+   on success 'fall through'.
+ * Started definining signature for lists using polymorphic types in the
+   style of ATLAS/MLS.
+
+Sun Mar 15 17:52:16 PST 1998
+ 
+ * Worked hard on implementation of compiler. Almost all constructs
+   are done now. Still struggling with some bugs. The compiler is
+   very straightforward and dumb at this point. There should be a
+   large number of optimizations made. But as a first prototype
+   it's ok.
+
+ * Renamed Push into Where
+ * Added new construct: Test
+ * Compilation of almost all constructs, including:
+   all, some, congruence, path.
+ * Improved translation of left choice; a separate stack is
+   needed to deal with it to get the commit effect; once the
+   left part has succeeded, the right part should never be
+   executed.
+ * New and copy are translated, but not yet implemented in the
+   C preamble.
+ * For several constructs I added a more abstract definition
+   of the translation. This is material for a paper.
+ * Added environments to the state
+ * Defined matching no longer by means of Tmatch, but by
+   means of generated code. Is very crude now. Should
+   be improved. But it does handle non-linear patterns
+   and variables defined earlier.
+ * Code for build reads values of variables from the environment.
+   Can not yet handle int and string arguments because of <appl>
+   placeholder, should be <term> but this is not provided by
+   ATermLib
+ * improved C datatype and its pretty-printer 
+   (added construct for representing comments)
+   am having troubles with the infix operators
+ * new list function: find_index
+
+Thu Mar 12 22:36:41 PST 1998
+
+ * Started implementation of strategy to C compiler (toc.sml).
+ * Got first strategy to compile and run in C.
+ - Todo: environments and scopes in C + translation of
+   several operators
+ * Improved Tim's C pretty-printer a bit.
+ * New list functions: split, iota
+
+Tue Mar 10 23:04:08 PST 1998
+
+ * Hand-compiled a small strategy expression to C with ATerms.
+ * Borrowed C datatype in SML and a library for pretty-printing.
+   This will be used to generate C code.
+  (Installed Aterm library)
+
+Mon Mar  2 12:31:53 PST 1998
+
+ * Strategy functions can now have term arguments, e.g. in(~v, ~e).
+   The constructor is Arg.
+ * Renamed Eps into Id
+ * Renamed Mu into Rec
+ * Push takes a strategy. No more pop. Push 'copies' the current term
+   applies the strategy to it and when successful throws away the
+   term. Only the environment is kept. This is to express temporary
+   computations, e.g. in conditions.
+ * The functions that build the SIn(C(...)) strategy terms are now
+   called C' instead of c.
+ * Strategy substitution is parameterized with a strategy substitution
+   -and- a term substitution. Implements instantiation of bodies of
+   strategy definitions.
+ * new list function: zipsplit.
+ * Changed use of td_cata into more explicit definition doing the
+   recursion explicitly. Less code.
+ * Repaired broken definition of scope. Now all local variables are
+   pushed on the environment stack before entering the scope and
+   are popped afterwards.
+ * Added wildcards in terms. Notation _ (underscore).
+ * Added syntax for signatures. Types are terms. allowing a two-level
+   (polymorphic) type system. No typechecking is done yet.
+ * Added typechecking rules and strategy for the RML terms in rml.r
+
+Fri Feb 27 00:19:34 PST 1998
+
+ * Started to add push and pop strategies, implementation not yet
+   ready.
+ * Removed the general Pd strategy, because the boolean operator
+   made strategies into an non-equality type.
+ * Finished implementation of conditions. (But they should start with
+   a push and end with a pop.)
+ * Context terms can have a where condition, i.e. e[f where ...]
+   in order to do some checking and intermediate computation in the
+   local rewrite implied by a context. This introduces the problem 
+   of strategies in terms. Therefore terms are parameterized with
+   the notion of condition which is instantiated with strategies.
+   Strategies are also parameterized with such a type variable. In
+   this way strategies and terms have become a mutually recursive
+   datatype. This complicates traversals: catamorphism-like functions
+   have been extended with an extra function argument to apply to
+   the condition parameter.
+ * Hack: strategy substitution has a boolean flag that determines whether
+   substitution should descend into terms embedded in strategies. This
+   is necessary to defined strategy macros that are parameterized with
+   terms. A better solution should be found, i.e. some kind of indication
+   whether the argument is a term or a strategy. This is the reason for
+   introducing the StratToTerm exception.
+ * Added new example: rewrite rules for optimizing strategy expressions.
+ * Changed the MakeStrMap function to deal with copies of the same
+   subterm that introduce the same binding variable. The boolean flag of 
+   the function tells it whether or not to look for the old new name for
+   a variable or whether to generate a new new name;-)
+ * Changed syntax of scope to {vars : strategy}, where vars is a list
+   of variables. It may be necessary to make these variables also
+   parameterizable.
+ * Changed syntax of rules in strategies to <t1 -> t2 where s>.
+ * Changed syntax of assignment in condition to s => t.
+ * The problem with the s/r conflicts produced by [] is now resolved.
+ * Adapted the RML example in rml.r to the new syntax. Still some bugs
+   in definition (Inl1), probably due to need for push and pop.
+ * The sources.cm files define which files the SML compile manager should
+   read.
+
+ (Working too late again)
+
+
+Tue Feb 24 18:28:16 PST 1998
+
+ * The file extension for specifications is .r because the language is
+   called R, for really right rewriting.
+ * Have added a simple syntactic inclusion mechanism for specifications.
+   A declaration "imports file" has the effect that file is read at
+   that position as a specification, i.e. a list of declarations.
+ - (This entailed calling the parser inside the definition of the parser;
+   to circumvent ML's module restrictions the parser is now parameterized
+   with a function to call on imports. This is filled by a call to the
+   final parse function itself, but because of recursion a fixed point
+   has to be used.)
+ * Introducing some new abbreviations:
+   apply a strategy to a term: [s] t means build(t) . s
+   match the result of applying a strategy: s -> t means s . match(t)
+ * Conditions seem unavoidable. I have started adding conditions to
+   rewrite rules. The idea is that a condition is nothing more than
+   strategy expression. This entails a couple of changes in the
+   syntax and in the interpretation functions. A rule is now written
+   as 
+
+		t1 -> t2 where c
+
+   Here c makes typically use of the constructs introduced above, e.g.
+
+   		t1 -> t2 where [s] t3 -> t4
+
+ ! The syntax does not work yet because of the many shift/reduce
+   conflicts caused by the overloading of [ and ]. So I'll probably
+   have to find some other notation for application
+
+
+Mon Feb 23 17:19:06 PST 1998
+
+ * Made usage of structures local in all structures
+ * Use = instead of streq
+ * Renamed structure List into MyList to avoid confusion with SML
+   library module
+ * All strategies are defined in the interpreter. If an unknown strategy
+   is encountered this is reported by printing a message.
+ * The file rml.trs contains the rules for RML optimization.
+   Contains notes about new features to add and alternative translations.
+
+
+Mon Feb 23 10:21:11 PST 1998
+
+ * Added strategy new(x) that binds the term variable x to a new string.
+ * Introduced copy strategy. It always succeeds and replaces the root
+   by a copy of the root in which all bound variables have been renamed
+   to new variables. The copy function is a parameter of the evaluation
+   function.
+ * Introduced congruence strategies. Cons(s1, s2) will succceed on
+   a Cons term if si succeeds on i-th argument. No new constructor has
+   been introduced, but the SApp constructor is reused. A congruence
+   strategy is a strategy function that is not defined.
+ * Changed the scope constructor: it now introduces a list of variable names
+   that are removed from the environment (undefined) when entering the
+   scope. This allows for local scopes that inherit some variables and
+   locally introduce some others. 
+ ->When generalizing this we will probably wind up with a proper scoping
+   mechanism using a stack with local variables. In the current scheme
+   previously existing bindings can be destroyed by a local scope.
+
+ * Changed constructor All into Alls to avoid confusion with the List.All
+   function.
+ * Changed use of @ for string concatenation to the standard ^.
+ * Using = to test term equality.
+ * Parser translates term lists [t1, ..., tn] to Cons/Nil lists to allow
+   writing rewrite rules over lists. (No list matching is provided yet, 
+   might not be necessary.) The function consnil_to_lst provides the
+   backward translation.
+ * Remove function on tables to remove all entries for some key.
+
+Thu Feb 19 19:46:17 PST 1998
+
+ * Added strings to the language and datatype of terms.
+ -> todo: remove double-quotes after parsing
+
+ * Added copy.sml for making copies of terms with new variables;
+   using the module gensym from the metasml implementation
+ * Added constructors All and Some for strategies. This allows
+   to pretty-print these operators (Pd(f,s) with f a function can
+   not be pretty-printed; it is also not possible to determine which
+   operator it was originally.) I will remove Pd from the abstract
+   syntax and only use it as an implementation notion.
+ * Added pretty-printer for strategies. (all pretty-printers are non
+   pretty, i.e. only generate a flat string)
+ * Fixed bug in foldr1
+ * Removed structure Absyn from parser; just open all modules needed
+   for abstract syntax
+ 
+ ! Warning: introduced function All in List and constructor All in
+   Strategies.
+
+Tue Feb 17 20:00:49 PST 1998
+
+ * updated documentation of the SML program. Make in src will give you
+   Doc.dvi
+ * Put all list functions in lists.mml
+ * Reorganized some functions, i.e. closer to definition of the main
+   datatype they work on.
+ * There is now a function |rewrite| that applies a strategy to a term
+   given the term, the strategy and a list of strategy definitions.
+ * Cleaned up the grammar files
+
+Tue Feb 17 17:31:37 PST 1998
+
+ * Added the following basic strategies:
+    Match(t) : succeeds if the term t is matched, it extends the substitution
+        for variables introduced in t
+    Build(t) : succeeds and replaces the term by the instantiation of term t
+    SRule(t1, t2) : anonymous rewrite rule, synonymous with Label(l), where
+        l is defined as l : t1 -> t2
+
+ * Added the following composite strategy combinator:
+    Neg(s) : succeed if s fails and vice versa
+
+ * The notion of top-down catamorphism replaces the problematic strat_x_map:
+   td_strat_cata (and similarly td_term_cata) takes a test and two functions
+   phi1 and phi2; the first is applied if test yields true the second if
+   test yields false; in the latter case the cata is applied recursively
+   to the children first.
+
+ * The file contexts.mml defines the replacement of contexts in rewrite
+   rules. See the file for an explanation.

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  UNIFICATION
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library031.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library033.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>6.1.4&nbsp;&nbsp;  UNIFICATION</H3>	<blockquote><hr><BR>
+<BR>
+	Syntactic unification, no variable bindings are taken into
+	account.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module unification
+imports list term substitution
+</PRE>	<CODE>&lt;unify(isvar)&gt; [(t1,t2),(t3,t4),...] =&gt; [(x1,p1),(x2,p2),...]</CODE> <BR>
+<BR>
+	The strategy <CODE>unify</CODE> unifies a list of pairs of terms and
+	creates the
+	most general unifier for them. The strategy is parameterized
+	by a strategy <CODE>isvar</CODE> that determines the shape of variables.
+	The result is a list of pairs <CODE>(x1,p1)</CODE>, where <CODE>x1</CODE> is
+	a term for which <CODE>isvar</CODE> succeeds and <CODE>p1</CODE> is the term
+	it should be substituted with to unify the terms.<BR>
+<BR>
+<PRE>
+strategies
+  
+  equal = 
+    for(id ,[], UfIdem &lt;+ UfDecompose
+                //&lt;+ debug(!"not equal: "); FAIL
+    )
+
+rules 
+
+  UfIdem : 
+    [(x,x) | ps] -&gt; ps
+
+  UfDecompose : 
+    [(f#(xs), f#(ys)) | ps] -&gt; &lt;conc&gt;(&lt;zip(id)&gt;(xs, ys), ps)
+
+strategies
+
+  diff =  
+    for(\ ps -&gt; ([],ps) \ , (id,[]), (id, UfIdem &lt;+ UfDecompose) &lt;+ UfShift)
+
+rules
+
+  UfShift :
+    (ps1, [p | ps2]) -&gt; ([p | ps1], ps2)
+    
+strategies
+
+  pattern-match(isvar) = 
+    for(\ pairs -&gt; (pairs, []) \
+       ,\ ([], sbs) -&gt; sbs \
+       ,(UfIdem, id) &lt;+ MatchVar(isvar) + (UfDecompose, id))
+
+rules
+
+  MatchVar(isvar) : 
+    ([(x,y) | ps], sbs) -&gt; (ps, [(x, y) | sbs])
+    where &lt;isvar&gt; x; &lt;not(fetch({z: ?(x,z); &lt;not(eq)&gt; (y, z)}))&gt; sbs
+
+strategies
+
+  unify(isvar) =
+    for(\ pairs -&gt; (pairs, []) \
+       ,\ ([], sbs) -&gt; sbs \
+       ,(UfIdem, id) &lt;+ UfVar(isvar) + UfSwap(isvar) &lt;+ (UfDecompose, id))
+
+rules
+
+  UfVar(isvar) : 
+        ([(x,y) | ps], sbs) -&gt; (ps', [(x, y) | sbs''])
+        where &lt;isvar&gt; x; &lt;not('in)&gt;(x,y); 
+              &lt;substitute(isvar)&gt; ([(x,y)], (sbs, ps)) =&gt; (sbs'', ps')
+
+  UfSwap(isvar) : 
+        ([(x,y) | ps], sbs) -&gt; ([(y,x) | ps], sbs)
+        where &lt;not(isvar)&gt; x; &lt;isvar&gt; y
+
+rules
+
+  // Test occurrence of a in b 
+
+  'in : (a, t) -&gt; &lt;oncetd(?a)&gt; t
+
+strategies
+
+  equal(fltr) =
+    for(id ,[], UfIdem 
+                &lt;+ try([(fltr,fltr)|id]); UfDecompose
+                //&lt;+ debug(!"not equal: "); FAIL
+    )
+
+strategies
+
+  // The following equality strategy has an additional filter 
+  // that can be used for checking equality modulo alpha renaming. 
+  // The filter applies to the entire pair and can change something 
+  // in one term based on the other term.
+
+  equal(fltr1, fltr2) =
+    for(id ,[], UfIdem 
+                &lt;+ [(try(fltr1),try(fltr1)); try(fltr2)|id]; UfDecompose
+                //&lt;+ debug(!"not equal: "); FAIL
+    )
+</PRE> <HR>
+<A HREF="Library031.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library033.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

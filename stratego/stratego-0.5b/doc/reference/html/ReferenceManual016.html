@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Applying Strategies in Terms and Matching Terms in Strategies
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual015.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual017.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.2&nbsp;&nbsp; Applying Strategies in Terms and Matching Terms in Strategies</H3>	<blockquote><hr>
+	Strategies can be applied to (sub)terms of build patterns.
+	<hr></blockquote><BR>
+<BR>
+	The notation 
+<PRE>
+   &lt;Strategy&gt; Term
+</PRE>	is used to build an intermediate term to which the testing
+	strategy should be applied.
+	
+	If more than one condition has to hold, they can be composed
+	using the strategy operators introduced in previous sections.<BR>
+<BR>
+	
+<H5> Matching Conditions</H5>
+	
+	Conditions can also be used to compute an intermediate result
+	to be used in the right-hand side of the rule. A strategy of
+	the form
+<PRE>
+  Strategy =&gt; Term
+</PRE>	applies a strategy to the current term and matches the result
+	against the term. This can have the effect of binding the
+	variables in the term, which can then be used in the
+	right-hand side of the rule.
+	
+	For example, the following rule defines the eta expansion
+	of a lambda expression.
+<PRE>
+  EtaExp: e -&gt; Lambda(x, Apply(e, Var(x)))
+          where new =&gt; x
+</PRE>	The condition <CODE>new =&gt; x</CODE> generates a new string and
+	matches the result against the variable <CODE>x</CODE>.<BR>
+<BR>
+	
+<H5> Strategy Applications</H5>	Application of a strategy to a subterm in the right-hand
+	side of a rule.
+<PRE>
+  &lt;Strategy&gt; Term
+</PRE>	
+	For example, let <CODE>subs</CODE> be the strategy that when applied
+	to a triple <CODE>(a, b, c)</CODE> replaces occurences of <CODE>b</CODE>
+	in <CODE>c</CODE> by <CODE>a</CODE>, then beta reduction can also be
+	defined using the following rule:
+<PRE>
+  Beta : Apply(Lambda(x, e1), e2) -&gt; &lt;subs&gt; (e2, Var(x), e1)
+</PRE>	Using matching conditions this rule is a shorthand for the
+	rule
+<PRE>
+  Beta : Apply(Lambda(x, e1), e2) -&gt; e3
+         where &lt;subs&gt; (e2, Var(x), e1) =&gt; e3
+</PRE>	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 18: Syntax of strategy application</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Application
+imports Stratego-Strategies
+exports
+  context-free syntax
+    "&lt;" Strat "&gt;" Term     -&gt; Term    {cons("App")}
+
+    Strat "=&gt;" Term        -&gt; Strat   {cons("AM")}
+    "&lt;" StratAux "&gt;" Term  -&gt; Strat   {cons("BA")}
+    Strat                  -&gt; StratAux
+  context-free priorities
+    "&lt;" StratAux "&gt;" Term -&gt; Strat &gt;
+    Strat "=&gt;" Term -&gt; Strat &gt;
+    Strat ";" Strat -&gt; Strat</PRE>
+	
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual015.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual017.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

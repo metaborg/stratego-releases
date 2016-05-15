@@ -1,0 +1,2 @@
+Scope([[0],[0,0],[1,0],[0,1,0],[1,1,0]],Seq(Assign(Var([0])),Case(Var([0]),[Alt("F",[Var([0,0]),Var([1,0])],Case(Var([1,0]),[Alt("H",[],Case(Var([0,0]),[Alt("A",[],Build(Op("C",[])))],Fail)),Alt("G",[Var([0,1,0]),Var([1,1,0])],Case(Var([0,1,0]),[Alt("B",[],Case(Var([0,0]),[],Scope(["x_9"],Seq(Assign(Var("x_9"),Var([0,0])),Seq(Assign(Var("x_9"),Var([1,1,0])),Build(Op("B",[])))))))],Fail))],Fail))],Fail)))
+

@@ -1,0 +1,356 @@
+***************************************************************************
+
+This file contains ideas for extensions and improvements of Stratego
+and/or the Stratego compiler.
+
+***************************************************************************
+PLAN
+
+* Spring 2001
+
+  - Stabilize the language
+  - Describe syntax + semantics in reference manual
+  - Clean up specification of compiler components
+  - Define the intermediate languages in the compiler; define checkers
+    for these formats
+  - Implement optimizations 
+  - Change to new implementation scheme
+
+* Release 0.5
+
+  - Use cached AFuns when building terms.
+  - pp-instructions in Stratego
+  - Declare constructors in compiler
+  - Correctness of math functions
+  - Correctness of explode-term/mk-term for strings (??)
+
+  - Reference manual
+  - Complete & correct SDF2 syntax of Stratego
+
+  - xmpl/lambda
+  // Bug: "_" aan RHS geeft "Not a build-term-expression"
+
+***************************************************************************
+DOCUMENTATION
+
+* xmpl/: develop small examples; for example, various lambda reduction
+  strategies
+
+* improve the tutorial talk
+  - more examples
+
+* update the reference manual
+
+* overlays for domain-specific transformation
+  plus(x,y) = App("plus", [x,y])
+
+* Make online documentation, for example using pdflatex
+
+* Searchable documentation (pdf or latex2html)
+
+* Online documentation?
+
+* Describe how to use parsers and unparsers in the tutorial
+
+***************************************************************************
+LANGUAGE
+
+* Get rid of keywords rules and strategies, i.e., mix rules and strategies
+  in specification (??)
+
+* Add injections (constructor-less constructors) to signature (also
+  called subtypes):
+  
+  signature
+    sorts Var Exp
+    constructors
+      Var : String -> Var
+      _   : Var -> Exp
+      Abs : Var * Exp -> Exp
+
+* make threadl variant of thread that threads from right to left
+
+NOT URGENT
+
+* final module/definition
+
+  Marks a definition or all definitions in a module as final. This means
+  that modules importing this definition cannot extend it. For separate
+  compilation. (Alternative: speculative separate compilation)
+
+* Some/many rules can be used both ways. For example, in propositional
+  logic we have
+  A10 : Impl(x, y) -> Or(Not(x), y)
+  A11 : Or(Not(x), y) -> Impl(x, y)
+  It would be more attractive to be able to write
+  A10 : Impl(x, y) <-> Or(Not(x), y)
+  then, A10L would refer to the first rule and A10R to the second (?)
+
+* Extend Cons/Nil matching, building and congruence to built-in ATerm lists
+  - find out how much overhead the cons/nil <-> list translation causes
+    (this is not usually counted by the timing function in iowrap)
+    that is, how much time is spent in reading and writing terms,
+    how much would this go down if list conversions are no longer
+    present
+  - debug the implementation
+  the following should have been implemented:
+  - replace BuildFun("Cons") by BuildFunCons, same for Nil
+  - same for MatchFun
+  - same for Cons and Nil congruences
+  - implement these in rts with same semantics
+  - extend semantics to include built-in lists
+  - Cons builds built-in list if tail is list
+  - all, some, one should also work on lists
+  - this touches the matching automaton computation: 
+    + Match(Op("Cons", [t1, t2])) -> 
+	MatchFun("Cons"); ConsHead(); Match(t1); Tpop();
+                          ConsTail(); Match(t2); Tpop();
+  - and the backend:
+    + MatchFun("Cons") -> MatchFunCons()
+      etc.
+
+* Implement tuples by means of Tuplei constructor instead of TCons/TNil (??)
+
+* Support implicit annotations in terms
+  represent a term
+  	F(t1, ..., tn){a1, ..., an}
+  as
+	F(t1, ..., tn, [a1,...,an])
+  i.e., every constructor has an extra argument that represent the
+  annotations.
+  A rule 
+	F(t1, ..., tn) -> F(t1', ..., tn')
+  is implemented as
+	F(t1, ..., tn,_) -> F(t1', ..., tn',[])
+
+* NO,NO,NO: Add support for retrieving and setting annotations
+  (apply in implode-asfix: annotations)
+
+***************************************************************************
+TYPESYSTEM / STATIC SEMANTICS
+
+* What properties should type system check?
+
+* typechecking: first make sure that programs never crash
+
+* Stefan Kahrs in [Kah96] discusses the
+  notion of completeness--programs which never go wrong can be
+  type-checked--which complements Milner's notion of
+  soundness--type-checked programs never go wrong [Mil78].
+
+***************************************************************************
+LIBRARY
+
+* Math functions (cos, sin, sqrt) (for DSP project)
+  - the primitives (cos, sin, sqrt) work, but do they produce the right result?
+
+* Document Library
+
+* Rationalize the io library; find out if all files that are opened
+  are also closed.
+
+* Systematization of the library: 
+  - define primitives in separate module, e.g., io-prim.r or table-prim.r
+  - make subcollections such that not the entire library needs
+    to be imported, e.g., sys, list, ...
+
+* Call box2text and sglr from Stratego (embed parsers and
+  pretty-printers).  Support this in a generic way.
+
+* dtime should count children time as well
+  - time-self: time only self process
+  - time-all: time children as well
+
+* Option handling via environment table as in environment variables.
+
+***************************************************************************
+TOOLS
+
+* Debugging: insert debugging statements before and after selected
+  list of strategies
+
+* StrategoBench: Benchmarking framework in the style of SUnit
+
+* StrategoUnit: Develop a testing framework in the style of JUnit
+  (document)
+
+* Extreme Programming in Stratego (document)
+  - how to test
+  - how to debug
+  - how to refactor (interactive refactoring?)
+
+* StrategoGlue: composing transformation components
+  use StrategoScript?
+
+* Stratego.el: Emacs: filling + latex mode between \end{code} \begin{code}
+
+* Default pretty-printing = ugly printing + indentation
+  is available: publish (but requires box2text)
+
+* TermTypeCheck: check format of terms using recursive patterns;
+  generate recursive patterns from signature
+
+* MetaStratego: A meta-programming framework for Stratego
+  - signature
+  - pretty-printer
+  - SDF2 syntax definition
+  - derivation of signatures from SDF2 definition
+  - SDF2 pretty-printer
+  - do these belong in stratego distribution? or in separate package?
+
+***************************************************************************
+COMPILER
+
+USERINTERFACE / ERROR REPORTING
+
+* check import graph: operators used in a module should be visible
+  through its imports
+
+* Warn in case of overloaded rule or strategy names (optionally)
+
+* store line numbers of rules and definitions and use in error messages
+
+* list origin when reporting "error: operator s1/0 undefined"
+
+  could be done by first making a list/table of all available
+  definitions and checking it after computing the calls from a
+  rule or definition
+
+* dealing with shared libraries; Merijn writes:
+
+  -doe configure --disable-shared (de allerlaatste versie van
+  aterm doet dat automatisch al). Hiermee wordt de generatie
+  van shared libraries voorkomen
+  -of, link sc met de -static optie om geen gebruik te aken
+  van shared libraries
+  -of, laat LD_LIBRARY_PATH wijzen naar <aterm-prefix>/lib.
+  Hierdoor kan de dynamic linker de shared libraries vinden.
+
+* sc : commandline interface
+  - -c flag for sc: only compile to C code
+  - document the interface in tutorial and manual page (?)
+
+* silent rewriting mode: no success or failure message or profiling
+  information
+
+MAINTENANCE/BUGS
+
+* There is a nameclash in Stratego.def/r/pp: the strategy some(s) and the
+  constructor for Option(a), Some(a), have the same constructor: 'Some'. This
+  causes another pretty printing problem. (Hedzer)
+
+* No Wld'cards should occur in Build's
+
+* sc should stop after a parse error in pack-stratego
+
+* Distinghuish and describe interfaces to the components by means
+  of signatures. Make format checkers for these interfaces.
+
+* remove dead code
+
+* Translate pp-instructions to Stratego
+
+* Declare all constructors in compiler
+
+* Bug in handling of operators: if f(x) is defined, but f is used
+ a goto to f results. (repaired in 0.4.14?)
+
+* ATerm library reading function crashes on nullary constants with
+  parentheses, as in A(). Has this always been the case? Shouldn't this
+  be repaired? (repaired in 0.4.14?)
+
+* Does f#(xs) work for strings?
+
+* Handle variable unbinding on backtracking
+
+  one way: only bind unbound variables when choice is committed:
+  Consider
+
+   	?F(x, y); s1 <+ s2
+
+  and assume that x is bound before invocation of this strategy and
+  that y is not (y value is looked for). transform this into
+
+	{y: ?F(x, y); s1; split(id,!y)}; ?(_,y); Fst <+ s2
+
+  This has the same effect as the earlier expression (can this insight
+  be made more efficient? turned into primitive operations?)
+
+  Note: this assume one can determine statically which variables are
+  unbound when entering a choice. Although this scheme works when y
+  is bound, it might turn out very expensive, because a failing match
+  to y is discovered after doing s1.
+
+* As patterns may only be used in matching positions
+
+* ReadTerm crashes on non-existing file
+
+IMPLEMENTATION SCHEME
+
+* Consider translation to other target languages; candidates include
+  JVM, Java, Haskell, SML
+
+* Use setjmp and longjmp to handle backtracking between strategies
+
+* Wrappers for foreign functions:
+  Write wrappers that take care of the interaction with the term stack,
+  i.e., get the argument from the top of the stack and possibly unpack
+  the arguments packed in a tuple to the arguments of a function and
+  provide the correct return address.
+
+* Separate compilation (in particular for library)
+  - requires procedure call implementation
+  - calling convention for procedures (also needed for foreign functions)
+  - dealing with variable scope
+
+OPTIMIZATION
+
+* F(id,\ H(x) -> G(x,x) \, id) is equivalent to
+  \ F(a, H(x), b) -> F(a, G(x,x), b) \
+
+* Replace symbolic references to symbols (MatchFunFC("Cons")) by pointers
+  to symbols (MatchFunFC(_sym_Cons)) and define these pointers at
+  initialization. _sym_Cons = ATmakeSymbol("Cons", 2)
+
+* Do needed definition analysis as early as possible
+
+* set up benchmarks and reggression tests
+  - propositional formulae
+  - sieve
+  - note: the compiler itself is of course the real regression test
+    although it does not cover all aspects/constructs of the language
+
+* Make a set of benchmarks that can function as reference for optimizations
+
+* What is the overhead caused by the assert statements in the run-time
+  system?
+
+* Do effects analysis on strategy expressions; distinghuish the following
+  effects: no effect, transformation effect, variable binding effect, 
+  failure effect
+
+* optimizations
+	- stack access should be done via hard pointers instead of
+	indices, i.e., now: choice_stack[csp], should be: csp is pointer
+	to choice_stack[csp];
+	- do matchings on symbols instead of strings
+
+* Also inline sums of rules if they occur inside a sum
+
+* Generate congruence definition by need in the same style as threading
+  and distributing congruences.
+
+SYSTEM
+
+* Link yacc generated parsers with Stratego specifications
+
+* Control what kind of object files (dbg, opt, prof) are linked
+
+
+***************************************************************************
+THEORY
+
+* Compare to other traversal frameworks, e.g., 
+	
+	- Adaptive OO Programming
+	- PolyP / Generic Haskell

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  STRING
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library011.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library013.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.2.1&nbsp;&nbsp;  STRING</H3>	This module defines some operations on strings, including
+	conversions to and from numbers.<BR>
+<BR>
+<PRE>
+module string
+imports list conditional iteration
+
+rules
+
+  sect(op, arg) : x -&gt; &lt;op&gt; (x, &lt;arg&gt;())
+
+strategies
+  
+  new = prim("_ST_new")
+
+  is-string = prim("_ST_is_string")
+
+  implode-string = prim("_ST_implode_string")
+  explode-string = prim("_ST_explode_string")
+
+  conc-strings = (explode-string, explode-string); conc; implode-string
+
+  concat-strings = map(explode-string); concat; implode-string
+
+  int-to-string = 
+    rec x(split(sect(mod, !10); sect(add, !48), sect(div, !10); int);
+          (id, ?0; ![] &lt;+ x); MkCons );
+    reverse;
+    implode-string
+
+  string-to-int =
+    explode-string;
+    split(!0, id);
+    repeat(S2I2); 
+    S2I1
+
+  escape = 
+    explode-string;
+    rec x(Escape; [id, id | x] &lt;+ [id | x] &lt;+ []);
+    implode-string
+
+  unescape = 
+    explode-string;
+    rec x(try(UnEscape); ([id | x] &lt;+ []));
+    implode-string
+
+  string-length =
+    explode-string;
+    length
+
+rules
+
+  Escape : [34 | cs] -&gt; [92, 34 | cs]
+  Escape : [92 | cs] -&gt; [92, 92 | cs]
+  Escape : [10 | cs] -&gt; [92, 110 | cs]
+
+  UnEscape : [92, 34 | cs]  -&gt; [34 | cs]
+  UnEscape : [92, 92 | cs]  -&gt; [92 | cs]
+  UnEscape : [92, 110 | cs] -&gt; [10 | cs]
+
+  S2I1 : (n, [])         -&gt; n
+
+  S2I2 : (n, [m|ms]) -&gt; (&lt;add&gt;(&lt;mul&gt;(10, n), &lt;subt&gt;(m, 48)), ms)
+         where &lt;geq&gt;(m, 48); &lt;leq&gt;(m, 57)
+
+  S2D0 : (n, [46|ys])  -&gt; (n, 10, ys)
+
+  S2D1 : (n, f, []) -&gt; n
+
+  S2D2 : (n, f, [m|ms]) -&gt; 
+         (&lt;add&gt;(n, &lt;div&gt;(&lt;subt&gt;(m, 48), f)), &lt;mul&gt;(f, 10), ms)
+         where &lt;geq&gt;(m, 48); &lt;leq&gt;(m, 57)
+
+strategies
+
+  string-to-num =
+    explode-string;
+    split(!0, id);
+    repeat(S2I2);
+    ( S2I1
+    + S2D0;
+      repeat(S2D2);
+      S2D1
+    )
+
+strategies
+
+  lower-case = 
+    explode-string;
+    map(lc);
+    implode-string
+
+   lc = try(where(sect(geq, !65)); where(sect(leq, !90)); sect(add, !32))
+
+rules
+
+  SplitInit : x -&gt; ([], [], x)
+
+  SplitExit : 
+        (xs, cs, []) -&gt; 
+        &lt;reverse&gt; [&lt;reverse; implode-string&gt; cs|xs]
+
+  SplitNext : 
+        (xs, cs, [32|ys]) -&gt; 
+        (Cons(&lt;reverse; implode-string&gt; cs, xs), [], ys)
+
+  SplitNext : 
+        (xs, cs, [y|ys]) -&gt; (xs, [y|cs], ys)
+        where &lt;not(eq)&gt; (y, 32)
+
+strategies
+
+  split-at-space =
+    explode-string;
+    SplitInit;
+    rec x(SplitExit &lt;+ SplitNext; x)  
+
+  basename =
+    explode-string;
+    try(rec x([id|x] &lt;+ ?[46 | _]; ![]));
+    implode-string
+
+  basename(ext) =
+    explode-string;
+    try(rec x([id|x] &lt;+ [46 | ext]; ![]));
+    implode-string
+
+  guarantee-extension(ext) =
+    basename;
+    split(id, &lt;ext&gt;());
+    add-extension
+
+rules
+
+  add-extension : (name, ext) -&gt; &lt;concat-strings&gt; [name, ".", ext]
+</PRE> <HR>
+<A HREF="Library011.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library013.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

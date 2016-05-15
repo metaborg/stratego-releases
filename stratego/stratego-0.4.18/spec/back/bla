@@ -1,0 +1,37 @@
+
+
+	+ BuildFun("Cons",2)
+	+ BuildFun("Cons",2)
+	+ BuildFun(is-string,0)
+	+ BuildFun("Nil",0)
+	+ BuildFun("TNil",0)
+	+ BuildFun("TNil",0)
+	+ BuildStr(is-string)
+	+ BuildStr("test suite: ")
+	+ BuildVard(3,1)
+	+ BuildVard(4,1)
+	+ BuildVard(5,1)
+	+ BuildVard(6,1)
+	+ BuildVard(7,1)
+	+ BuildVard(is-int,is-int)
+	+ Epopd(6,1)
+	+ Epopd(7,1)
+	+ Epushd(5,1)
+	+ Epushd(6,1)
+	+ Epushd(7,1)
+	+ Epushd(is-int,is-int)
+	+ Goto(is-string)
+	+ Label(is-string)
+	+ MatchVard(4,1)
+	+ MatchVard(5,1)
+	+ MatchVard(6,1)
+	+ MatchVard(7,1)
+	+ MatchVard(is-int,is-int)
+	+ Rpush(is-string)
+	+ Tdupl
+	+ Tpush
+	+ Tpush
+	+ Tpush
+	+ Tpush
+	+ Tpush
+	+ Tpush

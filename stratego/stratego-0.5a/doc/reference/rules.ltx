@@ -1,0 +1,237 @@
+\section{Rules}
+
+\subsection{Defining Basic Transformations with Rules}
+
+	\begin{abstract}
+
+	Standard rewrite rules are a notation for a special kind
+	of strategies.
+
+	\end{abstract}
+
+	A rule section has the form
+\begin{verbatim}
+  rules 
+    Rule*
+\end{verbatim}
+	A rule has the form
+\begin{verbatim}
+  Label : Term -> Term 
+\end{verbatim}
+
+	An example is the following rule that defines beta-reduction
+	on lambda expressions.
+\begin{verbatim}
+  rules
+    Beta : Apply(Lambda(x, e1), e2) -> Subs(e2, x, e1)
+\end{verbatim}
+	denotes
+\begin{verbatim}
+  strategies
+    Beta = ?App(Abs(x, e1), e2); !Let(x, e2, e1)
+\end{verbatim}
+
+	A rewrite rule defines a one step transformation on terms.  If
+	the term matches the left-hand side of the rule it is replaced
+	by the appropriately instantiated right-hand side of the rule.
+	This transformation happens at the root of a term. Later on we
+	will introduce ways to apply rules to the subterms of a term.
+
+	\paragraph{Conditional Rules}
+
+	The simple rules that we introduced above apply if the
+	left-hand side of the rule matches the root of the
+	term. Sometimes we want to restrict the applicability of a
+	rule to a subset of terms that match the pattern of the
+	left-hand side. A conditional rule of the form
+\begin{verbatim}
+  Label : Term -> Term where Strategy
+\end{verbatim}
+	applies if the left-hand side matches and in addition the
+	strategy in the where clause succeeds when applied to the
+	term.
+	
+	For example, let \verb|in| be the strategy that when applied
+	to a pair \verb|(t1, t2)| of terms, determines whether
+	\verb|t1| occurs as a subterm of \verb|t2|, then the following
+	conditional rule defines eta reduction of a lambda term:
+\begin{verbatim}
+  Eta : Lambda(x, Apply(e, Var(x))) -> e
+        where <not(in)> (Var(x), e)
+\end{verbatim}
+
+	The notation 
+\begin{verbatim}
+   <Strategy> Term
+\end{verbatim}
+	is used to build an intermediate term to which the testing
+	strategy should be applied.
+	
+	If more than one condition has to hold, they can be composed
+	using the strategy operators introduced in previous sections.
+
+	\paragraph{Anonymous Rules}
+
+	sometimes useful to define rule without a name
+
+	\verb|\ t1 -> t2 where s \ |
+
+	\paragraph{Parameterized and Overloaded Rules}
+
+	follows mapping to strategy definitions
+
+	\begin{boxedfigure}{}{Syntax of rules}
+
+	\inputverbatim{\sdfdir/Stratego-Rules.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Applying Strategies in Terms and Matching Terms in Strategies}
+
+	\begin{abstract}
+
+	Strategies can be applied to (sub)terms of build patterns.
+
+	\end{abstract}
+
+	The notation 
+\begin{verbatim}
+   <Strategy> Term
+\end{verbatim}
+	is used to build an intermediate term to which the testing
+	strategy should be applied.
+	
+	If more than one condition has to hold, they can be composed
+	using the strategy operators introduced in previous sections.
+
+	\paragraph{Matching Conditions}
+	
+	Conditions can also be used to compute an intermediate result
+	to be used in the right-hand side of the rule. A strategy of
+	the form
+\begin{verbatim}
+  Strategy => Term
+\end{verbatim}
+	applies a strategy to the current term and matches the result
+	against the term. This can have the effect of binding the
+	variables in the term, which can then be used in the
+	right-hand side of the rule.
+	
+	For example, the following rule defines the eta expansion
+	of a lambda expression.
+\begin{verbatim}
+  EtaExp: e -> Lambda(x, Apply(e, Var(x)))
+          where new => x
+\end{verbatim}
+	The condition \verb|new => x| generates a new string and
+	matches the result against the variable \verb|x|.
+
+	\paragraph{Strategy Applications}
+
+	Application of a strategy to a subterm in the right-hand
+	side of a rule.
+\begin{verbatim}
+  <Strategy> Term
+\end{verbatim}
+	
+	For example, let \verb|subs| be the strategy that when applied
+	to a triple \verb|(a, b, c)| replaces occurences of \verb|b|
+	in \verb|c| by \verb|a|, then beta reduction can also be
+	defined using the following rule:
+\begin{verbatim}
+  Beta : Apply(Lambda(x, e1), e2) -> <subs> (e2, Var(x), e1)
+\end{verbatim}
+	Using matching conditions this rule is a shorthand for the
+	rule
+\begin{verbatim}
+  Beta : Apply(Lambda(x, e1), e2) -> e3
+         where <subs> (e2, Var(x), e1) => e3
+\end{verbatim}
+
+	\newpage
+
+	\begin{boxedfigure}{}{Syntax of strategy application}
+
+	\inputverbatim{\sdfdir/Stratego-Application.sdf}
+	
+	\end{boxedfigure}
+
+\subsection{Strategic Pattern Matching Rules}
+
+	\begin{abstract}
+
+	\end{abstract}
+
+	\newpage
+
+	\begin{boxedfigure}{}{}
+
+	\inputverbatim{\sdfdir/Stratego-Strategic-Rules.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Describing Deeply Embedded Patterns with Contexts}
+
+	\begin{abstract}
+
+	\end{abstract}
+
+	For some applications matching with a fixed pattern is not
+	sufficient because some part of the pattern can be at an
+	arbitrary depth from the root. In such circumstances
+	contextual matching can be used.
+
+	For example, assume that our lambda terms satisfy the variable
+	assumption, i.e. no two bound variables are the same if their
+	binding positions are different, then we can define alpha
+	renaming by means of the rule
+\begin{verbatim}
+  Alpha : Lambda(x, e[Var(x)](sometd)) -> Lambda(y, e[Var(y)])
+          where new => y
+\end{verbatim}
+	This rule replaces the abstracted variable \verb|x| and all
+	occurences of \verb|Var(x)| in the body of the abstraction by
+	the fresh variable \verb|Var(y)|. The strategy \verb|sometd|
+	specified with the context determines what traversal strategy
+	to use to find occurences of \verb|Var(x)|.  (Later on we will
+	discuss how a bound variables can be renamed in order to
+	adhere to the variable assumption.)
+
+	\newpage
+
+	\begin{boxedfigure}{}{}
+
+	\inputverbatim{\sdfdir/Stratego-Contexts.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Abstracting from Patterns with Overlays}
+
+	\begin{abstract}
+
+	\end{abstract} 
+
+	\newpage
+
+	\begin{boxedfigure}{}{Syntax of overlays}
+
+	\inputverbatim{\sdfdir/Stratego-Overlays.sdf}
+
+	\end{boxedfigure}
+
+\subsection{As Patterns}
+
+	As patterns of the form x @ t can be used to deconstruct a
+	term using pattern matching and at the same time bind the
+	entire term to the variable x. For example, given the rule
+
+\begin{verbatim}
+       rules
+         R : F(x, y @ G(A, z)) -> H(x, y, z)
+\end{verbatim}
+
+   	we have that
+
+\begin{verbatim}
+       <R> F(B,G(A,C)) => H(B,G(A,C),C)
+\end{verbatim}

@@ -1,0 +1,56 @@
+# Buildfile for "stratego" generated automatically on Fri 27 Oct 2000 08:05:47 PM CEST
+#
+#
+# supported Buildfile variables:
+#  Mandatory variables defining common configuration parameters which should
+#  be defined in the "common" section of the Buildfile:
+#    actions        a list of actions that can be executed for the package
+#    package        name of the software package
+#    platforms      a list of platforms for which "package" should be build
+#    top            top directory of source tree
+#
+#  Optional parameters which may occur anywhere in the Buildfile:
+#    build_dir      location where build should be performed
+#    log_dir        location where logs files are written
+#
+#  For each action "a" as defined by the "actions" variable, the following
+#  variables can can be defined:
+#    a              command to execute for action "a"
+#    post_a         command to execute after action "a" has been successfully
+#                   executed
+#
+
+common() {
+     package=stratego
+     version=0.5b
+
+   platforms="linux_i686"
+     actions="unpack configure build install check"
+
+where_are_we=`pwd`
+
+   build_dir=/tmp/stratego-build
+      pkgdir=/home/visser/res/xt/stratego
+     log_dir=/home/visser/res/xt/stratego/build
+
+         top=${package}-${version}
+
+      prefix="${build_dir}/stratego-build"
+
+      unpack="rm -fr ${top} ${prefix}${os}/${arch}; \
+              tar zxvf ${pkgdir}/${package}-${version}.tar.gz"
+
+   configure="./configure --prefix=${prefix} --with-aterm=/home/visser/res/xt"
+
+       build="gmake"
+
+     install="gmake install"
+
+       check="gmake check"
+}
+
+linux_i686() {
+   platform=linux_i686
+         os=linux
+       arch=i686
+}

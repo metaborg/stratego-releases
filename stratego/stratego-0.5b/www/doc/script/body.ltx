@@ -1,0 +1,109 @@
+\section{Introduction}
+
+	The primary complaint of Stratego users is the slow turn
+	around time of the Stratego compiler. For a large
+	specification it can take several minutes for compilation to
+	complete. This is bad enough when building an installation,
+	but really annoying when debugging a new specification.
+
+	There are several solutions to this problem.  First of all,
+	the performance of compiled Stratego specifications can be
+	improved by generating better code. This would automatically
+	improve the performance of the compiler itself.  But the
+	performance of the compiler can be much further improved by
+	introducing separate compilation. Currently the entire library
+	is processed in order to compile even the smallest
+	specification.  Finally, an interpreter for Stratego would
+	allow to instanteneously try out a specificaiton without any
+	compilation at all. These solutions are complementary and will
+	all contribute to improving the usability of Stratego.
+
+	Improving the quality of generated code and speeding up the
+	compiler have been goals from the first version of the
+	compiler. Better results are still needed in this area. A new
+	implementation scheme has been devised and waits
+	implementation. This scheme will allow separate compilation
+	too some degree. This will allow precompilation of the library
+	and thus save compilation time. However, compilation will
+	always remain expensive. Therefore, it is attractive to have
+	an interpreter as well.
+	
+	This paper presents StrategoScript, an interpreter for
+	Stratego. A script is a stand-alone, executable text file that
+	can import ordinary and preprocessed Stratego modules. A
+	script achieves transformations of the current term by means
+	of strategy expressions. All the capabilities available in
+	normal specifications are available in scripts as well. The
+	difference with compiled specifications is that executation is
+	bound to be slower.
+
+	StrategoScript is intended for learning, testing, and
+	debugging Stratego specification. It might also be useful as
+	glue between transformation components. The current version
+	(0.5b) has not been extensively tested with big examples and
+	has some limitations.
+
+\section{StrategoScript by Example}
+
+	A script is a sequence of commands that are executed in
+	turn. Possible commands are strategy expressions, module imports,
+	strategy definitions, rule definitions, signatures, and overlays.
+
+	A strategy expression is executed by applying it to current
+	term.  When the expression succeeds the term is replaced by
+	the transformed term, otherwise execution fails
+
+	But it is possible to import modules into a script, to dump
+	the current state of a script, and to load such a dump in
+	another script. I have made an alpha version available at
+
+	If put in a file that is made executable, it can execute on
+	its own. 
+
+	A script consists of the keywords "stratego script" followed
+	by a list of commands, which are normal module sections
+	(imports, rules, strategies, etc.), :dump "file", :load
+	"file", and > s, where s is an arbitrary strategy expression.
+
+	Semantics
+
+	Each command is evaluated in turn. Strategy commands transform
+	the current term. Strategy commands can use variables bound in
+	previous commands.
+
+	\begin{figure}
+		\begin{boxedminipage}{\hsize}
+		\verbatiminput{xmpl/dump-library.ss}
+		\end{boxedminipage}
+
+	\caption{this imports the library and then dumps it}
+
+	\end{figure}
+
+	\begin{figure}
+	\begin{boxedminipage}{\hsize}
+		\verbatiminput{xmpl/load-lib.ss}
+	\end{boxedminipage}
+
+	\caption{this loads the dumped library image, loads module
+	script6.r and applies rules B and A from that
+	module. Everything from the library can be used.}
+
+	\end{figure}
+
+\section{Unit Testing Specifications with StrategoScript}
+
+\section{Implementation}
+
+	StrategoScript has been implemented in Stratego.
+
+ \subsection{Importing Modules}
+
+	reuse of existing compiler components
+
+	call to the compiler to preprocess an imported module
+
+ \subsection{Evaluation of Strategy Expressions}
+
+	evaluation of primitives
+

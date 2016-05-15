@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Strategic Pattern Matching Rules
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual016.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual018.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.3&nbsp;&nbsp; Strategic Pattern Matching Rules</H3>	<blockquote><hr>
+	<hr></blockquote><BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 19: </DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Strategic-Rules
+exports 
+  context-free syntax
+    %% rule with strategic patterns
+
+    Strat "--&gt;" Strat ("where" Strat)? 
+                                -&gt; SRule {cons("StratRule")}
+
+    Identifier ("(" {Identifier ","}* ")")? 
+      "::"  SRule -&gt; RDef {cons("RDef")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual016.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual018.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

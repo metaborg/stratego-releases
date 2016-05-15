@@ -1,0 +1,595 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+
+\section{Overview}
+
+\subsection{Structure}
+
+	This chapter explains the constructs of the strategy language.
+
+\subsection{Modules}
+
+	A specification consists of a set of modules with one
+	designated top module. The strategy denoted by a specification
+	is the strategy \verb|main|.
+
+	A module has the form
+\begin{verbatim}
+  module Modname
+    {Imports | Signature | Rules | Strategies}*
+\end{verbatim}
+	that is it consits of a list of import sections, signatures,
+	rule sections and strategy sections. A module with name
+	\verb|Modname| is assumed to resided in a file with name
+	\verb|Modname.r|.
+
+	An import has the form
+\begin{verbatim}
+  imports Modname
+\end{verbatim}
+	and denotes the structural inclusion of the sections of module
+	\verb|Modname| into the importing module. Here structural
+	inclusion means inclusion at the level of abstract syntax as
+	opposed to textual inclusion as is in the C \verb|#include|
+	statement.
+
+	\newpage
+
+	\begin{boxedfigure}{}{}
+
+	\inputverbatim{\sdfdir/Stratego-Modules.sdf}
+
+	\end{boxedfigure}
+
+\section{Lexical Syntax}
+
+\subsection{Identifiers}
+	
+	Identifiers are strings of characters starting with a letter
+	followed by zero or more letters, digits or underscores.  A
+	lowercase identifiers is an identifier starting with a
+	lowercase letter. An uppercase identifier is an identifier
+	starting with an uppercase letter.
+	
+	A decimal natural number is a string of digits (0 .. 9).
+
+	Comments can be written in SML style between \verb|(*| and
+	\verb|*)| and can span multiple lines. But, note that comments
+	cannot be nested.
+
+	reserverd words
+
+	symbols used
+
+
+	\begin{boxedfigure}{}{}
+
+	\inputverbatim{\sdfdir/Stratego-Lexicals.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Layout and Literate Specifications}
+
+	In addition the syntax supports literate programming.  A file
+	starts with the keyword \verb|\literate|. Pieces of
+	specification text are enclosed in the phrases
+	\verb|\begin{code}| and \verb|\end{code}|. In between pieces
+	of code one can write arbitrary text. The general structure of
+	a file is:
+\begin{verbatim}
+  \literate
+     LaTeX text
+  \begin{code}
+     specification text
+  \end{code}
+     LaTeX text
+  \begin{code}
+     specification text
+  \end{code}
+\end{verbatim}
+	The parser only reads the code parts of a file. A file can be
+	\verb|\input| directly in \LaTeX. The code parts are set in
+	verbatim, the non-code parts are interpreted as regular
+	\LaTeX{} material.
+
+	\newpage
+
+	\begin{boxedfigure}{}{}
+
+	\inputverbatim{\sdfdir/Stratego-Layout.sdf}
+
+	\end{boxedfigure}
+
+\section{Data}
+
+\subsection{Terms}
+
+	Terms are constructs over the grammar
+\begin{verbatim}
+  T -> x | s | n | C | C(T1,...,Tn) | [T1,...,Tn] | (T1,...,Tn)
+\end{verbatim}
+	where \verb|x| denotes a variable, i.e., an identifier,
+	\verb|s| denotes strings of characters between double quotes,
+	\verb|n| denotes decimal natural numbers, \verb|C| denotes a
+	constructor, i.e., an identifier.  Variables and unary
+	constructors are distinguished by means of the signature (see
+	below). The notation \verb|[t1,...,tn]| denotes a list of
+	terms and is syntactic sugar for
+	\verb|Cons(t1,...,Cons(tn,Nil))|.  The notation
+	\verb|(t1,...,tn)| denotes a tuple of terms and is syntactic
+	sugar for \verb|TCons(t1,...,TCons(tn,TNil)))|.
+
+	This defines the raw terms that are the object of
+	transformation. A language is encoded by means of terms by
+	specifying a subset of this set of terms by means of a
+	signature.
+
+	\newpage
+
+	\begin{boxedfigure}{}{}
+
+	\inputverbatim{\sdfdir/Stratego-Terms.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Signatures}
+
+	A signature is of the form
+\begin{verbatim}
+  signature
+    sorts Sort ... Sort
+    operations OpDecl ... OpDecl
+\end{verbatim}
+	
+	An operation declaration of the form 
+\begin{verbatim}
+  C : Sort
+\end{verbatim}
+	declares a nullary constructor (a constant) \verb|C| of type
+	\verb|Sort|. A declaration of the form
+\begin{verbatim}
+  C : Sort1 * ... * Sortn -> Sort
+\end{verbatim}
+	declares an $n$-ary constructor \verb|C| that takes a tuple of
+	terms \verb|(t1,...,tn)| where \verb|ti| is of sort
+	\verb|Sorti| into a term \verb|C(t1,...,tn)| of sort
+	\verb|Sort|. 	
+
+	Predefined sorts are \verb|String| denoting strings of
+	characters between double quotes, and \verb|Int| denoting
+	natural numbers in decimal notation.
+
+	For example, the following signature describes a language
+	of lambda expressions.
+\begin{verbatim}
+signature
+  sorts Exp
+  operations
+    Var    : String -> Exp 
+    Apply  : Exp * Exp -> Exp
+    Lambda : String * Exp -> Exp
+\end{verbatim}
+
+	Terms with variables are only used in a specification.
+	Transformations apply only to ground terms.
+
+	(At this point typechecking is not done by the implementation.
+	It is nonetheless important to write signatures because the
+	definition of the congruence operators is derived from them.)
+
+	derivation of congruence operators
+
+\subsection{Overlays}
+
+	pseudo constructors
+
+\section{Kernel}
+
+\subsection{Simple Rules}
+
+	A rule section has the form
+\begin{verbatim}
+  rules 
+    Rule*
+\end{verbatim}
+	A rule has the form
+\begin{verbatim}
+  Label : Term -> Term 
+\end{verbatim}
+
+	An example is the following rule that defines beta-reduction
+	on lambda expressions.
+\begin{verbatim}
+  rules
+
+    Beta : Apply(Lambda(x, e1), e2) -> Subs(e2, x, e1)
+\end{verbatim}
+
+	A rewrite rule defines a one step transformation on terms.  If
+	the term matches the left-hand side of the rule it is replaced
+	by the appropriately instantiated right-hand side of the rule.
+	This transformation happens at the root of a term. Later on we
+	will introduce ways to apply rules to the subterms of a term.
+
+\subsection{Strategy Definitions}
+
+	Rewrite rules specify one-step transformations on terms.  In
+	order to achieve a combined transformation using a set of
+	rewrite rules, they have to be combined into a program that
+	applies the rules until some desired state is achieved.
+	Conventional rewrite engines provide a fixed strategy for
+	normalizing a term with respect to a set of rewrite rules.
+	The strategy language described in this tutorial provides a
+	language of strategy operators that should be used to specify
+	the strategy to be used to apply a set of rules to a term.
+
+	A strategy section of a specification has the form
+\begin{verbatim}
+   strategies 
+     StrategyDefinition*
+\end{verbatim}
+	and consists of a list of strategy definitions that give
+	names to strategy expressions.
+
+	A strategy definition has the form
+\begin{verbatim}
+   Id(Id1,...,Idn) = Strategy 
+\end{verbatim}
+	Here \verb|Id| is the strategy operator defined by the
+	definition, the \verb|Idi| are strategy arguments to the
+	operator and \verb|Strategy| is the body of the definition. A
+	call \verb|Id(s1,...,sn)| to this operator is equivalent to
+	the body of the definition with the \verb|si| substituted for
+	the \verb|Idi|.  Definitions cannot be recursive. Recursion is
+	defined using the recursion operator introduced below.
+
+\subsection{Sequential Programming}	
+
+	If \verb|Label| is the label of a rule in a rule section then
+	\verb|Label| is an atomic strategy expression that applies to
+	a term if the corresponding rule applies to it.
+
+	A transformation can fail if it does not apply to a term or
+	succeed if it does.
+
+	\paragraph{Success and Failure} The operator \verb|id| always
+	succeeds without any transformation. The operator \verb|fail|
+	always fails.
+
+	\paragraph{Sequential Composition} If \verb|s1| and \verb|s2|
+	are strategies, then \verb|s1 ; s2| is the strategy that first
+	applies \verb|s1| and if that succeeds applies \verb|s2| to
+	the result.
+
+	\paragraph{Non-deterministic Choice} If \verb|s1| and \verb|s2| are
+	strategies, then \verb|s1 + s2| is the strategy that chooses
+	either \verb|s1| or \verb|s2|, but such that the strategy
+	chosen succeeds.
+
+	\paragraph{Deterministic Choice} If \verb|s1| and \verb|s2|
+	are strategies, then \verb|s1 <+ s2| is the strategy that
+	first tries \verb|s1| and if that succeeds is done. If
+	\verb|s1| fails, then \verb|s2| is applied to the original
+	term.  The operator is also called \emph{left choice} because
+	it prefers its left argument.  An example of the use of left
+	choice is the definition of \verb|try|:
+\begin{verbatim}
+  try(s) = s <+ id
+\end{verbatim}
+	The strategy \verb|try(s)| succeeds with the result of
+	\verb|s| if \verb|s| succeeds. Otherwise, if \verb|s| fails,
+	\verb|s| succeeds without any effect.
+	
+	\paragraph{Recursion} If \verb|s| is a strategy, then
+	\verb|rec x. s| is the strategy that at each point in \verb|s|
+	where the strategy variable \verb|x| is called, calls itself.
+	An example of the use of recursion is the definition of
+	\verb|repeat|:
+\begin{verbatim}
+  repeat(s)  = rec x ((s; x) <+ id)
+\end{verbatim}
+	The strategy \verb|repeat(s)| applies the strategy \verb|s|
+	as long as it succeeds.
+
+	\paragraph{Test} If \verb|s| is a strategy, then
+	\verb|test(s)| is the strategy that succeeds if \verb|s|
+	succeeds, but throws away the effect of its transformation.
+
+	\paragraph{Negation} If \verb|s| is a strategy, then
+	\verb|not(s)| is the strategy that fails if \verb|s| succeeds
+	and succeeds if \verb|s| fails.
+	
+	In summary we have introduced the following language of
+	strategy expressions
+\begin{verbatim}
+  s -> id | fail | s1 ; s2 | s1 + s2 | s1 <+ s2 | rec x(s) | 
+       test(s) | not(s) | ...
+\end{verbatim}
+	In the next section we will extend this language with
+	traversal operators.
+
+	\paragraph{Operator Precedence}
+
+	Operators in decreasing binding strength
+	\begin{itemize}
+	\item \verb|=>|
+	\item \verb|;|
+	\item \verb|+|, \verb|<+| (mutually right associative)
+	\end{itemize}
+
+	In other words 
+\verb|a ; b + c <+ d ; e| 
+	is parsed as 
+\verb|(a ; b) + (c <+ (d ; e))|
+
+
+\subsection{Term Traversal}
+
+	The operators defined above combine rule labels that apply
+	transformations to the root of a term into strategies that
+	repeatedly apply transformations to the root of a term.  In
+	order to achieve transformations throughout a term we need
+	operators to traverse the term.
+	
+	\paragraph{Congruence} If \verb|C| is an $n$-ary operator
+	defined in the signature, and \verb|s1|, ..., \verb|sn| are
+	strategies, then \verb|C(s1,...,sn)| is a strategy that only
+	applies to \verb|C| terms and then applies \verb|si| to the
+	$i$-th.  For example, consider the following signature
+	defining the list constructors \verb|Nil| and \verb|Cons|:
+\begin{verbatim} 
+  signature
+    operations
+      Nil  : List(a)
+      Cons : a * List(a) -> List(a)
+\end{verbatim}
+	The strategy \verb|Nil| applies to the term \verb|Nil| without
+	any change and fails for all other terms.  The strategy
+	\verb|Cons(s1, s2)| applies to a term \verb|Cons(t1, t2)| if
+	\verb|si| applies to \verb|ti| with result \verb|ti'| and has
+	as result \verb|Cons(t1', t2')|.  Using these operators we can
+	define the operator \verb|map| as:
+\begin{verbatim}
+  map(s) = rec x(Nil + Cons(s, x))
+\end{verbatim}
+	The strategy \verb|map(s)| applies a strategy \verb|s| to each
+	element of a list. Observe how recursion is used to apply the
+	strategy to the tail of the list.
+
+	\paragraph{Path} If \verb|s| is a strategy, then \verb|n(s)|
+	(with \verb|n| a natural number) is the strategy that applies
+	\verb|s| to the $n$-th argument of the term. It fails if the
+	term has less then $n$ arguments, or if \verb|s| fails on the
+	$n$-th argument.
+
+	\paragraph{All} If \verb|s| is a strategy, then \verb|all(s)|
+	is the strategy that applies \verb|s| to each of the children
+	of the root of the term. It succeeds if each of these
+	applications succeeds and fails otherwise. In particular,
+	\verb|all(s)| succeeds on a term that has no arguments (a
+	constant).  For example, the following strategies apply a
+	strategy \verb|s| to each node in a term, in preorder
+	(top-down), postorder (bottom-up) and a combination of pre-
+	and postorder (downup):
+\begin{verbatim}
+  bottomup(s) = rec x(all(x); s)
+  topdown(s)  = rec x(s; all(x))
+  downup(s)   = rec x(s; all(x); s)
+\end{verbatim}
+	A typical usage of these operators is the strategy
+\begin{verbatim}
+  bottomup(try(s))
+\end{verbatim}
+	that tries to apply \verb|s| at each node of a term.
+
+	\paragraph{One} The strategy \verb|one(s)| applies \verb|s|
+	non-deterministically to one direct subterm. It fails if there
+	is no subterm for which it succeeds. In particular, it fails
+	for constants, since they have no child for which \verb|s| can
+	succeed. As we did with \verb|all| we can construct bottom-up
+	and top-down traversals with \verb|one|:
+\begin{verbatim}
+  oncebu(s) = rec x(one(x) <+ s)
+  oncetd(s) = rec x(s <+ one(x))
+\end{verbatim}
+	These strategies succeed if they find a single node in the
+	term where the application of \verb|s| is successful. The
+	first one searches the term in bottom-up order: it first tries
+	to find a succesfull application in one of the children
+	\verb|one(x)| and otherwise tries \verb|s| at the root.
+
+	\paragraph{Some} The strategy \verb|some(s)| applies \verb|s|
+	to as many children as possible, but at least to one.
+
+	Examples of the use of \verb|some| are:
+\begin{verbatim}
+  somebu(s)     = rec x(some(x); try(s) <+ s)
+  sometd(s)     = rec x(s; all(try(x)) <+ some(x))
+  somedownup(s) = rec x(s; all(x); try(s) <+ some(x); try(s))
+\end{verbatim}
+
+	\paragraph{Grammar} In summary we have the following language
+	of strategy expressions
+\begin{verbatim}
+  s -> id | fail | s1 ; s2 | s1 + s2 | s1 <+ s2 | rec x(s) | test(s) | 
+       not(s) | C(s1,...,sn) | n(s) | all(s) | one(s) | some(s)
+\end{verbatim}
+
+ \subsection{Matching and Building}
+
+	match
+
+	build
+
+	scope
+
+	Rewrite rules and the features used in conditions are in fact
+	defined in terms of lower level construct. In this section we
+	discuss these lower level constructs. For first-time users
+	this section is optional material.
+
+ 	Match, Build and Scope
+
+	Example:	fetch
+
+  	inlining rules in strategy expressions
+
+\section{Built-in Datatypes / Primitives / Foreign Function Interface}
+
+ \subsection{Lists}
+
+	\verb+[a, b, c | xs]+
+
+	\verb|Cons(x, xs)|
+
+	\verb|Nil|
+
+	
+
+ \subsection{Integers}
+	
+	plus
+
+	minus
+
+	mul
+
+ \subsection{Strings}
+
+	New: The strategy \verb|new| applied to any term succeeds and
+	transforms the term into a string that has not yet been used.
+	This strategy is used to generate fresh variables.
+
+	implode-string
+	
+	explode-string
+
+\section{Advanced Rules}
+
+ 	\subsection{Conditional Rules}
+
+	The simple rules that we introduced above apply if the
+	left-hand side of the rule matches the root of the
+	term. Sometimes we want to restrict the applicability of a
+	rule to a subset of terms that match the pattern of the
+	left-hand side. A conditional rule of the form
+\begin{verbatim}
+  Label : Term -> Term where Strategy
+\end{verbatim}
+	applies if the left-hand side matches and in addition the
+	strategy in the where clause succeeds when applied to the
+	term.
+	
+	For example, let \verb|in| be the strategy that when applied
+	to a pair \verb|(t1, t2)| of terms, determines whether
+	\verb|t1| occurs as a subterm of \verb|t2|, then the following
+	conditional rule defines eta reduction of a lambda term:
+\begin{verbatim}
+  Eta : Lambda(x, Apply(e, Var(x))) -> e
+        where <not(in)> (Var(x), e)
+\end{verbatim}
+
+	The notation 
+\begin{verbatim}
+   <Strategy> Term
+\end{verbatim}
+	is used to build an intermediate term to which the testing
+	strategy should be applied.
+	
+	If more than one condition has to hold, they can be composed
+	using the strategy operators introduced in previous sections.
+
+	\subsection{Matching Conditions}
+	
+	Conditions can also be used to compute an intermediate result
+	to be used in the right-hand side of the rule. A strategy of
+	the form
+\begin{verbatim}
+  Strategy => Term
+\end{verbatim}
+	applies a strategy to the current term and matches the result
+	against the term. This can have the effect of binding the
+	variables in the term, which can then be used in the
+	right-hand side of the rule.
+	
+	For example, the following rule defines the eta expansion
+	of a lambda expression.
+\begin{verbatim}
+  EtaExp: e -> Lambda(x, Apply(e, Var(x)))
+          where new => x
+\end{verbatim}
+	The condition \verb|new => x| generates a new string and
+	matches the result against the variable \verb|x|.
+
+	\subsection{Strategy Applications}
+
+	Application of a strategy to a subterm in the right-hand
+	side of a rule.
+\begin{verbatim}
+  <Strategy> Term
+\end{verbatim}
+	
+	For example, let \verb|subs| be the strategy that when applied
+	to a triple \verb|(a, b, c)| replaces occurences of \verb|b|
+	in \verb|c| by \verb|a|, then beta reduction can also be
+	defined using the following rule:
+\begin{verbatim}
+  Beta : Apply(Lambda(x, e1), e2) -> <subs> (e2, Var(x), e1)
+\end{verbatim}
+	Using matching conditions this rule is a shorthand for the
+	rule
+\begin{verbatim}
+  Beta : Apply(Lambda(x, e1), e2) -> e3
+         where <subs> (e2, Var(x), e1) => e3
+\end{verbatim}
+
+	\subsection{Contexts}
+
+	For some applications matching with a fixed pattern is not
+	sufficient because some part of the pattern can be at an
+	arbitrary depth from the root. In such circumstances
+	contextual matching can be used.
+
+	For example, assume that our lambda terms satisfy the variable
+	assumption, i.e. no two bound variables are the same if their
+	binding positions are different, then we can define alpha
+	renaming by means of the rule
+\begin{verbatim}
+  Alpha : Lambda(x, e[Var(x)](sometd)) -> Lambda(y, e[Var(y)])
+          where new => y
+\end{verbatim}
+	This rule replaces the abstracted variable \verb|x| and all
+	occurences of \verb|Var(x)| in the body of the abstraction by
+	the fresh variable \verb|Var(y)|. The strategy \verb|sometd|
+	specified with the context determines what traversal strategy
+	to use to find occurences of \verb|Var(x)|.  (Later on we will
+	discuss how a bound variables can be renamed in order to
+	adhere to the variable assumption.)
+
+	\subsection{Multiple Rules with the Same Label}
+
+	A rule label that refers to more than one rule is considered
+	to be the non-deterministic choice beteen these rules.
+
+	\subsection{Parameterized Rules}
+
+	Just like defined strategy operators, rule labels can be
+	parameterized with a list of strategies.
+
+

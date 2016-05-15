@@ -1,0 +1,1347 @@
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD><TITLE>The Stratego Tutorial</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+</HEAD>
+<BODY >
+<!--HEVEA command line is: hevea -exec xxdate.exe doc.ltx -I ../../../share//tex -I ../intro -I ../basics -I ../install -o ../html/Tutorial.html -->
+<!--HTMLHEAD-->
+<!--ENDHTML-->
+<!--CUT DEF subsection 1 -->
+
+
+ 
+    <A HREF="../../index.html">
+       <IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+    <A HREF="../../reference/html/index.html">
+       <IMG SRC ="next_motif.gif" ALT="Next"></A>
+    <hr>
+  
+ 
+<H1 ALIGN=center>The Stratego Tutorial</H1>
+
+<H3 ALIGN=center>Eelco Visser</H3>
+
+<H3 ALIGN=center>March 15, 2001</H3>
+ <hr>This document is also available in <A HREF="../../Tutorial.ps">Postscript</A>.
+ <hr>
+ 		<!--TOC section Stratego at a Glance-->
+
+<H2>1&nbsp;&nbsp; Stratego at a Glance</H2><!--SEC END -->
+
+<!--TOC subsection Specifying Program Transformation Systems with Stratego-->
+
+<H3>1.1&nbsp;&nbsp; Specifying Program Transformation Systems with Stratego</H3><!--SEC END -->
+
+	<blockquote><hr>
+	Stratego is a language for the specification of program
+	transformation systems based on the paradigm of rewriting
+	strategies. Stratego specifications give rise to term
+	transformers that read a term and output a transformed
+	term. Such transformation components can easily be composed
+	into transformation pipelines.
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph Term Transformation Systems-->
+
+<H5> Term Transformation Systems</H5><!--SEC END -->
+	Stratego is a language for the specification of automatic
+	program transformation systems. In the Stratego model, a
+	program transformation system is a program that reads a
+	program, applies a transformation to it, and, if that
+	succeeds, spits out the transformed program or otherwise
+	states that it failed (Figure&nbsp;<A HREF="#Fig:BasicArch">1</A>). Programs
+	are supposed to be represented by means of abstract syntax
+	trees or <EM>terms</EM>. A transformation system is thus a
+	program that transforms terms to terms.<BR>
+<BR>
+	Transformation components can be composed into pipelines that
+	interface by means of intermediate terms
+	(Figure&nbsp;<A HREF="#Fig:CompArch">2</A>). In this fashion large program
+	transformation systems can be built from small reusable
+	components, provided that the components synchronize on the
+	intermediate languages used.<BR>
+<BR>
+	<!--TOC paragraph Specifying Transformations with Rewriting Strategies-->
+
+<H5> Specifying Transformations with Rewriting Strategies</H5><!--SEC END -->
+	Basic transformation rules can be expressed as <EM>term
+	rewrite rules</EM> of the form <CODE>l -&gt; r</CODE> that transform a term
+	matching <CODE>l</CODE> to an instantiation of <CODE>r</CODE>.<BR>
+<BR>
+	Pure rewrite rules with a standard evaluation strategy are not
+	sufficient for most program transformation jobs, because more
+	fine grained control over their application is needed. Usually
+	such control is encoded in the rewrite rules themselves,
+	leading to bad reusability of rules and a large overhead for
+	expressing traversals over the abstract syntax tree.<BR>
+<BR>
+	Instead Stratego offers a language of user-definable
+	<EM>rewriting strategies</EM> that provide control over the
+	application of transformation rules. This is achieved by a
+	set of operators for the expression of generic traversals over
+	abstract syntax trees (Figure&nbsp;<A HREF="#Fig:Traversal">3</A>). The basic
+	operators can be combined to achieve a wide range of traversal
+	algorithms.<BR>
+<BR>
+	The use of strategies greatly reduces the overhead caused by
+	explicitly programming term traversals. Furthermore, since
+	individual transformation rules are freed from the burden of
+	encoding traversals, they can be reused in other situations.
+	Finally, the strategy operators turn out to be an interesting
+	new programming paradigm that allow one to reach deep into
+	terms without much effort.
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 1: 
+	Basic architecture of a transformation system
+	</DIV><BR>
+<A NAME="Fig:BasicArch"></A><BR>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial001.gif">
+	</DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 2: 
+	Composition of transformation systems
+	</DIV><BR>
+<A NAME="Fig:CompArch"></A><BR>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial002.gif">
+	</DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 3: 
+	Generic term traversal
+	</DIV><BR>
+<A NAME="Fig:Traversal"></A><BR>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial003.gif">
+	</DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV>
+<!--TOC subsection When to use and not to use Stratego-->
+
+<H3>1.2&nbsp;&nbsp; When to use and not to use Stratego</H3><!--SEC END -->
+
+	<blockquote><hr>
+	Stratego is designed for the scheduling of the application of
+	a series of local transformation rules on terms. Therefore,
+	the language is primarily useful in source to source program
+	transformation, application generation and code generation.
+	It is not designed for theorem proving, program analysis,
+	interactive program derivation or general purpose programming,
+	although it can be used to assist in these activities.
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph What Stratego is for-->
+
+<H5> What Stratego is for</H5><!--SEC END -->
+	Stratego is designed for the specification of automatic
+	program transformation systems. Typical application areas of
+	automatic program transformation are source-to-source
+	transformations, application generation, code generation,
+	program derivation and documentation generation.<BR>
+<BR>
+	Source-to-source transformation is the transformation of a
+	program to a program in the same language. Examples of source
+	to source transformations are simplification, optimization and
+	desugaring, i.e., the elimination of syntactic abstractions.<BR>
+<BR>
+	Application generation is the translation of a program in a
+	high-level (end-user) application language to an
+	implementation in a general purpose programming language.<BR>
+<BR>
+	Code generation is the translation of program constructs to
+	sequences of machine code instructions.<BR>
+<BR>
+	Automatic program derivation is concerned with the generation
+	of programs from data. Examples of program derivations are
+	the derivation of a constructor signature from a context-free
+	grammar and the derivation of a pretty-printer from a
+	context-free grammar [<A HREF="#BV96.gen"><CITE>1</CITE></A>].<BR>
+<BR>
+	Documentation generation is the extraction of documentation
+	information from a program.<BR>
+<BR>
+	Program analysis is concerned with deriving properties about
+	elements of programs. Examples of program analysis are type
+	checking, type inference, and data flow analysis. Although
+	Stratego can be used to implement such analyses, it is not
+	particularly well supported. This aspect should probably be
+	strengthened.<BR>
+<BR>
+	<!--TOC paragraph What Stratego is not for-->
+
+<H5> What Stratego is not for</H5><!--SEC END -->
+	Stratego is not necessarily applicable in other areas of
+	program manipulation related applications. In particular, it
+	is probably not the right platform for interactive program
+	transformation, theorem proving and general purpose
+	programming.<BR>
+<BR>
+	Interactive program transformation is concerned with the
+	gradual transformation from a high-level specification to an
+	implementation by intervention from a programmer. The
+	programmer has to decide what refinement steps to apply to
+	what part of the specification. However, Stratego can be used
+	to make program transformation scripts that automatically
+	transform a specific specification to an implementation. Such
+	scripts can be written incrementally to reflect the increased
+	understanding of the refinement.<BR>
+<BR>
+	Theorem proving is used for establishing correctness of
+	programs. Stratego does not support theorem proving.
+	However, it can be used to generate proof obligations as input
+	for theorem provers.<BR>
+<BR>
+	Stratego is not a general purpose programming language to use
+	for application programming, user-interface implementation,
+	etc. However, it can very well be used to generate or
+	transform programs in a general purpose language.
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 4: 
+	Application areas
+	</DIV><BR>
+<A NAME="Fig:AppplicationAreas"></A>
+	<UL>
+<LI>
+	 Abstract and concrete syntax tree manipulation
+	
+<LI> Simplification
+	
+<LI> Optimization
+	
+<LI> Desugaring (eliminating syntactic abstractions)
+	
+<LI> Code generation
+	
+<LI> Application generation
+	
+<LI> Documentation generation
+	
+<LI> Program analysis
+	</UL>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 5: 
+	Non application areas
+	</DIV><BR>
+<A NAME="Fig:NonAppplicationAreas"></A><BR>
+	<UL>
+<LI>
+	 Theorem proving
+	
+<LI> Interactive program transformation / derivation
+	
+<LI> General purpose programming
+	</UL>	<DIV ALIGN=center><HR SIZE=2></DIV>
+<!--TOC subsection Stratego Features-->
+
+<H3>1.3&nbsp;&nbsp; Stratego Features</H3><!--SEC END -->
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 6: 
+	Key features of Stratego
+	</DIV><BR>
+<A NAME="Fig:StrategoProperties"></A>
+	<UL>
+<LI>
+	 Modular specification of transformation systems
+	
+<LI> Separation of rules and strategies
+	
+<LI> Reuse of rules
+	
+<LI> Primitive operators of rewriting
+	
+<LI> Concise specification of term traversals
+	
+<LI> Administration of failure
+	
+<LI> Generic operations on (anonymous) trees
+	
+<LI> Persistent terms
+	</UL>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 7: 
+	Features not supported by Stratego
+	</DIV><BR>
+<A NAME="Fig:StrategoNonProperties"></A>
+	<UL>
+<LI>
+	 Higher-order abstract syntax
+	</UL>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Using the Stratego Documentation-->
+
+<H3>1.4&nbsp;&nbsp; Using the Stratego Documentation</H3><!--SEC END -->
+	<blockquote><hr>
+	To support the production of Stratego specifications, the
+	distribution comes with four documents: a tutorial, an
+	overview of the library, a reference manual and the
+	documentation of the compiler.
+	<hr></blockquote><BR>
+<BR>
+<!--TOC paragraph The Stratego Tutorial-->
+
+<H5> The Stratego Tutorial</H5><!--SEC END -->
+	The Stratego Tutorial shows how to install and use the
+	Stratego compiler and gives basic examples of Stratego
+	specifications. The tutorial is basic reading material for
+	every Stratego user.<BR>
+<BR>
+<!--TOC paragraph The Stratego Library-->
+
+<H5> The Stratego Library</H5><!--SEC END -->
+	The Stratego Library documents all generic rules and
+	strategies in the standard library that comes with the
+	distribution. The Library includes the declaration of all
+	primitive operations (I/O, string manipulation, arithmetic,
+	process creation, etc.). Refer to the library to find common
+	strategies and to understand the primitive operations.<BR>
+<BR>
+<!--TOC paragraph The Stratego Reference Manual-->
+
+<H5> The Stratego Reference Manual</H5><!--SEC END -->
+	The Stratego Reference manual documents all constructs of the
+	language by giving their syntax and a description of the
+	semantics. Refer to the reference manual to clarify syntactic
+	issues and understand the concepts of the semantics.<BR>
+<BR>
+<!--TOC paragraph The Stratego Compiler-->
+
+<H5> The Stratego Compiler</H5><!--SEC END -->
+	The Stratego Compiler contains the complete annotated source
+	of the compiler and run-time system. The compiler should be
+	read by Stratego developers and those that want to get a
+	detailed understanding of the implementation of the
+	operational semantics. It should not be necessary to read the
+	Compiler for ordinary use. However, it is a case study of the
+	use of Stratego and in which a number of idioms are used.<BR>
+<BR>
+<!--TOC paragraph Other Stratego Publications-->
+
+<H5> Other Stratego Publications</H5><!--SEC END -->
+	Several other publications introduce Stratego, discuss
+	applications, semantics and related work. See for example
+	[<A HREF="#JV99"><CITE>JV99</CITE></A><CITE>, </CITE><A HREF="#LV97"><CITE>2</CITE></A><CITE>, </CITE><A HREF="#Vis99"><CITE>3</CITE></A><CITE>, </CITE><A HREF="#VB98"><CITE>7</CITE></A><CITE>, </CITE><A HREF="#VBT98"><CITE>8</CITE></A>].
+
+	
+<BR>
+<BR>
+<!--TOC section Installation-->
+
+<H2>2&nbsp;&nbsp; Installation</H2><!--SEC END -->
+
+<!--TOC subsection Downloading Stratego-->
+
+<H3>2.1&nbsp;&nbsp; Downloading Stratego</H3><!--SEC END -->
+	<blockquote><hr>
+	Stratego is available on the Internet. The Stratego
+	distribution contains the sources of the Stratego compiler and
+	the Stratego compiler. Utilities for use with Stratego are
+	available in separate packages.
+	<hr></blockquote>
+	
+	<!--TOC paragraph The Stratego Package-->
+
+<H5> The Stratego Package</H5><!--SEC END -->
+	The Stratego compiler is implemented in Stratego itself. The
+	distribution contains the bootstrapped C sources of the
+	compiler, the implementation of the run-time system, the
+	Stratego library, the Stratego sources of the compiler, and
+	the Stratego documentation.<BR>
+<BR>
+	<!--TOC paragraph Downloading-->
+
+<H5> Downloading</H5><!--SEC END -->
+	The latest release of the Stratego compiler can be found at
+	the Stratego web page:
+	<CODE>http://www.cs.uu.nl/~visser/stratego/</CODE>. Download the
+	latest release <CODE>stratego-x.x.tar.gz</CODE><BR>
+<BR>
+	<!--TOC paragraph Requirements-->
+
+<H5> Requirements</H5><!--SEC END -->
+	 The following packages are required for the installation of
+	 Stratego:
+<UL>
+<LI>
+ ATerm library
+
+<LI> gmake
+
+<LI> gcc [developed with version egcs-2.91.66]
+
+<LI> bison, flex
+</UL>
+	Except for the ATerm library, these are all standard elements
+	of a GNU installation.<BR>
+<BR>
+	Starting with version 0.4.4a, the ATerm library is no longer
+	bundled with the Stratego distribution. It is available via
+	the Stratego web page though.<BR>
+<BR>
+	The distribution for Stratego version 0.5a has
+	been tested on Linux (RedHat 6.0) on a Pentium II. Previous
+	versions have been tested also on Sun4 and Solaris.
+	Installation under IRIX at SGI machines has been problematic
+	for previous versions. Installation under Windows NT with
+	Cygnus has not yet been attempted. I would be interested in
+	hearing any reports from such an attempt.<BR>
+<BR>
+	<BR>
+<BR>
+<BR>
+<BR>
+<!--TOC subsection Installing Stratego-->
+
+<H3>2.2&nbsp;&nbsp; Installing Stratego</H3><!--SEC END -->
+	<blockquote><hr>
+	The Stratego distribution has been prepared with autoconf and
+	automake and should be portable to any platform with the
+	required packages. Installation requires only the
+	configuration of the package using a configuration script.
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph Installing the ATerm Library-->
+
+<H5> Installing the ATerm Library</H5><!--SEC END -->
+	Choose a location for the installation of the aterm package, say
+	<CODE>/loc/of/aterm/</CODE>.<BR><CODE>    &gt; cd /loc/of/aterm/</CODE><BR>	Download the ATerm package <CODE>aterm-x.y.tar.gz</CODE>. Unpack it
+	using the command<BR><CODE>    &gt; tar zxf aterm-x.y.tar.gz</CODE><BR>	Configure the aterm package, setting the prefix to the
+	directory where the library should be installed, i.e., if
+	prefix points to directory <CODE>dir</CODE>, then the library will
+	be installed in <CODE>dir/lib</CODE> and the executables in
+	<CODE>dir/bin</CODE>.<BR><CODE>    &gt; cd aterm-x.y</CODE><BR><CODE>    &gt; ./configure --prefix=/installation/of/aterm</CODE><BR>	make<BR><CODE>    &gt; gmake</CODE><BR>	and install<BR><CODE>    &gt; gmake install</CODE><BR>
+<BR>
+	<!--TOC paragraph Unpacking the Stratego Package-->
+
+<H5> Unpacking the Stratego Package</H5><!--SEC END -->
+	Choose a location for the installation of Stratego, say
+	<CODE>/loc/of/stratego/</CODE>.<BR><CODE>    &gt; cd /loc/of/stratego/</CODE><BR>	Download the Stratego package <CODE>stratego-x.y.z.tar.gz</CODE>.
+	Unpack it using the command:<BR><CODE>    &gt; tar zxf stratego-x.y.z.tar.gz</CODE><BR><CODE>    &gt; cd stratego-x.y.z/</CODE><BR>	<!--TOC paragraph Configuring the Stratego Package-->
+
+<H5> Configuring the Stratego Package</H5><!--SEC END -->
+	If you only intend to use the Stratego compiler and not work on its
+	development set prefix to any appropriate value when installing, e.g.,<BR><CODE>    &gt; ./configure --prefix=/usr/local \</CODE><BR><CODE>                  --with-aterm=/installation/of/aterm</CODE><BR>	The directory <CODE>/installation/of/aterm</CODE> should be the same
+	as the prefix you configured the aterm library with. If
+	prefix points to directory <CODE>dir</CODE>, then the Stratego
+	compiler will be installed in <CODE>dir/bin</CODE>, the libraries in
+	<CODE>dir/lib</CODE> and the Stratego library in <TT>	dir/share/stratego</TT>.<BR>
+<BR>
+	If you intend to change the compiler specification in <CODE>spec/</CODE>
+	and bootstrap the compiler, you need to set prefix to the
+	local directory. Or at least a directory where you have write
+	permissions such that it is easy to re-install the
+	compiler. This is the what I usually do:<BR><CODE>    &gt; ./configure --prefix=`pwd` \</CODE><BR><CODE>                  --with-aterm=/installation/of/aterm</CODE><BR>	This entails that you need to include <CODE>`pwd`/bin</CODE> in your
+	<CODE>PATH</CODE>.<BR>
+<BR>
+	Note that this last option may also be needed if you don't
+	have permissions to install in standard installation
+	directories.<BR>
+<BR>
+	<!--TOC paragraph Making and Installing-->
+
+<H5> Making and Installing</H5><!--SEC END -->
+	For both kinds of configurations, make the compiler by<BR><CODE>    &gt; gmake</CODE><BR><CODE>    &gt; gmake install</CODE>	<BR>
+<BR>
+	<!--TOC paragraph Setting the PATH-->
+
+<H5> Setting the PATH</H5><!--SEC END -->
+	Finally, extend the definition of your path to point to the
+	stratego compiler. In a user configuration, set<BR><CODE>    &gt; PATH=/usr/local/bin:$PATH</CODE><BR>	In a developer configuration, set<BR><CODE>    &gt; PATH=/loc/of/stratego/bin:$PATH</CODE><BR>
+<BR>
+	<!--TOC paragraph Checking the Installation-->
+
+<H5> Checking the Installation</H5><!--SEC END -->
+	Now check that the compiler is installed by typing<BR><CODE>    &gt; which sc</CODE><BR>	which should return something like<BR><CODE>    /loc/of/stratego/bin/sc</CODE><BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 8: Summary of the installation procedure</DIV><BR>
+<A NAME="Fig:"></A><BR>
+<PRE>
+&gt; cd /loc/of/stratego/
+&gt; tar zxf stratego-x.y.z.tar.gz
+&gt; cd stratego-x.y.z
+&gt; ./configure --prefix=/usr/local \
+              --with-aterm=/installation/of/aterm
+&gt; gmake
+&gt; gmake install
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<BR>
+<BR>
+<!--TOC subsection Structure of the Distribution-->
+
+<H3>2.3&nbsp;&nbsp; Structure of the Distribution</H3><!--SEC END -->
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 9: Structure of the Stratego distribution</DIV><BR>
+<A NAME="Fig:dist-structure"></A>
+	<UL>
+<LI>
+	 spec : sources of the compiler components
+		<UL>
+<LI>
+		 back : back-end 
+		
+<LI> form : format checking
+		
+<LI> front : front-end
+		
+<LI> lib : library of the compiler
+		
+<LI> match : matching automaton
+		
+<LI> opt : optimizer
+		
+<LI> post : post-processing
+		
+<LI> pp : pretty-printing
+		
+<LI> rts : run-time system
+		
+<LI> sc : the Stratego compiler; glues components together
+		
+<LI> si : the Stratego interpreter
+		
+<LI> sig : signatures
+		
+<LI> slib : Stratego library
+			<UL>
+<LI>
+			 spec : specifications
+			
+<LI> src : C implementation of primitives
+			</UL>
+		
+<LI> syn : syntax
+		
+<LI> test : regression tests
+		</UL>
+	
+<LI> src : the bootstrapped compiler components
+		<UL>
+<LI>
+		 a mirror of the spec tree with only the generated
+		C code, without specifications
+		</UL>
+	
+<LI> test : regression tests 
+	
+<LI> doc : documentation
+		<UL>
+<LI>
+		 compiler 
+		
+<LI> library
+		
+<LI> reference
+		
+<LI> tutorial
+		</UL>
+	
+<LI> xmpl : example specifications
+	
+<LI> share
+		<UL>
+<LI>
+		 tex : LaTeX packages
+		
+<LI> stratego : installed Stratego library
+		
+<LI> bib : BibTeX files
+		</UL>
+	
+<LI> www : Stratego web page
+	
+<LI> bin : installed executables
+	
+<LI> include : installed include files
+	
+<LI> lib : installed binary libraries
+	</UL>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Bootstrapping the Stratego Compiler-->
+
+<H3>2.4&nbsp;&nbsp; Bootstrapping the Stratego Compiler</H3><!--SEC END -->
+	<blockquote><hr>
+	The Stratego compiler is defined in Stratego. The distribution
+	contains the complete Stratego source of the compiler. This
+	makes it possible to adapt the language and/or its
+	implementation. In order to obtain a new working compiler it
+	is necessary to follow a careful bootstrapping procedure.
+	<hr></blockquote><BR>
+<BR>
+	To create a new version of the compiler, edit the appropriate
+	files in the spec/* directories to reflect the change in the
+	run-time system, compiler, and/or parser. Then do the
+	following<BR><CODE>    &gt; cd spec</CODE><BR><CODE>    &gt; make</CODE><BR><CODE>    &gt; make install</CODE><BR>
+<BR>
+	Then use the generated compiler to compile some test
+	specifications. If that seems to work, try to bootstrap by<BR><CODE>    &gt; make bootstrap</CODE><BR>	This will compile the compiler components with itself.<BR>
+<BR>
+	If this goes wrong at some point, you'll have to reinstall the stable
+	compiler in the src/ tree:<BR><CODE>    &gt; cd ..</CODE><BR><CODE>    &gt; make install</CODE><BR>
+<BR>
+	It can be useful to have two installations of the compiler,
+	one of them the stable compiler from src. To achieve this, do
+	the following.<BR>
+<BR>
+	<UL>
+<LI>
+	 Make a user configuration as described above and make and
+	install the compiler with this configuration. This puts a
+	stable version of the compiler in a standard place like
+	/usr/local/bin.
+	
+<LI> Make a developer configuration as described above.
+	
+<LI> In one terminal use the stable compiler to compile the
+	compiler components, i.e., <CODE>PATH=/usr/local/bin:$PATH</CODE>
+	
+<LI> In another terminal use the newly compiled compiler to test
+	your changes i.e., <CODE>PATH=/path/to/stratego/bin:$PATH</CODE>
+	Now if something goes wrong it is easier to recompile the
+	compiler components.
+	</UL>	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 10: The bootstrapping procedure</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	
+		
+<BR>
+<BR>
+<!--TOC section Stratego by Example-->
+
+<H2>3&nbsp;&nbsp; Stratego by Example</H2><!--SEC END -->
+ 
+<!--TOC subsection Developing Transformation Systems with Stratego-->
+
+<H3>3.1&nbsp;&nbsp; Developing Transformation Systems with Stratego</H3><!--SEC END -->
+
+	<blockquote><hr>
+	A Stratego specification consists of a collection of modules
+	that contain signatures, rules and strategies that together
+	define a transformation system. The Stratego compiler
+	translates a specifiation to an executable program that can be
+	used to transform terms.
+	<hr></blockquote><BR>
+<BR>
+	A Stratego specification defines a transformation on terms. A
+	specification consists of a signature describing the structure
+	of the language, rules that define the steps of the
+	transformation, and strategies that combine the rules in a
+	transformation system.<BR>
+<BR>
+	All these elements can be mixed in any order in one big
+	file. However, to make specifications reusable, Stratego
+	provides a module system that can be used to spread
+	definitions over several files. Thus, a specification consists
+	of a collection of modules that define signatures, rules and
+	strategies.<BR>
+<BR>
+ 	It is usually a good idea to divide a specification over
+	several modules: one defining the language, several definining
+	various sorts of transformation rules and strategies, and one
+	definining the main strategy that applies these rules.
+	
+	An executable transformation system can be derived from a
+	specification by means of the Stratego compiler <EM>sc</EM>.
+	Compiled specifications can be used to transform terms.<BR>
+<BR>
+	Specifications are rarely correct in one go. Some errors are
+	caught by the compiler, others have to be detected by
+	inspection of the specification and by debugging techniques.<BR>
+<BR>
+	<!--TOC paragraph Example: Simplification of Propositional Formulae-->
+
+<H5> Example: Simplification of Propositional Formulae</H5><!--SEC END -->
+	As an example, consider the simplification of propositional
+	formulae. Figure&nbsp;<A HREF="#Fig:ImpGraph">12</A> shows the import graph for
+	the specification. An arrow points from the importing module
+	to the module that is imported. Module <CODE>prop</CODE> defines the
+	signature of propositional formulae. Module <CODE>prop-truth</CODE>
+	defines the truth rules for the propositional
+	connectives. Module <CODE>prop-laws</CODE> defines a number of rules
+	defining sound transformations on formulae. Module
+	<CODE>prop-simplify</CODE> imports modules <CODE>prop-laws</CODE> and
+	<CODE>prop-truth</CODE> and defines various ways of combining the
+	rules in simplifying transformations. Module <CODE>disjnf</CODE>
+	declares one of these transformations, i.e., the
+	simplification of a formula to disjunctive normal form, to be
+	the main transformation.<BR>
+<BR>
+	In addition, module <CODE>prop-simplify</CODE> imports the module
+	<CODE>simple-traversal</CODE>, which defines a number of standard
+	term traversals. Module <CODE>disjnf</CODE> imports <CODE>io</CODE>,
+	which defines strategies for term input and output. The latter
+	two modules are part of the Stratego library.
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 11: The development process</DIV><BR>
+<A NAME="Fig:"></A>
+	<UL>
+<LI>
+	 Develop specification = collection of modules defining
+		<UL>
+<LI>
+		 Signature
+		
+<LI> Rules
+		
+<LI> Strategies
+		</UL>
+	
+<LI> Compile specification
+		<UL>
+<LI>
+		 Repair syntactic errors
+		</UL>
+	
+<LI> Use compiled specification
+		<UL>
+<LI>
+		 Detect logical errors
+		</UL>
+	</UL>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 12: Import graph of a specification</DIV><BR>
+<A NAME="Fig:ImpGraph"></A>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial004.gif">
+	</DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV> 
+<BR>
+<!--TOC subsection Describing Terms with Signatures-->
+
+<H3>3.2&nbsp;&nbsp; Describing Terms with Signatures</H3><!--SEC END -->
+	
+	<blockquote><hr>
+	Stratego specifications define transformations on terms. The
+	structure of terms can be described by means of signatures.
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph Terms-->
+
+<H5> Terms</H5><!--SEC END -->
+	In the Stratego model, programs and all other objects that are
+	transformed are represented by means of terms. In their most
+	basic form, terms are described by the rule
+<CODE>t := C(t1,...,tn)</CODE>.
+	That is, a term is an application of a constructor <CODE>C</CODE> to
+	zero or more other terms.<BR>
+<BR>
+	An example term is
+<CODE>Not(Or(And(Atom("B"), Atom("A")), Atom("A"))</CODE><BR>
+<BR>
+	<!--TOC paragraph Tree Representation of Terms-->
+
+<H5> Tree Representation of Terms</H5><!--SEC END -->
+	A term can be represented by means of a tree
+	diagram. Figure&nbsp;<A HREF="#Fig:Tree">15</A> shows a tree diagram for the
+	example term above. Tree diagrams are a model for the
+	representation of terms in a computer's memory. Nodes
+	correspond to tree cells that contain a node tag and pointers
+	(arrows) to the cells corresponding to the sub-terms of the
+	node.<BR>
+<BR>
+	<!--TOC paragraph DAG Representation of Terms-->
+
+<H5> DAG Representation of Terms</H5><!--SEC END -->
+	In fact, in the Stratego implementation terms are represented
+	by means of directed, acyclic graphs (dags) that share
+	sub-terms. That is, occurences of the same sub-term are
+	actually represented by the same cell in memory. For instance,
+	the diagram in Figure&nbsp;<A HREF="#Fig:Dag">16</A> shows the sharing of the
+	sub-term <CODE>Atom("A")</CODE> by the <CODE>And</CODE> and the <CODE>Or</CODE>
+	node.<BR>
+<BR>
+	<!--TOC paragraph Signatures-->
+
+<H5> Signatures</H5><!--SEC END -->
+	A signature is used to describe the names of term constructors
+	and the number and type of their arguments. An operator
+	declaration
+<CODE>C : s</CODE> 
+	defines a nullary constructor <CODE>C</CODE>. An operator declaration
+<CODE>C : s1 * ... * sn -&gt; s</CODE> 
+	defines an <CODE>n</CODE>-ary constructor <CODE>C</CODE>. A signature
+	characterizes a sub-set of the universal set of terms
+	described above.<BR>
+<BR>
+	For example, Figure&nbsp;<A HREF="#Fig:prop.r">14</A> shows module module
+	<CODE>prop</CODE> (in file <CODE>prop.r</CODE>), which defines the
+	structure of propositional formalae. The signature defines
+	the sort <CODE>Prop</CODE> of propositional formulae. The operations
+	or constructors of the language are <CODE>Atom</CODE> that
+	constructs propositional letters, <CODE>Not</CODE> for negation,
+	<CODE>And</CODE> for conjunction, <CODE>Or</CODE> for disjunction,
+	<CODE>Impl</CODE> for implication and <CODE>Eq</CODE> for equivalence. The
+	term in Figure&nbsp;<A HREF="#Fig:Term">13</A> is an example of a formula over
+	this signature.
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 13: A term representing a propositional formula
+	(file: prop.trm).</DIV><BR>
+<A NAME="Fig:Term"></A>
+	<PRE>Not(And(Not(Or(Atom("A"), Not(And(Atom("B"), Atom("C"))))),
+        Atom("D")))
+</PRE>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 14: Signature of propostional formulae
+	(file: prop.r).</DIV><BR>
+<A NAME="Fig:prop.r"></A>
+	<PRE>module prop
+signature
+  sorts Prop
+  constructors
+    False : Prop
+    True  : Prop
+    Atom  : String -&gt; Prop
+    Not   : Prop -&gt; Prop
+    And   : Prop * Prop -&gt; Prop
+    Or    : Prop * Prop -&gt; Prop
+    Impl  : Prop * Prop -&gt; Prop
+    Eq    : Prop * Prop -&gt; Prop</PRE>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 15: Tree structure of terms</DIV><BR>
+<A NAME="Fig:Tree"></A>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial005.gif">
+	</DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 16: Directed-acyclic graph structure of terms</DIV><BR>
+<A NAME="Fig:Dag"></A>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial006.gif">
+	</DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV>
+<!--TOC subsection Specifying Basic Transformations with Rules-->
+
+<H3>3.3&nbsp;&nbsp; Specifying Basic Transformations with Rules</H3><!--SEC END -->
+	<blockquote><hr>
+	Transformation rules are the basic components of
+	transformations defined in Stratego. A rule transforms a term
+	at the root if the term matches the left-hand side of the
+	rule. The result is the instantiation of the right-hand side
+	of the rule.
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph Transformation-->
+
+<H5> Transformation</H5><!--SEC END -->
+	A transformation is a modification of a term. An example of a
+	transformation on propositional formulae is the transformation
+	of an arbitrary formula to disjunctive normal form.<BR>
+<BR>
+	<!--TOC paragraph Rule-->
+
+<H5> Rule</H5><!--SEC END -->
+	Transformations can be achieved by consecutively applying a
+	number of small modifications to a term. In Stratego, a
+	transformation rule defines a single transformation step. A
+	rule consists of a label (e.g., <CODE>DMO</CODE>), a left-hand side
+	term pattern (e.g, <TT>Not(Or(x, y))</TT>) and a right-hand side
+	term pattern (e.g., <CODE>And(Not(x), Not(y))</CODE>. <BR>
+<BR>
+	Notation:
+<CODE>DMO : Not(Or(x, y)) -&gt; And(Not(x), Not(y))</CODE><BR>
+<BR>
+	<!--TOC paragraph Term Patterns are Terms with Variables-->
+
+<H5> Term Patterns are Terms with Variables</H5><!--SEC END -->
+	A term pattern is a term with variables. That is, term patterns
+	are described by the rule
+<CODE>tp := x | C(tp1,...,tpn)</CODE>, 
+	where <CODE>x</CODE> is a variable. Variables do not have to be
+	declared. All nullary (i.e., non-applied) constructors that
+	are not declared in the signature are assumed to be variables.<BR>
+<BR>
+	<!--TOC paragraph Applying Transformation Rules-->
+
+<H5> Applying Transformation Rules</H5><!--SEC END -->
+	A rule defines a one-step transformation <EM>at the root</EM> of
+	a term. A rule applies to a term if the term matches the
+	left-hand side pattern of the rule. If that is the case the
+	term is replaced with the right-hand side of the term in which
+	the variables are replaced by the corresponding sub-terms that
+	were matched in the left-hand side. Thus a transformation rule
+	succeeds to apply if the left-hand side matches, and fails to
+	apply if that is not the case. In general, a transformation
+	may succeed or fail to apply to a term<BR>
+<BR>
+	For example, the De&nbsp;Morgan rule <CODE>DMO</CODE> transforms the term
+<PRE>
+  Not(Or(And(Atom("B"), Atom("A")), Atom("A")))
+</PRE>	to
+<PRE>
+  And(Not(And(Atom("B"), Atom("A"))), Not(Atom("A")))
+</PRE>	Figure&nbsp;<A HREF="#Fig:DMOapplication">17</A> illustrates the effect of this
+	transformation on the tree structure of a term.<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 17: Application of rule
+	<TT>DMO</TT> to the root of term <TT>Not(Or(And(Atom("B"),
+	Atom("A")), Atom("A")))</TT>. Note that the sharing of the
+	common subterm <TT>Atom("A")</TT> is preserved.</DIV><BR>
+<A NAME="Fig:DMOapplication"></A>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial007.gif">
+	</DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Simplification Rules for Propositional Formulae-->
+
+<H3>3.4&nbsp;&nbsp; Simplification Rules for Propositional Formulae</H3><!--SEC END -->
+
+	<blockquote><hr>
+	There are a great number of valid transformation rules on
+	propositional formulae. Although each is useful in itself,
+	together they form a non-terminating rewrite system.
+	<hr></blockquote><BR>
+<BR>
+	Propositional formulae can be simplified using well-known
+	rules such as De Morgan's laws and distribution laws. Some of
+	these simplification rules are defined in module
+	<CODE>prop-laws</CODE> (Figure&nbsp;<A HREF="#Fig:prop-laws.r">19</A>). Module
+	<CODE>prop-truth</CODE> (Figure&nbsp;<A HREF="#Fig:prop-truth.r">18</A>) defines
+	rules for constant propagation in formulae.<BR>
+<BR>
+	Note that these rules give rise to a number of possible
+	normalizations of formulae. Interpretation of the rules as a
+	rewrite system is not useful since they define a
+	non-terminating system. For example, rules DAOL and DOAL can
+	be applied alternately without reaching a normal-form.<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 18: Truth rules for propositional
+	formulae.</DIV><BR>
+<A NAME="Fig:prop-truth.r"></A>
+	<PRE>module prop-truth
+imports prop
+
+rules
+
+  T1  : Not(True) -&gt; False       T2  : Not(False) -&gt; True
+
+  T3  : And(True, x) -&gt; x        T5  : And(False, x) -&gt; False  
+  T4  : And(x, True) -&gt; x        T6  : And(x, False) -&gt; False  
+  
+  T7  : Or(True, x) -&gt; True      T9  : Or(False, x) -&gt; x
+  T8  : Or(x, True) -&gt; True      T10 : Or(x, False) -&gt; x
+
+  T11 : Impl(True, x) -&gt; x       T14 : Impl(False, False) -&gt; True
+  T12 : Impl(x, True) -&gt; True    T15 : Impl(True, False) -&gt; False
+  T13 : Impl(False, x) -&gt; True
+
+  T16 : Eq(False, x) -&gt; Not(x)   T18 : Eq(True, x) -&gt; x
+  T17 : Eq(x, False) -&gt; Not(x)   T19 : Eq(x, True) -&gt; x</PRE>
+	<DIV ALIGN=center><HR SIZE=2></DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 19: Simplification rules for
+	propositional formulae.</DIV><BR>
+<A NAME="Fig:prop-laws.r"></A><BR>
+	<PRE>module prop-laws
+imports prop
+rules
+
+  AA    : And(And(x, y), z) -&gt; And(x, And(y, z))
+  AO    : Or(Or(x, y), z) -&gt; Or(x, Or(y, z))
+  AI    : Impl(Impl(x, y), z) -&gt; Impl(x, Impl(y, z))
+  AE    : Eq(Eq(x, y), z) -&gt; Eq(x, Eq(y, z))
+  
+  CA    : And(x, y) -&gt; And(y, x) 
+  CO    : Or(x, y) -&gt; Or(y, x)
+  CE    : Eq(x, y) -&gt; Eq(y, x)
+
+  IDA   : And(x, x) -&gt; x
+  IDO   : Or(x, x) -&gt; x
+  IDI   : Impl(x, x) -&gt; True
+  IDE   : Eq(x, x) -&gt; True
+
+  DAOL  : And(Or(x, y), z) -&gt; Or(And(x, z), And(y, z))
+  DAOR  : And(z, Or(x, y)) -&gt; Or(And(z, x), And(z, y))
+  DOAL  : Or(And(x, y), z) -&gt; And(Or(x, z), Or(y, z))
+  DOAR  : Or(z, And(x, y)) -&gt; And(Or(z, x), Or(z, y))
+
+  DN    : Not(Not(x)) -&gt; x
+
+  DMA   : Not(And(x, y)) -&gt; Or(Not(x), Not(y))
+  DMO   : Not(Or(x, y))  -&gt; And(Not(x), Not(y))
+  DMI   : Not(Impl(x, y)) -&gt; And(x, Not(y))
+  DME   : Not(Eq(x, y)) -&gt; Or(And(Not(x), y), And(x, Not(y)))
+
+  DefN  : Not(x) -&gt; Impl(x, False)
+  DefI  : Impl(x, y) -&gt; Or(Not(x), y)
+  DefE  : Eq(x, y) -&gt; And(Impl(x, y), Impl(y, x))
+  DefO1 : Or(x, y) -&gt; Impl(Not(x), y)
+  DefO2 : Or(x, y) -&gt; Not(And(Not(x), Not(y)))
+  DefA1 : And(x, y) -&gt; Not(Or(Not(x), Not(y)))
+  DefA2 : And(x, y) -&gt; Not(Impl(x, Not(y)))
+
+  IDefI : Or(Not(x), y) -&gt; Impl(x, y)
+  IDefE : And(Impl(x, y), Impl(y, x)) -&gt; Eq(x, y)
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV>
+<!--TOC subsection Combining Rules into Transformation Systems with Strategies-->
+
+<H3>3.5&nbsp;&nbsp; Combining Rules into Transformation Systems with Strategies</H3><!--SEC END -->
+
+	<blockquote><hr>
+	Applying all transformation rules until none applies anymore,
+	is often not a good strategy in program transformation because
+	the transformation might not terminate or because many
+	different transformation paths are possible, one of which
+	needs to be chosen. Programmable strategies provide a way
+	to control the application of transformation rules.
+	<hr></blockquote>
+	
+	Standard term rewriting apply rules using a default strategy
+	in which all rules are applied as long as possible. Therefore,
+	for a rewrite system to be meaningful it should be terminating
+	and confluent, i.e., whatever transformation path is chosen
+	the same term results. <BR>
+<BR>
+	In general, however, given a collection of meaningful
+	transformation rules many possible transformations on a term
+	are possible. Depending on the desired outcome, different
+	rules should be applied.<BR>
+<BR>
+	For example, the rules for transformation of propositional
+	formulae can be used to transform formulae to a wide variety
+	of normal forms. Formulae in <EM>disjunctive normal form</EM>
+	are disjunctions of conjunctions of atoms or negations of
+	atoms. Furthermore, disjunctive normal forms do not contain
+	implications, equivalences or truth values. A formula in
+	<EM>conjunctive normal form</EM> is a conjunction of
+	disjunctions of atoms or negations of atoms. Finally, any
+	propositional formula can be expressed using just implication
+	and <CODE>False</CODE>.<BR>
+<BR>
+	Each of these normal forms can be achieved by combining a
+	different selection of the rules from module
+	<CODE>prop-laws</CODE> into a transformation.<BR>
+<BR>
+	<!--TOC paragraph Transformation Strategies-->
+
+<H5> Transformation Strategies</H5><!--SEC END -->
+	Stratego supports user-definable strategies for the
+	application of transformation rules. A strategy is a program
+	that specifies which rules to apply in what order to which
+	sub-terms of a term. <BR>
+<BR>
+	Rule labels are basic strategies. Strategies are composed from
+	rule labels with a number of strategy operators. For example,
+	the specification in Figure&nbsp;<A HREF="#Fig:prop-simplify.r">21</A> uses
+	non-deterministic choice (<CODE>+</CODE>), sequential composition
+	(<CODE>;</CODE>), and recursive closure (<CODE>rec x(s)</CODE>). 
+	Application of transformations below the root of a
+	term is achieved by means of traversal operators such as
+	<CODE>all(s)</CODE>, which applies the strategy <CODE>s</CODE> to all
+	direct sub-terms of the term to which it is applied.<BR>
+<BR>
+	In module <CODE>prop-simplify</CODE> the rules from modules
+	<CODE>prop-laws</CODE> and <CODE>prop-truth</CODE> are combined into
+	strategies that simplify formulae. Strategy <CODE>disjnf</CODE>
+	transforms propositional formulae to disjunctive normal form.
+	It defines a traversal over a term that pushes <CODE>Not</CODE>s
+	inwards on the way down and pushes <CODE>And</CODE>s inwards on the
+	way up. Strategy <CODE>conjnf</CODE> transforms formulae to
+	conjunctive normal form in a similar way, but using
+	<CODE>Or</CODE>-distributivity instead of <CODE>And</CODE>-distributivity.
+	Strategy <CODE>desugar</CODE> defines implication and equivalence in
+	terms of conjunction, disjunction, and negation. 
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 20: Simple traversal strategies. This is an
+	extract from the library module <TT>simple-traversal</TT>. See
+	the Stratego Library for more example strategies.</DIV><BR>
+<A NAME="Fig:"></A>
+	
+		<PRE>module simple-traversal
+strategies
+
+  try(s)           = s &lt;+ id
+  repeat(s)        = rec x(try(s; x))
+
+  topdown(s)       = rec x(s; all(x))
+  bottomup(s)      = rec x(all(x); s)
+  downup(s)        = rec x(s; all(x); s)
+  downup2(s1, s2)  = rec x(s1; all(x); s2)
+
+  oncetd(s)        = rec x(s &lt;+ one(x))
+  oncebu(s)        = rec x(one(x) &lt;+ s)
+
+  alltd(s)         = rec x(s &lt;+ all(x))
+
+  (* etc. *)
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 21: Simplification strategies
+	for propositional formulae.</DIV><BR>
+<A NAME="Fig:prop-simplify.r"></A><BR>
+		<PRE>module prop-simplify
+imports prop-laws prop-truth simple-traversal 
+strategies
+
+ T        = T1 + T2 + T3 + T4 + T5 + T6 + T7 + T8 + T9 + T10 +
+            T11 + T12 + T13 + T14 + T15 + T16 + T17 + T18 + T19
+
+ desugar  = topdown(try(DefI + DefE))
+ eval     = bottomup(repeat(T))
+ impl-nf  = topdown(repeat(DefN + DefA2 + DefO1 + DefE))
+
+ disj-nf  = innermost(DAOL + DAOR + DN + DMA + DMO)
+ conj-nf  = innermost(DOAL + DOAR + DN + DMA + DMO)
+
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV>
+<BR>
+<!--TOC subsection Compiling Specifications to Executable Programs-->
+
+<H3>3.6&nbsp;&nbsp; Compiling Specifications to Executable Programs</H3><!--SEC END -->
+
+	<blockquote><hr>
+	A specification defines a transformation. To make the
+	transformation executable on a computer, it is necessary to
+	compile it to a standard programming language. The Stratego
+	compiler translates a Stratego specification to a stand-alone
+	C program.
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph The Main Strategy-->
+
+<H5> The Main Strategy</H5><!--SEC END -->
+	In order to compile a specification it is necessary to
+	indicate the main transformation strategy that the compiled
+	program should apply to terms. The compiler assumes that a
+	definition for the strategy <CODE>main</CODE> exists that indicates
+	the transformation to perform. For example, module
+	<CODE>disjnf</CODE> in Figure&nbsp;<A HREF="#Fig:disjnf.r">22</A> defines the strategy
+	<CODE>main</CODE> to first desugar the formula and then transform it
+	to disjunctive normal form.<BR>
+<BR>
+	Note the use of the strategy <CODE>stdio</CODE> in the definition of
+	<CODE>main</CODE>. Input/output behaviour needs to be defined in the
+	specifiation itself, i.e., it is not handled in a default
+	manner. The <CODE>stdio</CODE> strategy implements the most basic
+	interface, i.e., read a term from standard input and write the
+	result to standard output. <CODE>stdio</CODE> is defined in the
+	library module <CODE>io</CODE>.<BR>
+<BR>
+	<!--TOC paragraph Compiling Specifications-->
+
+<H5> Compiling Specifications</H5><!--SEC END -->
+	A specification is compiled with the Stratego compiler <EM>sc</EM>
+	by typing<BR><CODE>    &gt; sc -i disjnf</CODE><BR>	Note that the suffix <CODE>.r</CODE> is not included in the name
+	provided to the compiler. During compilation the compiler
+	gives diagnostic output to indicate the progress of the
+	compilation process.<BR><CODE>    &gt; sc -i disjnf</CODE><BR><CODE>     ...</CODE><BR><CODE>    compilation succeeded</CODE><BR>	Compilation creates the C program <CODE>disjnf.c</CODE> and the
+	executable program <CODE>disjnf</CODE>.<BR>
+<BR>
+	<!--TOC paragraph Using Compiled Specifications-->
+
+<H5> Using Compiled Specifications</H5><!--SEC END -->
+	The executable <TT>disjn</TT> can be applied to a term to
+	transform it. For example, the formula in file
+	<CODE>prop.trm</CODE> is transformed by typing:<BR><CODE>&gt; disjnf &lt; prop.trm</CODE><BR><CODE>Or(Or(Atom("A"),Or(Not(Atom("B")),Not(Atom("C")))),Not(Atom("D")))</CODE>
+	If rewriting fails the output would read<BR><CODE>    rewriting failed</CODE><BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 22: Module defining <TT>main</TT> strategy.</DIV><BR>
+<A NAME="Fig:disjnf.r"></A>
+	<!--TOC section disjnf-->
+
+<H2>4&nbsp;&nbsp; disjnf</H2><!--SEC END -->
+
+<PRE>
+module disjnf
+imports lib prop-simplify
+strategies
+
+  main = stdio(eval; desugar; disj-nf)
+</PRE>
+	<DIV ALIGN=center><HR SIZE=2></DIV>
+<BR>
+<!--TOC subsection Detecting Errors in Stratego Specifications-->
+
+<H3>4.1&nbsp;&nbsp; Detecting Errors in Stratego Specifications</H3><!--SEC END -->
+	<blockquote><hr>
+	The errors made in Stratego programs can be classified into
+	syntactic errors and logical errors. Logical errors are errors
+	in the intended semantics of the specification. Syntactic
+	errors are violations of the syntax or static semantics of the
+	language. Not all syntactic errors are currently caught by
+	the front-end of the compiler.
+	<hr></blockquote><BR>
+<BR>
+	If compilation fails there is something wrong with the
+	specification. The compiler should give an error message to
+	indicate what is wrong. The following types of errors may
+	occur.<BR>
+<BR>
+	<!--TOC paragraph Undefined Operator-->
+
+<H5> Undefined Operator</H5><!--SEC END -->
+
+	
+	If we forget the import of the library module <TT>prop-truth</TT>,
+	we get the error message
+<PRE>
+  error: operator T1 undefined
+</PRE>	that indicates that the rule <CODE>T1</CODE> is not defined.<BR>
+<BR>
+	<!--TOC paragraph Unbound Variable-->
+
+<H5> Unbound Variable</H5><!--SEC END -->
+	If in rule <CODE>A9</CODE> we would make a typo:
+<PRE>
+  AO : Or(Or(x, y), z) -&gt; Or(x, Or(y, s))
+</PRE>	i.e., <CODE>s</CODE> instead of <CODE>z</CODE> in the right-hand side, we get
+	the error message
+<PRE>
+  error in rule AO : variable s: used, but not bound
+</PRE>	that indicates that the rule is trying to build a term with an
+	uninstantiated variable.<BR>
+<BR>
+	<!--TOC paragraph Common Errors-->
+
+<H5> Common Errors</H5><!--SEC END -->
+	The following are common errors<BR>
+<BR>
+	- strategy operator with wrong number of arguments<BR>
+<BR>
+	- term constructor with wrong number of arguments (run-time error)<BR>
+<BR>
+	- using term where strategy is expected (failure because of
+	non-applicable congruence, undefined operator if some of the
+	constructors are not defined in the signature)<BR>
+<BR>
+	- using a strategy where a term is expected <BR>
+<BR>
+<!--TOC subsection Debugging Stratego Programs-->
+
+<H3>4.2&nbsp;&nbsp; Debugging Stratego Programs</H3><!--SEC END -->
+	<blockquote><hr>
+	In order to detect logical errors in specification it
+	sometimes helps to understand what goes wrong at run-time (in
+	addition to carefully reading the specification).
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph Syntactic errors with run-time manifestation-->
+
+<H5> Syntactic errors with run-time manifestation</H5><!--SEC END -->
+	- the transformation crashes mentioning an assertion violation<BR>
+<BR>
+	- the transformation crashes with a segmentation fault
+	
+	these are caused by shortcomings in the implementation<BR>
+<BR>
+	<!--TOC paragraph Logical errors-->
+
+<H5> Logical errors</H5><!--SEC END -->
+	- the transformation fails while it is expected to succeed<BR>
+<BR>
+	- the transformation succeeds, but with a wrong result
+	
+	<!--TOC paragraph Splitting up the Specification-->
+
+<H5> Splitting up the Specification</H5><!--SEC END -->
+	Often it is useful to test components of a specification to
+	narrow down the place where the error occurs<BR>
+<BR>
+	- comment out tail end of a transformation pipeline<BR>
+<BR>
+	- narrow down the subject term <BR>
+<BR>
+	<!--TOC paragraph The Debug Operator-->
+
+<H5> The Debug Operator</H5><!--SEC END -->
+	The <CODE>debug</CODE> operator prints the current term to <CODE>stderr</CODE>.<BR>
+<BR>
+	<!--TOC paragraph The PrintStack Operator-->
+
+<H5> The PrintStack Operator</H5><!--SEC END -->
+ 	The primitive <CODE>print-stack</CODE> prints the top n elements of
+ 	the stack if applied to an integer term (as in
+ 	<CODE>where(&lt;print-stack&gt; n)</CODE> or the entire stack if applied
+ 	to a non-integer term.
+									
+<BR>
+<BR>
+<!--TOC section Further Reading-->
+
+<H2>5&nbsp;&nbsp; Further Reading</H2><!--SEC END -->
+
+<!--TOC subsection Extending Your Understanding of Stratego-->
+
+<H3>5.1&nbsp;&nbsp; Extending Your Understanding of Stratego</H3><!--SEC END -->
+	<blockquote><hr>
+	This tutorial only scratches the surface of Stratego
+	specification. To extend your understanding of Stratego refer
+	to the other existing documentation and bug me with requests
+	to extend this tutorial.
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph Other Documentation-->
+
+<H5> Other Documentation</H5><!--SEC END -->
+	Refer to <EM>The Stratego Reference Manual</EM> for an overview
+	of all the language constructs.<BR>
+<BR>
+	Refer to <EM>The Stratego Library</EM> for a large number of
+	standard strategies. The modules in the library are self
+	documenting and often contain examples of the application of
+	the strategies.<BR>
+<BR>
+	Refer to <EM>The Stratego Compiler</EM> for an overview of the
+	implementation of Stratego and all the details of the
+	compilation process.<BR>
+<BR>
+	<!--TOC paragraph Publications-->
+
+<H5> Publications</H5><!--SEC END -->
+	There are a number of publications on the design,
+	implementation and use of Stratego. See the bibliography for
+	references. While these publications do not always reflect the
+	current state of the language, they do reflect its spirit.<BR>
+<BR>
+	<!--TOC paragraph Topics for Future Inclusion in this Tutorial-->
+
+<H5> Topics for Future Inclusion in this Tutorial</H5><!--SEC END -->
+	Here are some topics that I consider for inclusion in this
+	tutorial. Which ones I tackle first will depend on popular
+	demand and my mood.
+	
+	<UL>
+<LI>
+	 Discussion of (advanced) language constructs
+	
+<LI> Primitives
+	
+<LI> Architectures for program transformation
+	
+<LI> Connecting Stratego components to other systems
+	</UL>
+
+
+ 
+ 
+ 
+<!--HTMLFOOT-->
+<!--ENDHTML-->
+
+<!--FOOTER-->
+<HR SIZE=2>
+<BLOCKQUOTE><EM>This document was translated from L<sup>A</sup>T<sub>E</sub>X by
+</EM><A HREF="http://pauillac.inria.fr/~maranget/hevea/index.html"><EM>H</EM><EM><FONT SIZE=2><sup>E</sup></FONT></EM><EM>V</EM><EM><FONT SIZE=2><sup>E</sup></FONT></EM><EM>A</EM></A><EM>.
+</EM></BLOCKQUOTE></BODY>
+</HTML>
+

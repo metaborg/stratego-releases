@@ -1,0 +1,78 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+	This document contains a specification of the strategy
+	language Stratego in itself. Stratego is an extension of
+	strategy languages described in
+	\cite{LV97,VBT98,VB98,Vis98}. A tutorial for the language is
+	given in \cite{Vis98.tutorial}. These paper also discuss
+	related work. For an extended survey of program transformation
+	systems see \cite{Vis99.survey}. In particular, we give a
+	formal definition of desugaring the high-level language into
+	the underlying core language.
+
+	In addition to being a formal, executable definition of the
+	strategy language, this document is a case study in the
+	application of strategies to \emph{compiling by
+	transformation}.
+
+	\paragraph{Programming with Strategies}
+
+	Programming with strategies is different from both functional
+	programming and algebraic specification (first-order term
+	rewriting).  It is possible to use techniques from these, but
+	we strive for a more pure approach in which there is a strict
+	separation between data constructors and transformation
+	functions. 
+
+	The following is a tentative list of principles we try to
+	adhere to:
+\begin{itemize}
+	\item Rules are pure transformations on constructor terms.
+
+	\item All computation is done by strategy expressions.  
+
+	\item All data is represented in terms.  
+
+	\item Strategy operators are not parameterized by data.  
+
+	\item Generic traversal over terms. (Polytypic)
+
+	\item All recursive computations are expressed in strategies.
+	No recursion in rules, rules are `flat' transformations.
+
+\end{itemize}
+	Additional observations about our style of programming are:
+\begin{itemize}
+	\item Rules and strategy definitions are usually short.
+\end{itemize}
+
+\section{Overview}
+
+	
+	In the next chapters we define a number of strategies for
+	compiling a strategy specification to abstract machine code.
+
+	\begin{itemize}
+	\item frontend
+	\item needed-defs
+	\item desugar
+	\item inline
+	\item optimize
+	\item backend
+	\end{itemize}

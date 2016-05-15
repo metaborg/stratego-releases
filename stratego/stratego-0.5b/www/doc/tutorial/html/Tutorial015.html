@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Detecting Errors in Stratego Specifications
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial014.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial016.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.1&nbsp;&nbsp; Detecting Errors in Stratego Specifications</H3>	<blockquote><hr>
+	The errors made in Stratego programs can be classified into
+	syntactic errors and logical errors. Logical errors are errors
+	in the intended semantics of the specification. Syntactic
+	errors are violations of the syntax or static semantics of the
+	language. Not all syntactic errors are currently caught by
+	the front-end of the compiler.
+	<hr></blockquote><BR>
+<BR>
+	If compilation fails there is something wrong with the
+	specification. The compiler should give an error message to
+	indicate what is wrong. The following types of errors may
+	occur.<BR>
+<BR>
+	
+<H5> Undefined Operator</H5>
+	
+	If we forget the import of the library module <TT>prop-truth</TT>,
+	we get the error message
+<PRE>
+  error: operator T1 undefined
+</PRE>	that indicates that the rule <CODE>T1</CODE> is not defined.<BR>
+<BR>
+	
+<H5> Unbound Variable</H5>	If in rule <CODE>A9</CODE> we would make a typo:
+<PRE>
+  AO : Or(Or(x, y), z) -&gt; Or(x, Or(y, s))
+</PRE>	i.e., <CODE>s</CODE> instead of <CODE>z</CODE> in the right-hand side, we get
+	the error message
+<PRE>
+  error in rule AO : variable s: used, but not bound
+</PRE>	that indicates that the rule is trying to build a term with an
+	uninstantiated variable.<BR>
+<BR>
+	
+<H5> Common Errors</H5>	The following are common errors<BR>
+<BR>
+	- strategy operator with wrong number of arguments<BR>
+<BR>
+	- term constructor with wrong number of arguments (run-time error)<BR>
+<BR>
+	- using term where strategy is expected (failure because of
+	non-applicable congruence, undefined operator if some of the
+	constructors are not defined in the signature)<BR>
+<BR>
+	- using a strategy where a term is expected <BR>
+<BR>
+<HR>
+<A HREF="Tutorial014.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial016.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

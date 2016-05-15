@@ -1,0 +1,55 @@
+* sc -h exits without printing anything
+
+* Merijn:
+
+sc dumpt core wanneer .r file een parse error bevat:
+
+mdejonge> sc -i MkTable.r 
+MkTable.r: line 30 - parse error
+parse-mod failed (with status 1)
+Segmentation Fault - core dumped
+
+* Syntax: x->[x]
+
+* Bug in context handling (by Merijn de Jonge)
+
+module Main
+imports
+lib
+
+rules
+
+(*
+t.c: In function oit':
+  t.c:109: parse error before 
+* Fri Feb 25 16:54:33 GMT 2000
+
+	stch : x[F(a)] -> a
+
+
+(* idem *)
+
+(*
+Match( name ): Table(entries) -> box-term
+   where <oncetd( ?PP-Table-Entry( <name>(), box-term ) )>entries
+*)
+
+
+strategies
+   main = iowrap(Match)
+(*   main = iowrap( Match( !aap() ) )
+*)
+
+yntax error: \ [46 | _] -> [] \
+
+* Fri Feb 25 14:30:40 GMT 2000
+
+	- Congruence succeeds when applied to term with more arguments
+	than in signature; see test/control/congruence-arguments.r
+
+	- Match succeeds ...; see test/control/match-arity.r
+
+* Joost Visser, Fri Nov 12 12:58:37 GMT 1999
+
+	sc crashes if invoked on a module in a different directory
+

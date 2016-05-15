@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  FIXPOINT-TRAVERSAL
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library004.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library006.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.1.2&nbsp;&nbsp;  FIXPOINT-TRAVERSAL</H3>	<blockquote><hr><BR>
+<BR>
+	A collection of strategies that keeps traversing a term until
+	no more applications of some strategy to the nodes can be
+	found.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module fixpoint-traversal
+imports iteration simple-traversal
+strategies
+
+  reduce(s)     = repeat(rec x(some(x) + s))
+
+  outermost(s)  = repeat(oncetd(s))
+
+  innermost'(s) = repeat(oncebu(s))
+
+  innermost(s)  = rec x(all(x); (s; x &lt;+ id))
+
+  pseudo-innermost3(s) =
+        rec x(all(x); rec y(try(s; all(all(all(y); y); y); y)))
+</PRE>
+ 	<HR>
+<A HREF="Library004.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library006.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

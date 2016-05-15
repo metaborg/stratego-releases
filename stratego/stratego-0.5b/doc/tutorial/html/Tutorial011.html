@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Specifying Basic Transformations with Rules
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial010.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial012.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.3&nbsp;&nbsp; Specifying Basic Transformations with Rules</H3>	<blockquote><hr>
+	Transformation rules are the basic components of
+	transformations defined in Stratego. A rule transforms a term
+	at the root if the term matches the left-hand side of the
+	rule. The result is the instantiation of the right-hand side
+	of the rule.
+	<hr></blockquote><BR>
+<BR>
+	
+<H5> Transformation</H5>	A transformation is a modification of a term. An example of a
+	transformation on propositional formulae is the transformation
+	of an arbitrary formula to disjunctive normal form.<BR>
+<BR>
+	
+<H5> Rule</H5>	Transformations can be achieved by consecutively applying a
+	number of small modifications to a term. In Stratego, a
+	transformation rule defines a single transformation step. A
+	rule consists of a label (e.g., <CODE>DMO</CODE>), a left-hand side
+	term pattern (e.g, <TT>Not(Or(x, y))</TT>) and a right-hand side
+	term pattern (e.g., <CODE>And(Not(x), Not(y))</CODE>. <BR>
+<BR>
+	Notation:
+<CODE>DMO : Not(Or(x, y)) -&gt; And(Not(x), Not(y))</CODE><BR>
+<BR>
+	
+<H5> Term Patterns are Terms with Variables</H5>	A term pattern is a term with variables. That is, term patterns
+	are described by the rule
+<CODE>tp := x | C(tp1,...,tpn)</CODE>, 
+	where <CODE>x</CODE> is a variable. Variables do not have to be
+	declared. All nullary (i.e., non-applied) constructors that
+	are not declared in the signature are assumed to be variables.<BR>
+<BR>
+	
+<H5> Applying Transformation Rules</H5>	A rule defines a one-step transformation <EM>at the root</EM> of
+	a term. A rule applies to a term if the term matches the
+	left-hand side pattern of the rule. If that is the case the
+	term is replaced with the right-hand side of the term in which
+	the variables are replaced by the corresponding sub-terms that
+	were matched in the left-hand side. Thus a transformation rule
+	succeeds to apply if the left-hand side matches, and fails to
+	apply if that is not the case. In general, a transformation
+	may succeed or fail to apply to a term<BR>
+<BR>
+	For example, the De&nbsp;Morgan rule <CODE>DMO</CODE> transforms the term
+<PRE>
+  Not(Or(And(Atom("B"), Atom("A")), Atom("A")))
+</PRE>	to
+<PRE>
+  And(Not(And(Atom("B"), Atom("A"))), Not(Atom("A")))
+</PRE>	Figure&nbsp;<A HREF="#Fig:DMOapplication">17</A> illustrates the effect of this
+	transformation on the tree structure of a term.<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 17: Application of rule
+	<TT>DMO</TT> to the root of term <TT>Not(Or(And(Atom("B"),
+	Atom("A")), Atom("A")))</TT>. Note that the sharing of the
+	common subterm <TT>Atom("A")</TT> is preserved.</DIV><BR>
+<A NAME="Fig:DMOapplication"></A>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial007.gif">
+	</DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="Tutorial010.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial012.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

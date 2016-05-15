@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  FREE-VARIABLES
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library028.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library030.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>6.1.1&nbsp;&nbsp;  FREE-VARIABLES</H3>	<blockquote><hr><BR>
+<BR>
+	Extraction of free variables from an expression is governed
+	by the shape of variables and the shape of variable bindings.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module free-variables
+imports list
+</PRE>	
+<H5> Parameters of Free Variable Extraction</H5>	the following aspects determine the extraction of
+	free variables from expressions<BR>
+<BR>
+	<UL>
+<LI><BR>
+<BR>
+	 shape of variables<BR>
+<BR>
+	
+<LI> variables bound by a binding construct<BR>
+<BR>
+	
+<LI> arguments of the binding constructs where variables are
+	bound<BR>
+<BR>
+	</UL>	In addition can variable constructs contain other variables, 
+	or in other words, whether variables are leaves or non-leaves.<BR>
+<BR>
+	
+<H5> Variables are Leaves</H5>	In the first style of free variable extraction, variables are
+	leaves of abstract syntax trees.<BR>
+<BR>
+	Free variables of a term; The first argument s1 is a strategy
+	that transforms variables into lists of variables, e.g.,
+	<CODE>Var(x) -&gt; [x]</CODE>; The second argument s2 is a strategy
+	that maps binding constructs to the list of bound variables,
+	e.g., <CODE>Scope(xs, s) -&gt; xs</CODE>;<BR>
+<BR>
+<PRE>
+strategies
+
+  free-vars(getvars, boundvars) = 
+    rec x(getvars 
+          &lt;+ split(collect-kids(x), boundvars &lt;+ ![]); diff)
+
+  free-vars(getvars, boundvars, boundin) = 
+    rec x(getvars 
+          &lt;+ {vs: where(boundvars =&gt; vs); 
+                  boundin(split(x, !vs); diff, x, ![])};
+             collect-kids(id)
+          &lt;+ collect-kids(x))
+
+(* // if we had strategy abstraction /\(x1,...,xn) -&gt; s
+
+  free-vars(getvars, boundvars, boundin) = 
+    collect(getvars
+           ,/\ (x,nil) -&gt; 
+            {vs: where(boundvars =&gt; vs); 
+                 boundin(split(x, !vs); diff, x, nil)})
+*)
+
+  free-vars(getvars, boundvars, boundin, eq) = 
+    rec x(getvars 
+          &lt;+ {vs: where(boundvars =&gt; vs); 
+                  boundin(split(x, !vs); diff(eq), x, ![])};
+             collect-kids(id)
+          &lt;+ collect-kids(x))
+</PRE>	
+<H5> Variables are not Leafs</H5>	In a more complicated style of free variable extraction,
+	variables are not leaves of abstract syntax trees, but can
+	contain subterms that again contain variables.<BR>
+<BR>
+<PRE>
+strategies
+
+  free-vars2(getvars, boundvars) = 
+    rec x(split(getvars &lt;+ ![],
+                split(collect-kids(x), boundvars &lt;+ ![]); diff); 
+          union)
+
+  free-vars2(getvars, boundvars, boundin) = 
+    rec x(split(getvars &lt;+ ![],
+                ({vs: where(boundvars =&gt; vs); 
+                      boundin(split(x, !vs); diff, x, ![])};
+                 collect-kids(id)
+                 &lt;+ collect-kids(x)));
+          union)
+
+  free-vars2(getvars, boundvars, boundin, eq) = 
+    rec x(split(getvars &lt;+ ![]
+               ,{vs: where(boundvars =&gt; vs);
+                     boundin(split(x, !vs); diff(eq), x, ![]);
+                     collect-kids(id)}
+                &lt;+ collect-kids(x)
+               ); union)
+</PRE>
+	<HR>
+<A HREF="Library028.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library030.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

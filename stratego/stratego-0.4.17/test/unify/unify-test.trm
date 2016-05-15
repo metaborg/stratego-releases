@@ -1,0 +1,14 @@
+
+[
+TCons(
+	Var("x0")
+,TCons(
+	F(Var("a"), H(Var("a"), Var("c")), G(E, Var("a")))
+,TNil))
+,
+TCons(
+	F(Var("a"), Var("b"), G(Var("c"), D))
+,TCons(
+	Var("x0")
+,TNil))
+]

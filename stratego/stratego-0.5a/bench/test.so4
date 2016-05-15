@@ -1,0 +1,1 @@
+[SDef("main",[],Call(SVar("e_0"),[])),SDef("e_0",[],Where(Scope(["k_0"],Seq(Assign(Var("k_0")),Seq(Build(Op("TCons",[Op("stderr",[]),Op("TCons",[Op("Cons",[Var("k_0"),Op("Nil",[])]),Op("TNil",[])])])),Call(SVar("f_0"),[])))))),SDef("f_0",[],Prim("_ST_printnl"))]

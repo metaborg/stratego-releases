@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Transforming Programs with Stratego
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual001.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual003.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>1.2&nbsp;&nbsp; Transforming Programs with Stratego</H3>	<blockquote><hr>
+	Program transformation systems defined in Stratego are
+	combined with parsers and pretty-printers to create
+	source-to-source transformation systems.
+	<hr></blockquote><BR>
+<BR>
+	A transformation system defined by a Stratego specification
+	constitutes a program that transforms a term to another term
+	or fails.<BR>
+<BR>
+	Stratego programs define transformations on abstract syntax
+	trees. In order to transform programs that are represented as
+	texts, it is necessary to define a parser that transforms a
+	program text to an abstract syntax tree and a pretty-printer
+	that transforms an abstract syntax tree to text
+	(Figure&nbsp;<A HREF="#Fig:architecture">2</A>).<BR>
+<BR>
+	This manual will not go into the details of implementing such
+	tools. There is a wide range of possibilities for definining
+	parsers and pretty-printers. One possibility is the use of
+	SDF for parsing and the Box language of the GPP package for
+	pretty-printing. These packages are combined in the XT bundle
+	of transformation tools [<A HREF="index.html#WWW-XT"><CITE>1</CITE></A>].<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 2: (** Architecture of program
+	transformation systems **)</DIV><BR>
+<A NAME="Fig:architecture"></A><BR>
+	program (text)<BR>
+<BR>
+	parser<BR>
+<BR>
+	abstract syntax tree (term)<BR>
+<BR>
+	transformer (generated from Stratego specification)<BR>
+<BR>
+	transformed abstract syntax tree (term)<BR>
+<BR>
+	pretty-printer<BR>
+<BR>
+	transformed program (text)<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual001.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual003.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

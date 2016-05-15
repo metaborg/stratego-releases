@@ -1,0 +1,19 @@
+D/.deps////
+D/data////
+/Makefile.am/1.21/Mon Feb  5 22:02:10 2001//
+/check-constructors.r/1.4/Mon Feb  5 22:02:10 2001//
+/extract-test.r/1.1/Mon Feb  5 22:02:11 2001//
+/extract.r/1.3/Mon Feb  5 22:02:11 2001//
+/frontend.r/1.10/Mon Feb  5 22:02:11 2001//
+/inline.r/1.3/Mon Feb  5 22:02:11 2001//
+/inlining.r/1.9/Mon Feb  5 22:02:11 2001//
+/mul-contexts.r/1.2/Mon Feb  5 22:02:11 2001//
+/needed-defs-test.r/1.2/Mon Feb  5 22:02:11 2001//
+/normalize-spec.r/1.8/Mon Feb  5 22:02:11 2001//
+/spec-to-sdefs.r/1.12/Mon Feb  5 22:02:11 2001//
+/spec-to-strat.r/1.3/Mon Feb  5 22:02:11 2001//
+/test.r/1.1/Mon Feb  5 22:02:11 2001//
+/use-def.r/1.7/Mon Feb  5 22:02:11 2001//
+/extract-all.r/1.1/Mon Feb  5 22:02:15 2001//
+/needed-defs.r/1.10/Tue Mar 13 21:45:11 2001//
+/desugar.r/1.8/Thu Mar 15 11:12:10 2001//

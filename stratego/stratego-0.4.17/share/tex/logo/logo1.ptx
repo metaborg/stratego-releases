@@ -1,0 +1,61 @@
+\expandafter\ifx\csname graph\endcsname\relax \csname newbox\endcsname\graph\fi
+\expandafter\ifx\csname graphtemp\endcsname\relax \csname newdimen\endcsname\graphtemp\fi
+\setbox\graph=\vtop{\vskip 0pt\hbox{%
+    \special{pn 8}%
+    \special{pa 700 0}%
+    \special{pa 0 1212}%
+    \special{fp}%
+    \special{pa 700 0}%
+    \special{pa 1400 1212}%
+    \special{fp}%
+    \special{pa 1400 1212}%
+    \special{pa 0 1212}%
+    \special{fp}%
+    \special{pa 700 0}%
+    \special{pa 700 808}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 718 738}%
+    \special{pa 700 808}%
+    \special{pa 682 738}%
+    \special{pa 718 738}%
+    \special{fp}%
+    \special{pa 700 808}%
+    \special{pa 467 1212}%
+    \special{fp}%
+    \special{pa 700 808}%
+    \special{pa 933 1212}%
+    \special{fp}%
+    \special{pa 467 1212}%
+    \special{pa 233 808}%
+    \special{fp}%
+    \special{pa 700 0}%
+    \special{pa 233 808}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 283 756}%
+    \special{pa 233 808}%
+    \special{pa 253 739}%
+    \special{pa 283 756}%
+    \special{fp}%
+    \special{pa 933 1212}%
+    \special{pa 1167 808}%
+    \special{fp}%
+    \special{pa 700 0}%
+    \special{pa 1167 808}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 1147 739}%
+    \special{pa 1167 808}%
+    \special{pa 1117 756}%
+    \special{pa 1147 739}%
+    \special{fp}%
+    \hbox{\vrule depth1.212in width0pt height 0pt}%
+    \kern 1.400in
+  }%
+}%
+\begin{boxedminipage}{1.5in}
+$\box\graph$
+\par
+{\huge\bf\sf STRATEGO}
+\end{boxedminipage}

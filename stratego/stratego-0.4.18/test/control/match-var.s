@@ -1,0 +1,1 @@
+[SDef("main",[],Scope([],Seq(Call(SVar("d_0"),[]),Call(SVar("e_0"),[])))),SDef("d_0",[],Scope(["a_0"],Seq(Seq(Id,Match(Var("a_0"))),Build(Op("TCons",[Var("a_0"),Op("TCons",[Var("a_0"),Op("TNil",[])])]))))),SDef("e_0",[],Scope(["b_0"],Scope(["c_0"],Seq(Match(Var("c_0")),Seq(Where(Seq(Seq(Build(Var("c_0")),Call(SVar("d_0"),[])),Match(Var("b_0")))),Seq(Build(Var("b_0")),Id))))))]

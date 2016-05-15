@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Describing Terms with Signatures
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial009.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial011.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.2&nbsp;&nbsp; Describing Terms with Signatures</H3>	
+	<blockquote><hr>
+	Stratego specifications define transformations on terms. The
+	structure of terms can be described by means of signatures.
+	<hr></blockquote><BR>
+<BR>
+	
+<H5> Terms</H5>	In the Stratego model, programs and all other objects that are
+	transformed are represented by means of terms. In their most
+	basic form, terms are described by the rule
+<CODE>t := C(t1,...,tn)</CODE>.
+	That is, a term is an application of a constructor <CODE>C</CODE> to
+	zero or more other terms.<BR>
+<BR>
+	An example term is
+<CODE>Not(Or(And(Atom("B"), Atom("A")), Atom("A"))</CODE><BR>
+<BR>
+	
+<H5> Tree Representation of Terms</H5>	A term can be represented by means of a tree
+	diagram. Figure&nbsp;<A HREF="#Fig:Tree">15</A> shows a tree diagram for the
+	example term above. Tree diagrams are a model for the
+	representation of terms in a computer's memory. Nodes
+	correspond to tree cells that contain a node tag and pointers
+	(arrows) to the cells corresponding to the sub-terms of the
+	node.<BR>
+<BR>
+	
+<H5> DAG Representation of Terms</H5>	In fact, in the Stratego implementation terms are represented
+	by means of directed, acyclic graphs (dags) that share
+	sub-terms. That is, occurences of the same sub-term are
+	actually represented by the same cell in memory. For instance,
+	the diagram in Figure&nbsp;<A HREF="#Fig:Dag">16</A> shows the sharing of the
+	sub-term <CODE>Atom("A")</CODE> by the <CODE>And</CODE> and the <CODE>Or</CODE>
+	node.<BR>
+<BR>
+	
+<H5> Signatures</H5>	A signature is used to describe the names of term constructors
+	and the number and type of their arguments. An operator
+	declaration
+<CODE>C : s</CODE> 
+	defines a nullary constructor <CODE>C</CODE>. An operator declaration
+<CODE>C : s1 * ... * sn -&gt; s</CODE> 
+	defines an <CODE>n</CODE>-ary constructor <CODE>C</CODE>. A signature
+	characterizes a sub-set of the universal set of terms
+	described above.<BR>
+<BR>
+	For example, Figure&nbsp;<A HREF="#Fig:prop.r">14</A> shows module module
+	<CODE>prop</CODE> (in file <CODE>prop.r</CODE>), which defines the
+	structure of propositional formalae. The signature defines
+	the sort <CODE>Prop</CODE> of propositional formulae. The operations
+	or constructors of the language are <CODE>Atom</CODE> that
+	constructs propositional letters, <CODE>Not</CODE> for negation,
+	<CODE>And</CODE> for conjunction, <CODE>Or</CODE> for disjunction,
+	<CODE>Impl</CODE> for implication and <CODE>Eq</CODE> for equivalence. The
+	term in Figure&nbsp;<A HREF="#Fig:Term">13</A> is an example of a formula over
+	this signature.
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 13: A term representing a propositional formula
+	(file: prop.trm).</DIV><BR>
+<A NAME="Fig:Term"></A>
+	<PRE>Not(And(Not(Or(Atom("A"), Not(And(Atom("B"), Atom("C"))))),
+        Atom("D")))
+</PRE>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 14: Signature of propostional formulae
+	(file: prop.r).</DIV><BR>
+<A NAME="Fig:prop.r"></A>
+	<PRE>module prop
+signature
+  sorts Prop
+  constructors
+    False : Prop
+    True  : Prop
+    Atom  : String -&gt; Prop
+    Not   : Prop -&gt; Prop
+    And   : Prop * Prop -&gt; Prop
+    Or    : Prop * Prop -&gt; Prop
+    Impl  : Prop * Prop -&gt; Prop
+    Eq    : Prop * Prop -&gt; Prop</PRE>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 15: Tree structure of terms</DIV><BR>
+<A NAME="Fig:Tree"></A>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial005.gif">
+	</DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 16: Directed-acyclic graph structure of terms</DIV><BR>
+<A NAME="Fig:Dag"></A>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial006.gif">
+	</DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV>
+<HR>
+<A HREF="Tutorial009.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial011.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

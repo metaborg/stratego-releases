@@ -1,0 +1,3976 @@
+\begin{filecontents*}{llncs.cls}
+% LLNCS DOCUMENT CLASS -- version 2.5
+% for LaTeX2e
+%
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesClass{llncs}[1999/01/12 v2.5
+^^JLaTeX document class for Lecture Notes in Computer Science]
+% Options
+\let\if@envcntreset\iffalse
+\DeclareOption{envcountreset}{\let\if@envcntreset\iftrue}
+\DeclareOption{citeauthoryear}{\let\citeauthoryear=Y}
+\DeclareOption{oribibl}{\let\oribibl=Y}
+\let\if@envcntsame\iffalse
+\DeclareOption{envcountsame}{\let\if@envcntsame\iftrue}
+\let\if@envcntsect\iffalse
+\DeclareOption{envcountsect}{\let\if@envcntsect\iftrue}
+\let\if@runhead\iffalse
+\DeclareOption{runningheads}{\let\if@runhead\iftrue}
+
+\let\if@openbib\iffalse
+\DeclareOption{openbib}{\let\if@openbib\iftrue}
+
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+
+\ProcessOptions
+
+\LoadClass[twoside]{article}
+\RequirePackage{multicol} % needed for the list of participants, index
+
+\setlength{\textwidth}{12.2cm}
+\setlength{\textheight}{19.3cm}
+
+\renewcommand\small{%
+   \@setfontsize\small\@ixpt{11}%
+   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus2\p@
+   \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \parsep 0\p@ \@plus1\p@ \@minus\p@
+               \topsep 8\p@ \@plus2\p@ \@minus4\p@
+               \itemsep0\p@}%
+   \belowdisplayskip \abovedisplayskip
+}
+
+\frenchspacing
+\widowpenalty=10000
+\clubpenalty=10000
+
+\setlength\oddsidemargin   {63\p@}
+\setlength\evensidemargin  {63\p@}
+\setlength\marginparwidth  {90\p@}
+
+\setlength\headsep   {16\p@}
+
+\setlength\footnotesep{7.7\p@}
+\setlength\textfloatsep{8mm\@plus 2\p@ \@minus 4\p@}
+\setlength\intextsep   {8mm\@plus 2\p@ \@minus 2\p@}
+
+\setcounter{secnumdepth}{2}
+
+\newcounter {chapter}
+\renewcommand\thechapter      {\@arabic\c@chapter}
+
+\newif\if@mainmatter \@mainmattertrue
+\newcommand\frontmatter{\cleardoublepage
+            \@mainmatterfalse\pagenumbering{Roman}}
+\newcommand\mainmatter{\cleardoublepage
+       \@mainmattertrue\pagenumbering{arabic}}
+\newcommand\backmatter{\if@openright\cleardoublepage\else\clearpage\fi
+      \@mainmatterfalse}
+
+\renewcommand\part{\cleardoublepage
+                 \thispagestyle{empty}%
+                 \if@twocolumn
+                     \onecolumn
+                     \@tempswatrue
+                   \else
+                     \@tempswafalse
+                 \fi
+                 \null\vfil
+                 \secdef\@part\@spart}
+
+\def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >-2\relax
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+    \markboth{}{}%
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+     \ifnum \c@secnumdepth >-2\relax
+       \huge\bfseries \partname~\thepart
+       \par
+       \vskip 20\p@
+     \fi
+     \Huge \bfseries #2\par}%
+    \@endpart}
+\def\@spart#1{%
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+     \Huge \bfseries #1\par}%
+    \@endpart}
+\def\@endpart{\vfil\newpage
+              \if@twoside
+                \null
+                \thispagestyle{empty}%
+                \newpage
+              \fi
+              \if@tempswa
+                \twocolumn
+              \fi}
+
+\newcommand\chapter{\clearpage
+                    \thispagestyle{empty}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapter}
+\def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
+                       \if@mainmatter
+                         \refstepcounter{chapter}%
+                         \typeout{\@chapapp\space\thechapter.}%
+                         \addcontentsline{toc}{chapter}%
+                                  {\protect\numberline{\thechapter}#1}%
+                       \else
+                         \addcontentsline{toc}{chapter}{#1}%
+                       \fi
+                    \else
+                      \addcontentsline{toc}{chapter}{#1}%
+                    \fi
+                    \chaptermark{#1}%
+                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
+                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
+                    \if@twocolumn
+                      \@topnewpage[\@makechapterhead{#2}]%
+                    \else
+                      \@makechapterhead{#2}%
+                      \@afterheading
+                    \fi}
+\def\@makechapterhead#1{%
+% \vspace*{50\p@}%
+  {\centering
+    \ifnum \c@secnumdepth >\m@ne
+      \if@mainmatter
+        \large\bfseries \@chapapp{} \thechapter
+        \par\nobreak
+        \vskip 20\p@
+      \fi
+    \fi
+    \interlinepenalty\@M
+    \Large \bfseries #1\par\nobreak
+    \vskip 40\p@
+  }}
+\def\@schapter#1{\if@twocolumn
+                   \@topnewpage[\@makeschapterhead{#1}]%
+                 \else
+                   \@makeschapterhead{#1}%
+                   \@afterheading
+                 \fi}
+\def\@makeschapterhead#1{%
+% \vspace*{50\p@}%
+  {\centering
+    \normalfont
+    \interlinepenalty\@M
+    \Large \bfseries  #1\par\nobreak
+    \vskip 40\p@
+  }}
+
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+                       {-18\p@ \@plus -4\p@ \@minus -4\p@}%
+                       {12\p@ \@plus 4\p@ \@minus 4\p@}%
+                       {\normalfont\large\bfseries\boldmath
+                        \rightskip=\z@ \@plus 8em\pretolerance=10000 }}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                       {-18\p@ \@plus -4\p@ \@minus -4\p@}%
+                       {8\p@ \@plus 4\p@ \@minus 4\p@}%
+                       {\normalfont\normalsize\bfseries\boldmath
+                        \rightskip=\z@ \@plus 8em\pretolerance=10000 }}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                       {-18\p@ \@plus -4\p@ \@minus -4\p@}%
+                       {-0.5em \@plus -0.22em \@minus -0.1em}%
+                       {\normalfont\normalsize\bfseries\boldmath}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                       {-12\p@ \@plus -4\p@ \@minus -4\p@}%
+                       {-0.5em \@plus -0.22em \@minus -0.1em}%
+                       {\normalfont\normalsize\itshape}}
+\renewcommand\subparagraph[1]{\typeout{LLNCS warning: You should not use
+                  \string\subparagraph\space with this class}\vskip0.5cm
+You should not use \verb|\subparagraph| with this class.\vskip0.5cm}
+
+\DeclareMathSymbol{\Gamma}{\mathalpha}{letters}{"00}
+\DeclareMathSymbol{\Delta}{\mathalpha}{letters}{"01}
+\DeclareMathSymbol{\Theta}{\mathalpha}{letters}{"02}
+\DeclareMathSymbol{\Lambda}{\mathalpha}{letters}{"03}
+\DeclareMathSymbol{\Xi}{\mathalpha}{letters}{"04}
+\DeclareMathSymbol{\Pi}{\mathalpha}{letters}{"05}
+\DeclareMathSymbol{\Sigma}{\mathalpha}{letters}{"06}
+\DeclareMathSymbol{\Upsilon}{\mathalpha}{letters}{"07}
+\DeclareMathSymbol{\Phi}{\mathalpha}{letters}{"08}
+\DeclareMathSymbol{\Psi}{\mathalpha}{letters}{"09}
+\DeclareMathSymbol{\Omega}{\mathalpha}{letters}{"0A}
+
+\let\footnotesize\small
+
+\def\vec#1{\mathchoice{\mbox{\boldmath$\displaystyle#1$}}
+{\mbox{\boldmath$\textstyle#1$}}
+{\mbox{\boldmath$\scriptstyle#1$}}
+{\mbox{\boldmath$\scriptscriptstyle#1$}}}
+
+\def\squareforqed{\hbox{\rlap{$\sqcap$}$\sqcup$}}
+\def\qed{\ifmmode\squareforqed\else{\unskip\nobreak\hfil
+\penalty50\hskip1em\null\nobreak\hfil\squareforqed
+\parfillskip=0pt\finalhyphendemerits=0\endgraf}\fi}
+
+\def\getsto{\mathrel{\mathchoice {\vcenter{\offinterlineskip
+\halign{\hfil
+$\displaystyle##$\hfil\cr\gets\cr\to\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\textstyle##$\hfil\cr\gets
+\cr\to\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\scriptstyle##$\hfil\cr\gets
+\cr\to\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\scriptscriptstyle##$\hfil\cr
+\gets\cr\to\cr}}}}}
+\def\lid{\mathrel{\mathchoice {\vcenter{\offinterlineskip\halign{\hfil
+$\displaystyle##$\hfil\cr<\cr\noalign{\vskip1.2pt}=\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\textstyle##$\hfil\cr<\cr
+\noalign{\vskip1.2pt}=\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\scriptstyle##$\hfil\cr<\cr
+\noalign{\vskip1pt}=\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\scriptscriptstyle##$\hfil\cr
+<\cr
+\noalign{\vskip0.9pt}=\cr}}}}}
+\def\gid{\mathrel{\mathchoice {\vcenter{\offinterlineskip\halign{\hfil
+$\displaystyle##$\hfil\cr>\cr\noalign{\vskip1.2pt}=\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\textstyle##$\hfil\cr>\cr
+\noalign{\vskip1.2pt}=\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\scriptstyle##$\hfil\cr>\cr
+\noalign{\vskip1pt}=\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\scriptscriptstyle##$\hfil\cr
+>\cr
+\noalign{\vskip0.9pt}=\cr}}}}}
+\def\grole{\mathrel{\mathchoice {\vcenter{\offinterlineskip
+\halign{\hfil
+$\displaystyle##$\hfil\cr>\cr\noalign{\vskip-1pt}<\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\textstyle##$\hfil\cr
+>\cr\noalign{\vskip-1pt}<\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\scriptstyle##$\hfil\cr
+>\cr\noalign{\vskip-0.8pt}<\cr}}}
+{\vcenter{\offinterlineskip\halign{\hfil$\scriptscriptstyle##$\hfil\cr
+>\cr\noalign{\vskip-0.3pt}<\cr}}}}}
+\def\bbbr{{\rm I\!R}} %reelle Zahlen
+\def\bbbm{{\rm I\!M}}
+\def\bbbn{{\rm I\!N}} %natuerliche Zahlen
+\def\bbbf{{\rm I\!F}}
+\def\bbbh{{\rm I\!H}}
+\def\bbbk{{\rm I\!K}}
+\def\bbbp{{\rm I\!P}}
+\def\bbbone{{\mathchoice {\rm 1\mskip-4mu l} {\rm 1\mskip-4mu l}
+{\rm 1\mskip-4.5mu l} {\rm 1\mskip-5mu l}}}
+\def\bbbc{{\mathchoice {\setbox0=\hbox{$\displaystyle\rm C$}\hbox{\hbox
+to0pt{\kern0.4\wd0\vrule height0.9\ht0\hss}\box0}}
+{\setbox0=\hbox{$\textstyle\rm C$}\hbox{\hbox
+to0pt{\kern0.4\wd0\vrule height0.9\ht0\hss}\box0}}
+{\setbox0=\hbox{$\scriptstyle\rm C$}\hbox{\hbox
+to0pt{\kern0.4\wd0\vrule height0.9\ht0\hss}\box0}}
+{\setbox0=\hbox{$\scriptscriptstyle\rm C$}\hbox{\hbox
+to0pt{\kern0.4\wd0\vrule height0.9\ht0\hss}\box0}}}}
+\def\bbbq{{\mathchoice {\setbox0=\hbox{$\displaystyle\rm
+Q$}\hbox{\raise
+0.15\ht0\hbox to0pt{\kern0.4\wd0\vrule height0.8\ht0\hss}\box0}}
+{\setbox0=\hbox{$\textstyle\rm Q$}\hbox{\raise
+0.15\ht0\hbox to0pt{\kern0.4\wd0\vrule height0.8\ht0\hss}\box0}}
+{\setbox0=\hbox{$\scriptstyle\rm Q$}\hbox{\raise
+0.15\ht0\hbox to0pt{\kern0.4\wd0\vrule height0.7\ht0\hss}\box0}}
+{\setbox0=\hbox{$\scriptscriptstyle\rm Q$}\hbox{\raise
+0.15\ht0\hbox to0pt{\kern0.4\wd0\vrule height0.7\ht0\hss}\box0}}}}
+\def\bbbt{{\mathchoice {\setbox0=\hbox{$\displaystyle\rm
+T$}\hbox{\hbox to0pt{\kern0.3\wd0\vrule height0.9\ht0\hss}\box0}}
+{\setbox0=\hbox{$\textstyle\rm T$}\hbox{\hbox
+to0pt{\kern0.3\wd0\vrule height0.9\ht0\hss}\box0}}
+{\setbox0=\hbox{$\scriptstyle\rm T$}\hbox{\hbox
+to0pt{\kern0.3\wd0\vrule height0.9\ht0\hss}\box0}}
+{\setbox0=\hbox{$\scriptscriptstyle\rm T$}\hbox{\hbox
+to0pt{\kern0.3\wd0\vrule height0.9\ht0\hss}\box0}}}}
+\def\bbbs{{\mathchoice
+{\setbox0=\hbox{$\displaystyle     \rm S$}\hbox{\raise0.5\ht0\hbox
+to0pt{\kern0.35\wd0\vrule height0.45\ht0\hss}\hbox
+to0pt{\kern0.55\wd0\vrule height0.5\ht0\hss}\box0}}
+{\setbox0=\hbox{$\textstyle        \rm S$}\hbox{\raise0.5\ht0\hbox
+to0pt{\kern0.35\wd0\vrule height0.45\ht0\hss}\hbox
+to0pt{\kern0.55\wd0\vrule height0.5\ht0\hss}\box0}}
+{\setbox0=\hbox{$\scriptstyle      \rm S$}\hbox{\raise0.5\ht0\hbox
+to0pt{\kern0.35\wd0\vrule height0.45\ht0\hss}\raise0.05\ht0\hbox
+to0pt{\kern0.5\wd0\vrule height0.45\ht0\hss}\box0}}
+{\setbox0=\hbox{$\scriptscriptstyle\rm S$}\hbox{\raise0.5\ht0\hbox
+to0pt{\kern0.4\wd0\vrule height0.45\ht0\hss}\raise0.05\ht0\hbox
+to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
+\def\bbbz{{\mathchoice {\hbox{$\mathsf\textstyle Z\kern-0.4em Z$}}
+{\hbox{$\mathsf\textstyle Z\kern-0.4em Z$}}
+{\hbox{$\mathsf\scriptstyle Z\kern-0.3em Z$}}
+{\hbox{$\mathsf\scriptscriptstyle Z\kern-0.2em Z$}}}}
+
+\let\ts\,
+
+\setlength\leftmargini  {17\p@}
+\setlength\leftmargin    {\leftmargini}
+\setlength\leftmarginii  {\leftmargini}
+\setlength\leftmarginiii {\leftmargini}
+\setlength\leftmarginiv  {\leftmargini}
+\setlength  \labelsep  {.5em}
+\setlength  \labelwidth{\leftmargini}
+\addtolength\labelwidth{-\labelsep}
+
+\def\@listI{\leftmargin\leftmargini
+            \parsep 0\p@ \@plus1\p@ \@minus\p@
+            \topsep 8\p@ \@plus2\p@ \@minus4\p@
+            \itemsep0\p@}
+\let\@listi\@listI
+\@listi
+\def\@listii {\leftmargin\leftmarginii
+              \labelwidth\leftmarginii
+              \advance\labelwidth-\labelsep
+              \topsep    0\p@ \@plus2\p@ \@minus\p@}
+\def\@listiii{\leftmargin\leftmarginiii
+              \labelwidth\leftmarginiii
+              \advance\labelwidth-\labelsep
+              \topsep    0\p@ \@plus\p@\@minus\p@
+              \parsep    \z@
+              \partopsep \p@ \@plus\z@ \@minus\p@}
+
+\renewcommand\labelitemi{\normalfont\bfseries --}
+\renewcommand\labelitemii{$\m@th\bullet$}
+
+\setlength\arraycolsep{1.4\p@}
+\setlength\tabcolsep{1.4\p@}
+
+\def\tableofcontents{\chapter*{\contentsname\@mkboth{{\contentsname}}%
+                                                    {{\contentsname}}}
+ \def\authcount##1{\setcounter{auco}{##1}\setcounter{@auth}{1}}
+ \def\lastand{\ifnum\value{auco}=2\relax
+                 \unskip{} \andname\
+              \else
+                 \unskip \lastandname\
+              \fi}%
+ \def\and{\stepcounter{@auth}\relax
+          \ifnum\value{@auth}=\value{auco}%
+             \lastand
+          \else
+             \unskip,
+          \fi}%
+ \@starttoc{toc}\if@restonecol\twocolumn\fi}
+
+\def\l@part#1#2{\addpenalty{\@secpenalty}%
+   \addvspace{2em plus\p@}%  % space above part line
+   \begingroup
+     \parindent \z@
+     \rightskip \z@ plus 5em
+     \hrule\vskip5pt
+     \bfseries\boldmath   % set line in boldface
+     \leavevmode          % TeX command to enter horizontal mode.
+     #1\par
+     \vskip5pt
+     \hrule
+     \vskip1pt
+     \nobreak             % Never break after part entry
+   \endgroup}
+
+\def\@dotsep{2}
+
+\def\hyperhrefextend{\ifx\hyper@anchor\@undefined\else
+{chapter.\thechapter}\fi}
+
+\def\addnumcontentsmark#1#2#3{%
+\addtocontents{#1}{\protect\contentsline{#2}{\protect\numberline
+                     {\thechapter}#3}{\thepage}\hyperhrefextend}}
+\def\addcontentsmark#1#2#3{%
+\addtocontents{#1}{\protect\contentsline{#2}{#3}{\thepage}\hyperhrefextend}}
+\def\addcontentsmarkwop#1#2#3{%
+\addtocontents{#1}{\protect\contentsline{#2}{#3}{0}\hyperhrefextend}}
+
+\def\@adcmk[#1]{\ifcase #1 \or
+\def\@gtempa{\addnumcontentsmark}%
+  \or    \def\@gtempa{\addcontentsmark}%
+  \or    \def\@gtempa{\addcontentsmarkwop}%
+  \fi\@gtempa{toc}{chapter}}
+\def\addtocmark{\@ifnextchar[{\@adcmk}{\@adcmk[3]}}
+
+\def\l@chapter#1#2{\addpenalty{-\@highpenalty}
+ \vskip 1.0em plus 1pt \@tempdima 1.5em \begingroup
+ \parindent \z@ \rightskip \@pnumwidth
+ \parfillskip -\@pnumwidth
+ \leavevmode \advance\leftskip\@tempdima \hskip -\leftskip
+ {\large\bfseries\boldmath#1}\ifx0#2\hfil\null
+ \else
+      \nobreak
+      \leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern
+      \@dotsep mu$}\hfill
+      \nobreak\hbox to\@pnumwidth{\hss #2}%
+ \fi\par
+ \penalty\@highpenalty \endgroup}
+
+\def\l@title#1#2{\addpenalty{-\@highpenalty}
+ \addvspace{8pt plus 1pt}
+ \@tempdima \z@
+ \begingroup
+ \parindent \z@ \rightskip \@tocrmarg
+ \parfillskip -\@tocrmarg
+ \leavevmode \advance\leftskip\@tempdima \hskip -\leftskip
+ #1\nobreak
+ \leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern
+ \@dotsep mu$}\hfill
+ \nobreak\hbox to\@pnumwidth{\hss #2}\par
+ \penalty\@highpenalty \endgroup}
+
+\setcounter{tocdepth}{0}
+\newdimen\tocchpnum
+\newdimen\tocsecnum
+\newdimen\tocsectotal
+\newdimen\tocsubsecnum
+\newdimen\tocsubsectotal
+\newdimen\tocsubsubsecnum
+\newdimen\tocsubsubsectotal
+\newdimen\tocparanum
+\newdimen\tocparatotal
+\newdimen\tocsubparanum
+\tocchpnum=\z@            % no chapter numbers
+\tocsecnum=15\p@          % section 88. plus 2.222pt
+\tocsubsecnum=23\p@       % subsection 88.8 plus 2.222pt
+\tocsubsubsecnum=27\p@    % subsubsection 88.8.8 plus 1.444pt
+\tocparanum=35\p@         % paragraph 88.8.8.8 plus 1.666pt
+\tocsubparanum=43\p@      % subparagraph 88.8.8.8.8 plus 1.888pt
+\def\calctocindent{%
+\tocsectotal=\tocchpnum
+\advance\tocsectotal by\tocsecnum
+\tocsubsectotal=\tocsectotal
+\advance\tocsubsectotal by\tocsubsecnum
+\tocsubsubsectotal=\tocsubsectotal
+\advance\tocsubsubsectotal by\tocsubsubsecnum
+\tocparatotal=\tocsubsubsectotal
+\advance\tocparatotal by\tocparanum}
+\calctocindent
+
+\def\l@section{\@dottedtocline{1}{\tocchpnum}{\tocsecnum}}
+\def\l@subsection{\@dottedtocline{2}{\tocsectotal}{\tocsubsecnum}}
+\def\l@subsubsection{\@dottedtocline{3}{\tocsubsectotal}{\tocsubsubsecnum}}
+\def\l@paragraph{\@dottedtocline{4}{\tocsubsubsectotal}{\tocparanum}}
+\def\l@subparagraph{\@dottedtocline{5}{\tocparatotal}{\tocsubparanum}}
+
+\def\listoffigures{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \fi\section*{\listfigurename\@mkboth{{\listfigurename}}{{\listfigurename}}}
+ \@starttoc{lof}\if@restonecol\twocolumn\fi}
+\def\l@figure{\@dottedtocline{1}{0em}{1.5em}}
+
+\def\listoftables{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \fi\section*{\listtablename\@mkboth{{\listtablename}}{{\listtablename}}}
+ \@starttoc{lot}\if@restonecol\twocolumn\fi}
+\let\l@table\l@figure
+
+\renewcommand\listoffigures{%
+    \section*{\listfigurename
+      \@mkboth{\listfigurename}{\listfigurename}}%
+    \@starttoc{lof}%
+    }
+
+\renewcommand\listoftables{%
+    \section*{\listtablename
+      \@mkboth{\listtablename}{\listtablename}}%
+    \@starttoc{lot}%
+    }
+
+\ifx\oribibl\undefined
+\ifx\citeauthoryear\undefined
+\renewenvironment{thebibliography}[1]
+     {\section*{\refname}
+      \def\@biblabel##1{##1.}
+      \small
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \if@openbib
+              \advance\leftmargin\bibindent
+              \itemindent -\bibindent
+              \listparindent \itemindent
+              \parsep \z@
+            \fi
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \if@openbib
+        \renewcommand\newblock{\par}%
+      \else
+        \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
+      \fi
+      \sloppy\clubpenalty4000\widowpenalty4000%
+      \sfcode`\.=\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\def\@lbibitem[#1]#2{\item[{[#1]}\hfill]\if@filesw
+     {\let\protect\noexpand\immediate
+     \write\@auxout{\string\bibcite{#2}{#1}}}\fi\ignorespaces}
+\newcount\@tempcntc
+\def\@citex[#1]#2{\if@filesw\immediate\write\@auxout{\string\citation{#2}}\fi
+  \@tempcnta\z@\@tempcntb\m@ne\def\@citea{}\@cite{\@for\@citeb:=#2\do
+    {\@ifundefined
+       {b@\@citeb}{\@citeo\@tempcntb\m@ne\@citea\def\@citea{,}{\bfseries
+        ?}\@warning
+       {Citation `\@citeb' on page \thepage \space undefined}}%
+    {\setbox\z@\hbox{\global\@tempcntc0\csname b@\@citeb\endcsname\relax}%
+     \ifnum\@tempcntc=\z@ \@citeo\@tempcntb\m@ne
+       \@citea\def\@citea{,}\hbox{\csname b@\@citeb\endcsname}%
+     \else
+      \advance\@tempcntb\@ne
+      \ifnum\@tempcntb=\@tempcntc
+      \else\advance\@tempcntb\m@ne\@citeo
+      \@tempcnta\@tempcntc\@tempcntb\@tempcntc\fi\fi}}\@citeo}{#1}}
+\def\@citeo{\ifnum\@tempcnta>\@tempcntb\else
+               \@citea\def\@citea{,\,\hskip\z@skip}%
+               \ifnum\@tempcnta=\@tempcntb\the\@tempcnta\else
+               {\advance\@tempcnta\@ne\ifnum\@tempcnta=\@tempcntb \else
+                \def\@citea{--}\fi
+      \advance\@tempcnta\m@ne\the\@tempcnta\@citea\the\@tempcntb}\fi\fi}
+\else
+\renewenvironment{thebibliography}[1]
+     {\section*{\refname}
+      \small
+      \list{}%
+           {\settowidth\labelwidth{}%
+            \leftmargin\parindent
+            \itemindent=-\parindent
+            \labelsep=\z@
+            \if@openbib
+              \advance\leftmargin\bibindent
+              \itemindent -\bibindent
+              \listparindent \itemindent
+              \parsep \z@
+            \fi
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{}}%
+      \if@openbib
+        \renewcommand\newblock{\par}%
+      \else
+        \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
+      \fi
+      \sloppy\clubpenalty4000\widowpenalty4000%
+      \sfcode`\.=\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+      \def\@cite#1{#1}%
+      \def\@lbibitem[#1]#2{\item[]\if@filesw
+        {\def\protect##1{\string ##1\space}\immediate
+      \write\@auxout{\string\bibcite{#2}{#1}}}\fi\ignorespaces}
+   \fi
+\else
+\@cons\@openbib@code{\noexpand\small}
+\fi
+
+\def\idxquad{\hskip 10\p@}% space that divides entry from number
+
+\def\@idxitem{\par\hangindent 10\p@}
+
+\def\subitem{\par\setbox0=\hbox{--\enspace}% second order
+                \noindent\hangindent\wd0\box0}% index entry
+
+\def\subsubitem{\par\setbox0=\hbox{--\,--\enspace}% third
+                \noindent\hangindent\wd0\box0}% order index entry
+
+\def\indexspace{\par \vskip 10\p@ plus5\p@ minus3\p@\relax}
+
+\renewenvironment{theindex}
+               {\@mkboth{\indexname}{\indexname}%
+                \thispagestyle{empty}\parindent\z@
+                \parskip\z@ \@plus .3\p@\relax
+                \let\item\par
+                \def\,{\relax\ifmmode\mskip\thinmuskip
+                             \else\hskip0.2em\ignorespaces\fi}%
+                \normalfont\small
+                \begin{multicols}{2}[\@makeschapterhead{\indexname}]%
+                }
+                {\end{multicols}}
+
+\renewcommand\footnoterule{%
+  \kern-3\p@
+  \hrule\@width 2truecm
+  \kern2.6\p@}
+\long\def\@makefntext#1{%
+    \parindent 1em%
+    \leftskip 1em%
+    \noindent
+    \llap{\hb@xt@1em{\hss\@makefnmark\ }}\ignorespaces#1}
+
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{{\bfseries #1.} #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    {\bfseries #1.} #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+
+\def\fps@figure{htbp}
+\def\fnum@figure{\figurename\thefigure}
+\def \@floatboxreset {%
+        \reset@font
+        \small
+        \@setnobreak
+        \@setminipage
+}
+\def\fps@table{htbp}
+\def\fnum@table{\tablename\thetable}
+\renewenvironment{table}
+               {\setlength\abovecaptionskip{0\p@}%
+                \setlength\belowcaptionskip{10\p@}%
+                \@float{table}}
+               {\end@float}
+\renewenvironment{table*}
+               {\setlength\abovecaptionskip{0\p@}%
+                \setlength\belowcaptionskip{10\p@}%
+                \@dblfloat{table}}
+               {\end@dblfloat}
+
+\long\def\@caption#1[#2]#3{\par\addcontentsline{\csname
+  ext@#1\endcsname}{#1}{\protect\numberline{\csname
+  the#1\endcsname}{\ignorespaces #2}}\begingroup
+    \@parboxrestore
+    \@makecaption{\csname fnum@#1\endcsname}{\ignorespaces #3}\par
+  \endgroup}
+
+% LaTeX does not provide a command to enter the authors institute
+% addresses. The \institute command is defined here.
+
+\newcounter{@inst}
+\newcounter{@auth}
+\newcounter{auco}
+\def\andname{and}
+\def\lastandname{\unskip, and}
+\newdimen\instindent
+\newbox\authrun
+\newtoks\authorrunning
+\newtoks\tocauthor
+\newbox\titrun
+\newtoks\titlerunning
+\newtoks\toctitle
+
+\def\clearheadinfo{\gdef\@author{No Author Given}%
+                   \gdef\@title{No Title Given}%
+                   \gdef\@subtitle{}%
+                   \gdef\@institute{No Institute Given}%
+                   \gdef\@thanks{}%
+                   \global\titlerunning={}\global\authorrunning={}%
+                   \global\toctitle={}\global\tocauthor={}}
+
+\def\institute#1{\gdef\@institute{#1}}
+
+\def\institutename{\par
+ \begingroup
+ \parskip=\z@
+ \parindent=\z@
+ \setcounter{@inst}{1}%
+ \def\and{\par\stepcounter{@inst}%
+ \noindent$^{\the@inst}$\enspace\ignorespaces}%
+ \setbox0=\vbox{\def\thanks##1{}\@institute}%
+ \ifnum\c@@inst=1\relax
+ \else
+   \setcounter{footnote}{\c@@inst}%
+   \setcounter{@inst}{1}%
+   \noindent$^{\the@inst}$\enspace
+ \fi
+ \ignorespaces
+ \@institute\par
+ \endgroup}
+
+\def\@fnsymbol#1{\ensuremath{\ifcase#1\or\star\or{\star\star}\or
+   {\star\star\star}\or \dagger\or \ddagger\or
+   \mathchar "278\or \mathchar "27B\or \|\or **\or \dagger\dagger
+   \or \ddagger\ddagger \else\@ctrerr\fi}}
+
+\def\inst#1{\unskip$^{#1}$}
+\def\fnmsep{\unskip$^,$}
+\def\email#1{{\tt#1}}
+\def\homedir{\~{ }}
+
+\def\subtitle#1{\gdef\@subtitle{#1}}
+\clearheadinfo
+
+\renewcommand\maketitle{\newpage
+  \refstepcounter{chapter}%
+  \stepcounter{section}%
+  \setcounter{section}{0}%
+  \setcounter{subsection}{0}%
+  \setcounter{figure}{0}
+  \setcounter{table}{0}
+  \setcounter{equation}{0}
+  \setcounter{footnote}{0}%
+  \begingroup
+    \parindent=\z@
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \if@twocolumn
+      \ifnum \col@number=\@ne
+        \@maketitle
+      \else
+        \twocolumn[\@maketitle]%
+      \fi
+    \else
+      \newpage
+      \global\@topnum\z@   % Prevents figures from going at top of page.
+      \@maketitle
+    \fi
+    %\thispagestyle{empty}\@thanks
+%
+    \def\\{\unskip\ \ignorespaces}\def\inst##1{\unskip{}}%
+    \def\thanks##1{\unskip{}}\def\fnmsep{\unskip}%
+    \instindent=\hsize
+    \advance\instindent by-\headlineindent
+    \if!\the\toctitle!\addcontentsline{toc}{title}{\@title}\else
+       \addcontentsline{toc}{title}{\the\toctitle}\fi
+    \if@runhead
+       \if!\the\titlerunning!\else
+         \edef\@title{\the\titlerunning}%
+       \fi
+       \global\setbox\titrun=\hbox{\small\rm\unboldmath\ignorespaces\@title}%
+       \ifdim\wd\titrun>\instindent
+          \typeout{Title too long for running head. Please supply}%
+          \typeout{a shorter form with \string\titlerunning\space prior to
+                   \string\maketitle}%
+          \global\setbox\titrun=\hbox{\small\rm
+          Title Suppressed Due to Excessive Length}%
+       \fi
+       \xdef\@title{\copy\titrun}%
+    \fi
+%
+    \if!\the\tocauthor!\relax
+      {\def\and{\noexpand\protect\noexpand\and}%
+      \protected@xdef\toc@uthor{\@author}}%
+    \else
+      \def\\{\noexpand\protect\noexpand\newline}%
+      \protected@xdef\scratch{\the\tocauthor}%
+      \protected@xdef\toc@uthor{\scratch}%
+    \fi
+    \addtocontents{toc}{{\protect\raggedright\protect\leftskip15\p@
+    \protect\rightskip\@tocrmarg
+    \protect\itshape\toc@uthor\protect\endgraf}}%
+    \if@runhead
+       \if!\the\authorrunning!
+         \value{@inst}=\value{@auth}%
+         \setcounter{@auth}{1}%
+       \else
+         \edef\@author{\the\authorrunning}%
+       \fi
+       \global\setbox\authrun=\hbox{\small\unboldmath\@author\unskip}%
+       \ifdim\wd\authrun>\instindent
+          \typeout{Names of authors too long for running head. Please supply}%
+          \typeout{a shorter form with \string\authorrunning\space prior to
+                   \string\maketitle}%
+          \global\setbox\authrun=\hbox{\small\rm
+          Authors Suppressed Due to Excessive Length}%
+       \fi
+       \xdef\@author{\copy\authrun}%
+       \markboth{\@author}{\@title}%
+     \fi
+  \endgroup
+  \setcounter{footnote}{0}%
+  \clearheadinfo}
+%
+\def\@maketitle{\newpage
+ \markboth{}{}%
+ \def\lastand{\ifnum\value{@inst}=2\relax
+                 \unskip{} \andname\
+              \else
+                 \unskip \lastandname\
+              \fi}%
+ \def\and{\stepcounter{@auth}\relax
+          \ifnum\value{@auth}=\value{@inst}%
+             \lastand
+          \else
+             \unskip,
+          \fi}%
+ \begin{center}%
+ {\Large \bfseries\boldmath
+  \pretolerance=10000
+  \@title \par}\vskip .8cm
+\if!\@subtitle!\else {\large \bfseries\boldmath
+  \vskip -.65cm
+  \pretolerance=10000
+  \@subtitle \par}\vskip .8cm\fi
+ \setbox0=\vbox{\setcounter{@auth}{1}\def\and{\stepcounter{@auth}}%
+ \def\thanks##1{}\@author}%
+ \global\value{@inst}=\value{@auth}%
+ \global\value{auco}=\value{@auth}%
+ \setcounter{@auth}{1}%
+{\lineskip .5em
+\noindent\ignorespaces
+\@author\vskip.35cm}
+ {\small\institutename}
+ \end{center}%
+ }
+
+% definition of the "\spnewtheorem" command.
+%
+% Usage:
+%
+%     \spnewtheorem{env_nam}{caption}[within]{cap_font}{body_font}
+% or  \spnewtheorem{env_nam}[numbered_like]{caption}{cap_font}{body_font}
+% or  \spnewtheorem*{env_nam}{caption}{cap_font}{body_font}
+%
+% New is "cap_font" and "body_font". It stands for
+% fontdefinition of the caption and the text itself.
+%
+% "\spnewtheorem*" gives a theorem without number.
+%
+% A defined spnewthoerem environment is used as described
+% by Lamport.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\@thmcountersep{}
+\def\@thmcounterend{.}
+
+\def\spnewtheorem{\@ifstar{\@sthm}{\@Sthm}}
+
+% definition of \spnewtheorem with number
+
+\def\@spnthm#1#2{%
+  \@ifnextchar[{\@spxnthm{#1}{#2}}{\@spynthm{#1}{#2}}}
+\def\@Sthm#1{\@ifnextchar[{\@spothm{#1}}{\@spnthm{#1}}}
+
+\def\@spxnthm#1#2[#3]#4#5{\expandafter\@ifdefinable\csname #1\endcsname
+   {\@definecounter{#1}\@addtoreset{#1}{#3}%
+   \expandafter\xdef\csname the#1\endcsname{\expandafter\noexpand
+     \csname the#3\endcsname \noexpand\@thmcountersep \@thmcounter{#1}}%
+   \expandafter\xdef\csname #1name\endcsname{#2}%
+   \global\@namedef{#1}{\@spthm{#1}{\csname #1name\endcsname}{#4}{#5}}%
+                              \global\@namedef{end#1}{\@endtheorem}}}
+
+\def\@spynthm#1#2#3#4{\expandafter\@ifdefinable\csname #1\endcsname
+   {\@definecounter{#1}%
+   \expandafter\xdef\csname the#1\endcsname{\@thmcounter{#1}}%
+   \expandafter\xdef\csname #1name\endcsname{#2}%
+   \global\@namedef{#1}{\@spthm{#1}{\csname #1name\endcsname}{#3}{#4}}%
+                               \global\@namedef{end#1}{\@endtheorem}}}
+
+\def\@spothm#1[#2]#3#4#5{%
+  \@ifundefined{c@#2}{\@latexerr{No theorem environment `#2' defined}\@eha}%
+  {\expandafter\@ifdefinable\csname #1\endcsname
+  {\global\@namedef{the#1}{\@nameuse{the#2}}%
+  \expandafter\xdef\csname #1name\endcsname{#3}%
+  \global\@namedef{#1}{\@spthm{#2}{\csname #1name\endcsname}{#4}{#5}}%
+  \global\@namedef{end#1}{\@endtheorem}}}}
+
+\def\@spthm#1#2#3#4{\topsep 7\p@ \@plus2\p@ \@minus4\p@
+\refstepcounter{#1}%
+\@ifnextchar[{\@spythm{#1}{#2}{#3}{#4}}{\@spxthm{#1}{#2}{#3}{#4}}}
+
+\def\@spxthm#1#2#3#4{\@spbegintheorem{#2}{\csname the#1\endcsname}{#3}{#4}%
+                    \ignorespaces}
+
+\def\@spythm#1#2#3#4[#5]{\@spopargbegintheorem{#2}{\csname
+       the#1\endcsname}{#5}{#3}{#4}\ignorespaces}
+
+\def\@spbegintheorem#1#2#3#4{\trivlist
+                 \item[\hskip\labelsep{#3#1\ #2\@thmcounterend}]#4}
+
+\def\@spopargbegintheorem#1#2#3#4#5{\trivlist
+      \item[\hskip\labelsep{#4#1\ #2}]{#4(#3)\@thmcounterend\ }#5}
+
+% definition of \spnewtheorem* without number
+
+\def\@sthm#1#2{\@Ynthm{#1}{#2}}
+
+\def\@Ynthm#1#2#3#4{\expandafter\@ifdefinable\csname #1\endcsname
+   {\global\@namedef{#1}{\@Thm{\csname #1name\endcsname}{#3}{#4}}%
+    \expandafter\xdef\csname #1name\endcsname{#2}%
+    \global\@namedef{end#1}{\@endtheorem}}}
+
+\def\@Thm#1#2#3{\topsep 7\p@ \@plus2\p@ \@minus4\p@
+\@ifnextchar[{\@Ythm{#1}{#2}{#3}}{\@Xthm{#1}{#2}{#3}}}
+
+\def\@Xthm#1#2#3{\@Begintheorem{#1}{#2}{#3}\ignorespaces}
+
+\def\@Ythm#1#2#3[#4]{\@Opargbegintheorem{#1}
+       {#4}{#2}{#3}\ignorespaces}
+
+\def\@Begintheorem#1#2#3{#3\trivlist
+                           \item[\hskip\labelsep{#2#1\@thmcounterend}]}
+
+\def\@Opargbegintheorem#1#2#3#4{#4\trivlist
+      \item[\hskip\labelsep{#3#1}]{#3(#2)\@thmcounterend\ }}
+
+\if@envcntsect
+   \def\@thmcountersep{.}
+   \spnewtheorem{theorem}{Theorem}[section]{\bfseries}{\itshape}
+\else
+   \spnewtheorem{theorem}{Theorem}{\bfseries}{\itshape}
+   \if@envcntreset
+      \@addtoreset{theorem}{section}
+   \else
+      \@addtoreset{theorem}{chapter}
+   \fi
+\fi
+
+%definition of divers theorem environments
+\spnewtheorem*{claim}{Claim}{\itshape}{\rmfamily}
+\spnewtheorem*{proof}{Proof}{\itshape}{\rmfamily}
+\if@envcntsame % alle Umgebungen wie Theorem.
+   \def\spn@wtheorem#1#2#3#4{\@spothm{#1}[theorem]{#2}{#3}{#4}}
+\else % alle Umgebungen mit eigenem Zaehler
+   \if@envcntsect % mit section numeriert
+      \def\spn@wtheorem#1#2#3#4{\@spxnthm{#1}{#2}[section]{#3}{#4}}
+   \else % nicht mit section numeriert
+      \if@envcntreset
+         \def\spn@wtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}
+                                   \@addtoreset{#1}{section}}
+      \else
+         \def\spn@wtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}
+                                   \@addtoreset{#1}{chapter}}
+      \fi
+   \fi
+\fi
+\spn@wtheorem{case}{Case}{\itshape}{\rmfamily}
+\spn@wtheorem{conjecture}{Conjecture}{\itshape}{\rmfamily}
+\spn@wtheorem{corollary}{Corollary}{\bfseries}{\itshape}
+\spn@wtheorem{definition}{Definition}{\bfseries}{\itshape}
+\spn@wtheorem{example}{Example}{\itshape}{\rmfamily}
+\spn@wtheorem{exercise}{Exercise}{\itshape}{\rmfamily}
+\spn@wtheorem{lemma}{Lemma}{\bfseries}{\itshape}
+\spn@wtheorem{note}{Note}{\itshape}{\rmfamily}
+\spn@wtheorem{problem}{Problem}{\itshape}{\rmfamily}
+\spn@wtheorem{property}{Property}{\itshape}{\rmfamily}
+\spn@wtheorem{proposition}{Proposition}{\bfseries}{\itshape}
+\spn@wtheorem{question}{Question}{\itshape}{\rmfamily}
+\spn@wtheorem{solution}{Solution}{\itshape}{\rmfamily}
+\spn@wtheorem{remark}{Remark}{\itshape}{\rmfamily}
+
+\def\@takefromreset#1#2{%
+    \def\@tempa{#1}%
+    \let\@tempd\@elt
+    \def\@elt##1{%
+        \def\@tempb{##1}%
+        \ifx\@tempa\@tempb\else
+            \@addtoreset{##1}{#2}%
+        \fi}%
+    \expandafter\expandafter\let\expandafter\@tempc\csname cl@#2\endcsname
+    \expandafter\def\csname cl@#2\endcsname{}%
+    \@tempc
+    \let\@elt\@tempd}
+
+\def\theopargself{\def\@spopargbegintheorem##1##2##3##4##5{\trivlist
+      \item[\hskip\labelsep{##4##1\ ##2}]{##4##3\@thmcounterend\ }##5}
+                  \def\@Opargbegintheorem##1##2##3##4{##4\trivlist
+      \item[\hskip\labelsep{##3##1}]{##3##2\@thmcounterend\ }}
+      }
+
+\renewenvironment{abstract}{%
+      \list{}{\advance\topsep by0.35cm\relax\small
+      \leftmargin=1cm
+      \labelwidth=\z@
+      \listparindent=\z@
+      \itemindent\listparindent
+      \rightmargin\leftmargin}\item[\hskip\labelsep
+                                    \bfseries\abstractname]}
+    {\endlist}
+\renewcommand{\abstractname}{Abstract.}
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\figurename}{Fig.\thinspace}
+\renewcommand{\tablename}{Table~}
+
+\newdimen\headlineindent             % dimension for space between
+\headlineindent=1.166cm              % number and text of headings.
+
+\def\ps@headings{\let\@mkboth\@gobbletwo
+   \let\@oddfoot\@empty\let\@evenfoot\@empty
+   \def\@evenhead{\normalfont\small\rlap{\thepage}\hspace{\headlineindent}%
+                  \leftmark\hfil}
+   \def\@oddhead{\normalfont\small\hfil\rightmark\hspace{\headlineindent}%
+                 \llap{\thepage}}
+   \def\chaptermark##1{}%
+   \def\sectionmark##1{}%
+   \def\subsectionmark##1{}}
+
+\def\ps@titlepage{\let\@mkboth\@gobbletwo
+   \let\@oddfoot\@empty\let\@evenfoot\@empty
+   \def\@evenhead{\normalfont\small\rlap{\thepage}\hspace{\headlineindent}%
+                  \hfil}
+   \def\@oddhead{\normalfont\small\hfil\hspace{\headlineindent}%
+                 \llap{\thepage}}
+   \def\chaptermark##1{}%
+   \def\sectionmark##1{}%
+   \def\subsectionmark##1{}}
+
+\if@runhead\ps@headings\else
+\ps@empty\fi
+
+\setlength\arraycolsep{1.4\p@}
+\setlength\tabcolsep{1.4\p@}
+
+\endinput
+\end{filecontents*}
+
+\begin{filecontents*}{article.cls}
+%%
+%% This is file `article.cls',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% classes.dtx  (with options: `article')
+%% 
+%% This is a generated file.
+%% 
+%% Copyright 1993 1994 1995 1996 1997
+%% The LaTeX3 Project and any individual authors listed elsewhere
+%% in this file.
+%% 
+%% For further copyright information, and conditions for modification
+%% and distribution, see the file legal.txt, and any other copyright
+%% notices in this file.
+%% 
+%% This file is part of the LaTeX2e system.
+%% ----------------------------------------
+%%   This system is distributed in the hope that it will be useful,
+%%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%% 
+%%   For error reports concerning UNCHANGED versions of this file no
+%%   more than one year old, see bugs.txt.
+%% 
+%%   Please do not request updates from us directly.  Primary
+%%   distribution is through the CTAN archives.
+%% 
+%% 
+%% IMPORTANT COPYRIGHT NOTICE:
+%% 
+%% You are NOT ALLOWED to distribute this file alone.
+%% 
+%% You are allowed to distribute this file under the condition that it
+%% is distributed together with all the files listed in manifest.txt.
+%% 
+%% If you receive only some of these files from someone, complain!
+%% 
+%% 
+%% Permission is granted to copy this file to another file with a
+%% clearly different name and to customize the declarations in that
+%% copy to serve the needs of your installation, provided that you
+%% comply with the conditions in the file legal.txt.
+%% 
+%% However, NO PERMISSION is granted to generate or to distribute a
+%% modified version of this file under its original name.
+%% 
+%% You are NOT ALLOWED to change this file.
+%% 
+%% 
+%% MODIFICATION ADVICE:
+%% 
+%% If you want to customize this file, it is best to make a copy of
+%% the source file(s) from which it was produced.  Use a different
+%% name for your copy(ies) and modify the copy(ies); this will ensure
+%% that your modifications do not get overwritten when you install a
+%% new release of the standard system.  You should also ensure that
+%% your modified source file does not generate any modified file with
+%% the same name as a standard file.
+%% 
+%% You can then easily distribute your modifications by distributing
+%% the modified and renamed copy of the source file, taking care to
+%% observe the conditions in legal.txt; this will ensure that other
+%% users can safely use your modifications.
+%% 
+%% You will also need to produce your own, suitably named, .ins file to
+%% control the generation of files from your source file; this file
+%% should contain your own preambles for the files it generates, not
+%% those in the standard .ins files.
+%% 
+%% The names of the source files used are shown above.
+%% 
+%% 
+%% 
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesClass{article}
+              [1998/05/05 v1.3y
+ Standard LaTeX document class]
+\newcommand\@ptsize{}
+\newif\if@restonecol
+\newif\if@titlepage
+\@titlepagefalse
+\if@compatibility\else
+\DeclareOption{a4paper}
+   {\setlength\paperheight {297mm}%
+    \setlength\paperwidth  {210mm}}
+\DeclareOption{a5paper}
+   {\setlength\paperheight {210mm}%
+    \setlength\paperwidth  {148mm}}
+\DeclareOption{b5paper}
+   {\setlength\paperheight {250mm}%
+    \setlength\paperwidth  {176mm}}
+\DeclareOption{letterpaper}
+   {\setlength\paperheight {11in}%
+    \setlength\paperwidth  {8.5in}}
+\DeclareOption{legalpaper}
+   {\setlength\paperheight {14in}%
+    \setlength\paperwidth  {8.5in}}
+\DeclareOption{executivepaper}
+   {\setlength\paperheight {10.5in}%
+    \setlength\paperwidth  {7.25in}}
+\DeclareOption{landscape}
+   {\setlength\@tempdima   {\paperheight}%
+    \setlength\paperheight {\paperwidth}%
+    \setlength\paperwidth  {\@tempdima}}
+\fi
+\if@compatibility
+  \renewcommand\@ptsize{0}
+\else
+\DeclareOption{10pt}{\renewcommand\@ptsize{0}}
+\fi
+\DeclareOption{11pt}{\renewcommand\@ptsize{1}}
+\DeclareOption{12pt}{\renewcommand\@ptsize{2}}
+\if@compatibility\else
+\DeclareOption{oneside}{\@twosidefalse \@mparswitchfalse}
+\fi
+\DeclareOption{twoside}{\@twosidetrue  \@mparswitchtrue}
+\DeclareOption{draft}{\setlength\overfullrule{5pt}}
+\if@compatibility\else
+\DeclareOption{final}{\setlength\overfullrule{0pt}}
+\fi
+\DeclareOption{titlepage}{\@titlepagetrue}
+\if@compatibility\else
+\DeclareOption{notitlepage}{\@titlepagefalse}
+\fi
+\if@compatibility\else
+\DeclareOption{onecolumn}{\@twocolumnfalse}
+\fi
+\DeclareOption{twocolumn}{\@twocolumntrue}
+\DeclareOption{leqno}{\input{leqno.clo}}
+\DeclareOption{fleqn}{\input{fleqn.clo}}
+\DeclareOption{openbib}{%
+  \AtEndOfPackage{%
+   \renewcommand\@openbib@code{%
+      \advance\leftmargin\bibindent
+      \itemindent -\bibindent
+      \listparindent \itemindent
+      \parsep \z@
+      }%
+   \renewcommand\newblock{\par}}%
+}
+\ExecuteOptions{letterpaper,10pt,oneside,onecolumn,final}
+\ProcessOptions
+\input{size1\@ptsize.clo}
+\setlength\lineskip{1\p@}
+\setlength\normallineskip{1\p@}
+\renewcommand\baselinestretch{}
+\setlength\parskip{0\p@ \@plus \p@}
+\@lowpenalty   51
+\@medpenalty  151
+\@highpenalty 301
+\setcounter{topnumber}{2}
+\renewcommand\topfraction{.7}
+\setcounter{bottomnumber}{1}
+\renewcommand\bottomfraction{.3}
+\setcounter{totalnumber}{3}
+\renewcommand\textfraction{.2}
+\renewcommand\floatpagefraction{.5}
+\setcounter{dbltopnumber}{2}
+\renewcommand\dbltopfraction{.7}
+\renewcommand\dblfloatpagefraction{.5}
+\if@twoside
+  \def\ps@headings{%
+      \let\@oddfoot\@empty\let\@evenfoot\@empty
+      \def\@evenhead{\thepage\hfil\slshape\leftmark}%
+      \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+      \let\@mkboth\markboth
+    \def\sectionmark##1{%
+      \markboth {\MakeUppercase{%
+        \ifnum \c@secnumdepth >\z@
+          \thesection\quad
+        \fi
+        ##1}}{}}%
+    \def\subsectionmark##1{%
+      \markright {%
+        \ifnum \c@secnumdepth >\@ne
+          \thesubsection\quad
+        \fi
+        ##1}}}
+\else
+  \def\ps@headings{%
+    \let\@oddfoot\@empty
+    \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+    \let\@mkboth\markboth
+    \def\sectionmark##1{%
+      \markright {\MakeUppercase{%
+        \ifnum \c@secnumdepth >\m@ne
+          \thesection\quad
+        \fi
+        ##1}}}}
+\fi
+\def\ps@myheadings{%
+    \let\@oddfoot\@empty\let\@evenfoot\@empty
+    \def\@evenhead{\thepage\hfil\slshape\leftmark}%
+    \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+    \let\@mkboth\@gobbletwo
+    \let\sectionmark\@gobble
+    \let\subsectionmark\@gobble
+    }
+  \if@titlepage
+  \newcommand\maketitle{\begin{titlepage}%
+  \let\footnotesize\small
+  \let\footnoterule\relax
+  \let \footnote \thanks
+  \null\vfil
+  \vskip 60\p@
+  \begin{center}%
+    {\LARGE \@title \par}%
+    \vskip 3em%
+    {\large
+     \lineskip .75em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+      \vskip 1.5em%
+    {\large \@date \par}%       % Set date in \large size.
+  \end{center}\par
+  \@thanks
+  \vfil\null
+  \end{titlepage}%
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+}
+\else
+\newcommand\maketitle{\par
+  \begingroup
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    \long\def\@makefntext##1{\parindent 1em\noindent
+            \hb@xt@1.8em{%
+                \hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
+    \if@twocolumn
+      \ifnum \col@number=\@ne
+        \@maketitle
+      \else
+        \twocolumn[\@maketitle]%
+      \fi
+    \else
+      \newpage
+      \global\@topnum\z@   % Prevents figures from going at top of page.
+      \@maketitle
+    \fi
+    \thispagestyle{plain}\@thanks
+  \endgroup
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@maketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+}
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \@title \par}%
+    \vskip 1.5em%
+    {\large
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 1em%
+    {\large \@date}%
+  \end{center}%
+  \par
+  \vskip 1.5em}
+\fi
+\setcounter{secnumdepth}{3}
+\newcounter {part}
+\newcounter {section}
+\newcounter {subsection}[section]
+\newcounter {subsubsection}[subsection]
+\newcounter {paragraph}[subsubsection]
+\newcounter {subparagraph}[paragraph]
+\renewcommand \thepart {\@Roman\c@part}
+\renewcommand \thesection {\@arabic\c@section}
+\renewcommand\thesubsection   {\thesection.\@arabic\c@subsection}
+\renewcommand\thesubsubsection{\thesubsection .\@arabic\c@subsubsection}
+\renewcommand\theparagraph    {\thesubsubsection.\@arabic\c@paragraph}
+\renewcommand\thesubparagraph {\theparagraph.\@arabic\c@subparagraph}
+\newcommand\part{\par
+   \addvspace{4ex}%
+   \@afterindentfalse
+   \secdef\@part\@spart}
+
+\def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >\m@ne
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+    {\parindent \z@ \raggedright
+     \interlinepenalty \@M
+     \normalfont
+     \ifnum \c@secnumdepth >\m@ne
+       \Large\bfseries \partname~\thepart
+       \par\nobreak
+     \fi
+     \huge \bfseries #2%
+     \markboth{}{}\par}%
+    \nobreak
+    \vskip 3ex
+    \@afterheading}
+\def\@spart#1{%
+    {\parindent \z@ \raggedright
+     \interlinepenalty \@M
+     \normalfont
+     \huge \bfseries #1\par}%
+     \nobreak
+     \vskip 3ex
+     \@afterheading}
+\newcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                   {2.3ex \@plus.2ex}%
+                                   {\normalfont\Large\bfseries}}
+\newcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\large\bfseries}}
+\newcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\newcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                    {3.25ex \@plus1ex \@minus.2ex}%
+                                    {-1em}%
+                                    {\normalfont\normalsize\bfseries}}
+\newcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+                                       {3.25ex \@plus1ex \@minus .2ex}%
+                                       {-1em}%
+                                      {\normalfont\normalsize\bfseries}}
+\if@twocolumn
+  \setlength\leftmargini  {2em}
+\else
+  \setlength\leftmargini  {2.5em}
+\fi
+\leftmargin  \leftmargini
+\setlength\leftmarginii  {2.2em}
+\setlength\leftmarginiii {1.87em}
+\setlength\leftmarginiv  {1.7em}
+\if@twocolumn
+  \setlength\leftmarginv  {.5em}
+  \setlength\leftmarginvi {.5em}
+\else
+  \setlength\leftmarginv  {1em}
+  \setlength\leftmarginvi {1em}
+\fi
+\setlength  \labelsep  {.5em}
+\setlength  \labelwidth{\leftmargini}
+\addtolength\labelwidth{-\labelsep}
+\@beginparpenalty -\@lowpenalty
+\@endparpenalty   -\@lowpenalty
+\@itempenalty     -\@lowpenalty
+\renewcommand\theenumi{\@arabic\c@enumi}
+\renewcommand\theenumii{\@alph\c@enumii}
+\renewcommand\theenumiii{\@roman\c@enumiii}
+\renewcommand\theenumiv{\@Alph\c@enumiv}
+\newcommand\labelenumi{\theenumi.}
+\newcommand\labelenumii{(\theenumii)}
+\newcommand\labelenumiii{\theenumiii.}
+\newcommand\labelenumiv{\theenumiv.}
+\renewcommand\p@enumii{\theenumi}
+\renewcommand\p@enumiii{\theenumi(\theenumii)}
+\renewcommand\p@enumiv{\p@enumiii\theenumiii}
+\newcommand\labelitemi{\textbullet}
+\newcommand\labelitemii{\normalfont\bfseries \textendash}
+\newcommand\labelitemiii{\textasteriskcentered}
+\newcommand\labelitemiv{\textperiodcentered}
+\newenvironment{description}
+               {\list{}{\labelwidth\z@ \itemindent-\leftmargin
+                        \let\makelabel\descriptionlabel}}
+               {\endlist}
+\newcommand*\descriptionlabel[1]{\hspace\labelsep
+                                \normalfont\bfseries #1}
+\if@titlepage
+  \newenvironment{abstract}{%
+      \titlepage
+      \null\vfil
+      \@beginparpenalty\@lowpenalty
+      \begin{center}%
+        \bfseries \abstractname
+        \@endparpenalty\@M
+      \end{center}}%
+     {\par\vfil\null\endtitlepage}
+\else
+  \newenvironment{abstract}{%
+      \if@twocolumn
+        \section*{\abstractname}%
+      \else
+        \small
+        \begin{center}%
+          {\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+        \end{center}%
+        \quotation
+      \fi}
+      {\if@twocolumn\else\endquotation\fi}
+\fi
+\newenvironment{verse}
+               {\let\\\@centercr
+                \list{}{\itemsep      \z@
+                        \itemindent   -1.5em%
+                        \listparindent\itemindent
+                        \rightmargin  \leftmargin
+                        \advance\leftmargin 1.5em}%
+                \item\relax}
+               {\endlist}
+\newenvironment{quotation}
+               {\list{}{\listparindent 1.5em%
+                        \itemindent    \listparindent
+                        \rightmargin   \leftmargin
+                        \parsep        \z@ \@plus\p@}%
+                \item\relax}
+               {\endlist}
+\newenvironment{quote}
+               {\list{}{\rightmargin\leftmargin}%
+                \item\relax}
+               {\endlist}
+\if@compatibility
+\newenvironment{titlepage}
+    {%
+      \if@twocolumn
+        \@restonecoltrue\onecolumn
+      \else
+        \@restonecolfalse\newpage
+      \fi
+      \thispagestyle{empty}%
+      \setcounter{page}\z@
+    }%
+    {\if@restonecol\twocolumn \else \newpage \fi
+    }
+\else
+\newenvironment{titlepage}
+    {%
+      \if@twocolumn
+        \@restonecoltrue\onecolumn
+      \else
+        \@restonecolfalse\newpage
+      \fi
+      \thispagestyle{empty}%
+      \setcounter{page}\@ne
+    }%
+    {\if@restonecol\twocolumn \else \newpage \fi
+     \if@twoside\else
+        \setcounter{page}\@ne
+     \fi
+    }
+\fi
+\newcommand\appendix{\par
+  \setcounter{section}{0}%
+  \setcounter{subsection}{0}%
+  \renewcommand\thesection{\@Alph\c@section}}
+\setlength\arraycolsep{5\p@}
+\setlength\tabcolsep{6\p@}
+\setlength\arrayrulewidth{.4\p@}
+\setlength\doublerulesep{2\p@}
+\setlength\tabbingsep{\labelsep}
+\skip\@mpfootins = \skip\footins
+\setlength\fboxsep{3\p@}
+\setlength\fboxrule{.4\p@}
+\renewcommand \theequation {\@arabic\c@equation}
+\newcounter{figure}
+\renewcommand \thefigure {\@arabic\c@figure}
+\def\fps@figure{tbp}
+\def\ftype@figure{1}
+\def\ext@figure{lof}
+\def\fnum@figure{\figurename~\thefigure}
+\newenvironment{figure}
+               {\@float{figure}}
+               {\end@float}
+\newenvironment{figure*}
+               {\@dblfloat{figure}}
+               {\end@dblfloat}
+\newcounter{table}
+\renewcommand\thetable{\@arabic\c@table}
+\def\fps@table{tbp}
+\def\ftype@table{2}
+\def\ext@table{lot}
+\def\fnum@table{\tablename~\thetable}
+\newenvironment{table}
+               {\@float{table}}
+               {\end@float}
+\newenvironment{table*}
+               {\@dblfloat{table}}
+               {\end@dblfloat}
+\newlength\abovecaptionskip
+\newlength\belowcaptionskip
+\setlength\abovecaptionskip{10\p@}
+\setlength\belowcaptionskip{0\p@}
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{#1: #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    #1: #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+\DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+\DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+\DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+\DeclareRobustCommand*\cal{\@fontswitch\relax\mathcal}
+\DeclareRobustCommand*\mit{\@fontswitch\relax\mathnormal}
+\newcommand\@pnumwidth{1.55em}
+\newcommand\@tocrmarg{2.55em}
+\newcommand\@dotsep{4.5}
+\setcounter{tocdepth}{3}
+\newcommand\tableofcontents{%
+    \section*{\contentsname
+        \@mkboth{%
+           \MakeUppercase\contentsname}{\MakeUppercase\contentsname}}%
+    \@starttoc{toc}%
+    }
+\newcommand*\l@part[2]{%
+  \ifnum \c@tocdepth >-2\relax
+    \addpenalty\@secpenalty
+    \addvspace{2.25em \@plus\p@}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      {\leavevmode
+       \large \bfseries #1\hfil \hb@xt@\@pnumwidth{\hss #2}}\par
+       \nobreak
+       \if@compatibility
+         \global\@nobreaktrue
+         \everypar{\global\@nobreakfalse\everypar{}}%
+      \fi
+    \endgroup
+  \fi}
+\newcommand*\l@section[2]{%
+  \ifnum \c@tocdepth >\z@
+    \addpenalty\@secpenalty
+    \addvspace{1.0em \@plus\p@}%
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+    \endgroup
+  \fi}
+\newcommand*\l@subsection{\@dottedtocline{2}{1.5em}{2.3em}}
+\newcommand*\l@subsubsection{\@dottedtocline{3}{3.8em}{3.2em}}
+\newcommand*\l@paragraph{\@dottedtocline{4}{7.0em}{4.1em}}
+\newcommand*\l@subparagraph{\@dottedtocline{5}{10em}{5em}}
+\newcommand\listoffigures{%
+    \section*{\listfigurename
+      \@mkboth{\MakeUppercase\listfigurename}%
+              {\MakeUppercase\listfigurename}}%
+    \@starttoc{lof}%
+    }
+\newcommand*\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+\newcommand\listoftables{%
+    \section*{\listtablename
+      \@mkboth{%
+          \MakeUppercase\listtablename}{\MakeUppercase\listtablename}}%
+    \@starttoc{lot}%
+    }
+\let\l@table\l@figure
+\newdimen\bibindent
+\setlength\bibindent{1.5em}
+\newenvironment{thebibliography}[1]
+     {\section*{\refname
+        \@mkboth{\MakeUppercase\refname}{\MakeUppercase\refname}}%
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\newcommand\newblock{\hskip .11em\@plus.33em\@minus.07em}
+\let\@openbib@code\@empty
+\newenvironment{theindex}
+               {\if@twocolumn
+                  \@restonecolfalse
+                \else
+                  \@restonecoltrue
+                \fi
+                \columnseprule \z@
+                \columnsep 35\p@
+                \twocolumn[\section*{\indexname}]%
+                \@mkboth{\MakeUppercase\indexname}%
+                        {\MakeUppercase\indexname}%
+                \thispagestyle{plain}\parindent\z@
+                \parskip\z@ \@plus .3\p@\relax
+                \let\item\@idxitem}
+               {\if@restonecol\onecolumn\else\clearpage\fi}
+\newcommand\@idxitem{\par\hangindent 40\p@}
+\newcommand\subitem{\@idxitem \hspace*{20\p@}}
+\newcommand\subsubitem{\@idxitem \hspace*{30\p@}}
+\newcommand\indexspace{\par \vskip 10\p@ \@plus5\p@ \@minus3\p@\relax}
+\renewcommand\footnoterule{%
+  \kern-3\p@
+  \hrule\@width.4\columnwidth
+  \kern2.6\p@}
+\newcommand\@makefntext[1]{%
+    \parindent 1em%
+    \noindent
+    \hb@xt@1.8em{\hss\@makefnmark}#1}
+\newcommand\contentsname{Contents}
+\newcommand\listfigurename{List of Figures}
+\newcommand\listtablename{List of Tables}
+\newcommand\refname{References}
+\newcommand\indexname{Index}
+\newcommand\figurename{Figure}
+\newcommand\tablename{Table}
+\newcommand\partname{Part}
+\newcommand\appendixname{Appendix}
+\newcommand\abstractname{Abstract}
+\def\today{\ifcase\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi
+  \space\number\day, \number\year}
+\setlength\columnsep{10\p@}
+\setlength\columnseprule{0\p@}
+\pagestyle{plain}
+\pagenumbering{arabic}
+\if@twoside
+\else
+  \raggedbottom
+\fi
+\if@twocolumn
+  \twocolumn
+  \sloppy
+  \flushbottom
+\else
+  \onecolumn
+\fi
+\endinput
+%%
+%% End of file `article.cls'.
+\end{filecontents*}
+
+\begin{filecontents*}{size10.clo}
+%%
+%% This is file `size10.clo',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% classes.dtx  (with options: `10pt')
+%% 
+%% This is a generated file.
+%% 
+%% Copyright 1993 1994 1995 1996 1997
+%% The LaTeX3 Project and any individual authors listed elsewhere
+%% in this file.
+%% 
+%% For further copyright information, and conditions for modification
+%% and distribution, see the file legal.txt, and any other copyright
+%% notices in this file.
+%% 
+%% This file is part of the LaTeX2e system.
+%% ----------------------------------------
+%%   This system is distributed in the hope that it will be useful,
+%%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%% 
+%%   For error reports concerning UNCHANGED versions of this file no
+%%   more than one year old, see bugs.txt.
+%% 
+%%   Please do not request updates from us directly.  Primary
+%%   distribution is through the CTAN archives.
+%% 
+%% 
+%% IMPORTANT COPYRIGHT NOTICE:
+%% 
+%% You are NOT ALLOWED to distribute this file alone.
+%% 
+%% You are allowed to distribute this file under the condition that it
+%% is distributed together with all the files listed in manifest.txt.
+%% 
+%% If you receive only some of these files from someone, complain!
+%% 
+%% 
+%% Permission is granted to copy this file to another file with a
+%% clearly different name and to customize the declarations in that
+%% copy to serve the needs of your installation, provided that you
+%% comply with the conditions in the file legal.txt.
+%% 
+%% However, NO PERMISSION is granted to generate or to distribute a
+%% modified version of this file under its original name.
+%% 
+%% You are NOT ALLOWED to change this file.
+%% 
+%% 
+%% MODIFICATION ADVICE:
+%% 
+%% If you want to customize this file, it is best to make a copy of
+%% the source file(s) from which it was produced.  Use a different
+%% name for your copy(ies) and modify the copy(ies); this will ensure
+%% that your modifications do not get overwritten when you install a
+%% new release of the standard system.  You should also ensure that
+%% your modified source file does not generate any modified file with
+%% the same name as a standard file.
+%% 
+%% You can then easily distribute your modifications by distributing
+%% the modified and renamed copy of the source file, taking care to
+%% observe the conditions in legal.txt; this will ensure that other
+%% users can safely use your modifications.
+%% 
+%% You will also need to produce your own, suitably named, .ins file to
+%% control the generation of files from your source file; this file
+%% should contain your own preambles for the files it generates, not
+%% those in the standard .ins files.
+%% 
+%% The names of the source files used are shown above.
+%% 
+%% 
+%% 
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\ProvidesFile{size10.clo}
+              [1998/05/05 v1.3y
+      Standard LaTeX file (size option)]
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize\@xpt\@xiipt
+   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\normalsize
+\newcommand\small{%
+   \@setfontsize\small\@ixpt{11}%
+   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus2\p@
+   \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 4\p@ \@plus2\p@ \@minus2\p@
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\newcommand\footnotesize{%
+   \@setfontsize\footnotesize\@viiipt{9.5}%
+   \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus\p@
+   \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 3\p@ \@plus\p@ \@minus\p@
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\newcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\newcommand\large{\@setfontsize\large\@xiipt{14}}
+\newcommand\Large{\@setfontsize\Large\@xivpt{18}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xviipt{22}}
+\newcommand\huge{\@setfontsize\huge\@xxpt{25}}
+\newcommand\Huge{\@setfontsize\Huge\@xxvpt{30}}
+\if@twocolumn
+  \setlength\parindent{1em}
+\else
+  \setlength\parindent{15\p@}
+\fi
+\setlength\smallskipamount{3\p@ \@plus 1\p@ \@minus 1\p@}
+\setlength\medskipamount{6\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\bigskipamount{12\p@ \@plus 4\p@ \@minus 4\p@}
+\setlength\headheight{12\p@}
+\setlength\headsep   {25\p@}
+\setlength\topskip   {10\p@}
+\setlength\footskip{30\p@}
+\if@compatibility \setlength\maxdepth{4\p@} \else
+\setlength\maxdepth{.5\topskip} \fi
+\if@compatibility
+  \if@twocolumn
+    \setlength\textwidth{410\p@}
+  \else
+    \setlength\textwidth{345\p@}
+  \fi
+\else
+  \setlength\@tempdima{\paperwidth}
+  \addtolength\@tempdima{-2in}
+  \setlength\@tempdimb{345\p@}
+  \if@twocolumn
+    \ifdim\@tempdima>2\@tempdimb\relax
+      \setlength\textwidth{2\@tempdimb}
+    \else
+      \setlength\textwidth{\@tempdima}
+    \fi
+  \else
+    \ifdim\@tempdima>\@tempdimb\relax
+      \setlength\textwidth{\@tempdimb}
+    \else
+      \setlength\textwidth{\@tempdima}
+    \fi
+  \fi
+\fi
+\if@compatibility\else
+  \@settopoint\textwidth
+\fi
+\if@compatibility
+  \setlength\textheight{43\baselineskip}
+\else
+  \setlength\@tempdima{\paperheight}
+  \addtolength\@tempdima{-2in}
+  \addtolength\@tempdima{-1.5in}
+  \divide\@tempdima\baselineskip
+  \@tempcnta=\@tempdima
+  \setlength\textheight{\@tempcnta\baselineskip}
+\fi
+\addtolength\textheight{\topskip}
+\if@twocolumn
+ \setlength\marginparsep {10\p@}
+\else
+  \setlength\marginparsep{11\p@}
+\fi
+\setlength\marginparpush{5\p@}
+\if@compatibility
+  \if@twoside
+     \setlength\oddsidemargin   {44\p@}
+     \setlength\evensidemargin  {82\p@}
+     \setlength\marginparwidth {107\p@}
+  \else
+     \setlength\oddsidemargin   {63\p@}
+     \setlength\evensidemargin  {63\p@}
+     \setlength\marginparwidth  {90\p@}
+  \fi
+  \if@twocolumn
+     \setlength\oddsidemargin  {30\p@}
+     \setlength\evensidemargin {30\p@}
+     \setlength\marginparwidth {48\p@}
+  \fi
+\else
+  \if@twoside
+    \setlength\@tempdima        {\paperwidth}
+    \addtolength\@tempdima      {-\textwidth}
+    \setlength\oddsidemargin    {.4\@tempdima}
+    \addtolength\oddsidemargin  {-1in}
+    \setlength\marginparwidth   {.6\@tempdima}
+    \addtolength\marginparwidth {-\marginparsep}
+    \addtolength\marginparwidth {-0.4in}
+  \else
+    \setlength\@tempdima        {\paperwidth}
+    \addtolength\@tempdima      {-\textwidth}
+    \setlength\oddsidemargin    {.5\@tempdima}
+    \addtolength\oddsidemargin  {-1in}
+    \setlength\marginparwidth   {.5\@tempdima}
+    \addtolength\marginparwidth {-\marginparsep}
+    \addtolength\marginparwidth {-0.4in}
+    \addtolength\marginparwidth {-.4in}
+  \fi
+  \ifdim \marginparwidth >2in
+     \setlength\marginparwidth{2in}
+  \fi
+  \@settopoint\oddsidemargin
+  \@settopoint\marginparwidth
+  \setlength\evensidemargin  {\paperwidth}
+  \addtolength\evensidemargin{-2in}
+  \addtolength\evensidemargin{-\textwidth}
+  \addtolength\evensidemargin{-\oddsidemargin}
+  \@settopoint\evensidemargin
+\fi
+\if@compatibility
+  \setlength\topmargin{27pt}
+\else
+  \setlength\topmargin{\paperheight}
+  \addtolength\topmargin{-2in}
+  \addtolength\topmargin{-\headheight}
+  \addtolength\topmargin{-\headsep}
+  \addtolength\topmargin{-\textheight}
+  \addtolength\topmargin{-\footskip}     % this might be wrong!
+  \addtolength\topmargin{-.5\topmargin}
+  \@settopoint\topmargin
+\fi
+\setlength\footnotesep{6.65\p@}
+\setlength{\skip\footins}{9\p@ \@plus 4\p@ \@minus 2\p@}
+\setlength\floatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\textfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\intextsep   {12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\dblfloatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\dbltextfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\@fptop{0\p@ \@plus 1fil}
+\setlength\@fpsep{8\p@ \@plus 2fil}
+\setlength\@fpbot{0\p@ \@plus 1fil}
+\setlength\@dblfptop{0\p@ \@plus 1fil}
+\setlength\@dblfpsep{8\p@ \@plus 2fil}
+\setlength\@dblfpbot{0\p@ \@plus 1fil}
+\setlength\partopsep{2\p@ \@plus 1\p@ \@minus 1\p@}
+\def\@listi{\leftmargin\leftmargini
+            \parsep 4\p@ \@plus2\p@ \@minus\p@
+            \topsep 8\p@ \@plus2\p@ \@minus4\p@
+            \itemsep4\p@ \@plus2\p@ \@minus\p@}
+\let\@listI\@listi
+\@listi
+\def\@listii {\leftmargin\leftmarginii
+              \labelwidth\leftmarginii
+              \advance\labelwidth-\labelsep
+              \topsep    4\p@ \@plus2\p@ \@minus\p@
+              \parsep    2\p@ \@plus\p@  \@minus\p@
+              \itemsep   \parsep}
+\def\@listiii{\leftmargin\leftmarginiii
+              \labelwidth\leftmarginiii
+              \advance\labelwidth-\labelsep
+              \topsep    2\p@ \@plus\p@\@minus\p@
+              \parsep    \z@
+              \partopsep \p@ \@plus\z@ \@minus\p@
+              \itemsep   \topsep}
+\def\@listiv {\leftmargin\leftmarginiv
+              \labelwidth\leftmarginiv
+              \advance\labelwidth-\labelsep}
+\def\@listv  {\leftmargin\leftmarginv
+              \labelwidth\leftmarginv
+              \advance\labelwidth-\labelsep}
+\def\@listvi {\leftmargin\leftmarginvi
+              \labelwidth\leftmarginvi
+              \advance\labelwidth-\labelsep}
+\endinput
+%%
+%% End of file `size10.clo'.
+\end{filecontents*}
+
+\begin{filecontents*}{multicol.sty}
+%% 
+%% This is file `multicol.sty' generated
+%% on <1991/2/26> with the docstrip utility (v1.1k). 
+%% 
+%% The original source file was `multicol.doc'.
+%% 
+%% 
+%% Copyright (C) 1989,1990,1991 by Frank Mittelbach. All rights reserved. 
+%% 
+%% IMPORTANT NOTICE: 
+%% 
+%% You are not allowed to change this file. You may however copy this file 
+%% to a file with a different name and then change the copy. 
+%% 
+%% You are NOT ALLOWED to distribute this file alone. You are NOT ALLOWED 
+%% to take money for the distribution or use of this file (or a changed 
+%% version) except for a nominal charge for copying etc. 
+%% 
+%% You are allowed to distribute this file under the condition that it is 
+%% distributed together with all files mentioned in readme.mz1. 
+%% 
+%% If you receive only some of these files from someone, complain! 
+%% 
+%% However, if these files are distributed by established suppliers as part 
+%% of a complete TeX distribution, and the structure of the distribution 
+%% would make it difficult to distribute the whole set of files, *those 
+%% parties* are allowed to distribute only some of the files provided that 
+%% it is made clear that the user will get a complete distribution-set upon 
+%% request to that supplier (not me). 
+%% Notice that this permission is not granted to the end user. 
+%% 
+%% Error Reports in case of UNCHANGED versions to 
+%% 
+%% F. Mittelbach 
+%% Eichenweg 29 
+%% D-6500 Mainz 1 
+%% Federal Republic of Germany 
+%% Bitnet: <PZF5HZ@RUIPC1E> 
+%% 
+%% Please do not request updates from me. Distribution is done only 
+%% through Mail-Servers and TeX organisations. 
+%% 
+\def\fileversion{v1.3b}
+\def\filedate{90/10/09}
+\def\docdate {90/10/09}
+
+%% \CheckSum{543}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+\@ifundefined{mult@cols}{}{\endinput}
+\typeout{Style option: `multicol'
+   \fileversion\space <\filedate> (FMi)}
+\typeout{English documentation
+ \@spaces\@spaces\space<\docdate> (FMi)}
+\def\multicols#1{\col@number#1\relax
+  \ifnum\col@number<\tw@
+     \@warning{Using `\number\col@number'
+       columns doesn't seem a good idea.^^J
+       I therefore use two columns instead}%
+     \col@number\tw@ \fi
+  \@ifnextchar[\mult@cols{\mult@cols[]}}
+\def\mult@cols[#1]{\@ifnextchar[%
+  {\mult@@cols{#1}}%
+  {\mult@@cols{#1}[\premulticols]}}
+\def\mult@@cols#1[#2]{%
+  \ifnum\c@tracingmulticols>\z@
+      \typeout{^^J^^JStarting multicolumn
+               output with \the\col@number
+               \space columns:^^J}\fi
+   \enough@room#2%
+   #1\par\addvspace\multicolsep
+   \begingroup
+   \prepare@multicols\ignorespaces}
+\def\enough@room#1{\par \addpenalty\z@
+   \page@free \pagegoal
+   \advance \page@free -\pagetotal
+   \ifnum \c@tracingmulticols>\z@
+     \typeout{Current page:}%
+     \message{\@spaces goal height=%
+       \the\pagegoal: used \the\pagetotal
+       \space -> free=\the\page@free}%
+     \typeout{\@spaces needed \the#1
+              (for \string#1)}\fi
+   \ifdim \page@free <#1\newpage \fi}
+\def\prepare@multicols{%
+  \output{\global\setbox\partial@page
+                 \vbox{\unvbox\@cclv}}\eject
+  \vbadness10001 \hbadness5000
+  \tolerance\multicoltolerance
+  \pretolerance\m@ne
+  \setemergencystretch\col@number\hsize
+  \set@floatcmds
+  \doublecol@number\col@number
+  \multiply\doublecol@number\tw@
+  \advance\baselineskip\multicolbaselineskip
+  \advance\@colroom-\ht\partial@page
+  \vsize\col@number\@colroom
+  \advance\vsize\c@collectmore\baselineskip
+  \hsize\columnwidth \advance\hsize\columnsep
+  \advance\hsize-\col@number\columnsep
+  \divide\hsize\col@number
+  \linewidth\hsize
+  \output{\multi@columnout}%
+  \multiply\count\footins\col@number
+  \multiply\skip \footins\col@number
+  \reinsert@footnotes}
+\def\endmulticols{\par\addpenalty\z@
+  \output{\balance@columns}\eject
+  \endgroup \reinsert@footnotes
+  \global\c@unbalance\z@
+  \enough@room\postmulticols
+  \addvspace\multicolsep
+  \ifnum\c@tracingmulticols>\z@
+     \typeout{^^JEnding multicolumn
+              output.^^J^^J}\fi}
+\newcount\c@unbalance     \c@unbalance   = 0
+\newcount\c@collectmore   \c@collectmore = 0
+\newcount\c@tracingmulticols
+                     \c@tracingmulticols = 0
+\newcount\col@number
+\newcount\doublecol@number
+\newcount\multicoltolerance
+                   \multicoltolerance = 9999
+\newdimen\page@free
+\newdimen\premulticols  \premulticols = 50pt
+\newdimen\postmulticols \postmulticols= 20pt
+\newskip\multicolsep
+      \multicolsep = 12pt plus 4pt minus 3pt
+\newskip\multicolbaselineskip
+                   \multicolbaselineskip=0pt
+\newbox\partial@page
+\def\process@cols#1#2{\count@#1\relax
+     \loop #2%
+     \advance\count@\tw@
+     \ifnum\count@<\doublecol@number
+   \repeat}
+\def\page@sofar{\unvbox\partial@page
+   \process@cols\z@{\wd\count@\hsize}%
+   \hbox to\textwidth{%
+     \process@cols\tw@{\box\count@
+       \hss\vrule\@width\columnseprule\hss}%
+     \box\z@}}
+\def\reinsert@footnotes{\ifvoid\footins\else
+         \insert\footins{\unvbox\footins}\fi}
+\def\multi@columnout{%
+   \ifnum\outputpenalty <-\@Mi
+   \speci@ls \else
+   \splittopskip\topskip
+   \splitmaxdepth\maxdepth
+   \dimen@\@colroom
+   \divide\skip\footins\col@number
+   \ifvoid\footins \else
+      \advance\dimen@-\skip\footins
+      \advance\dimen@-\ht\footins   \fi
+   \process@cols\tw@{\setbox\count@
+            \vsplit\@cclv to\dimen@}%
+   \setbox\z@\vsplit\@cclv to\dimen@
+   \ifvoid\@cclv \else
+       \unvbox\@cclv
+       \penalty\outputpenalty
+       \ifnum \c@tracingmulticols>\tw@
+                    \hrule\allowbreak \fi
+       \@warning{I moved some lines to
+                     the next page.^^J
+            \@spaces Footnotes on page
+         \thepage\space might be wrong}\fi
+   \setbox\@cclv\vbox{\page@sofar}%
+   \@makecol\@outputpage
+   \global\@colroom\@colht
+   \process@deferreds
+   \ifnum\c@tracingmulticols>\@ne
+     \typeout{Colroom: \the\@colht\space
+              after float space removed
+              = \the\@colroom }\fi
+   \global\vsize\col@number\@colroom
+   \global\advance\vsize
+      \c@collectmore\baselineskip
+   \multiply\skip\footins\col@number\fi}
+\def\speci@ls{%
+   \typeout{Floats and marginpars not
+            allowed inside `multicols'
+            environment!}%
+   \unvbox\@cclv\reinsert@footnotes
+   \xdef\@freelist{\@freelist\@currlist}%
+   \gdef\@currlist{}}
+\def\process@deferreds{%
+   \@floatplacement
+   \begingroup
+    \let\@tempb\@deferlist
+    \gdef\@deferlist{}%
+    \let\@elt\@scolelt
+      \@tempb \endgroup}
+\newif\ifshr@nking
+\def\raggedcolumns{%
+   \@bsphack\shr@nkingtrue\@esphack}
+\def\flushcolumns{%
+   \@bsphack\shr@nkingfalse\@esphack}
+\def\balance@columns{%
+   \splittopskip\topskip
+   \splitmaxdepth\maxdepth
+  \setbox\z@\vbox{\unvbox\@cclv}\dimen@\ht\z@
+   \advance\dimen@\col@number\topskip
+   \advance\dimen@-\col@number\baselineskip
+   \divide\dimen@\col@number
+   \advance\dimen@\c@unbalance\baselineskip
+   \ifnum\c@tracingmulticols>\@ne
+      \typeout{Balance columns:
+        \ifnum\c@unbalance=\z@\else
+       (off balance=\number\c@unbalance)\fi}%
+   \fi
+   \vbadness\@M \loop
+    {\process@cols\@ne{\global\setbox\count@
+                             \box\voidb@x}}%
+     \global\setbox\@ne\copy\z@
+   {\process@cols\thr@@{\global\setbox\count@
+                     \vsplit\@ne to\dimen@}}%
+    \ifnum\c@tracingmulticols>\@ne
+       \message{\@spaces First column
+                = \the\ht\thr@@}\fi
+    \ifshr@nking \global\setbox\thr@@
+                 \vbox{\unvbox\thr@@}%
+       \ifnum\c@tracingmulticols>\@ne
+          \message{ after shrinking
+                    \the\ht\thr@@}\fi\fi
+    \ifnum\c@tracingmulticols>\@ne
+      \message{<> last column = \the\ht\@ne}%
+      \typeout{}\fi
+    \ifdim\ht\@ne >\ht\thr@@
+    \global\advance\dimen@\p@
+    \repeat
+   \dimen@\ht\thr@@
+   \process@cols\z@{\@tempcnta\count@
+        \advance\@tempcnta\@ne
+        \setbox\count@\vbox to\dimen@
+           {\unvbox\@tempcnta
+            \ifshr@nking\vfill\fi}}%
+   \global\vsize\@colroom
+   \global\advance\vsize\ht\partial@page
+   \page@sofar}
+\@ifundefined{emergencystretch}
+     {\newdimen\emergencystretch}{}
+\emergencystretch 1pt
+\def\setemergencystretch#1#2{%
+   \emergencystretch 4pt
+   \multiply\emergencystretch#1}
+
+\def\set@floatcmds{%
+ \let\@dblfloat\@dbflt
+ \def\end@dblfloat{\par
+   \vskip\z@\egroup
+   \ifnum\@floatpenalty<\z@
+     \@cons\@deferlist\@currbox
+   \fi
+   \ifnum\@floatpenalty=-\@Mii
+     \@esphack
+   \fi}}
+
+\endinput
+%% 
+%% End of file `multicol.sty'.
+\end{filecontents*}
+
+\begin{filecontents*}{moreverb.sty}
+%% 
+%% This is file `moreverb.sty',
+%% generated with the docstrip utility.
+%% 
+%% The original source files were:
+%% 
+%% moreverb.dtx  (with options: `moreverb')
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{moreverb}
+        [1996/05/24 v2.2c
+    `more' verbatim facilities%
+                   ]
+\@ifundefined{verbatim@processline}{\RequirePackage{verbatim}}{}
+\newwrite \verbatim@out
+\def\verbatimwrite#1{%
+  \@bsphack
+  \immediate\openout \verbatim@out #1
+  \let\do\@makeother\dospecials
+  \catcode`\^^M\active \catcode`\^^I=12
+  \def\verbatim@processline{%
+    \immediate\write\verbatim@out
+      {\the\verbatim@line}}%
+  \verbatim@start}
+\def\endverbatimwrite{%
+  \immediate\closeout\verbatim@out
+  \@esphack}
+\newcount\tab@position \newcount\tab@size
+\def\verbatimtabsize{8\relax}
+\def\@xobeytab{\leavevmode\penalty\@M
+   {\loop\ \global\advance\tab@position-1 \ifnum\tab@position>0 \repeat}}
+\begingroup
+  \catcode`\^^I=\active
+  \gdef\@vobeytabs{\catcode`\^^I\active\let^^I\@xobeytab}%
+\endgroup
+\def\verbatim@tabexpand#1{%
+  \ifx#1\@nil \expandafter\par \else
+    \ifx#1\@xobeysp \@xobeysp\advance\tab@position-1 \else
+    \ifx#1\@xobeytab \@xobeytab\else
+       #1\advance\tab@position-1
+    \fi\fi
+    \ifnum\tab@position=0 \tab@position\tab@size \fi
+    \expandafter\verbatim@tabexpand
+  \fi
+}
+\newcount\listing@line \listing@line=1
+\def\listing@step{1\relax}
+\def\listinglabel#1{\rlap{\small\rmfamily\the#1}\hskip2.5em}
+\def\thelisting@line{%
+  \setbox0\hbox{\listinglabel\listing@line}%
+  \@tempcnta=\listing@line
+  \divide\@tempcnta\listing@step \multiply\@tempcnta\listing@step
+  \ifnum\listing@line=1
+    \unhbox0
+  \else
+    \ifnum\@tempcnta=\listing@line
+      \unhbox0
+    \else
+      \hskip\wd0
+    \fi
+  \fi}
+\newcommand\listing[2][1]{%
+  \global\listing@line=#2\relax
+  \gdef\listing@step{#1\relax}
+  \listingcont}
+\def\listingcont{%
+  \tab@size=\verbatimtabsize
+  \def\verbatim@processline{\tab@position\tab@size
+    \thelisting@line \global\advance\listing@line1
+    \expandafter\verbatim@tabexpand\the\verbatim@line\@nil}%
+  \@verbatim\frenchspacing\@vobeyspaces\@vobeytabs\verbatim@start}
+\let\endlisting=\endtrivlist
+\let\endlistingcont=\endtrivlist
+\expandafter\newcommand\csname listing*\endcsname[2][1]{%
+  \global\listing@line=#2\relax
+  \gdef\listing@step{#1\relax}
+  \csname listingcont*\endcsname}
+\@namedef{listingcont*}{%
+  \def\verbatim@processline{%
+    \thelisting@line \global\advance\listing@line1
+    \the\verbatim@line\par}%
+  \@verbatim\verbatim@start}
+\expandafter\let\csname endlisting*\endcsname\endtrivlist
+\expandafter\let\csname endlistingcont*\endcsname\endtrivlist
+\def\listinginput{%
+   \@ifnextchar[%]
+     {\@listinginput}%
+     {\@listinginput[1]}}
+{\catcode`\~=\active \lccode`\~=`\^^M \lccode`\N=`\N
+ \lowercase{%
+  \gdef\@listinginput[#1]#2#3{\begingroup
+     \global\listing@line=#2
+     \gdef\listing@step{#1\relax}
+     \tab@size=\verbatimtabsize
+     \def\verbatim@processline{\tab@position\tab@size
+        \thelisting@line \global\advance\listing@line1
+        \expandafter\verbatim@tabexpand\the\verbatim@line\@nil}%
+     \@verbatim\frenchspacing\@vobeyspaces\@vobeytabs
+     \def\verbatim@addtoline##1~{%
+        \verbatim@line\expandafter{\the\verbatim@line##1}}%
+     \openin\verbatim@in@stream=#3
+     \ifeof\verbatim@in@stream
+       \PackageWarning{moreverb}{No file #3.}%
+     \else
+       \verbtab@oktrue
+       \loop
+          \read\verbatim@in@stream to \verbtab@line
+          \ifeof\verbatim@in@stream
+             \verbtab@okfalse
+           \else
+             \expandafter\verbatim@addtoline\verbtab@line
+             \verbatim@processline
+             \verbatim@startline
+          \fi
+       \ifverbtab@ok\repeat
+       \closein\verbatim@in@stream\fi
+     \endtrivlist\endgroup\@doendpe}}}
+\def\verbatimcmd{%
+  \PackageError{moreverb}{The verbatimcmd environment is obsolete%
+                          \MessageBreak
+                          Use alltt in its place}%
+}
+\let\endverbatimcmd\relax
+\def\boxedverbatim{%
+  \def\verbatim@processline{%
+    {\setbox0=\hbox{\the\verbatim@line}%
+    \hsize=\wd0 \the\verbatim@line\par}}%
+  \@minipagetrue%%%DPC%%%
+  \@tempswatrue%%%DPC%%%
+  \setbox0=\vbox\bgroup \verbatim
+}
+\def\endboxedverbatim{%
+  \endverbatim
+  \unskip\setbox0=\lastbox %%%DPC%%%
+  \egroup
+  \fbox{\box0}% <<<=== change here for centering,...
+}
+\newcommand\verbatimtab[1][\verbatimtabsize]{%
+  \do@verbatimtab{#1}{%
+     \@verbatim\frenchspacing\@vobeyspaces\@vobeytabs\verbatim@start}%
+}
+\def\do@verbatimtab#1#2{%
+  \tab@size=#1
+  \def\verbatim@processline{\tab@position\tab@size
+     \expandafter\verbatim@tabexpand\the\verbatim@line\@nil}#2
+}
+\let\endverbatimtab=\endtrivlist
+\newif\ifverbtab@ok
+\def\verbatimtabinput{%
+   \@ifnextchar[%]
+     {\@verbatimtabinput}%
+     {\@verbatimtabinput[\verbatimtabsize]}}
+{\catcode`\~=\active \lccode`\~=`\^^M \lccode`\N=`\N
+ \lowercase{%
+  \gdef\@verbatimtabinput[#1]#2{\begingroup
+     \do@verbatimtab{#1}{%
+       \@verbatim\frenchspacing\@vobeyspaces\@vobeytabs}%
+     \def\verbatim@addtoline##1~{%
+        \verbatim@line\expandafter{\the\verbatim@line##1}}%
+     \openin\verbatim@in@stream=#2
+     \ifeof\verbatim@in@stream
+       \PackageWarning{moreverb}{No file #2.}
+     \else
+       \verbtab@oktrue
+       \loop
+          \read\verbatim@in@stream to \verbtab@line
+          \ifeof\verbatim@in@stream\verbtab@okfalse
+          \else
+             \expandafter\verbatim@addtoline\verbtab@line
+             \verbatim@processline
+             \verbatim@startline
+          \fi
+       \ifverbtab@ok\repeat
+       \closein\verbatim@in@stream
+     \fi
+   \endtrivlist\endgroup\@doendpe}}}
+\endinput
+%% 
+%% End of file `moreverb.sty'.
+\end{filecontents*}
+
+\begin{filecontents*}{verbatim.sty}
+%% 
+%% This is file `verbatim.sty', generated 
+%% on <1994/9/8> with the docstrip utility (2.2h).
+%% 
+%% The original source files were:
+%% 
+%% verbatim.dtx  (with options: `package')
+%% 
+%% IMPORTANT NOTICE: 
+%% This file is part of the `tools' bundle 
+%% in the LaTeX2e distribution. 
+%% 
+%% You are not allowed to distribute this file. 
+%% For distribution of the original source see 
+%% the copyright notice in the source file, and 
+%% in the file readme.txt distributed with the 
+%% tools bundle. 
+%% 
+%% Package `verbatim' to use with LaTeX2e
+%% Copyright (C) 1989--1994 by Rainer Sch\"opf. All rights reserved.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{verbatim}
+     [1994/06/10 v1.5e LaTeX2e package for verbatim enhancements]
+\@ifundefined{verbatim@@@}{}{\endinput}
+\typeout{Package: `verbatim'
+   %\fileversion \space <\filedate>  (RmS)
+}
+%\typeout{English Documentation
+   %\@spaces <\docdate>  (RmS)}
+\newtoks\every@verbatim
+\every@verbatim={}
+\def\@makeother#1{\catcode`#112\relax}
+\begingroup
+ \catcode`\ =\active%
+ \def\x{\def\@vobeyspaces{\catcode`\ \active\let \@xobeysp}}
+ \expandafter\endgroup\x
+\def\@xobeysp{\leavevmode\penalty\@M\ }
+\newtoks\verbatim@line
+\def\verbatim@startline{\verbatim@line{}}
+\def\verbatim@addtoline#1{%
+  \verbatim@line\expandafter{\the\verbatim@line#1}}
+\def\verbatim@processline{\the\verbatim@line\par}
+\def\verbatim@finish{\ifcat$\the\verbatim@line$\else
+  \verbatim@processline\fi}
+\def\verbatim@font{\normalfont\ttfamily
+                   \let\do\do@noligs
+                   \verbatim@nolig@list}
+\def\@verbatim{\the\every@verbatim
+  \trivlist \item \relax
+  \global\@inlabelfalse
+  \@beginparpenalty \predisplaypenalty
+  \leftskip\@totalleftmargin\rightskip\z@
+  \parindent\z@\parfillskip\@flushglue\parskip\z@
+  \@@par
+  \def\par{%
+    \if@tempswa
+      \null\@@par\penalty\interlinepenalty
+    \else
+      \@tempswatrue
+      \ifhmode\@@par\penalty\interlinepenalty\fi
+    \fi}%
+  \def\@noitemerr{\@warning{No verbatim text}}%
+  \obeylines
+  \verbatim@font
+  \let\do\@makeother \dospecials}
+\def\verbatim{\@verbatim \frenchspacing\@vobeyspaces\verbatim@start}
+\@namedef{verbatim*}{\@verbatim\verbatim@start}
+\let\endverbatim=\endtrivlist
+\expandafter\let\csname endverbatim*\endcsname =\endtrivlist
+\def\comment{\@bsphack
+             \let\do\@makeother\dospecials\catcode`\^^M\active
+             \let\verbatim@startline\relax
+             \let\verbatim@addtoline\@gobble
+             \let\verbatim@processline\relax
+             \let\verbatim@finish\relax
+             \verbatim@}
+\let\endcomment=\@esphack
+\@ifundefined{vrb@catcodes}%
+  {\def\vrb@catcodes{%
+     \catcode`\!12\catcode`\[12\catcode`\]12}}{}
+\begingroup
+ \vrb@catcodes
+ \lccode`\!=`\\ \lccode`\[=`\{ \lccode`\]=`\}
+ \catcode`\~=\active \lccode`\~=`\^^M
+ \lccode`\C=`\C
+ \lowercase{\endgroup
+    \def\verbatim@start#1{%
+      \verbatim@startline
+      \if\noexpand#1\noexpand~%
+        \let\next\verbatim@
+      \else \def\next{\verbatim@#1}\fi
+      \next}%
+    \def\verbatim@#1~{\verbatim@@#1!end\@nil}%
+    \def\verbatim@@#1!end{%
+       \verbatim@addtoline{#1}%
+       \futurelet\next\verbatim@@@}%
+    \def\verbatim@@@#1\@nil{%
+       \ifx\next\@nil
+         \verbatim@processline
+         \verbatim@startline
+         \let\next\verbatim@
+       \else
+         \def\@tempa##1!end\@nil{##1}%
+         \@temptokena{!end}%
+         \def\next{\expandafter\verbatim@test\@tempa#1\@nil~}%
+       \fi \next}%
+    \def\verbatim@test#1{%
+           \let\next\verbatim@test
+           \if\noexpand#1\noexpand~%
+             \expandafter\verbatim@addtoline
+               \expandafter{\the\@temptokena}%
+             \verbatim@processline
+             \verbatim@startline
+             \let\next\verbatim@
+           \else \if\noexpand#1
+             \@temptokena\expandafter{\the\@temptokena#1}%
+           \else \if\noexpand#1\noexpand[%
+             \let\@tempc\@empty
+             \let\next\verbatim@testend
+           \else
+             \expandafter\verbatim@addtoline
+               \expandafter{\the\@temptokena}%
+             \def\next{\verbatim@#1}%
+           \fi\fi\fi
+           \next}%
+    \def\verbatim@testend#1{%
+         \if\noexpand#1\noexpand~%
+           \expandafter\verbatim@addtoline
+             \expandafter{\the\@temptokena[}%
+           \expandafter\verbatim@addtoline
+             \expandafter{\@tempc}%
+           \verbatim@processline
+           \verbatim@startline
+           \let\next\verbatim@
+         \else\if\noexpand#1\noexpand]%
+           \let\next\verbatim@@testend
+         \else\if\noexpand#1\noexpand!%
+           \expandafter\verbatim@addtoline
+             \expandafter{\the\@temptokena[}%
+           \expandafter\verbatim@addtoline
+             \expandafter{\@tempc}%
+           \def\next{\verbatim@!}%
+         \else \expandafter\def\expandafter\@tempc\expandafter
+           {\@tempc#1}\fi\fi\fi
+         \next}%
+    \def\verbatim@@testend{%
+       \ifx\@tempc\@currenvir
+         \verbatim@finish
+         \edef\next{\noexpand\end{\@currenvir}%
+                    \noexpand\verbatim@rescan{\@currenvir}}%
+       \else
+         \expandafter\verbatim@addtoline
+           \expandafter{\the\@temptokena[}%
+           \expandafter\verbatim@addtoline
+             \expandafter{\@tempc]}%
+         \let\next\verbatim@
+       \fi
+       \next}%
+    \def\verbatim@rescan#1#2~{\if\noexpand~\noexpand#2~\else
+        \@warning{Characters dropped after `\string\end{#1}'}\fi}}
+\newread\verbatim@in@stream
+\def\verbatim@readfile#1{%
+  \verbatim@startline
+  \openin\verbatim@in@stream #1\relax
+  \ifeof\verbatim@in@stream
+    \typeout{No file #1.}%
+  \else
+    \expandafter\endlinechar\expandafter\m@ne
+    \expandafter\verbatim@read@file
+    \expandafter\endlinechar\the\endlinechar\relax
+    \closein\verbatim@in@stream
+  \fi
+  \verbatim@finish
+}
+\def\verbatim@read@file{%
+  \read\verbatim@in@stream to\next
+  \ifeof\verbatim@in@stream
+  \else
+    \expandafter\verbatim@addtoline\expandafter{\next}%
+    \verbatim@processline
+    \verbatim@startline
+    \expandafter\verbatim@read@file
+  \fi
+}
+\def\verbatiminput{\begingroup
+  \@ifstar{\verbatim@input\relax}%
+          {\verbatim@input{\frenchspacing\@vobeyspaces}}}
+\def\verbatim@input#1#2{\@verbatim #1\relax
+  \verbatim@readfile{#2}\endtrivlist\endgroup\@doendpe}
+\endinput
+%% 
+%% End of file `verbatim.sty'.
+\end{filecontents*}
+
+\begin{filecontents*}{boxedminipage.sty}
+%%% ====================================================================
+%%%  @LaTeX-style-file{
+%%%     author          = "Mario Wolczko",
+%%%     version         = "2",
+%%%     date            = "21 May 1992",
+%%%     time            = "20:55:01 BST",
+%%%     filename        = "boxedminipage.sty",
+%%%     address         = "Dept of Computer Science
+%%%                        The University of Manchester
+%%%                        Oxford Road
+%%%                        Manchester M13 9PL
+%%%                        UK",
+%%%     telephone       = "+44-61-275-6146",
+%%%     FAX             = "+44-61-275-6236",
+%%%     checksum        = "04781 71 253 2587",
+%%%     email           = "mario@cs.man.ac.uk (Internet)",
+%%%     codetable       = "ISO/ASCII",
+%%%     keywords        = "LaTeX, minipage, framebox",
+%%%     supported       = "yes",
+%%%     docstring       = "LaTeX document-style option which defines
+%%%     the boxedminipage environment -- just like minipage, but with
+%%%     a box around it.",
+%%%  }
+%%% ====================================================================
+%
+% The thickness of the rules around the box is controlled by
+% \fboxrule, and the distance between the rules and the edges of the
+% inner box is governed by \fboxsep.
+%
+% This code is based on Lamport's minipage code.
+%
+% Fixed, 7 Jun 89 by Jerry Leichter
+%	Leave \fboxsep worth of separation at top and bottom, not just at
+%	the sides!
+%
+\def\boxedminipage{\@ifnextchar [{\@iboxedminipage}{\@iboxedminipage[c]}}
+
+\def\@iboxedminipage[#1]#2{\leavevmode \@pboxswfalse
+  \if #1b\vbox
+    \else \if #1t\vtop
+	     \else \ifmmode \vcenter
+		       \else \@pboxswtrue $\vcenter
+		    \fi
+	  \fi
+  \fi\bgroup % start of outermost vbox/vtop/vcenter
+    \hsize #2
+    \hrule\@height\fboxrule
+    \hbox\bgroup % inner hbox
+      \vrule\@width\fboxrule \hskip\fboxsep \vbox\bgroup % innermost vbox
+	\vskip\fboxsep
+	\advance\hsize -2\fboxrule \advance\hsize-2\fboxsep
+	\textwidth\hsize \columnwidth\hsize
+	\@parboxrestore
+	\def\@mpfn{mpfootnote}\def\thempfn{\thempfootnote}\c@mpfootnote\z@
+	\let\@footnotetext\@mpfootnotetext
+	\let\@listdepth\@mplistdepth \@mplistdepth\z@
+	\@minipagerestore\@minipagetrue
+	\everypar{\global\@minipagefalse\everypar{}}}
+
+\def\endboxedminipage{%
+	\par\vskip-\lastskip
+	\ifvoid\@mpfootins\else
+	  \vskip\skip\@mpfootins\footnoterule\unvbox\@mpfootins\fi
+	\vskip\fboxsep
+      \egroup % ends the innermost \vbox
+      \hskip\fboxsep \vrule\@width\fboxrule
+    \egroup % ends the \hbox
+    \hrule\@height\fboxrule
+  \egroup% ends the vbox/vtop/vcenter
+  \if@pboxsw $\fi}
+
+\end{filecontents*}
+
+\begin{filecontents*}{fancyheadings.sty}
+% fancyheadings.sty version 1.1
+% Fancy headers and footers.
+% Piet van Oostrum, Dept of Computer Science, University of Utrecht
+% Padualaan 14, P.O. Box 80.089, 3508 TB Utrecht, The Netherlands
+% Telephone: +31-30-531806. piet@cs.ruu.nl (mcvax!hp4nl!ruuinf!piet)
+% Sep 23, 1992.
+
+\def\lhead{\@ifnextchar[{\@xlhead}{\@ylhead}}
+\def\@xlhead[#1]#2{\gdef\@elhead{#1}\gdef\@olhead{#2}}
+\def\@ylhead#1{\gdef\@elhead{#1}\gdef\@olhead{#1}}
+
+\def\chead{\@ifnextchar[{\@xchead}{\@ychead}}
+\def\@xchead[#1]#2{\gdef\@echead{#1}\gdef\@ochead{#2}}
+\def\@ychead#1{\gdef\@echead{#1}\gdef\@ochead{#1}}
+
+\def\rhead{\@ifnextchar[{\@xrhead}{\@yrhead}}
+\def\@xrhead[#1]#2{\gdef\@erhead{#1}\gdef\@orhead{#2}}
+\def\@yrhead#1{\gdef\@erhead{#1}\gdef\@orhead{#1}}
+
+\def\lfoot{\@ifnextchar[{\@xlfoot}{\@ylfoot}}
+\def\@xlfoot[#1]#2{\gdef\@elfoot{#1}\gdef\@olfoot{#2}}
+\def\@ylfoot#1{\gdef\@elfoot{#1}\gdef\@olfoot{#1}}
+
+\def\cfoot{\@ifnextchar[{\@xcfoot}{\@ycfoot}}
+\def\@xcfoot[#1]#2{\gdef\@ecfoot{#1}\gdef\@ocfoot{#2}}
+\def\@ycfoot#1{\gdef\@ecfoot{#1}\gdef\@ocfoot{#1}}
+
+\def\rfoot{\@ifnextchar[{\@xrfoot}{\@yrfoot}}
+\def\@xrfoot[#1]#2{\gdef\@erfoot{#1}\gdef\@orfoot{#2}}
+\def\@yrfoot#1{\gdef\@erfoot{#1}\gdef\@orfoot{#1}}
+
+\newdimen\headrulewidth
+\newdimen\footrulewidth
+\newdimen\plainheadrulewidth
+\newdimen\plainfootrulewidth
+\newdimen\headwidth
+\newif\if@fancyplain \@fancyplainfalse
+\def\fancyplain#1#2{\if@fancyplain#1\else#2\fi}
+
+% Initialization of the head and foot text.
+
+\headrulewidth 0.4pt
+\footrulewidth\z@
+\plainheadrulewidth\z@
+\plainfootrulewidth\z@
+
+\lhead[\fancyplain{}{\sl\rightmark}]{\fancyplain{}{\sl\leftmark}}
+%  i.e. empty on ``plain'' pages \rightmark on even, \leftmark on odd pages
+\chead{}
+\rhead[\fancyplain{}{\sl\leftmark}]{\fancyplain{}{\sl\rightmark}}
+%  i.e. empty on ``plain'' pages \leftmark on even, \rightmark on odd pages
+\lfoot{}
+\cfoot{\rm\thepage} % page number
+\rfoot{}
+
+% Put together a header or footer given the left, center and
+% right text, fillers at left and right and a rule.
+% The \lap commands put the text into an hbox of zero size,
+% so overlapping text does not generate an errormessage.
+
+\def\@fancyhead#1#2#3#4#5{#1\hbox to\headwidth{\vbox{\hbox
+{\rlap{\parbox[b]{\headwidth}{\raggedright#2\strut}}\hfill
+\parbox[b]{\headwidth}{\centering#3\strut}\hfill
+\llap{\parbox[b]{\headwidth}{\raggedleft#4\strut}}}\headrule}}#5}
+
+
+\def\@fancyfoot#1#2#3#4#5{#1\hbox to\headwidth{\vbox{\footrule
+\hbox{\rlap{\parbox[t]{\headwidth}{\raggedright#2\strut}}\hfill
+\parbox[t]{\headwidth}{\centering#3\strut}\hfill
+\llap{\parbox[t]{\headwidth}{\raggedleft#4\strut}}}}}#5}
+
+\def\headrule{{\if@fancyplain\headrulewidth\plainheadrulewidth\fi
+\hrule\@height\headrulewidth\@width\headwidth \vskip-\headrulewidth}}
+
+\def\footrule{{\if@fancyplain\footrulewidth\plainfootrulewidth\fi
+\vskip-0.3\normalbaselineskip\vskip-\footrulewidth
+\hrule\@width\headwidth\@height\footrulewidth\vskip0.3\normalbaselineskip}}
+
+\def\ps@fancy{
+\let\@mkboth\markboth
+\@ifundefined{chapter}{\def\sectionmark##1{\markboth
+{\uppercase{\ifnum \c@secnumdepth>\z@
+ \thesection\hskip 1em\relax \fi ##1}}{}}
+\def\subsectionmark##1{\markright {\ifnum \c@secnumdepth >\@ne
+ \thesubsection\hskip 1em\relax \fi ##1}}}
+{\def\chaptermark##1{\markboth {\uppercase{\ifnum \c@secnumdepth>\m@ne
+ \@chapapp\ \thechapter. \ \fi ##1}}{}}
+\def\sectionmark##1{\markright{\uppercase{\ifnum \c@secnumdepth >\z@
+ \thesection. \ \fi ##1}}}}
+\ps@@fancy
+\headwidth\textwidth}
+\def\ps@fancyplain{\ps@fancy \let\ps@plain\ps@plain@fancy}
+\def\ps@plain@fancy{\@fancyplaintrue\ps@@fancy}
+\def\ps@@fancy{
+\def\@oddhead{\@fancyhead\relax\@olhead\@ochead\@orhead\hss}
+\def\@oddfoot{\@fancyfoot\relax\@olfoot\@ocfoot\@orfoot\hss}
+\def\@evenhead{\@fancyhead\hss\@elhead\@echead\@erhead\relax}
+\def\@evenfoot{\@fancyfoot\hss\@elfoot\@ecfoot\@erfoot\relax}
+}
+\end{filecontents*}
+
+\begin{filecontents*}{affiliation.ltx}
+       	Department of Computer Science,
+       	Universiteit Utrecht\\
+	P.O. Box 80089, 3508 TB Utrecht, The Netherlands\\
+       	\email{http://www.cs.uu.nl/\homedir{}visser/}, 
+	\email{visser@acm.org}
+\end{filecontents*}
+
+\begin{filecontents*}{abstract.ltx}
+Stratego is a language for the specification of program transformation
+based on rewriting strategies.  The Stratego compiler is based on
+program transformation; it transforms a high-level Stratego
+specification via several intermediate representations to C. Several
+optimizations are performed on the intermediate representations.  The
+compiler is bootstrapped, i.e., it is specified in Stratego itself.
+In this paper we give an overview of the Stratego compiler:
+architecture; issues in the compilation of strategies; some
+high-lights of the specification; and experience with using strategies
+for writing program transformations.
+\end{filecontents*}
+
+\begin{filecontents*}{body.ltx}
+\input{introduction.ltx}
+\input{stratego.ltx}
+\input{compiler.ltx}
+\end{filecontents*}
+
+\begin{filecontents*}{introduction.ltx}
+\section{Introduction}
+
+	One of the shortcomings of implementing algebraic
+	specifications by means of term rewriting is the necessity to
+	encode the strategy to apply `equations' by means of
+	functions. This obscures the equational nature of
+	specifications and hampers their modularity because rules
+	become part of one particular strategy.  This observation was
+	done in several projects that used ASF+SDF \cite{DHK96} to
+	define language processors, in particular program
+	transformations. For example: normalization of box expressions
+	for pretty-printing \cite{BV94}; normalization of syntax
+	definitions \cite{Vis97.thesis}; transformation of C++
+	programs \cite{DHH98}.
+
+	Stratego is a language for the specification of program
+	transformations that overcomes this shortcoming by providing
+	user-definable rewriting strategies.  A rewriting strategy is
+	an expression in a language of strategy operators that combine
+	rules (usually via their labels) in a program that traverses a
+	term and applies the rules. 
+
+	The preliminary ideas for the strategy operators in Stratego,
+	inspired by the specification formalism ELAN \cite{BKK97},
+	include operators for sequential non-deterministic
+	programming, data-type specific and generic term traversal. In
+	\cite{LV97} an implementation of these operators in ASF+SDF is
+	described. That interpretive implementation style can be used
+	to write strategies for ASF+SDF equations and can be applied
+	in other settings as well; the traditional way of defining a
+	strategy with functions is replaced by a style in which an
+	evaluation function interprets a strategy expression. This
+	allows the concise specification of various strategies and the
+	use of one rule with many different strategies.
+
+	These preliminary ideas are further developed in
+	\cite{VB98,VBT98}. Rewrite rules are no longer primitives, but
+	are broken down into operations for matching, building and
+	variable scope. System~S, the resulting set of strategy
+	operators, provides the primitive operations for definining
+	both rewrite rules and strategies for applying them.  A
+	Stratego specification provides syntactic abstractions on top
+	of System~S. For example, a rewrite rule is an abstraction for
+	a sequence of operations that first matches the subject term
+	against a pattern, then satisfies a condition and finally
+	builds the instantiation of a term pattern. The identification
+	of this intermediate level allows the definition of very
+	expressive abstractions such as contextual rules and overlays
+	\cite{Vis99}.
+
+	The Stratego compiler first translates a high-level Stratego
+	specification to a System~S expresssion, which is then
+	translated to a list of abstract machine instructions that are
+	implemented in C.  The first compiler was written in
+	SML. Based on the first experience with that compiler an
+	improved compiler was specified in Stratego itself and
+	bootstrapped.  Bootstrapping proves to be a good approach for
+	developing the compiler and the language because it provides a
+	realistic case study and a good test case for the compiler.
+	The compiler is being used in several program transformation
+	case studies, such as a specificiation of an optimizer for a
+	functional language \cite{VBT98}, a deforestation algorithm
+	for a functional language \cite{JV99} and a transformation
+	tool to speed up C++ programs for high-performance computing.  
+
+	In this abstract we give an overview of System~S and Stratego,
+	present the architecture of the compiler and show some
+	examples of the use of strategies in the compiler.  In the
+	full paper we will further elaborate the application of
+	strategies in the compiler and give a first evaluation of the
+	use of strategies in program transformation.
+\end{filecontents*}
+
+\begin{filecontents*}{stratego.ltx}
+\section{The Language}
+	\label{Sec:Strategies}
+
+	This section introduces System~S, a calculus for the
+	definition of tree transformations, and Stratego, a
+	specification language providing syntactic abstractions for
+	System~S expressions. For an operational semantics see
+	\cite{VB98,VBT98}.
+
+\subsection{System S}
+
+	System~S is a hierarchy of operators for expressing term
+	transformations. The first level provides control constructs
+	for sequential non-deterministic programming, the second level
+	introduces combinators for term traversal and the third level
+	defines operators for binding variables and for matching and
+	building terms.
+
+	First-order terms are expressions over the grammar
+\begin{verbatim}
+        t := x | C(t1,...,tn) | [t1,...,tn] | (t1,...,tn)
+\end{verbatim}
+	where \verb|x| ranges over variables and \verb|C| over
+	constructors. The arity and types of constructors are declared
+	in signatures. The notation \verb|[t1,...,tn]| abbreviates the
+	list {\tt Cons(t1,...,Cons(tn,Nil))}. Transformations in
+	System~S are applied to ground terms, i.e., terms withouth
+	variables.
+
+	\paragraph{Level 1: Sequential Non-deterministic Programming}
+
+	Strategies are programs that attempt to transform ground terms
+	into ground terms, at which they may succeed or fail. In case
+	of success the result of such an attempt is a transformed
+	term. In case of failure the result is an indication of the
+	failure.  Strategies can be combined into new strategies by
+	means of the following operators: The \emph{identity} strategy
+\verb|id| 
+	leaves the subject term unchanged and always succeeds. The
+	\emph{failure} strategy
+\verb|fail| 
+	always fails.  The \emph{sequential composition}
+\verb|s1; s2| 
+	first attempts to apply \verb|s1| to the subject term and, if
+	that succeeds, applies \verb|s2| to the result.  The
+	\emph{non-deterministic choice}
+\verb|s1 + s2|
+	attempts to apply either \verb|s1| or \verb|s2|. It succeeds
+	if either succeeds and it fails if both fail; the order in
+	which \verb|s1| and \verb|s2| are tried is unspecified.  The
+	\emph{deterministic choice}
+\verb|s1 <+ s2|
+	attempts to apply either \verb|s1| or \verb|s2|, in that
+	order.  The \emph{recursive closure}
+\verb|rec x(s)|
+	attempts to apply \verb|s|, where at each occurence of the
+	variable \verb|x| in \verb|s|, the strategy \verb|rec x(s)| is
+	applied.  The \emph{test} strategy
+\verb|test(s)|
+	tries to apply \verb|s|. It succeeds if \verb|s| succeeds, and
+	reverts the subject term to the original term. It fails if
+	\verb|s| fails. The \emph{negation}
+\verb|not(s)|
+	succeeds (with the identity transformation) if \verb|s| fails
+	and fails if \verb|s| succeeds.  Two examples of strategies
+	defined with these operators are \verb|try| and \verb|repeat|
+	in Figure~\ref{Fig:traversals}.
+
+	\paragraph{Level 2: Term Traversal}
+
+	\begin{figure}[t]
+	\begin{boxedminipage}{\hsize}\small
+	\verbatiminput{traversals.r}
+	\end{boxedminipage}
+	\caption{Specification of several generic term traversal strategies.}
+	\label{Fig:traversals}
+	\end{figure}
+
+	The Level~1 constructs apply transformations to the root of a
+	term. In order to apply transformations throughout a term it
+	is necessary to traverse it. For this purpose, System~S
+	provides the following operators: For each \verb|n|-ary
+	constructor \verb|C| the \emph{congruence} operator
+\verb|C(s1,...,sn)|
+	is defined. It applies to terms of the form
+	\verb|C(t1,...,tn)| and applies \verb|si| to \verb|ti| for
+	{\tt 1 <= i <= n}. An example of the use of congruences is the
+	operator \verb|map(s)| in Figure~\ref{Fig:traversals} that
+	applies \verb|s| to each element of a list.
+
+	Congruences can be used to define traversals over specific
+	data structures. Specification of generic traversals (e.g.,
+	pre- or post-order over arbitrary structures) requires more
+	generic operators. The operator
+\verb|all(s)|
+	applies \verb|s| to all children of a constructor application
+	\verb|C(t1,...,tn)|. In particular,  \verb|all(s)| is the
+	identity on constants (constructor applications without
+	children).  The strategy
+\verb|one(s)|
+	applies \verb|s| to one child of a constructor application
+	\verb|C(t1,...,tn)|; it is precisely the failure
+	strategy on constants. The strategy
+\verb|some(s)|
+	applies \verb|s| to some of the children of a constructor 
+	application \verb|C(t1,...,tn)|, i.e., to at least one and 
+	as many as possible. Like \verb|one(s)|, \verb|some(s)| fails 
+	on constants.
+
+	Figure~\ref{Fig:traversals} defines various traversals based
+	on these operators. For instance, \verb|oncetd(s)| tries to
+	find \emph{one} application of \verb|s| somewhere in the term
+	starting at the root working its way down; \verb|s <+ one(x)|
+	first attempts to apply \verb|s|, if that fails an application
+	of \verb|s| is (recursively) attempted at one of the children 
+	of the subject term.
+	If no application is found the traversal fails. Compare this
+	to the traversal \verb|alltd(s)|, which finds \emph{all}
+	outermost applications of \verb|s| and never fails.
+
+	\paragraph{Level 3: Match, Build and Variable Binding}
+
+	The operators introduced thus far are useful for repeatedly
+	applying transformation rules throughout a term.  Actual
+	transformation rules are constructed by means of pattern
+	matching and building of pattern instantiations.
+
+	A match \verb|?t| succeeds if the pattern term \verb|t|
+	matches the subject term. As a side-effect, any variables in
+	\verb|t| are bound to the corresponding subterms of the
+	subject term.  If a variable was already bound before the
+	match, then the binding only succeeds if the terms are the
+	same. This enables non-linear pattern matching, so that a
+	match such as \verb|?F(x, x)| succeeds only if the two
+	arguments of \verb|F| in the subject term are equal. This
+	non-linear behaviour can also arise accross other
+	operations. For example, the two consecutive matches
+\verb|?F(x, y); ?F(y, x)|
+	succeed exactly when the two arguments of \verb|F| are equal. 
+	Once a variable is bound it cannot be unbound.
+
+	A build \verb|!t| replaces the subject term with the
+	instantiation of the pattern \verb|t| using the current
+	bindings of terms to variables in \verb|t|.
+	A scope 
+\verb|{x1,...,xn: s}| 
+	makes the variables \verb|xi| local to the strategy
+	\verb|s|. This means that bindings to these variables outside
+	the scope are undone when entering the scope and are restored
+	after leaving it.
+%
+	The operation \verb|where(s)| applies the strategy \verb|s| to
+	the subject term. If successful, it restores the original
+	subject term, keeping only the newly obtained bindings to
+	variables.
+
+\subsection{Stratego}
+
+	\begin{figure}[p]
+	\begin{boxedminipage}{\hsize}\small
+	\verbatiminput{terms.r}
+	\verbatiminput{strategy.r}
+	\end{boxedminipage}
+	\caption{Abstract syntax of terms and System~S expressions.} 
+	\label{Fig:terms}
+	\end{figure}
+
+	The specification language Stratego provides syntactic
+	abstractions for System~S expressions. A specification
+	consists of a collection of modules that define signatures,
+	transformation rules and strategy definitions.
+
+	A signature declares the sorts and operations (constructors)
+	that make up the structure of the language(s) being
+	transformed. Example signatures are shown in the modules in
+	Figure~\ref{Fig:terms}.  A strategy definition
+	\verb|f(x1,...,xn) = s| introduces a new strategy operator
+	\verb|f| parameterized with strategies \verb|x1| through
+	\verb|xn| and with body \verb|s|. Such definitions cannot be
+	recursive, i.e., they cannot refer (directly or indirectly) to
+	the operator being defined. All recursion must be expressed
+	explicitly by means of the recursion operator \verb|rec|.
+	Labeled transformation rules are abbreviations of a particular
+	form of strategy definitions.  A conditional rule
+\verb|L : l -> r where s| with label \verb|L|, left-hand side \verb|l|,
+	right-hand side \verb|r|, and condition \verb|s| denotes a
+	strategy definition
+\verb|L = {x1,...,xn: ?l; where(s); !r}|. 
+	Here, the body of the rule first matches the left-hand side, and 
+	then
+	attempts to satisfy the condition \verb|s|. If that succeeds, 
+	then it builds the right-hand side \verb|r|. The rule is 
+	enclosed in a scope that makes all term variables \verb|xi|
+	occurring in \verb|l|, \verb|s| and \verb|r| local to the
+	rule. If more than one definition is provided with the same
+	name, e.g., \verb|f(xs) = s1| and \verb|f(xs) = s2|, this is
+	equivalent to a single definition with the sum of the original
+	bodies as body, i.e., \verb|f(xs) = s1 + s2|.
+
+	The following definitions provide a useful shorthand. The notation
+\verb|<s> t| 
+	denotes \verb|!t; s|, i.e., the strategy that builds the term
+	\verb|t| and then applies \verb|s| to it.  The notation
+\verb|s => t| 
+	denotes \verb|s; ?t|, i.e., the strategy that applies \verb|s|
+	to the current subject term and then matches the result
+	against \verb|t|.  The combined notation
+\verb|<s> t => t'| 
+	thus denotes \verb|(!t; s); ?t'|.  The \verb|<s> t| notation
+	can also be used in a build expression. For example, the
+	strategy expression
+\verb|!F(<s> t, t')| corresponds to \verb|{x: <s> t => x; !F(x,t')}|,
+	where \verb|x| is a new variable.
+
+ \subsection{Library}
+
+	The language comes with a growing library of strategy
+	operators with functionality for
+\begin{itemize}
+
+	\item Simple traversals (such as in Figure~\ref{Fig:traversals})
+
+	\item Fixed-point traversals
+
+	\item List operations
+
+	\item Tuple operations
+
+	\item Manipulation of expressions with (bound) variables, such
+	as variable renaming, substitution, collection of the set of
+	free variables etc. These operations are language independent
+	and can be specialized to a language by instantiation of
+	generic operations. Note that this concerns \emph{object}
+	variables in the language being manipulated, which are
+	different from the meta-variable used in rules.
+
+\end{itemize}
+
+\end{filecontents*}
+
+\begin{filecontents*}{compiler.ltx}
+\section{The Compiler}
+
+	A Stratego specification defines a transformation on
+	terms. The Stratego compiler translates a specification to an
+	executable program that reads in a term, transforms it
+	according to the specification and outputs the resulting
+	transformed term.  In this section we discuss the architecture
+	of the compiler and the run-time system used in the generated
+	programs. In the next section we give some examples of the
+	specification of the compiler in Stratego itself.
+
+ \subsection{Architecture}
+	
+	\begin{figure}[p]
+	\begin{boxedminipage}{\hsize}\small
+	\input{architecture.ptx}
+	\end{boxedminipage}
+	\caption{Architecture of the Stratego compiler (sc)}
+	\label{Fig:architecture}
+	\end{figure}
+
+	The overall architecture of the compiler is shown in
+	Figure~\ref{Fig:architecture}. The compiler consists of four
+	main components: front-end, optimizer, matching-tree, and
+	back-end.
+
+	The front-end takes a Stratego specification (in abstract
+	syntax form) and translates it to a list of System~S
+	expressions (SSE).  The front-end itself is composed of five
+	stages: joining sections of the same kind (normalization);
+	translation of rules and signatures to strategy definitions;
+	extraction of the definitions that are actually needed for
+	implementation of the operator \verb|main|; elimination of the
+	syntactic abstractions (sugar) of the Stratego level; and
+	(selective) inlining definitions.  The result of this stage is
+	a list of strategy definitions for parameterless operators.
+
+	The optimizer simplifies a System~S expression by applying
+	algebraic laws. The matching-tree automaton transformer
+	targets expressions that are choices of strategies starting
+	with a match. Common prefixes are extracted to prevent
+	inspecting a term more than once.  The back-end translates an
+	expression to abstract machine instructions.
+
+ \subsection{Run-time System}
+
+	The abstract machine instructions produced by the compiler are
+	implemented as macros or procedures in C. These procedures
+	make use of a run-time system that supports stack and term
+	management. The return- and choice-stacks are needed for
+	control. The term-stack is used to deconstruct terms in
+	matching and term traversal.  For the representation of terms
+	the ATerms package \cite{OdJ98} is used. This package provides
+	an implementation of terms based on hash-consing and supports
+	garbage collection.
+	
+	The run-time system is implemented in C. Therefore, the
+	compiler and generated transformation programs only depend on
+	\verb|gcc|.  The Stratego compiler (sc) is being developed on
+	a Linux platform and is also used on Sun machines.  Although
+	this has not been done, there should be no problem in porting
+	the compiler to Windows NT platforms with GNU software.
+
+\section{Examples}
+
+	In this section we give some examples to illustrate the
+	specification of the compiler in Stratego.
+
+ \subsection{Example 1: Pipelines}
+
+	The \verb|main| strategy of the front-end defines a pipeline
+	of operations.  In addition to the operations discussed in the
+	previous section, use-def analysis is used to determine if
+	variables are used in builds without being bound in match
+	operations. 
+
+	Note that in general such a pipeline may fail to apply to a
+	term.  In this case, if an error is detected either in the
+	\verb|use-def| analysis (due to undeclared or unitialized
+	variables) or in the \verb|needed-defs| transformation
+	(missing definition), the pipeline fail. In these cases an
+	error message is derived from the failure.
+
+\begin{figure}[h]
+	\noindent
+\begin{boxedminipage}{\hsize}
+\begin{verbatim}
+module frontend
+imports normalize-spec spec-to-sdefs needed-defs 
+        desugar inlining use-def
+strategies
+ 
+  main = normalize-spec;   
+         where(spec-use-def);
+         spec-to-sdefs; 
+         needed-defs;  
+         desugar-spec;
+         inline
+\end{verbatim}
+\end{boxedminipage}
+\end{figure}
+
+ \subsection{Example 2: Desugaring}
+
+	The following specification is a fragment from module
+	\verb|desugar.r| that defines the elimination of syntactic
+	abstractions (sugar). Rules \verb|Bapp2| transforms a build
+	expression such as \verb|!F(<s> G(y))| to 
+\verb|{x: <s> G(y) => x; !F(x)}| 
+	in order to extract the strategy application inside the
+	build. 
+
+	Rule \verb|Bapp2| uses a contextual pattern 
+\verb|t[App(s, t')]| 
+	to reach an application \verb|App(s, t')| at an arbitrary
+	depth inside the term matching \verb|t|. This application is
+	replaced with the newly generated variable \verb|Var(x)| in
+	the right-hand side by means of the context \verb|t[Var(x)]|.
+	The right-hand side replaces the build by a scope construct
+	that declares a new local variable \verb|x|. Inside the scope
+	first \verb|s| is applied to \verb|t'| and the result matched
+	against the new variable \verb|x|. This variable is then used
+	inside the term \verb|t| in the build.
+
+	The strategy \verb|desugar| desugars an expression
+	by applying a set of rules, including \verb|Bapp2|, repeatedly
+	in a topdown traversal. The strategy {\tt desugar-spec}
+	applies this strategy to each definition body in a list of
+	definitions.
+
+\begin{figure}[h]
+	\noindent
+\begin{boxedminipage}{\hsize}
+\begin{verbatim}
+module desugar
+ ...
+rules
+
+  Bapp2 : Build(t[App(s, t')]) -> 
+          Scope([x], Seq(BAM(s, t', Var(x)), Build(t[Var(x)])))
+          where new => x
+
+strategies
+
+  desugar = topdown(try(desugarRule); 
+                    repeat(HL + (Bapp0 <+ Bapp1 <+ Bapp2)))
+
+  desugar-spec = map(SDef(id, id, desugar))
+\end{verbatim}
+\end{boxedminipage}
+\end{figure}
+
+ \subsection{Example 3: Compilation}
+	
+	The back-end of the compiler translates expressions to lists
+	of abstract machine instructions. For each language construct
+	a rule defines the pattern of instructions it corresponds to.
+	For example, the following rules define the translation of
+	left choice \verb|<+| and the generic traversal operator
+	\verb|all|.
+
+\begin{figure}[h]
+\noindent
+\begin{boxedminipage}{\hsize}
+\begin{verbatim}
+module compiler
+ ...
+rules
+  C : Instr(LChoice(s1, s2), env, rcs) -> 
+      Block([Cpush(fc),
+             Instr(s1, env, rcs), Cpop, Goto(sc),
+             Label(fc), Instr(s2, env, rcs),
+             Label(sc)])
+      where new => sc ; new => fc
+
+  C : Instr(All(s), env, rcs) -> 
+      Block([AllInit,
+             Label(c1), 
+             AllNextSon(c2), 	 
+             Instr(s, env, rcs), 
+             Goto(c1),           
+             Label(c2),
+             AllBuild])
+      where new => c1 ; new => c2
+\end{verbatim}
+\end{boxedminipage}
+\end{figure}
+
+	\noindent These rules are combined in the compilation strategy
+	\verb|compile|.  The default \verb|C| rules are applied after
+	the specialized \verb|Cs| rules. After translation the nested
+	code is flattened to a single list. Some simple optimizations
+	are performed by \verb|peephole| and finally, the code is
+	wrapped in some support code by \verb|Assemble|.
+
+\begin{figure}[h]
+\noindent
+\begin{boxedminipage}{\hsize}
+\begin{verbatim}
+module backend
+  ...
+strategies
+
+  compile = map(MkInstr; 
+                topdown(repeat(Cs <+ C))); 
+            flatten-blocks; 
+            peephole;
+            Assemble
+\end{verbatim}
+\end{boxedminipage}
+\end{figure}
+\end{filecontents*}
+
+\begin{filecontents*}{architecture.ptx}
+\expandafter\ifx\csname graph\endcsname\relax \csname newbox\endcsname\graph\fi
+\expandafter\ifx\csname graphtemp\endcsname\relax \csname newdimen\endcsname\graphtemp\fi
+\setbox\graph=\vtop{\vskip 0pt\hbox{%
+    \special{pn 8}%
+    \special{pa 1800 350}%
+    \special{pa 2500 350}%
+    \special{pa 2500 0}%
+    \special{pa 1800 0}%
+    \special{pa 1800 350}%
+    \special{fp}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 0.175in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss Stratego\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 0.175in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss specification\hss}}%
+    \special{pa 2150 350}%
+    \special{pa 2150 550}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 450}%
+    \special{pa 2150 550}%
+    \special{pa 2125 450}%
+    \special{pa 2175 450}%
+    \special{fp}%
+    \special{ar 2150 725 350 175 0 6.28319}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 0.725in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss Stratego\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 0.725in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss parser\hss}}%
+    \special{pa 2150 900}%
+    \special{pa 2150 1100}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 1000}%
+    \special{pa 2150 1100}%
+    \special{pa 2125 1000}%
+    \special{pa 2175 1000}%
+    \special{fp}%
+    \special{pa 1800 1450}%
+    \special{pa 2500 1450}%
+    \special{pa 2500 1100}%
+    \special{pa 1800 1100}%
+    \special{pa 1800 1450}%
+    \special{fp}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 1.275in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss Stratego\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 1.275in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss AST\hss}}%
+    \special{pa 2150 1450}%
+    \special{pa 2150 1650}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 1550}%
+    \special{pa 2150 1650}%
+    \special{pa 2125 1550}%
+    \special{pa 2175 1550}%
+    \special{fp}%
+    \special{ar 2150 1825 350 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 1.825in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss front-end\hss}}%
+    \special{pa 2150 2000}%
+    \special{pa 2150 2200}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 2100}%
+    \special{pa 2150 2200}%
+    \special{pa 2125 2100}%
+    \special{pa 2175 2100}%
+    \special{fp}%
+    \special{pa 1800 2550}%
+    \special{pa 2500 2550}%
+    \special{pa 2500 2200}%
+    \special{pa 1800 2200}%
+    \special{pa 1800 2550}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 2.375in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss SSE\hss}}%
+    \special{pa 2150 2550}%
+    \special{pa 2150 2750}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 2650}%
+    \special{pa 2150 2750}%
+    \special{pa 2125 2650}%
+    \special{pa 2175 2650}%
+    \special{fp}%
+    \special{ar 2150 2925 350 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 2.925in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss optimizer\hss}}%
+    \special{pa 2150 3100}%
+    \special{pa 2150 3300}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 3200}%
+    \special{pa 2150 3300}%
+    \special{pa 2125 3200}%
+    \special{pa 2175 3200}%
+    \special{fp}%
+    \special{pa 1800 3650}%
+    \special{pa 2500 3650}%
+    \special{pa 2500 3300}%
+    \special{pa 1800 3300}%
+    \special{pa 1800 3650}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 3.475in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss SSE\hss}}%
+    \special{pa 2150 3650}%
+    \special{pa 2150 3850}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 3750}%
+    \special{pa 2150 3850}%
+    \special{pa 2125 3750}%
+    \special{pa 2175 3750}%
+    \special{fp}%
+    \special{ar 2150 4025 350 175 0 6.28319}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 4.025in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss matching\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 4.025in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss tree\hss}}%
+    \special{pa 2150 4200}%
+    \special{pa 2150 4400}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 4300}%
+    \special{pa 2150 4400}%
+    \special{pa 2125 4300}%
+    \special{pa 2175 4300}%
+    \special{fp}%
+    \special{pa 1800 4750}%
+    \special{pa 2500 4750}%
+    \special{pa 2500 4400}%
+    \special{pa 1800 4400}%
+    \special{pa 1800 4750}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 4.575in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss SSE\hss}}%
+    \special{pa 2150 4750}%
+    \special{pa 2150 4950}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 4850}%
+    \special{pa 2150 4950}%
+    \special{pa 2125 4850}%
+    \special{pa 2175 4850}%
+    \special{fp}%
+    \special{ar 2150 5125 350 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 5.125in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss optimizer\hss}}%
+    \special{pa 2150 5300}%
+    \special{pa 2150 5500}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 5400}%
+    \special{pa 2150 5500}%
+    \special{pa 2125 5400}%
+    \special{pa 2175 5400}%
+    \special{fp}%
+    \special{pa 1800 5850}%
+    \special{pa 2500 5850}%
+    \special{pa 2500 5500}%
+    \special{pa 1800 5500}%
+    \special{pa 1800 5850}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 5.675in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss SSE\hss}}%
+    \special{pa 2150 5850}%
+    \special{pa 2150 6050}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 5950}%
+    \special{pa 2150 6050}%
+    \special{pa 2125 5950}%
+    \special{pa 2175 5950}%
+    \special{fp}%
+    \special{ar 2150 6225 350 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 6.225in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss back-end\hss}}%
+    \special{pa 2150 6400}%
+    \special{pa 2150 6600}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2175 6500}%
+    \special{pa 2150 6600}%
+    \special{pa 2125 6500}%
+    \special{pa 2175 6500}%
+    \special{fp}%
+    \special{pa 1800 6950}%
+    \special{pa 2500 6950}%
+    \special{pa 2500 6600}%
+    \special{pa 1800 6600}%
+    \special{pa 1800 6950}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 6.775in
+    \rlap{\kern 2.150in\lower\graphtemp\hbox to 0pt{\hss AMI (= C)\hss}}%
+    \special{ar 3650 725 350 175 0 6.28319}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 0.725in
+    \rlap{\kern 3.650in\lower\graphtemp\hbox to 0pt{\hss normalize-\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 0.725in
+    \rlap{\kern 3.650in\lower\graphtemp\hbox to 0pt{\hss spec\hss}}%
+    \special{pa 3650 900}%
+    \special{pa 3650 1100}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 3675 1000}%
+    \special{pa 3650 1100}%
+    \special{pa 3625 1000}%
+    \special{pa 3675 1000}%
+    \special{fp}%
+    \special{ar 3650 1275 350 175 0 6.28319}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 1.275in
+    \rlap{\kern 3.650in\lower\graphtemp\hbox to 0pt{\hss spec-\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 1.275in
+    \rlap{\kern 3.650in\lower\graphtemp\hbox to 0pt{\hss to-sdefs\hss}}%
+    \special{pa 3650 1450}%
+    \special{pa 3650 1650}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 3675 1550}%
+    \special{pa 3650 1650}%
+    \special{pa 3625 1550}%
+    \special{pa 3675 1550}%
+    \special{fp}%
+    \special{ar 3650 1825 350 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 1.825in
+    \rlap{\kern 3.650in\lower\graphtemp\hbox to 0pt{\hss needed-defs\hss}}%
+    \special{pa 3650 2000}%
+    \special{pa 3650 2200}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 3675 2100}%
+    \special{pa 3650 2200}%
+    \special{pa 3625 2100}%
+    \special{pa 3675 2100}%
+    \special{fp}%
+    \special{ar 3650 2375 350 175 0 6.28319}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 2.375in
+    \rlap{\kern 3.650in\lower\graphtemp\hbox to 0pt{\hss desugar-\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 2.375in
+    \rlap{\kern 3.650in\lower\graphtemp\hbox to 0pt{\hss spec\hss}}%
+    \special{pa 3650 2550}%
+    \special{pa 3650 2750}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 3675 2650}%
+    \special{pa 3650 2750}%
+    \special{pa 3625 2650}%
+    \special{pa 3675 2650}%
+    \special{fp}%
+    \special{ar 3650 2925 350 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 2.925in
+    \rlap{\kern 3.650in\lower\graphtemp\hbox to 0pt{\hss inline\hss}}%
+    \special{pa 3200 3250}%
+    \special{pa 4100 3250}%
+    \special{pa 4100 450}%
+    \special{pa 3200 450}%
+    \special{pa 3200 3250}%
+    \special{fp}%
+    \special{pa 2397 1701}%
+    \special{pa 3200 450}%
+    \special{da 0.050}%
+    \special{pa 2397 1949}%
+    \special{pa 3200 3250}%
+    \special{da 0.050}%
+    \special{pa 1800 725}%
+    \special{pa 1500 725}%
+    \special{da 0.050}%
+    \special{sh 1.000}%
+    \special{pa 1700 700}%
+    \special{pa 1800 725}%
+    \special{pa 1700 750}%
+    \special{pa 1700 700}%
+    \special{fp}%
+    \special{pa 700 900}%
+    \special{pa 1500 900}%
+    \special{pa 1500 550}%
+    \special{pa 700 550}%
+    \special{pa 700 900}%
+    \special{fp}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 0.725in
+    \rlap{\kern 1.100in\lower\graphtemp\hbox to 0pt{\hss Stratego in\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 0.725in
+    \rlap{\kern 1.100in\lower\graphtemp\hbox to 0pt{\hss LEX/YACC\hss}}%
+    \special{pa 1800 1825}%
+    \special{pa 1500 1825}%
+    \special{da 0.050}%
+    \special{sh 1.000}%
+    \special{pa 1700 1800}%
+    \special{pa 1800 1825}%
+    \special{pa 1700 1850}%
+    \special{pa 1700 1800}%
+    \special{fp}%
+    \special{ar 1350 1825 150 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 1.825in
+    \rlap{\kern 1.350in\lower\graphtemp\hbox to 0pt{\hss sc\hss}}%
+    \special{pa 1200 1825}%
+    \special{pa 900 1825}%
+    \special{da 0.050}%
+    \special{sh 1.000}%
+    \special{pa 1100 1800}%
+    \special{pa 1200 1825}%
+    \special{pa 1100 1850}%
+    \special{pa 1100 1800}%
+    \special{fp}%
+    \special{pa 200 2000}%
+    \special{pa 900 2000}%
+    \special{pa 900 1650}%
+    \special{pa 200 1650}%
+    \special{pa 200 2000}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 1.825in
+    \rlap{\kern 0.550in\lower\graphtemp\hbox to 0pt{\hss frontend.r\hss}}%
+    \special{pa 1800 2925}%
+    \special{pa 1500 2925}%
+    \special{da 0.050}%
+    \special{sh 1.000}%
+    \special{pa 1700 2900}%
+    \special{pa 1800 2925}%
+    \special{pa 1700 2950}%
+    \special{pa 1700 2900}%
+    \special{fp}%
+    \special{ar 1350 2925 150 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 2.925in
+    \rlap{\kern 1.350in\lower\graphtemp\hbox to 0pt{\hss sc\hss}}%
+    \special{pa 1200 2925}%
+    \special{pa 900 2925}%
+    \special{da 0.050}%
+    \special{sh 1.000}%
+    \special{pa 1100 2900}%
+    \special{pa 1200 2925}%
+    \special{pa 1100 2950}%
+    \special{pa 1100 2900}%
+    \special{fp}%
+    \special{pa 200 3100}%
+    \special{pa 900 3100}%
+    \special{pa 900 2750}%
+    \special{pa 200 2750}%
+    \special{pa 200 3100}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 2.925in
+    \rlap{\kern 0.550in\lower\graphtemp\hbox to 0pt{\hss optimizer.r\hss}}%
+    \special{pa 1800 4025}%
+    \special{pa 1500 4025}%
+    \special{da 0.050}%
+    \special{sh 1.000}%
+    \special{pa 1700 4000}%
+    \special{pa 1800 4025}%
+    \special{pa 1700 4050}%
+    \special{pa 1700 4000}%
+    \special{fp}%
+    \special{ar 1350 4025 150 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 4.025in
+    \rlap{\kern 1.350in\lower\graphtemp\hbox to 0pt{\hss sc\hss}}%
+    \special{pa 1200 4025}%
+    \special{pa 900 4025}%
+    \special{da 0.050}%
+    \special{sh 1.000}%
+    \special{pa 1100 4000}%
+    \special{pa 1200 4025}%
+    \special{pa 1100 4050}%
+    \special{pa 1100 4000}%
+    \special{fp}%
+    \special{pa 0 4200}%
+    \special{pa 900 4200}%
+    \special{pa 900 3850}%
+    \special{pa 0 3850}%
+    \special{pa 0 4200}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 4.025in
+    \rlap{\kern 0.450in\lower\graphtemp\hbox to 0pt{\hss matching-tree.r\hss}}%
+    \special{pa 1800 6225}%
+    \special{pa 1500 6225}%
+    \special{da 0.050}%
+    \special{sh 1.000}%
+    \special{pa 1700 6200}%
+    \special{pa 1800 6225}%
+    \special{pa 1700 6250}%
+    \special{pa 1700 6200}%
+    \special{fp}%
+    \special{ar 1350 6225 150 175 0 6.28319}%
+    \graphtemp=.5ex\advance\graphtemp by 6.225in
+    \rlap{\kern 1.350in\lower\graphtemp\hbox to 0pt{\hss sc\hss}}%
+    \special{pa 1200 6225}%
+    \special{pa 900 6225}%
+    \special{da 0.050}%
+    \special{sh 1.000}%
+    \special{pa 1100 6200}%
+    \special{pa 1200 6225}%
+    \special{pa 1100 6250}%
+    \special{pa 1100 6200}%
+    \special{fp}%
+    \special{pa 200 6400}%
+    \special{pa 900 6400}%
+    \special{pa 900 6050}%
+    \special{pa 200 6050}%
+    \special{pa 200 6400}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 6.225in
+    \rlap{\kern 0.550in\lower\graphtemp\hbox to 0pt{\hss back-end.r\hss}}%
+    \hbox{\vrule depth6.950in width0pt height 0pt}%
+    \kern 4.100in
+  }%
+}%
+$$\box\graph$$
+\end{filecontents*}
+
+\begin{filecontents*}{doc.bbl}
+\def\sortunder#1{}\def\sortunder#1{}\def\sortunder#1{}
+\begin{thebibliography}{10}
+
+\bibitem{BKK97}
+P.~Borovansk{\'y}, C.~Kirchner, and H.~Kirchner.
+\newblock Controlling rewriting by rewriting.
+\newblock In J.~Meseguer, editor, {\em Proceedings of the First International
+  Workshop on Rewriting Logic and its Applications}, volume~4 of {\em
+  Electronic Notes in Theoretical Computer Science}, Asilomar, Pacific Grove,
+  CA, September 1996. Elsevier.
+
+\bibitem{BV94}
+M.~{\sortunder{Brand}}van~den Brand and E.~Visser.
+\newblock From {Box} to {\TeX}: {An} algebraic approach to the generation of
+  documentation tools.
+\newblock Technical Report P9420, Programming Research Group, University of
+  Amsterdam, July 1994.
+
+\bibitem{DHK96}
+A.~{\sortunder{Deursen}}Van~Deursen, J.~Heering, and P.~Klint, editors.
+\newblock {\em Language Prototyping. An Algebraic Specification Approach},
+  volume~5 of {\em AMAST Series in Computing}.
+\newblock World Scientific, Singapore, September 1996.
+
+\bibitem{DHH98}
+T.~Dinesh, M.~Haveraaen, and J.~Heering.
+\newblock An algebraic programming style for numerical software and its
+  optimization.
+\newblock CWI Report SEN-R9844, CWI, Amsterdam, The Netherlands, December 1998.
+
+\bibitem{JV99}
+P.~Johann and E.~Visser.
+\newblock Warm fusion in {Stratego}: {A} case study in the generation of
+  program transformation systems.
+\newblock Technical report, Department of Computer Science, Universiteit
+  Utrecht, 1999.
+
+\bibitem{LV97}
+B.~Luttik and E.~Visser.
+\newblock Specification of rewriting strategies.
+\newblock In M.~P.~A. Sellink, editor, {\em 2nd International Workshop on the
+  Theory and Practice of Algebraic Specifications (ASF+SDF'97)}, Electronic
+  Workshops in Computing, Berlin, November 1997. Springer-Verlag.
+
+\bibitem{OdJ98}
+P.~A. Olivier and H.~A. de~Jong.
+\newblock Efficient annotated terms.
+\newblock Technical report, Programming Research Group, University of
+  Amsterdam, August 1998.
+
+\bibitem{Vis97.thesis}
+E.~Visser.
+\newblock {\em Syntax Definition for Language Prototyping}.
+\newblock PhD thesis, University of Amsterdam, September 1997.
+
+\bibitem{Vis99}
+E.~Visser.
+\newblock Strategic pattern matching.
+\newblock In {\em Rewriting Techniques and Applications (RTA'99)}, Lecture
+  Notes in Computer Science, Trento, Italy, July 1999. Springer-Verlag.
+
+\bibitem{VB98}
+E.~Visser and Z.-e.-A. Benaissa.
+\newblock A core language for rewriting.
+\newblock In C.~Kirchner and H.~Kirchner, editors, {\em Second International
+  Workshop on Rewriting Logic and its Applications (WRLA'98)}, Electronic Notes
+  in Theoretical Computer Science, Pont-{\`a}-Mousson, France, September 1--4
+  1998. Elsevier.
+
+\bibitem{VBT98}
+E.~Visser, Z.-e.-A. Benaissa, and A.~Tolmach.
+\newblock Building program optimizers with rewriting strategies.
+\newblock In {\em International Conference on Functional Programming
+  (ICFP'98)}, pages 13--26, Baltimore, Maryland, September 1998. ACM.
+
+\end{thebibliography}
+\end{filecontents*}
+
+\begin{filecontents*}{traversals.r}
+module traversals
+imports lists
+strategies
+  try(s)    = s <+ id              map(s)    = rec x(Nil + Cons(s, x))
+  repeat(s) = rec x(try(s; x))     list(s)   = rec x(Nil + Cons(s, x))
+  topdown   = rec x(s; all(x))     alltd(s)  = rec x(s <+ all(x))   
+  bottomup  = rec x(all(x); s)     oncetd(s) = rec x(s <+ one(x))   
+  downup(s) = rec x(s; all(x); s)  sometd(s) = rec x(s <+ some(x))  
+  onebu(s)  = rec x(one(x) <+ s)   somebu(s) = rec x(some(x) <+ s)
+  downup2(s1, s2) = rec x(s1; all(x); s2)
+\end{filecontents*}
+
+\begin{filecontents*}{terms.r}
+module terms
+imports list-cons
+signature
+  sorts Term 
+  operations
+    Wld :                        Term (* _ *)
+    Var : String              -> Term (* x *)
+    Int : Int                 -> Term (* 0, 1, 2 ... *)
+    Str : String              -> Term (* "", "a", ... *)
+    Op  : String * List(Term) -> Term (* f(t1,...,tn) *)
+\end{filecontents*}
+
+\begin{filecontents*}{strategy.r}
+module strategy
+imports terms 
+signature
+  sorts SVar Strat SDef
+  operations
+    Id      :                                  Strat (* id *)
+    Fail    :                                  Strat (* fail *)
+
+    Test    : Strat                         -> Strat (* test s *)
+    Not     : Strat                         -> Strat (* not s *)
+
+    Seq     : Strat * Strat                 -> Strat (* s1 ;  s2 *)
+    Choice  : Strat * Strat                 -> Strat (* s1 +  s2 *)
+    LChoice : Strat * Strat                 -> Strat (* s1 <+ s2 *)
+    
+    SVar    : String                        -> SVar
+    Rec     : String * Strat                -> Strat (* rec x (s) *)
+    Let     : SDef * Strat                  -> Strat (* let sdef in s2*)
+    SDef    : String * List(String) * Strat -> SDef  (* f(xs) = s *)
+    Call    : SVar * List(Strat)            -> Strat (* f(ss) *)
+
+    Path    : Int * Strat                   -> Strat (* i(s) *)
+    Cong    : String * List(Strat)          -> Strat (* f(s1,...,sn) *)
+    One     : Strat                         -> Strat (* one(s) *)
+    Some    : Strat                         -> Strat (* some(s) *)
+    All     : Strat                         -> Strat (* all(s) *)
+
+    Match    : Term                         -> Strat (* ?t *)
+    Build    : Term                         -> Strat (* !t *)
+
+    Scope   : List(String) * Strat          -> Strat (* {xs: s} *)
+    Where   : Strat                         -> Strat (* where s *)
+
+    Prim    : String -> Strat
+\end{filecontents*}
+
+
+%\documentclass[a4paper]{article}
+\documentclass{llncs}
+
+  \usepackage{moreverb}
+  \usepackage{boxedminipage}
+  \usepackage{fancyheadings}
+
+  \title{A Bootstrapped Compiler for Strategies (Extended Abstract)}
+
+  \institute{\input{affiliation.ltx}}
+
+  \author{Eelco Visser$^1$}
+
+%  \author{Eelco Visser\\
+%	\normalsize Department of Computer Science\\
+%	\normalsize Universiteit Utrecht\\
+%	\normalsize visser@acm.org}
+
+\begin{document}
+
+%  \pagestyle{plain}
+
+%  \thispagestyle{fancyplain} 
+
+%  \renewcommand{\headrulewidth}{0pt} 
+
+%  \lfoot{\sf To appear in \emph{Workshop on Strategies in Automated
+%  Deduction (SIAD'99)}, Trento, Italy. July 1999.}
+
+%  \cfoot{}
+
+  \maketitle
+  \begin{abstract}\input{abstract.ltx}\end{abstract}
+  \input{body.ltx}
+  \bibliographystyle{abbrv}
+  %\bibliographystyle{plain}
+  \bibliography{strat,trs,thesis,trans}
+
+\end{document}

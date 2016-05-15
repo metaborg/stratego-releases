@@ -1,0 +1,121 @@
+\section{Organization}
+
+\subsection{Organizing Specifications into Modules}
+
+	\begin{abstract}
+
+	A Stratego specification defines signatures, rules, strategies
+	and overlays. A specification can be divided into a collection
+	of modules.
+
+	\end{abstract}
+
+	A specification consists of a set of basis specifications that
+	define signatures, rules, strategies and overlays
+	(Figure~\ref{Fig:Stratego-Specifications.sdf}). Each of these
+	items is introduced by one of the keywords \verb|signature|,
+	\verb|rules|, \verb|strategies| and \verb|overlays|, followed
+	by a list of basic signatures, rule definitions, strategy
+	definitions or overlays, respectively.
+
+	A specification can be divided into a collection of modules
+	(Figure~\ref{Fig:Stratego-Modules.sdf}). A module has a name
+	and combines a number of module items, which are basic
+	specifications or import declarations.  A module with name
+	\verb|Modname| is assumed to resided in a file with name
+	\verb|Modname.r|. Note that \verb|imports|, \verb|signature|,
+	\verb|rules| and \verb|strategies| are reserved words that
+	cannot be used as module names.
+
+	An import of the form \verb|imports m1 ... mn | denotes the
+	structural inclusion of the sections of the modules \verb|mi|
+	into the importing module. Here structural inclusion means
+	inclusion at the level of abstract syntax as opposed to
+	textual inclusion as is in the C \verb|#include| statement.
+
+	The complete syntax of Stratego is defined in a number of
+	modules, which are combined in module \verb|Stratego-Syntax|
+	(Figure~\ref{Fig:Stratego-Syntax.sdf}).
+
+	\begin{boxedfigure}{Stratego-Specifications.sdf}{Syntax of
+	Stratego specifications}
+
+	\inputverbatim{\sdfdir/Stratego-Specifications.sdf}
+
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{Stratego-Modules.sdf}{Syntax of Stratego
+	modules}
+
+	\inputverbatim{\sdfdir/Stratego-Modules.sdf}
+
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{Stratego-Syntax.sdf}{The syntax of
+	Stratego is defined in several modules.}
+
+	\inputverbatim{\sdfdir/Stratego-Syntax.sdf}
+
+	\end{boxedfigure}
+
+
+
+\subsection{Laying out and Commenting Specifications}
+
+	\begin{abstract}
+
+	The tokens making up a specification can be separated by means
+	of white space and comments.
+
+	\end{abstract}
+
+	Spaces, tabs and newlines can be used at will in between
+	tokens of Stratego specifications, but not within tokens
+	(identifiers, keywords, literals, etc.).	
+
+	In addition various kinds of comments are supported. A small
+	comment on a single line can be inserted after \verb|//|. All
+	characters after \verb|//| until the end of the line are
+	comment. 
+
+	A larger comment can be written between \verb|(*| and
+	\verb|*)|. No nested occurences of \verb|*)| are allowed in
+	such comments.
+
+	To write large pieces of documenting text, the literate
+	programming convention can be used. A literate Stratego module
+	starts with the keyword \verb|\literate|. Fragments of
+	specification text are enclosed in the phrases
+	\verb|\begin{code}| and \verb|\end{code}|. In between pieces
+	of code one can write arbitrary text. The general structure of
+	a literate Stratego specification is:
+\begin{verbatim}
+  \literate
+     LaTeX text
+  \begin{code}
+     specification text
+  \end{code}
+     LaTeX text
+  \begin{code}
+     specification text
+  \end{code}
+\end{verbatim}
+	Only the code parts of a module are interpreted by the
+	compiler. A literate Stratego specification can be
+	\verb|\input| directly in \LaTeX. The code parts are set in
+	verbatim (provided the right style-file is used), the non-code
+	parts are interpreted as regular \LaTeX{} material.
+
+	\newpage
+
+	\begin{boxedfigure}{}{Syntax of layout}
+
+	\inputverbatim{\sdfdir/InstantiateLayout.sdf} 
+
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{}{Syntax of layout}
+
+	\inputverbatim{\sdfdir/Stratego-Layout.sdf}
+
+	\end{boxedfigure}

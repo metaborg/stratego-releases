@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  UGLY-PRINT
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library042.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<HR>
+
+<H3>8.1.3&nbsp;&nbsp;  UGLY-PRINT</H3><PRE>
+module ugly-print
+imports abox-ext
+strategies
+
+  ugly-print = 
+  rec x(try(
+        UP-Int 
+        &lt;+ UP-Str
+        &lt;+ UP-Cnst      
+        &lt;+ UP-Lst(x) 
+        &lt;+ UP-App(x)
+  ))
+
+rules
+
+  UP-Cnst : 
+    f#([]) -&gt; S(f)
+
+  UP-App(s) : 
+    f#(xs) -&gt; H0([S(f), Parens(V0(&lt;map(s); post-commas&gt; xs))])
+
+  UP-Str :
+    x -&gt; &lt;Quote&gt; S(x) where &lt;is-string&gt; x
+
+  UP-Int :
+    x -&gt; S(&lt;int-to-string&gt; x) where &lt;is-int&gt; x
+
+  UP-Lst(s) :
+    [] -&gt; S("[]")
+
+  UP-Lst(s) :
+    l @ [x | xs] -&gt; H0([S("["), V0(&lt;map(s); post-commas&gt; l), S("]")])
+</PRE>
+ 
+ 
+<HR>
+<A HREF="Library042.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+</BODY>
+</HTML>

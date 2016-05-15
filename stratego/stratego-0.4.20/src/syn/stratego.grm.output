@@ -1,0 +1,4257 @@
+Useless nonterminals:
+
+   kinds
+   kind
+
+
+Terminals which are not used:
+
+   ID
+   ASSIGN
+   BACKARROW
+   PARSEPROG
+   PARSEQUERY
+   STARSTAR
+   DOT
+
+
+Useless rules:
+
+#23    kinds :	 kind;
+#24    kinds :	 kinds kind;
+#25    kind :	 ASTERISK;
+#26    kind :	 STARSTAR;
+
+
+Conflict in state 33 between rule 106 and token WHERE resolved as reduce.
+Conflict in state 72 between rule 90 and token PLUS resolved as reduce.
+Conflict in state 72 between rule 90 and token LTPLUS resolved as reduce.
+Conflict in state 72 between rule 90 and token SEMICOLON resolved as reduce.
+Conflict in state 72 between rule 90 and token DOUBLEARROW resolved as reduce.
+Conflict in state 124 between rule 96 and token PLUS resolved as shift.
+Conflict in state 124 between rule 96 and token LTPLUS resolved as shift.
+Conflict in state 124 between rule 96 and token SEMICOLON resolved as shift.
+Conflict in state 124 between rule 96 and token DOUBLEARROW resolved as shift.
+Conflict in state 125 between rule 97 and token PLUS resolved as shift.
+Conflict in state 125 between rule 97 and token LTPLUS resolved as shift.
+Conflict in state 125 between rule 97 and token SEMICOLON resolved as shift.
+Conflict in state 125 between rule 97 and token DOUBLEARROW resolved as shift.
+Conflict in state 126 between rule 95 and token PLUS resolved as reduce.
+Conflict in state 126 between rule 95 and token LTPLUS resolved as reduce.
+Conflict in state 126 between rule 95 and token SEMICOLON resolved as shift.
+Conflict in state 126 between rule 95 and token DOUBLEARROW resolved as shift.
+Conflict in state 148 between rule 69 and token PLUS resolved as reduce.
+Conflict in state 148 between rule 69 and token LTPLUS resolved as reduce.
+Conflict in state 148 between rule 69 and token SEMICOLON resolved as reduce.
+Conflict in state 148 between rule 69 and token DOUBLEARROW resolved as reduce.
+State 33 contains 3 shift/reduce conflicts.
+State 45 contains 28 reduce/reduce conflicts.
+State 46 contains 1 shift/reduce conflict.
+State 47 contains 1 shift/reduce conflict.
+State 49 contains 1 shift/reduce conflict.
+State 60 contains 1 shift/reduce conflict.
+State 61 contains 5 shift/reduce conflicts.
+State 72 contains 1 shift/reduce conflict.
+State 108 contains 2 shift/reduce conflicts.
+State 124 contains 1 shift/reduce conflict.
+State 125 contains 1 shift/reduce conflict.
+State 126 contains 1 shift/reduce conflict.
+State 127 contains 1 shift/reduce conflict.
+State 145 contains 1 shift/reduce conflict.
+State 147 contains 23 reduce/reduce conflicts.
+State 148 contains 1 shift/reduce conflict.
+State 175 contains 1 shift/reduce conflict.
+
+Grammar
+rule 1    start -> MODULE id decls
+rule 2    start -> LBRACK strategy RBRACK term
+rule 3    start -> strategy
+rule 4    decls -> decl
+rule 5    decls -> decls decl
+rule 6    decls ->		/* empty */
+rule 7    mods ->		/* empty */
+rule 8    mods -> mods id
+rule 9    decl -> IMPORTS mods
+rule 10   decl -> RULES rules
+rule 11   decl -> STRATEGIES strategies
+rule 12   decl -> SIGNATURE sdecls
+rule 13   decl -> OVERLAYS overlays
+rule 14   sdecls -> sdecl
+rule 15   sdecls -> sdecls sdecl
+rule 16   sdecls ->		/* empty */
+rule 17   sdecl -> SORTS idlist
+rule 18   sdecl -> OPERATIONS opdecls
+rule 19   idlist ->		/* empty */
+rule 20   idlist -> idlist id optkind
+rule 21   optkind ->		/* empty */
+rule 22   optkind -> LPAREN termlist RPAREN
+rule 27   opdecls ->		/* empty */
+rule 28   opdecls -> opdecls opdecl
+rule 29   opdecl -> id COLON type
+rule 30   type -> typelist ARROW term
+rule 31   type -> term
+rule 32   typelist -> typelist ASTERISK term
+rule 33   typelist -> term
+rule 34   id -> LCID
+rule 35   id -> UCID
+rule 36   term -> id optcont
+rule 37   term -> UNDERSCORE
+rule 38   term -> INT
+rule 39   term -> REAL
+rule 40   term -> STRINGTOK
+rule 41   term -> id opttermlist
+rule 42   term -> LT strategy GT term
+rule 43   term -> LBRACK termlist tail RBRACK
+rule 44   term -> LPAREN termlist RPAREN
+rule 45   term -> term EXPLODE LPAREN term RPAREN
+rule 46   tail ->		/* empty */
+rule 47   tail -> BAR term
+rule 48   optcont ->		/* empty */
+rule 49   optcont -> LBRACK term optcond RBRACK trav
+rule 50   trav ->		/* empty */
+rule 51   trav -> LPAREN id RPAREN
+rule 52   opttermlist ->		/* empty */
+rule 53   opttermlist -> LPAREN termlist RPAREN
+rule 54   termlist -> term
+rule 55   termlist -> term COMMA termlist
+rule 56   termlist ->		/* empty */
+rule 57   tvarlist -> LCID
+rule 58   tvarlist -> LCID COMMA tvarlist
+rule 59   tvarlist ->		/* empty */
+rule 60   rules ->		/* empty */
+rule 61   rules -> rules rule_def
+rule 62   rule_def -> id optvarlist COLON rule
+rule 63   rule_def -> id optvarlist DOUBLECOLON stratrule
+rule 64   rule -> term ARROW term optcond
+rule 65   stratrule -> strategy LONGARROW strategy optcond
+rule 66   optcond ->		/* empty */
+rule 67   optcond -> WHERE strategy
+rule 68   optapplication ->		/* empty */
+rule 69   optapplication -> LEFTDOUBLEARROW strategy
+rule 70   strategy -> id optstrategylist
+rule 71   strategy -> strategy EXPLODE LPAREN strategy RPAREN
+rule 72   strategy -> MATCH LPAREN term RPAREN
+rule 73   strategy -> MATCH LPAREN term RPAREN
+rule 74   strategy -> MATCHe term optapplication
+rule 75   strategy -> BUILD LPAREN term RPAREN
+rule 76   strategy -> BUILDe term
+rule 77   strategy -> ANNMATCH LPAREN term COMMA term RPAREN
+rule 78   strategy -> ANNBUILD LPAREN term COMMA term RPAREN
+rule 79   strategy -> ANNRM term
+rule 80   strategy -> NEW
+rule 81   strategy -> STR_GT
+rule 82   strategy -> KIDS
+rule 83   strategy -> PRIM LPAREN STRINGTOK RPAREN
+rule 84   strategy -> LL rule GG
+rule 85   strategy -> BACKSLASH rule BACKSLASH
+rule 86   strategy -> LT strategy GT term
+rule 87   strategy -> strategy DOUBLEARROW term
+rule 88   strategy -> FAIL
+rule 89   strategy -> SUCC
+rule 90   strategy -> INT strategy
+rule 91   strategy -> NOT LPAREN strategy RPAREN
+rule 92   strategy -> WHERE LPAREN strategy RPAREN
+rule 93   strategy -> TEST LPAREN strategy RPAREN
+rule 94   strategy -> LCURLY tvarlist COLON strategy RCURLY
+rule 95   strategy -> strategy SEMICOLON strategy
+rule 96   strategy -> strategy PLUS strategy
+rule 97   strategy -> strategy LTPLUS strategy
+rule 98   strategy -> MU LCID LPAREN strategy RPAREN
+rule 99   strategy -> SOMETOK LPAREN strategy RPAREN
+rule 100  strategy -> ONE LPAREN strategy RPAREN
+rule 101  strategy -> ALL LPAREN strategy RPAREN
+rule 102  strategy -> THREAD LPAREN strategy RPAREN
+rule 103  strategy -> LPAREN strategylist RPAREN
+rule 104  strategy -> LBRACK strategylist strategytail RBRACK
+rule 105  strategy -> STRINGTOK
+rule 106  strategy -> INT
+rule 107  strategy -> REAL
+rule 108  strategytail ->		/* empty */
+rule 109  strategytail -> BAR strategy
+rule 110  optstrategylist ->		/* empty */
+rule 111  optstrategylist -> LPAREN strategylist RPAREN
+rule 112  strategylist ->		/* empty */
+rule 113  strategylist -> strategy
+rule 114  strategylist -> strategy COMMA strategylist
+rule 115  strategies ->		/* empty */
+rule 116  strategies -> strategies strategy_def
+rule 117  strategy_def -> id optvarlist EQ strategy
+rule 118  optvarlist ->		/* empty */
+rule 119  optvarlist -> LPAREN varlist RPAREN
+rule 120  varlist ->		/* empty */
+rule 121  varlist -> id
+rule 122  varlist -> id COMMA varlist
+rule 123  overlays ->		/* empty */
+rule 124  overlays -> overlay overlays
+rule 125  overlay -> id LPAREN varlist RPAREN EQ term
+rule 126  overlay -> id EQ term
+
+Terminals, with rules where they appear
+
+$ (-1)
+error (256)
+LCID (257) 34 57 58 98
+STRINGTOK (258) 40 83 105
+UCID (259) 35
+ID (260)
+ARROW (261) 30 64
+LONGARROW (262) 65
+ASSIGN (263)
+ASTERISK (264) 25 32
+BACKARROW (265)
+BAR (266) 47 109
+BUILD (267) 75
+ANNBUILD (268) 78
+ANNRM (269) 79
+BUILDe (270) 76
+COMMA (271) 55 58 77 78 114 122
+EQ (272) 117 125 126
+FAIL (273) 88
+GG (274) 84
+IMPORTS (275) 9
+KIDS (276) 82
+LBRACK (277) 2 43 49 104
+LCURLY (278) 94
+LL (279) 84
+LPAREN (280) 22 44 45 51 53 71 72 73 75 77 78 83 91 92 93 98 99 100
+    101 102 103 111 119 125
+LT (281) 42 86
+GT (282) 42 86
+ANNMATCH (283) 77
+MATCH (284) 72 73
+MATCHe (285) 74
+MODULE (286) 1
+NEW (287) 80
+OPERATIONS (288) 18
+OVERLAYS (289) 13
+PARSEPROG (290)
+PARSEQUERY (291)
+PRIM (292) 83
+RCURLY (293) 94
+RPAREN (294) 22 44 45 51 53 71 72 73 75 77 78 83 91 92 93 98 99 100
+    101 102 103 111 119 125
+RULES (295) 10
+SIGNATURE (296) 12
+SORTS (297) 17
+STARSTAR (298) 26
+STRATEGIES (299) 11
+STR_GT (300) 81
+SUCC (301) 89
+UNDERSCORE (302) 37
+DOT (303)
+BACKSLASH (304) 85
+EXPLODE (305) 45 71
+COLON (306) 29 62 94
+DOUBLECOLON (307) 63
+PLUS (308) 96
+LTPLUS (309) 97
+SEMICOLON (310) 95
+DOUBLEARROW (311) 87
+LEFTDOUBLEARROW (312) 69
+RBRACK (313) 2 43 49 104
+NOT (314) 91
+WHERE (315) 67 92
+TEST (316) 93
+ONE (317) 100
+ALL (318) 101
+THREAD (319) 102
+SOMETOK (320) 99
+MU (321) 98
+REAL (322) 39 107
+INT (323) 38 90 106
+
+Nonterminals, with rules where they appear
+
+start (70)
+    on left: 1 2 3
+decls (71)
+    on left: 4 5 6, on right: 1 5
+mods (72)
+    on left: 7 8, on right: 8 9
+decl (73)
+    on left: 9 10 11 12 13, on right: 4 5
+sdecls (74)
+    on left: 14 15 16, on right: 12 15
+sdecl (75)
+    on left: 17 18, on right: 14 15
+idlist (76)
+    on left: 19 20, on right: 17 20
+optkind (77)
+    on left: 21 22, on right: 20
+opdecls (78)
+    on left: 27 28, on right: 18 28
+opdecl (79)
+    on left: 29, on right: 28
+type (80)
+    on left: 30 31, on right: 29
+typelist (81)
+    on left: 32 33, on right: 30 32
+id (82)
+    on left: 34 35, on right: 1 8 20 29 36 41 51 62 63 70 117 121 122
+    125 126
+term (83)
+    on left: 36 37 38 39 40 41 42 43 44 45, on right: 2 30 31 32 33
+    42 45 47 49 54 55 64 72 73 74 75 76 77 78 79 86 87 125 126
+tail (84)
+    on left: 46 47, on right: 43
+optcont (85)
+    on left: 48 49, on right: 36
+trav (86)
+    on left: 50 51, on right: 49
+opttermlist (87)
+    on left: 52 53, on right: 41
+termlist (88)
+    on left: 54 55 56, on right: 22 43 44 53 55
+tvarlist (89)
+    on left: 57 58 59, on right: 58 94
+rules (90)
+    on left: 60 61, on right: 10 61
+rule_def (91)
+    on left: 62 63, on right: 61
+rule (92)
+    on left: 64, on right: 62 84 85
+stratrule (93)
+    on left: 65, on right: 63
+optcond (94)
+    on left: 66 67, on right: 49 64 65
+optapplication (95)
+    on left: 68 69, on right: 74
+strategy (96)
+    on left: 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87
+    88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106
+    107, on right: 2 3 42 65 67 69 71 86 87 90 91 92 93 94 95 96 97
+    98 99 100 101 102 109 113 114 117
+strategytail (97)
+    on left: 108 109, on right: 104
+optstrategylist (98)
+    on left: 110 111, on right: 70
+strategylist (99)
+    on left: 112 113 114, on right: 103 104 111 114
+strategies (100)
+    on left: 115 116, on right: 11 116
+strategy_def (101)
+    on left: 117, on right: 116
+optvarlist (102)
+    on left: 118 119, on right: 62 63 117
+varlist (103)
+    on left: 120 121 122, on right: 119 122 125
+overlays (104)
+    on left: 123 124, on right: 13 124
+overlay (105)
+    on left: 125 126, on right: 124
+
+
+state 0
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 10
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    MODULE	shift, and go to state 18
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    start	go to state 243
+    id  	go to state 34
+    strategy	go to state 35
+
+
+
+state 1
+
+    id  ->  LCID .   (rule 34)
+
+    $default	reduce using rule 34 (id)
+
+
+
+state 2
+
+    strategy  ->  STRINGTOK .   (rule 105)
+
+    $default	reduce using rule 105 (strategy)
+
+
+
+state 3
+
+    id  ->  UCID .   (rule 35)
+
+    $default	reduce using rule 35 (id)
+
+
+
+state 4
+
+    strategy  ->  BUILD . LPAREN term RPAREN   (rule 75)
+
+    LPAREN	shift, and go to state 36
+
+
+
+state 5
+
+    strategy  ->  ANNBUILD . LPAREN term COMMA term RPAREN   (rule 78)
+
+    LPAREN	shift, and go to state 37
+
+
+
+state 6
+
+    strategy  ->  ANNRM . term   (rule 79)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 46
+
+
+
+state 7
+
+    strategy  ->  BUILDe . term   (rule 76)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 47
+
+
+
+state 8
+
+    strategy  ->  FAIL .   (rule 88)
+
+    $default	reduce using rule 88 (strategy)
+
+
+
+state 9
+
+    strategy  ->  KIDS .   (rule 82)
+
+    $default	reduce using rule 82 (strategy)
+
+
+
+state 10
+
+    start  ->  LBRACK . strategy RBRACK term   (rule 2)
+    strategy  ->  LBRACK . strategylist strategytail RBRACK   (rule 104)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    $default	reduce using rule 112 (strategylist)
+
+    id  	go to state 34
+    strategy	go to state 49
+    strategylist	go to state 50
+
+
+
+state 11
+
+    strategy  ->  LCURLY . tvarlist COLON strategy RCURLY   (rule 94)
+
+    LCID	shift, and go to state 51
+
+    $default	reduce using rule 59 (tvarlist)
+
+    tvarlist	go to state 52
+
+
+
+state 12
+
+    strategy  ->  LL . rule GG   (rule 84)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 53
+    rule	go to state 54
+
+
+
+state 13
+
+    strategy  ->  LPAREN . strategylist RPAREN   (rule 103)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    $default	reduce using rule 112 (strategylist)
+
+    id  	go to state 34
+    strategy	go to state 55
+    strategylist	go to state 56
+
+
+
+state 14
+
+    strategy  ->  LT . strategy GT term   (rule 86)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 57
+
+
+
+state 15
+
+    strategy  ->  ANNMATCH . LPAREN term COMMA term RPAREN   (rule 77)
+
+    LPAREN	shift, and go to state 58
+
+
+
+state 16
+
+    strategy  ->  MATCH . LPAREN term RPAREN   (rule 72)
+    strategy  ->  MATCH . LPAREN term RPAREN   (rule 73)
+
+    LPAREN	shift, and go to state 59
+
+
+
+state 17
+
+    strategy  ->  MATCHe . term optapplication   (rule 74)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 60
+
+
+
+state 18
+
+    start  ->  MODULE . id decls   (rule 1)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    id  	go to state 61
+
+
+
+state 19
+
+    strategy  ->  NEW .   (rule 80)
+
+    $default	reduce using rule 80 (strategy)
+
+
+
+state 20
+
+    strategy  ->  PRIM . LPAREN STRINGTOK RPAREN   (rule 83)
+
+    LPAREN	shift, and go to state 62
+
+
+
+state 21
+
+    strategy  ->  STR_GT .   (rule 81)
+
+    $default	reduce using rule 81 (strategy)
+
+
+
+state 22
+
+    strategy  ->  SUCC .   (rule 89)
+
+    $default	reduce using rule 89 (strategy)
+
+
+
+state 23
+
+    strategy  ->  BACKSLASH . rule BACKSLASH   (rule 85)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 53
+    rule	go to state 63
+
+
+
+state 24
+
+    strategy  ->  NOT . LPAREN strategy RPAREN   (rule 91)
+
+    LPAREN	shift, and go to state 64
+
+
+
+state 25
+
+    strategy  ->  WHERE . LPAREN strategy RPAREN   (rule 92)
+
+    LPAREN	shift, and go to state 65
+
+
+
+state 26
+
+    strategy  ->  TEST . LPAREN strategy RPAREN   (rule 93)
+
+    LPAREN	shift, and go to state 66
+
+
+
+state 27
+
+    strategy  ->  ONE . LPAREN strategy RPAREN   (rule 100)
+
+    LPAREN	shift, and go to state 67
+
+
+
+state 28
+
+    strategy  ->  ALL . LPAREN strategy RPAREN   (rule 101)
+
+    LPAREN	shift, and go to state 68
+
+
+
+state 29
+
+    strategy  ->  THREAD . LPAREN strategy RPAREN   (rule 102)
+
+    LPAREN	shift, and go to state 69
+
+
+
+state 30
+
+    strategy  ->  SOMETOK . LPAREN strategy RPAREN   (rule 99)
+
+    LPAREN	shift, and go to state 70
+
+
+
+state 31
+
+    strategy  ->  MU . LCID LPAREN strategy RPAREN   (rule 98)
+
+    LCID	shift, and go to state 71
+
+
+
+state 32
+
+    strategy  ->  REAL .   (rule 107)
+
+    $default	reduce using rule 107 (strategy)
+
+
+
+state 33
+
+    strategy  ->  INT . strategy   (rule 90)
+    strategy  ->  INT .   (rule 106)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    LCID	[reduce using rule 106 (strategy)]
+    UCID	[reduce using rule 106 (strategy)]
+    BACKSLASH	[reduce using rule 106 (strategy)]
+    $default	reduce using rule 106 (strategy)
+
+    id  	go to state 34
+    strategy	go to state 72
+
+
+
+state 34
+
+    strategy  ->  id . optstrategylist   (rule 70)
+
+    LPAREN	shift, and go to state 73
+
+    $default	reduce using rule 110 (optstrategylist)
+
+    optstrategylist	go to state 74
+
+
+
+state 35
+
+    start  ->  strategy .   (rule 3)
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+    $default	reduce using rule 3 (start)
+
+
+
+state 36
+
+    strategy  ->  BUILD LPAREN . term RPAREN   (rule 75)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 80
+
+
+
+state 37
+
+    strategy  ->  ANNBUILD LPAREN . term COMMA term RPAREN   (rule 78)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 81
+
+
+
+state 38
+
+    term  ->  STRINGTOK .   (rule 40)
+
+    $default	reduce using rule 40 (term)
+
+
+
+state 39
+
+    term  ->  LBRACK . termlist tail RBRACK   (rule 43)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    $default	reduce using rule 56 (termlist)
+
+    id  	go to state 45
+    term	go to state 82
+    termlist	go to state 83
+
+
+
+state 40
+
+    term  ->  LPAREN . termlist RPAREN   (rule 44)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    $default	reduce using rule 56 (termlist)
+
+    id  	go to state 45
+    term	go to state 82
+    termlist	go to state 84
+
+
+
+state 41
+
+    term  ->  LT . strategy GT term   (rule 42)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 85
+
+
+
+state 42
+
+    term  ->  UNDERSCORE .   (rule 37)
+
+    $default	reduce using rule 37 (term)
+
+
+
+state 43
+
+    term  ->  REAL .   (rule 39)
+
+    $default	reduce using rule 39 (term)
+
+
+
+state 44
+
+    term  ->  INT .   (rule 38)
+
+    $default	reduce using rule 38 (term)
+
+
+
+state 45
+
+    term  ->  id . optcont   (rule 36)
+    term  ->  id . opttermlist   (rule 41)
+
+    LBRACK	shift, and go to state 86
+    LPAREN	shift, and go to state 87
+
+    $   	reduce using rule 48 (optcont)
+    $   	[reduce using rule 52 (opttermlist)]
+    LCID	reduce using rule 48 (optcont)
+    LCID	[reduce using rule 52 (opttermlist)]
+    UCID	reduce using rule 48 (optcont)
+    UCID	[reduce using rule 52 (opttermlist)]
+    ARROW	reduce using rule 48 (optcont)
+    ARROW	[reduce using rule 52 (opttermlist)]
+    LONGARROW	reduce using rule 48 (optcont)
+    LONGARROW	[reduce using rule 52 (opttermlist)]
+    ASTERISK	reduce using rule 48 (optcont)
+    ASTERISK	[reduce using rule 52 (opttermlist)]
+    BAR 	reduce using rule 48 (optcont)
+    BAR 	[reduce using rule 52 (opttermlist)]
+    COMMA	reduce using rule 48 (optcont)
+    COMMA	[reduce using rule 52 (opttermlist)]
+    GG  	reduce using rule 48 (optcont)
+    GG  	[reduce using rule 52 (opttermlist)]
+    IMPORTS	reduce using rule 48 (optcont)
+    IMPORTS	[reduce using rule 52 (opttermlist)]
+    GT  	reduce using rule 48 (optcont)
+    GT  	[reduce using rule 52 (opttermlist)]
+    OPERATIONS	reduce using rule 48 (optcont)
+    OPERATIONS	[reduce using rule 52 (opttermlist)]
+    OVERLAYS	reduce using rule 48 (optcont)
+    OVERLAYS	[reduce using rule 52 (opttermlist)]
+    RCURLY	reduce using rule 48 (optcont)
+    RCURLY	[reduce using rule 52 (opttermlist)]
+    RPAREN	reduce using rule 48 (optcont)
+    RPAREN	[reduce using rule 52 (opttermlist)]
+    RULES	reduce using rule 48 (optcont)
+    RULES	[reduce using rule 52 (opttermlist)]
+    SIGNATURE	reduce using rule 48 (optcont)
+    SIGNATURE	[reduce using rule 52 (opttermlist)]
+    SORTS	reduce using rule 48 (optcont)
+    SORTS	[reduce using rule 52 (opttermlist)]
+    STRATEGIES	reduce using rule 48 (optcont)
+    STRATEGIES	[reduce using rule 52 (opttermlist)]
+    BACKSLASH	reduce using rule 48 (optcont)
+    BACKSLASH	[reduce using rule 52 (opttermlist)]
+    EXPLODE	reduce using rule 48 (optcont)
+    EXPLODE	[reduce using rule 52 (opttermlist)]
+    PLUS	reduce using rule 48 (optcont)
+    PLUS	[reduce using rule 52 (opttermlist)]
+    LTPLUS	reduce using rule 48 (optcont)
+    LTPLUS	[reduce using rule 52 (opttermlist)]
+    SEMICOLON	reduce using rule 48 (optcont)
+    SEMICOLON	[reduce using rule 52 (opttermlist)]
+    DOUBLEARROW	reduce using rule 48 (optcont)
+    DOUBLEARROW	[reduce using rule 52 (opttermlist)]
+    LEFTDOUBLEARROW	reduce using rule 48 (optcont)
+    LEFTDOUBLEARROW	[reduce using rule 52 (opttermlist)]
+    RBRACK	reduce using rule 48 (optcont)
+    RBRACK	[reduce using rule 52 (opttermlist)]
+    WHERE	reduce using rule 48 (optcont)
+    WHERE	[reduce using rule 52 (opttermlist)]
+    $default	reduce using rule 48 (optcont)
+
+    optcont	go to state 88
+    opttermlist	go to state 89
+
+
+
+state 46
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  ANNRM term .   (rule 79)
+
+    EXPLODE	shift, and go to state 90
+
+    EXPLODE	[reduce using rule 79 (strategy)]
+    $default	reduce using rule 79 (strategy)
+
+
+
+state 47
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  BUILDe term .   (rule 76)
+
+    EXPLODE	shift, and go to state 90
+
+    EXPLODE	[reduce using rule 76 (strategy)]
+    $default	reduce using rule 76 (strategy)
+
+
+
+state 48
+
+    strategy  ->  LBRACK . strategylist strategytail RBRACK   (rule 104)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    $default	reduce using rule 112 (strategylist)
+
+    id  	go to state 34
+    strategy	go to state 55
+    strategylist	go to state 50
+
+
+
+state 49
+
+    start  ->  LBRACK strategy . RBRACK term   (rule 2)
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategylist  ->  strategy .   (rule 113)
+    strategylist  ->  strategy . COMMA strategylist   (rule 114)
+
+    COMMA	shift, and go to state 91
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+    RBRACK	shift, and go to state 92
+
+    RBRACK	[reduce using rule 113 (strategylist)]
+    $default	reduce using rule 113 (strategylist)
+
+
+
+state 50
+
+    strategy  ->  LBRACK strategylist . strategytail RBRACK   (rule 104)
+
+    BAR 	shift, and go to state 93
+
+    $default	reduce using rule 108 (strategytail)
+
+    strategytail	go to state 94
+
+
+
+state 51
+
+    tvarlist  ->  LCID .   (rule 57)
+    tvarlist  ->  LCID . COMMA tvarlist   (rule 58)
+
+    COMMA	shift, and go to state 95
+
+    $default	reduce using rule 57 (tvarlist)
+
+
+
+state 52
+
+    strategy  ->  LCURLY tvarlist . COLON strategy RCURLY   (rule 94)
+
+    COLON	shift, and go to state 96
+
+
+
+state 53
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    rule  ->  term . ARROW term optcond   (rule 64)
+
+    ARROW	shift, and go to state 97
+    EXPLODE	shift, and go to state 90
+
+
+
+state 54
+
+    strategy  ->  LL rule . GG   (rule 84)
+
+    GG  	shift, and go to state 98
+
+
+
+state 55
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategylist  ->  strategy .   (rule 113)
+    strategylist  ->  strategy . COMMA strategylist   (rule 114)
+
+    COMMA	shift, and go to state 91
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+    $default	reduce using rule 113 (strategylist)
+
+
+
+state 56
+
+    strategy  ->  LPAREN strategylist . RPAREN   (rule 103)
+
+    RPAREN	shift, and go to state 99
+
+
+
+state 57
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  LT strategy . GT term   (rule 86)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    GT  	shift, and go to state 100
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 58
+
+    strategy  ->  ANNMATCH LPAREN . term COMMA term RPAREN   (rule 77)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 101
+
+
+
+state 59
+
+    strategy  ->  MATCH LPAREN . term RPAREN   (rule 72)
+    strategy  ->  MATCH LPAREN . term RPAREN   (rule 73)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 102
+
+
+
+state 60
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  MATCHe term . optapplication   (rule 74)
+
+    EXPLODE	shift, and go to state 90
+    LEFTDOUBLEARROW	shift, and go to state 103
+
+    EXPLODE	[reduce using rule 68 (optapplication)]
+    $default	reduce using rule 68 (optapplication)
+
+    optapplication	go to state 104
+
+
+
+state 61
+
+    start  ->  MODULE id . decls   (rule 1)
+
+    IMPORTS	shift, and go to state 105
+    OVERLAYS	shift, and go to state 106
+    RULES	shift, and go to state 107
+    SIGNATURE	shift, and go to state 108
+    STRATEGIES	shift, and go to state 109
+
+    IMPORTS	[reduce using rule 6 (decls)]
+    OVERLAYS	[reduce using rule 6 (decls)]
+    RULES	[reduce using rule 6 (decls)]
+    SIGNATURE	[reduce using rule 6 (decls)]
+    STRATEGIES	[reduce using rule 6 (decls)]
+    $default	reduce using rule 6 (decls)
+
+    decls	go to state 110
+    decl	go to state 111
+
+
+
+state 62
+
+    strategy  ->  PRIM LPAREN . STRINGTOK RPAREN   (rule 83)
+
+    STRINGTOK	shift, and go to state 112
+
+
+
+state 63
+
+    strategy  ->  BACKSLASH rule . BACKSLASH   (rule 85)
+
+    BACKSLASH	shift, and go to state 113
+
+
+
+state 64
+
+    strategy  ->  NOT LPAREN . strategy RPAREN   (rule 91)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 114
+
+
+
+state 65
+
+    strategy  ->  WHERE LPAREN . strategy RPAREN   (rule 92)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 115
+
+
+
+state 66
+
+    strategy  ->  TEST LPAREN . strategy RPAREN   (rule 93)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 116
+
+
+
+state 67
+
+    strategy  ->  ONE LPAREN . strategy RPAREN   (rule 100)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 117
+
+
+
+state 68
+
+    strategy  ->  ALL LPAREN . strategy RPAREN   (rule 101)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 118
+
+
+
+state 69
+
+    strategy  ->  THREAD LPAREN . strategy RPAREN   (rule 102)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 119
+
+
+
+state 70
+
+    strategy  ->  SOMETOK LPAREN . strategy RPAREN   (rule 99)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 120
+
+
+
+state 71
+
+    strategy  ->  MU LCID . LPAREN strategy RPAREN   (rule 98)
+
+    LPAREN	shift, and go to state 121
+
+
+
+state 72
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  INT strategy .   (rule 90)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    EXPLODE	shift, and go to state 75
+
+    EXPLODE	[reduce using rule 90 (strategy)]
+    $default	reduce using rule 90 (strategy)
+
+
+
+state 73
+
+    optstrategylist  ->  LPAREN . strategylist RPAREN   (rule 111)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    $default	reduce using rule 112 (strategylist)
+
+    id  	go to state 34
+    strategy	go to state 55
+    strategylist	go to state 122
+
+
+
+state 74
+
+    strategy  ->  id optstrategylist .   (rule 70)
+
+    $default	reduce using rule 70 (strategy)
+
+
+
+state 75
+
+    strategy  ->  strategy EXPLODE . LPAREN strategy RPAREN   (rule 71)
+
+    LPAREN	shift, and go to state 123
+
+
+
+state 76
+
+    strategy  ->  strategy PLUS . strategy   (rule 96)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 124
+
+
+
+state 77
+
+    strategy  ->  strategy LTPLUS . strategy   (rule 97)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 125
+
+
+
+state 78
+
+    strategy  ->  strategy SEMICOLON . strategy   (rule 95)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 126
+
+
+
+state 79
+
+    strategy  ->  strategy DOUBLEARROW . term   (rule 87)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 127
+
+
+
+state 80
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  BUILD LPAREN term . RPAREN   (rule 75)
+
+    RPAREN	shift, and go to state 128
+    EXPLODE	shift, and go to state 90
+
+
+
+state 81
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  ANNBUILD LPAREN term . COMMA term RPAREN   (rule 78)
+
+    COMMA	shift, and go to state 129
+    EXPLODE	shift, and go to state 90
+
+
+
+state 82
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    termlist  ->  term .   (rule 54)
+    termlist  ->  term . COMMA termlist   (rule 55)
+
+    COMMA	shift, and go to state 130
+    EXPLODE	shift, and go to state 90
+
+    $default	reduce using rule 54 (termlist)
+
+
+
+state 83
+
+    term  ->  LBRACK termlist . tail RBRACK   (rule 43)
+
+    BAR 	shift, and go to state 131
+
+    $default	reduce using rule 46 (tail)
+
+    tail	go to state 132
+
+
+
+state 84
+
+    term  ->  LPAREN termlist . RPAREN   (rule 44)
+
+    RPAREN	shift, and go to state 133
+
+
+
+state 85
+
+    term  ->  LT strategy . GT term   (rule 42)
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    GT  	shift, and go to state 134
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 86
+
+    optcont  ->  LBRACK . term optcond RBRACK trav   (rule 49)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 135
+
+
+
+state 87
+
+    opttermlist  ->  LPAREN . termlist RPAREN   (rule 53)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    $default	reduce using rule 56 (termlist)
+
+    id  	go to state 45
+    term	go to state 82
+    termlist	go to state 136
+
+
+
+state 88
+
+    term  ->  id optcont .   (rule 36)
+
+    $default	reduce using rule 36 (term)
+
+
+
+state 89
+
+    term  ->  id opttermlist .   (rule 41)
+
+    $default	reduce using rule 41 (term)
+
+
+
+state 90
+
+    term  ->  term EXPLODE . LPAREN term RPAREN   (rule 45)
+
+    LPAREN	shift, and go to state 137
+
+
+
+state 91
+
+    strategylist  ->  strategy COMMA . strategylist   (rule 114)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    $default	reduce using rule 112 (strategylist)
+
+    id  	go to state 34
+    strategy	go to state 55
+    strategylist	go to state 138
+
+
+
+state 92
+
+    start  ->  LBRACK strategy RBRACK . term   (rule 2)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 139
+
+
+
+state 93
+
+    strategytail  ->  BAR . strategy   (rule 109)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 140
+
+
+
+state 94
+
+    strategy  ->  LBRACK strategylist strategytail . RBRACK   (rule 104)
+
+    RBRACK	shift, and go to state 141
+
+
+
+state 95
+
+    tvarlist  ->  LCID COMMA . tvarlist   (rule 58)
+
+    LCID	shift, and go to state 51
+
+    $default	reduce using rule 59 (tvarlist)
+
+    tvarlist	go to state 142
+
+
+
+state 96
+
+    strategy  ->  LCURLY tvarlist COLON . strategy RCURLY   (rule 94)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 143
+
+
+
+state 97
+
+    rule  ->  term ARROW . term optcond   (rule 64)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 144
+
+
+
+state 98
+
+    strategy  ->  LL rule GG .   (rule 84)
+
+    $default	reduce using rule 84 (strategy)
+
+
+
+state 99
+
+    strategy  ->  LPAREN strategylist RPAREN .   (rule 103)
+
+    $default	reduce using rule 103 (strategy)
+
+
+
+state 100
+
+    strategy  ->  LT strategy GT . term   (rule 86)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 145
+
+
+
+state 101
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  ANNMATCH LPAREN term . COMMA term RPAREN   (rule 77)
+
+    COMMA	shift, and go to state 146
+    EXPLODE	shift, and go to state 90
+
+
+
+state 102
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  MATCH LPAREN term . RPAREN   (rule 72)
+    strategy  ->  MATCH LPAREN term . RPAREN   (rule 73)
+
+    RPAREN	shift, and go to state 147
+    EXPLODE	shift, and go to state 90
+
+
+
+state 103
+
+    optapplication  ->  LEFTDOUBLEARROW . strategy   (rule 69)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 148
+
+
+
+state 104
+
+    strategy  ->  MATCHe term optapplication .   (rule 74)
+
+    $default	reduce using rule 74 (strategy)
+
+
+
+state 105
+
+    decl  ->  IMPORTS . mods   (rule 9)
+
+    $default	reduce using rule 7 (mods)
+
+    mods	go to state 149
+
+
+
+state 106
+
+    decl  ->  OVERLAYS . overlays   (rule 13)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 123 (overlays)
+
+    id  	go to state 150
+    overlays	go to state 151
+    overlay	go to state 152
+
+
+
+state 107
+
+    decl  ->  RULES . rules   (rule 10)
+
+    $default	reduce using rule 60 (rules)
+
+    rules	go to state 153
+
+
+
+state 108
+
+    decl  ->  SIGNATURE . sdecls   (rule 12)
+
+    OPERATIONS	shift, and go to state 154
+    SORTS	shift, and go to state 155
+
+    OPERATIONS	[reduce using rule 16 (sdecls)]
+    SORTS	[reduce using rule 16 (sdecls)]
+    $default	reduce using rule 16 (sdecls)
+
+    sdecls	go to state 156
+    sdecl	go to state 157
+
+
+
+state 109
+
+    decl  ->  STRATEGIES . strategies   (rule 11)
+
+    $default	reduce using rule 115 (strategies)
+
+    strategies	go to state 158
+
+
+
+state 110
+
+    start  ->  MODULE id decls .   (rule 1)
+    decls  ->  decls . decl   (rule 5)
+
+    IMPORTS	shift, and go to state 105
+    OVERLAYS	shift, and go to state 106
+    RULES	shift, and go to state 107
+    SIGNATURE	shift, and go to state 108
+    STRATEGIES	shift, and go to state 109
+
+    $default	reduce using rule 1 (start)
+
+    decl	go to state 159
+
+
+
+state 111
+
+    decls  ->  decl .   (rule 4)
+
+    $default	reduce using rule 4 (decls)
+
+
+
+state 112
+
+    strategy  ->  PRIM LPAREN STRINGTOK . RPAREN   (rule 83)
+
+    RPAREN	shift, and go to state 160
+
+
+
+state 113
+
+    strategy  ->  BACKSLASH rule BACKSLASH .   (rule 85)
+
+    $default	reduce using rule 85 (strategy)
+
+
+
+state 114
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  NOT LPAREN strategy . RPAREN   (rule 91)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    RPAREN	shift, and go to state 161
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 115
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  WHERE LPAREN strategy . RPAREN   (rule 92)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    RPAREN	shift, and go to state 162
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 116
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  TEST LPAREN strategy . RPAREN   (rule 93)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    RPAREN	shift, and go to state 163
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 117
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategy  ->  ONE LPAREN strategy . RPAREN   (rule 100)
+
+    RPAREN	shift, and go to state 164
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 118
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategy  ->  ALL LPAREN strategy . RPAREN   (rule 101)
+
+    RPAREN	shift, and go to state 165
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 119
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategy  ->  THREAD LPAREN strategy . RPAREN   (rule 102)
+
+    RPAREN	shift, and go to state 166
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 120
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategy  ->  SOMETOK LPAREN strategy . RPAREN   (rule 99)
+
+    RPAREN	shift, and go to state 167
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 121
+
+    strategy  ->  MU LCID LPAREN . strategy RPAREN   (rule 98)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 168
+
+
+
+state 122
+
+    optstrategylist  ->  LPAREN strategylist . RPAREN   (rule 111)
+
+    RPAREN	shift, and go to state 169
+
+
+
+state 123
+
+    strategy  ->  strategy EXPLODE LPAREN . strategy RPAREN   (rule 71)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 170
+
+
+
+state 124
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy PLUS strategy .   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+    EXPLODE	[reduce using rule 96 (strategy)]
+    $default	reduce using rule 96 (strategy)
+
+
+
+state 125
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategy  ->  strategy LTPLUS strategy .   (rule 97)
+
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+    EXPLODE	[reduce using rule 97 (strategy)]
+    $default	reduce using rule 97 (strategy)
+
+
+
+state 126
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy SEMICOLON strategy .   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    EXPLODE	shift, and go to state 75
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+    EXPLODE	[reduce using rule 95 (strategy)]
+    $default	reduce using rule 95 (strategy)
+
+
+
+state 127
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  strategy DOUBLEARROW term .   (rule 87)
+
+    EXPLODE	shift, and go to state 90
+
+    EXPLODE	[reduce using rule 87 (strategy)]
+    $default	reduce using rule 87 (strategy)
+
+
+
+state 128
+
+    strategy  ->  BUILD LPAREN term RPAREN .   (rule 75)
+
+    $default	reduce using rule 75 (strategy)
+
+
+
+state 129
+
+    strategy  ->  ANNBUILD LPAREN term COMMA . term RPAREN   (rule 78)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 171
+
+
+
+state 130
+
+    termlist  ->  term COMMA . termlist   (rule 55)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    $default	reduce using rule 56 (termlist)
+
+    id  	go to state 45
+    term	go to state 82
+    termlist	go to state 172
+
+
+
+state 131
+
+    tail  ->  BAR . term   (rule 47)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 173
+
+
+
+state 132
+
+    term  ->  LBRACK termlist tail . RBRACK   (rule 43)
+
+    RBRACK	shift, and go to state 174
+
+
+
+state 133
+
+    term  ->  LPAREN termlist RPAREN .   (rule 44)
+
+    $default	reduce using rule 44 (term)
+
+
+
+state 134
+
+    term  ->  LT strategy GT . term   (rule 42)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 175
+
+
+
+state 135
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    optcont  ->  LBRACK term . optcond RBRACK trav   (rule 49)
+
+    EXPLODE	shift, and go to state 90
+    WHERE	shift, and go to state 176
+
+    $default	reduce using rule 66 (optcond)
+
+    optcond	go to state 177
+
+
+
+state 136
+
+    opttermlist  ->  LPAREN termlist . RPAREN   (rule 53)
+
+    RPAREN	shift, and go to state 178
+
+
+
+state 137
+
+    term  ->  term EXPLODE LPAREN . term RPAREN   (rule 45)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 179
+
+
+
+state 138
+
+    strategylist  ->  strategy COMMA strategylist .   (rule 114)
+
+    $default	reduce using rule 114 (strategylist)
+
+
+
+state 139
+
+    start  ->  LBRACK strategy RBRACK term .   (rule 2)
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+
+    EXPLODE	shift, and go to state 90
+
+    $default	reduce using rule 2 (start)
+
+
+
+state 140
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategytail  ->  BAR strategy .   (rule 109)
+
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+    $default	reduce using rule 109 (strategytail)
+
+
+
+state 141
+
+    strategy  ->  LBRACK strategylist strategytail RBRACK .   (rule 104)
+
+    $default	reduce using rule 104 (strategy)
+
+
+
+state 142
+
+    tvarlist  ->  LCID COMMA tvarlist .   (rule 58)
+
+    $default	reduce using rule 58 (tvarlist)
+
+
+
+state 143
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  LCURLY tvarlist COLON strategy . RCURLY   (rule 94)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    RCURLY	shift, and go to state 180
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 144
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    rule  ->  term ARROW term . optcond   (rule 64)
+
+    EXPLODE	shift, and go to state 90
+    WHERE	shift, and go to state 176
+
+    $default	reduce using rule 66 (optcond)
+
+    optcond	go to state 181
+
+
+
+state 145
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  LT strategy GT term .   (rule 86)
+
+    EXPLODE	shift, and go to state 90
+
+    EXPLODE	[reduce using rule 86 (strategy)]
+    $default	reduce using rule 86 (strategy)
+
+
+
+state 146
+
+    strategy  ->  ANNMATCH LPAREN term COMMA . term RPAREN   (rule 77)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 182
+
+
+
+state 147
+
+    strategy  ->  MATCH LPAREN term RPAREN .   (rule 72)
+    strategy  ->  MATCH LPAREN term RPAREN .   (rule 73)
+
+    $   	reduce using rule 72 (strategy)
+    $   	[reduce using rule 73 (strategy)]
+    LCID	reduce using rule 72 (strategy)
+    LCID	[reduce using rule 73 (strategy)]
+    UCID	reduce using rule 72 (strategy)
+    UCID	[reduce using rule 73 (strategy)]
+    LONGARROW	reduce using rule 72 (strategy)
+    LONGARROW	[reduce using rule 73 (strategy)]
+    BAR 	reduce using rule 72 (strategy)
+    BAR 	[reduce using rule 73 (strategy)]
+    COMMA	reduce using rule 72 (strategy)
+    COMMA	[reduce using rule 73 (strategy)]
+    GG  	reduce using rule 72 (strategy)
+    GG  	[reduce using rule 73 (strategy)]
+    IMPORTS	reduce using rule 72 (strategy)
+    IMPORTS	[reduce using rule 73 (strategy)]
+    GT  	reduce using rule 72 (strategy)
+    GT  	[reduce using rule 73 (strategy)]
+    OVERLAYS	reduce using rule 72 (strategy)
+    OVERLAYS	[reduce using rule 73 (strategy)]
+    RCURLY	reduce using rule 72 (strategy)
+    RCURLY	[reduce using rule 73 (strategy)]
+    RPAREN	reduce using rule 72 (strategy)
+    RPAREN	[reduce using rule 73 (strategy)]
+    RULES	reduce using rule 72 (strategy)
+    RULES	[reduce using rule 73 (strategy)]
+    SIGNATURE	reduce using rule 72 (strategy)
+    SIGNATURE	[reduce using rule 73 (strategy)]
+    STRATEGIES	reduce using rule 72 (strategy)
+    STRATEGIES	[reduce using rule 73 (strategy)]
+    BACKSLASH	reduce using rule 72 (strategy)
+    BACKSLASH	[reduce using rule 73 (strategy)]
+    EXPLODE	reduce using rule 72 (strategy)
+    EXPLODE	[reduce using rule 73 (strategy)]
+    PLUS	reduce using rule 72 (strategy)
+    PLUS	[reduce using rule 73 (strategy)]
+    LTPLUS	reduce using rule 72 (strategy)
+    LTPLUS	[reduce using rule 73 (strategy)]
+    SEMICOLON	reduce using rule 72 (strategy)
+    SEMICOLON	[reduce using rule 73 (strategy)]
+    DOUBLEARROW	reduce using rule 72 (strategy)
+    DOUBLEARROW	[reduce using rule 73 (strategy)]
+    RBRACK	reduce using rule 72 (strategy)
+    RBRACK	[reduce using rule 73 (strategy)]
+    WHERE	reduce using rule 72 (strategy)
+    WHERE	[reduce using rule 73 (strategy)]
+    $default	reduce using rule 72 (strategy)
+
+
+
+state 148
+
+    optapplication  ->  LEFTDOUBLEARROW strategy .   (rule 69)
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    EXPLODE	shift, and go to state 75
+
+    EXPLODE	[reduce using rule 69 (optapplication)]
+    $default	reduce using rule 69 (optapplication)
+
+
+
+state 149
+
+    mods  ->  mods . id   (rule 8)
+    decl  ->  IMPORTS mods .   (rule 9)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 9 (decl)
+
+    id  	go to state 183
+
+
+
+state 150
+
+    overlay  ->  id . LPAREN varlist RPAREN EQ term   (rule 125)
+    overlay  ->  id . EQ term   (rule 126)
+
+    EQ  	shift, and go to state 184
+    LPAREN	shift, and go to state 185
+
+
+
+state 151
+
+    decl  ->  OVERLAYS overlays .   (rule 13)
+
+    $default	reduce using rule 13 (decl)
+
+
+
+state 152
+
+    overlays  ->  overlay . overlays   (rule 124)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 123 (overlays)
+
+    id  	go to state 150
+    overlays	go to state 186
+    overlay	go to state 152
+
+
+
+state 153
+
+    decl  ->  RULES rules .   (rule 10)
+    rules  ->  rules . rule_def   (rule 61)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 10 (decl)
+
+    id  	go to state 187
+    rule_def	go to state 188
+
+
+
+state 154
+
+    sdecl  ->  OPERATIONS . opdecls   (rule 18)
+
+    $default	reduce using rule 27 (opdecls)
+
+    opdecls	go to state 189
+
+
+
+state 155
+
+    sdecl  ->  SORTS . idlist   (rule 17)
+
+    $default	reduce using rule 19 (idlist)
+
+    idlist	go to state 190
+
+
+
+state 156
+
+    decl  ->  SIGNATURE sdecls .   (rule 12)
+    sdecls  ->  sdecls . sdecl   (rule 15)
+
+    OPERATIONS	shift, and go to state 154
+    SORTS	shift, and go to state 155
+
+    $default	reduce using rule 12 (decl)
+
+    sdecl	go to state 191
+
+
+
+state 157
+
+    sdecls  ->  sdecl .   (rule 14)
+
+    $default	reduce using rule 14 (sdecls)
+
+
+
+state 158
+
+    decl  ->  STRATEGIES strategies .   (rule 11)
+    strategies  ->  strategies . strategy_def   (rule 116)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 11 (decl)
+
+    id  	go to state 192
+    strategy_def	go to state 193
+
+
+
+state 159
+
+    decls  ->  decls decl .   (rule 5)
+
+    $default	reduce using rule 5 (decls)
+
+
+
+state 160
+
+    strategy  ->  PRIM LPAREN STRINGTOK RPAREN .   (rule 83)
+
+    $default	reduce using rule 83 (strategy)
+
+
+
+state 161
+
+    strategy  ->  NOT LPAREN strategy RPAREN .   (rule 91)
+
+    $default	reduce using rule 91 (strategy)
+
+
+
+state 162
+
+    strategy  ->  WHERE LPAREN strategy RPAREN .   (rule 92)
+
+    $default	reduce using rule 92 (strategy)
+
+
+
+state 163
+
+    strategy  ->  TEST LPAREN strategy RPAREN .   (rule 93)
+
+    $default	reduce using rule 93 (strategy)
+
+
+
+state 164
+
+    strategy  ->  ONE LPAREN strategy RPAREN .   (rule 100)
+
+    $default	reduce using rule 100 (strategy)
+
+
+
+state 165
+
+    strategy  ->  ALL LPAREN strategy RPAREN .   (rule 101)
+
+    $default	reduce using rule 101 (strategy)
+
+
+
+state 166
+
+    strategy  ->  THREAD LPAREN strategy RPAREN .   (rule 102)
+
+    $default	reduce using rule 102 (strategy)
+
+
+
+state 167
+
+    strategy  ->  SOMETOK LPAREN strategy RPAREN .   (rule 99)
+
+    $default	reduce using rule 99 (strategy)
+
+
+
+state 168
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategy  ->  MU LCID LPAREN strategy . RPAREN   (rule 98)
+
+    RPAREN	shift, and go to state 194
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 169
+
+    optstrategylist  ->  LPAREN strategylist RPAREN .   (rule 111)
+
+    $default	reduce using rule 111 (optstrategylist)
+
+
+
+state 170
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy EXPLODE LPAREN strategy . RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    RPAREN	shift, and go to state 195
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 171
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  ANNBUILD LPAREN term COMMA term . RPAREN   (rule 78)
+
+    RPAREN	shift, and go to state 196
+    EXPLODE	shift, and go to state 90
+
+
+
+state 172
+
+    termlist  ->  term COMMA termlist .   (rule 55)
+
+    $default	reduce using rule 55 (termlist)
+
+
+
+state 173
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    tail  ->  BAR term .   (rule 47)
+
+    EXPLODE	shift, and go to state 90
+
+    $default	reduce using rule 47 (tail)
+
+
+
+state 174
+
+    term  ->  LBRACK termlist tail RBRACK .   (rule 43)
+
+    $default	reduce using rule 43 (term)
+
+
+
+state 175
+
+    term  ->  LT strategy GT term .   (rule 42)
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+
+    EXPLODE	shift, and go to state 90
+
+    EXPLODE	[reduce using rule 42 (term)]
+    $default	reduce using rule 42 (term)
+
+
+
+state 176
+
+    optcond  ->  WHERE . strategy   (rule 67)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 197
+
+
+
+state 177
+
+    optcont  ->  LBRACK term optcond . RBRACK trav   (rule 49)
+
+    RBRACK	shift, and go to state 198
+
+
+
+state 178
+
+    opttermlist  ->  LPAREN termlist RPAREN .   (rule 53)
+
+    $default	reduce using rule 53 (opttermlist)
+
+
+
+state 179
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    term  ->  term EXPLODE LPAREN term . RPAREN   (rule 45)
+
+    RPAREN	shift, and go to state 199
+    EXPLODE	shift, and go to state 90
+
+
+
+state 180
+
+    strategy  ->  LCURLY tvarlist COLON strategy RCURLY .   (rule 94)
+
+    $default	reduce using rule 94 (strategy)
+
+
+
+state 181
+
+    rule  ->  term ARROW term optcond .   (rule 64)
+
+    $default	reduce using rule 64 (rule)
+
+
+
+state 182
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    strategy  ->  ANNMATCH LPAREN term COMMA term . RPAREN   (rule 77)
+
+    RPAREN	shift, and go to state 200
+    EXPLODE	shift, and go to state 90
+
+
+
+state 183
+
+    mods  ->  mods id .   (rule 8)
+
+    $default	reduce using rule 8 (mods)
+
+
+
+state 184
+
+    overlay  ->  id EQ . term   (rule 126)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 201
+
+
+
+state 185
+
+    overlay  ->  id LPAREN . varlist RPAREN EQ term   (rule 125)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 120 (varlist)
+
+    id  	go to state 202
+    varlist	go to state 203
+
+
+
+state 186
+
+    overlays  ->  overlay overlays .   (rule 124)
+
+    $default	reduce using rule 124 (overlays)
+
+
+
+state 187
+
+    rule_def  ->  id . optvarlist COLON rule   (rule 62)
+    rule_def  ->  id . optvarlist DOUBLECOLON stratrule   (rule 63)
+
+    LPAREN	shift, and go to state 204
+
+    $default	reduce using rule 118 (optvarlist)
+
+    optvarlist	go to state 205
+
+
+
+state 188
+
+    rules  ->  rules rule_def .   (rule 61)
+
+    $default	reduce using rule 61 (rules)
+
+
+
+state 189
+
+    sdecl  ->  OPERATIONS opdecls .   (rule 18)
+    opdecls  ->  opdecls . opdecl   (rule 28)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 18 (sdecl)
+
+    opdecl	go to state 206
+    id  	go to state 207
+
+
+
+state 190
+
+    sdecl  ->  SORTS idlist .   (rule 17)
+    idlist  ->  idlist . id optkind   (rule 20)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 17 (sdecl)
+
+    id  	go to state 208
+
+
+
+state 191
+
+    sdecls  ->  sdecls sdecl .   (rule 15)
+
+    $default	reduce using rule 15 (sdecls)
+
+
+
+state 192
+
+    strategy_def  ->  id . optvarlist EQ strategy   (rule 117)
+
+    LPAREN	shift, and go to state 204
+
+    $default	reduce using rule 118 (optvarlist)
+
+    optvarlist	go to state 209
+
+
+
+state 193
+
+    strategies  ->  strategies strategy_def .   (rule 116)
+
+    $default	reduce using rule 116 (strategies)
+
+
+
+state 194
+
+    strategy  ->  MU LCID LPAREN strategy RPAREN .   (rule 98)
+
+    $default	reduce using rule 98 (strategy)
+
+
+
+state 195
+
+    strategy  ->  strategy EXPLODE LPAREN strategy RPAREN .   (rule 71)
+
+    $default	reduce using rule 71 (strategy)
+
+
+
+state 196
+
+    strategy  ->  ANNBUILD LPAREN term COMMA term RPAREN .   (rule 78)
+
+    $default	reduce using rule 78 (strategy)
+
+
+
+state 197
+
+    optcond  ->  WHERE strategy .   (rule 67)
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+    $default	reduce using rule 67 (optcond)
+
+
+
+state 198
+
+    optcont  ->  LBRACK term optcond RBRACK . trav   (rule 49)
+
+    LPAREN	shift, and go to state 210
+
+    $default	reduce using rule 50 (trav)
+
+    trav	go to state 211
+
+
+
+state 199
+
+    term  ->  term EXPLODE LPAREN term RPAREN .   (rule 45)
+
+    $default	reduce using rule 45 (term)
+
+
+
+state 200
+
+    strategy  ->  ANNMATCH LPAREN term COMMA term RPAREN .   (rule 77)
+
+    $default	reduce using rule 77 (strategy)
+
+
+
+state 201
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    overlay  ->  id EQ term .   (rule 126)
+
+    EXPLODE	shift, and go to state 90
+
+    $default	reduce using rule 126 (overlay)
+
+
+
+state 202
+
+    varlist  ->  id .   (rule 121)
+    varlist  ->  id . COMMA varlist   (rule 122)
+
+    COMMA	shift, and go to state 212
+
+    $default	reduce using rule 121 (varlist)
+
+
+
+state 203
+
+    overlay  ->  id LPAREN varlist . RPAREN EQ term   (rule 125)
+
+    RPAREN	shift, and go to state 213
+
+
+
+state 204
+
+    optvarlist  ->  LPAREN . varlist RPAREN   (rule 119)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 120 (varlist)
+
+    id  	go to state 202
+    varlist	go to state 214
+
+
+
+state 205
+
+    rule_def  ->  id optvarlist . COLON rule   (rule 62)
+    rule_def  ->  id optvarlist . DOUBLECOLON stratrule   (rule 63)
+
+    COLON	shift, and go to state 215
+    DOUBLECOLON	shift, and go to state 216
+
+
+
+state 206
+
+    opdecls  ->  opdecls opdecl .   (rule 28)
+
+    $default	reduce using rule 28 (opdecls)
+
+
+
+state 207
+
+    opdecl  ->  id . COLON type   (rule 29)
+
+    COLON	shift, and go to state 217
+
+
+
+state 208
+
+    idlist  ->  idlist id . optkind   (rule 20)
+
+    LPAREN	shift, and go to state 218
+
+    $default	reduce using rule 21 (optkind)
+
+    optkind	go to state 219
+
+
+
+state 209
+
+    strategy_def  ->  id optvarlist . EQ strategy   (rule 117)
+
+    EQ  	shift, and go to state 220
+
+
+
+state 210
+
+    trav  ->  LPAREN . id RPAREN   (rule 51)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    id  	go to state 221
+
+
+
+state 211
+
+    optcont  ->  LBRACK term optcond RBRACK trav .   (rule 49)
+
+    $default	reduce using rule 49 (optcont)
+
+
+
+state 212
+
+    varlist  ->  id COMMA . varlist   (rule 122)
+
+    LCID	shift, and go to state 1
+    UCID	shift, and go to state 3
+
+    $default	reduce using rule 120 (varlist)
+
+    id  	go to state 202
+    varlist	go to state 222
+
+
+
+state 213
+
+    overlay  ->  id LPAREN varlist RPAREN . EQ term   (rule 125)
+
+    EQ  	shift, and go to state 223
+
+
+
+state 214
+
+    optvarlist  ->  LPAREN varlist . RPAREN   (rule 119)
+
+    RPAREN	shift, and go to state 224
+
+
+
+state 215
+
+    rule_def  ->  id optvarlist COLON . rule   (rule 62)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 53
+    rule	go to state 225
+
+
+
+state 216
+
+    rule_def  ->  id optvarlist DOUBLECOLON . stratrule   (rule 63)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    stratrule	go to state 226
+    strategy	go to state 227
+
+
+
+state 217
+
+    opdecl  ->  id COLON . type   (rule 29)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    type	go to state 228
+    typelist	go to state 229
+    id  	go to state 45
+    term	go to state 230
+
+
+
+state 218
+
+    optkind  ->  LPAREN . termlist RPAREN   (rule 22)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    $default	reduce using rule 56 (termlist)
+
+    id  	go to state 45
+    term	go to state 82
+    termlist	go to state 231
+
+
+
+state 219
+
+    idlist  ->  idlist id optkind .   (rule 20)
+
+    $default	reduce using rule 20 (idlist)
+
+
+
+state 220
+
+    strategy_def  ->  id optvarlist EQ . strategy   (rule 117)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 232
+
+
+
+state 221
+
+    trav  ->  LPAREN id . RPAREN   (rule 51)
+
+    RPAREN	shift, and go to state 233
+
+
+
+state 222
+
+    varlist  ->  id COMMA varlist .   (rule 122)
+
+    $default	reduce using rule 122 (varlist)
+
+
+
+state 223
+
+    overlay  ->  id LPAREN varlist RPAREN EQ . term   (rule 125)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 234
+
+
+
+state 224
+
+    optvarlist  ->  LPAREN varlist RPAREN .   (rule 119)
+
+    $default	reduce using rule 119 (optvarlist)
+
+
+
+state 225
+
+    rule_def  ->  id optvarlist COLON rule .   (rule 62)
+
+    $default	reduce using rule 62 (rule_def)
+
+
+
+state 226
+
+    rule_def  ->  id optvarlist DOUBLECOLON stratrule .   (rule 63)
+
+    $default	reduce using rule 63 (rule_def)
+
+
+
+state 227
+
+    stratrule  ->  strategy . LONGARROW strategy optcond   (rule 65)
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    LONGARROW	shift, and go to state 235
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+
+
+state 228
+
+    opdecl  ->  id COLON type .   (rule 29)
+
+    $default	reduce using rule 29 (opdecl)
+
+
+
+state 229
+
+    type  ->  typelist . ARROW term   (rule 30)
+    typelist  ->  typelist . ASTERISK term   (rule 32)
+
+    ARROW	shift, and go to state 236
+    ASTERISK	shift, and go to state 237
+
+
+
+state 230
+
+    type  ->  term .   (rule 31)
+    typelist  ->  term .   (rule 33)
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+
+    EXPLODE	shift, and go to state 90
+
+    ARROW	reduce using rule 33 (typelist)
+    ASTERISK	reduce using rule 33 (typelist)
+    $default	reduce using rule 31 (type)
+
+
+
+state 231
+
+    optkind  ->  LPAREN termlist . RPAREN   (rule 22)
+
+    RPAREN	shift, and go to state 238
+
+
+
+state 232
+
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+    strategy_def  ->  id optvarlist EQ strategy .   (rule 117)
+
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+
+    $default	reduce using rule 117 (strategy_def)
+
+
+
+state 233
+
+    trav  ->  LPAREN id RPAREN .   (rule 51)
+
+    $default	reduce using rule 51 (trav)
+
+
+
+state 234
+
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+    overlay  ->  id LPAREN varlist RPAREN EQ term .   (rule 125)
+
+    EXPLODE	shift, and go to state 90
+
+    $default	reduce using rule 125 (overlay)
+
+
+
+state 235
+
+    stratrule  ->  strategy LONGARROW . strategy optcond   (rule 65)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 2
+    UCID	shift, and go to state 3
+    BUILD	shift, and go to state 4
+    ANNBUILD	shift, and go to state 5
+    ANNRM	shift, and go to state 6
+    BUILDe	shift, and go to state 7
+    FAIL	shift, and go to state 8
+    KIDS	shift, and go to state 9
+    LBRACK	shift, and go to state 48
+    LCURLY	shift, and go to state 11
+    LL  	shift, and go to state 12
+    LPAREN	shift, and go to state 13
+    LT  	shift, and go to state 14
+    ANNMATCH	shift, and go to state 15
+    MATCH	shift, and go to state 16
+    MATCHe	shift, and go to state 17
+    NEW 	shift, and go to state 19
+    PRIM	shift, and go to state 20
+    STR_GT	shift, and go to state 21
+    SUCC	shift, and go to state 22
+    BACKSLASH	shift, and go to state 23
+    NOT 	shift, and go to state 24
+    WHERE	shift, and go to state 25
+    TEST	shift, and go to state 26
+    ONE 	shift, and go to state 27
+    ALL 	shift, and go to state 28
+    THREAD	shift, and go to state 29
+    SOMETOK	shift, and go to state 30
+    MU  	shift, and go to state 31
+    REAL	shift, and go to state 32
+    INT 	shift, and go to state 33
+
+    id  	go to state 34
+    strategy	go to state 239
+
+
+
+state 236
+
+    type  ->  typelist ARROW . term   (rule 30)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 240
+
+
+
+state 237
+
+    typelist  ->  typelist ASTERISK . term   (rule 32)
+
+    LCID	shift, and go to state 1
+    STRINGTOK	shift, and go to state 38
+    UCID	shift, and go to state 3
+    LBRACK	shift, and go to state 39
+    LPAREN	shift, and go to state 40
+    LT  	shift, and go to state 41
+    UNDERSCORE	shift, and go to state 42
+    REAL	shift, and go to state 43
+    INT 	shift, and go to state 44
+
+    id  	go to state 45
+    term	go to state 241
+
+
+
+state 238
+
+    optkind  ->  LPAREN termlist RPAREN .   (rule 22)
+
+    $default	reduce using rule 22 (optkind)
+
+
+
+state 239
+
+    stratrule  ->  strategy LONGARROW strategy . optcond   (rule 65)
+    strategy  ->  strategy . EXPLODE LPAREN strategy RPAREN   (rule 71)
+    strategy  ->  strategy . DOUBLEARROW term   (rule 87)
+    strategy  ->  strategy . SEMICOLON strategy   (rule 95)
+    strategy  ->  strategy . PLUS strategy   (rule 96)
+    strategy  ->  strategy . LTPLUS strategy   (rule 97)
+
+    EXPLODE	shift, and go to state 75
+    PLUS	shift, and go to state 76
+    LTPLUS	shift, and go to state 77
+    SEMICOLON	shift, and go to state 78
+    DOUBLEARROW	shift, and go to state 79
+    WHERE	shift, and go to state 176
+
+    $default	reduce using rule 66 (optcond)
+
+    optcond	go to state 242
+
+
+
+state 240
+
+    type  ->  typelist ARROW term .   (rule 30)
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+
+    EXPLODE	shift, and go to state 90
+
+    $default	reduce using rule 30 (type)
+
+
+
+state 241
+
+    typelist  ->  typelist ASTERISK term .   (rule 32)
+    term  ->  term . EXPLODE LPAREN term RPAREN   (rule 45)
+
+    EXPLODE	shift, and go to state 90
+
+    $default	reduce using rule 32 (typelist)
+
+
+
+state 242
+
+    stratrule  ->  strategy LONGARROW strategy optcond .   (rule 65)
+
+    $default	reduce using rule 65 (stratrule)
+
+
+
+state 243
+
+    $   	go to state 244
+
+
+
+state 244
+
+    $   	go to state 245
+
+
+
+state 245
+
+    $default	accept

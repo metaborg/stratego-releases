@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ The Compiler
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Doc003.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Doc005.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H2>4&nbsp;&nbsp; The Compiler</H2>
+ <A NAME="Sec:Compiler"></A>	The Stratego Compiler translates specifications to C code.
+	The run-time system is based on the ATerm library
+	[<A HREF="Doc007.html#BJKO2000"><CITE>4</CITE></A>], which supports the ATerm Format, a
+	representation for first-order terms with prefix application
+	syntax. The library implements writing and reading ATerms to
+	and from the external format, which is used to exchange terms
+	between tools. This enables component-based development of
+	transformation tools. For example, a Stratego program can
+	transform abstract syntax trees produced by any parser as long
+	as it produces an ATerm representation of the abstract syntax
+	tree for a program.<BR>
+<BR>
+	The compiler has been bootstrapped, that is, all components
+	except the parser are specified in Stratego itself. The
+	compiler performs various optimizations, including extracting
+	the definitions that are used in the main strategy, aggressive
+	inlining to enable further optimizations and merging of
+	matching patterns to avoid backtracking. A limitation of the
+	current compiler is that it does not support separate
+	compilation and that compilation of the generated code by
+	<CODE>gcc</CODE> is rather slow, resulting in long compilation times
+	(e.g., 3 minutes for a large compiler component). Overcoming
+	this limitation is the focus of current work.
+	
+<HR>
+<A HREF="Doc003.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Doc005.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

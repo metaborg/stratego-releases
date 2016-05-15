@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+
+   <title>Stratego: Version 0.4.18</title>
+
+   <link rel=stylesheet type="text/css" href="../style.css" title="style">
+
+</head>
+
+<body>
+
+<hr>
+    <h1>Version 0.4.18</h1>
+<hr>
+
+ released: September 29, 2000
+
+
+<h3>
+ SUMMARY of CHANGES
+</h3>
+
+ This release features several refactorings of the compiler. 
+
+<h3>
+      COMPILER
+</h3>
+
+<ul>
+
+  <li> 	Format checkers are used to describe and guard the interfaces
+   between components.
+    <p>
+
+  <li> 	
+  A new implementation of pattern matching based on the ideas of
+   Mikael Pettersson in his paper "A Term Pattern-Match Compiler
+   Inspired by Finite Automat Theory". This new implementation is
+   not fundamentally different, but it is much simpler and solves
+   an obscure bug that went unnoticed for a long time. It is also 
+   a nice example of compilation by transformation; patterns from
+   different strategies that are combined with + or <+ are merged
+   into a single automaton.
+    <p>
+
+  <li> 	
+  Strategy definitions are compiled to separate C functions. In 
+   previous versions one function with internal labels for each
+   definition were used. Surprisingly gcc has managed to compile
+   these long lists of instructions until now, but it started to
+   give scaling problems. This change makes gcc much less memory
+   hungry.
+    <p>
+
+  <li> 	
+  Constructor symbols are cached in global variables. In previous
+   versions constructor symbols were matched by string comparison.
+   This is now replaced with a comparison of the AFun, an integer.
+   This should reduce run-time of specifications.
+
+    <p>
+
+  <li> 	
+  The SDF2 definition of Stratego can be found in spec/sdf	
+
+    <p>
+
+</ul>
+
+<h3>
+ LIBRARY
+</h3>
+
+<ul>
+      <li> The tables modules has been extended with a number of useful 
+   strategies for table management that can be used for instance 
+   in symbol tables.
+
+</ul>
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,76 @@
+definition
+
+module Main
+imports Pico
+
+module Pico
+imports Layout Pico-Lexical Pico-Expressions 
+	Pico-Statements Pico-Declarations
+exports
+  sorts Id Expr Stat Decl
+
+module Layout
+exports
+  lexical syntax
+    [\ \t\n] -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+
+module Pico-Lexical
+exports
+  sorts Id 
+  lexical syntax
+    [a-z]+ -> Id {avoid}
+    [0-9]+ -> Int
+
+module Pico-Expressions
+exports
+  sorts Id Expr Stat Decl
+  context-free syntax
+    Id                          -> Exp {cons("Var")}
+    Int                         -> Exp {cons("Int")}
+    "(" Exp ")"                 -> Exp {bracket}
+    Id "(" {Exp ","}* ")"       -> Exp {cons("Call")}
+
+  context-free priorities
+        "-"  Exp -> Exp {left,cons("UMin")}
+  > Exp "^"  Exp -> Exp {left,cons("Pow")}
+  > Exp "*"  Exp -> Exp {left,cons("Mul")}
+  >{left:
+    Exp "+"  Exp -> Exp {left,cons("Add")}
+    Exp "-"  Exp -> Exp {left,cons("Sub")}}
+  >{left:
+    Exp "==" Exp -> Exp {left,cons("Eq")}
+    Exp "<>" Exp -> Exp {left,cons("Neq")}}
+  >{left:
+    Exp "&"  Exp -> Exp {left,cons("And")}
+    Exp "|"  Exp -> Exp {left,cons("Or")}}
+  >{right:
+    Exp ":=" Exp -> Exp {right,cons("Assign")}
+    Exp "+=" Exp -> Exp {right,cons("AsAdd")}
+    Exp "*=" Exp -> Exp {right,cons("AsMul")}
+    Exp "-=" Exp -> Exp {right,cons("AsMin")}
+    Exp "^=" Exp -> Exp {right,cons("AsPow")}}
+
+module Pico-Statements
+exports
+  sorts Stat Block
+  context-free syntax
+    Exp 			           -> Stat {cons("Exp")}
+    "while" "(" Exp ")" Stat               -> Stat {cons("While")}
+    "if" "(" Exp ")" Stat "else" Stat      -> Stat {cons("If")}
+    "for" "(" Exp ";" Exp ";" Exp ")" Stat -> Stat {cons("For")}
+    Block                                  -> Stat 
+
+    "{" ({Decl ";"}* ";")? 
+        {Stat ";"}* "}"               -> Block {cons("Block")}
+
+    "(" ({Decl ";"}* ";")? 
+        {Stat ";"}+ ";" Exp ")"       -> Exp {cons("Seq")}
+
+module Pico-Declarations
+exports
+  sorts Decl
+  context-free syntax
+    "var" Id 			     -> Decl {cons("VarDecl")}
+    "fun" Id "(" {Id ","}* ")" Block -> Decl {cons("FunDecl")}

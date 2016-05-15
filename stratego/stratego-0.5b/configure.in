@@ -1,0 +1,161 @@
+# $Id: configure.in,v 1.49 2001/03/15 11:17:11 visser Exp $
+
+# Copyright (C) 1998, 1999, 2000 Eelco Visser <visser@acm.org>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+AC_INIT(src/rts/stratego.c)
+AM_INIT_AUTOMAKE(stratego,0.5b)
+
+AC_ARG_WITH(aterm, [  --with-aterm            Specify location of aterm library, default: \$prefix], ATERM=$withval, ATERM="$prefix")
+
+AC_REVISION($Id: configure.in,v 1.49 2001/03/15 11:17:11 visser Exp $)
+
+AC_PROG_CC
+AC_PROG_RANLIB
+AC_PROG_YACC
+AM_PROG_LEX
+AC_PROG_INSTALL
+
+changequote(,)dnl
+case $VERSION in
+ [0-9]*.[0-9]*[a-z])  DIST_ALPHA="README-alpha";;
+ [0-9]*.[0-9]*.[0-9]*) DIST_ALPHA="README-alpha";;
+ *) DIST_ALPHA=;;
+esac
+changequote([, ])dnl
+AC_SUBST(DIST_ALPHA)
+
+AC_SUBST(ATERM)
+
+AC_OUTPUT( \
+	Makefile \
+	README \
+	\
+	test/Makefile \
+	test/optimizations/Makefile \
+	test/parser/Makefile \
+	test/memo/Makefile \
+	test/overloading/Makefile \
+	test/sieve/Makefile \
+	test/options/Makefile \
+	test/lists/Makefile \
+	test/syntax/Makefile \
+	test/pack/Makefile \
+	test/static/Makefile \
+	test/unify/Makefile \
+	test/control/Makefile \
+	test/numbers/Makefile \
+	test/io/Makefile \
+	\
+	spec/Makefile \
+	spec/rts/Makefile \
+	spec/rts/stratego/Makefile \
+	spec/slib/Makefile \
+	spec/slib/src/Makefile \
+	spec/slib/src/stratego/Makefile \
+	spec/slib/spec/Makefile \
+	spec/slib/spec/data/Makefile \
+	spec/back/Makefile \
+	spec/back/data/Makefile \
+	spec/front/Makefile \
+	spec/front/data/Makefile \
+	spec/match/Makefile \
+	spec/match/data/Makefile \
+	spec/opt/Makefile \
+	spec/post/Makefile \
+	spec/sc/Makefile \
+	spec/sc/sc \
+	spec/si/Makefile \
+	spec/si/stratego \
+	spec/si/data/Makefile \
+	spec/sig/Makefile \
+	spec/form/Makefile \
+	spec/lib/Makefile \
+	spec/pp/Makefile \
+	spec/syn/Makefile \
+	spec/test/Makefile \
+	spec/sdf/Makefile \
+	\
+	src/Makefile
+	src/back/Makefile \
+	src/opt/Makefile \
+	src/sc/Makefile \
+	src/sc/sc \
+	src/front/Makefile \
+	src/pp/Makefile \
+	src/post/Makefile \
+	src/syn/Makefile \
+	src/match/Makefile \
+	src/rts/Makefile \
+	src/rts/stratego/Makefile \
+	src/slib/Makefile \
+	src/slib/src/Makefile \
+	src/slib/src/stratego/Makefile \
+	src/slib/spec/Makefile \
+	src/si/Makefile \
+	src/si/stratego \
+	src/sig/Makefile \
+	\
+	www/Makefile \
+	www/release/Makefile \
+ 	www/hsx/Makefile \
+ 	www/tiger/Makefile \
+ 	www/codeboost/Makefile \
+ 	www/papers/Makefile \
+ 	www/papers/rta01/Makefile \
+	\
+	doc/Makefile \
+	doc/library/Makefile \
+	doc/compiler/Makefile \
+	doc/compiler/intro/Makefile \
+	doc/compiler/intro/xmpl/Makefile \
+	doc/reference/Makefile \
+	doc/tutorial/Makefile \
+	doc/tutorial/basics/Makefile \
+	doc/tutorial/main/Makefile \
+	doc/tutorial/install/Makefile \
+	doc/tutorial/xmpl/Makefile \
+	doc/tutorial/intro/Makefile \
+	doc/tutorial/slides/Makefile \
+	doc/tutorial/exercises/Makefile \
+	doc/tutorial/exercises/pico/Makefile \
+	doc/tutorial/exercises/pico/doc/Makefile \
+	doc/tutorial/exercises/pico/syn/Makefile \
+	doc/tutorial/exercises/pico/xmpl/Makefile \
+	doc/tutorial/exercises/pico/spec/Makefile \
+	doc/projects/Makefile \
+	doc/script/Makefile \
+	doc/script/xmpl/Makefile \
+	\
+	share/Makefile \
+	share/bib/Makefile \
+	share/tex/Makefile \
+	share/tex/logo/Makefile \
+	share/tex/version.ltx \
+	share/emacs/Makefile \
+	\
+	bench/Makefile \
+	bench/prop/Makefile \
+	bench/fib/Makefile \
+	\
+	xmpl/Makefile \
+	xmpl/prop/Makefile \
+	\
+	rpm/Makefile \
+	\
+	build/Makefile \
+)

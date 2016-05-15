@@ -1,0 +1,320 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\chapter{Stratego at a Glance}
+
+\subsection{Specifying Program Transformation Systems with Stratego}
+
+	\begin{abstract}
+
+	Stratego is a language for the specification of program
+	transformation systems based on the paradigm of rewriting
+	strategies.  Stratego specifications give rise to term
+	transformers that read a term and output a transformed
+	term. Such transformation components can easily be composed
+	into transformation pipelines.
+
+	\end{abstract}
+
+	\paragraph{Term Transformation Systems}
+
+	Stratego is a language for the specification of automatic
+	program transformation systems.  In the Stratego model, a
+	program transformation system is a program that reads a
+	program, applies a transformation to it, and, if that
+	succeeds, spits out the transformed program or otherwise
+	states that it failed (Figure~\ref{Fig:BasicArch}).  Programs
+	are supposed to be represented by means of abstract syntax
+	trees or \emph{terms}.  A transformation system is thus a
+	program that transforms terms to terms.
+
+	Transformation components can be composed into pipelines that
+	interface by means of intermediate terms
+	(Figure~\ref{Fig:CompArch}). In this fashion large program
+	transformation systems can be built from small reusable
+	components, provided that the components synchronize on the
+	intermediate languages used.
+
+	\paragraph{Specifying Transformations with Rewriting Strategies}
+
+	Basic transformation rules can be expressed as \emph{term
+	rewrite rules} of the form \verb|l -> r| that transform a term
+	matching \verb|l| to an instantiation of \verb|r|.
+
+	Pure rewrite rules with a standard evaluation strategy are not
+	sufficient for most program transformation jobs, because more
+	fine grained control over their application is needed. Usually
+	such control is encoded in the rewrite rules themselves,
+	leading to bad reusability of rules and a large overhead for
+	expressing traversals over the abstract syntax tree.
+
+	Instead Stratego offers a language of user-definable
+	\emph{rewriting strategies}\footnote{The name Stratego is
+	derived from this feature of the language.} that provide
+	control over the application of transformation rules.  This is
+	achieved by a set of operators for the expression of generic
+	traversals over abstract syntax trees
+	(Figure~\ref{Fig:Traversal}). The basic operators can be
+	combined to achieve a wide range of traversal algorithms.
+
+	The use of strategies greatly reduces the overhead caused by
+	explicitly programming term traversals. Furthermore, since
+	individual transformation rules are freed from the burden of
+	encoding traversals, they can be reused in other situations.
+	Finally, the strategy operators turn out to be an interesting
+	new programming paradigm that allow one to reach deep into
+	terms without much effort.
+
+	\begin{boxedfigure}{BasicArch}{
+	Basic architecture of a transformation system
+	}
+
+	\begin{center}
+	\input{arch.ptx}
+	\end{center}
+
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{CompArch}{
+	Composition of transformation systems
+	}
+
+	\begin{center}
+	\input{comp.ptx}
+	\end{center}
+
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{Traversal}{
+	Generic term traversal
+	}
+
+	\begin{center}
+	$\psfig{file=../intro/treetrans.eps,width=10cm}$
+	\end{center}
+
+	\end{boxedfigure}
+
+\subsection{When to use and not to use Stratego}
+
+	\begin{abstract}
+
+	Stratego is designed for the scheduling of the application of
+	a series of local transformation rules on terms.  Therefore,
+	the language is primarily useful in source to source program
+	transformation, application generation and code generation.
+	It is not designed for theorem proving, program analysis,
+	interactive program derivation or general purpose programming,
+	although it can be used to assist in these activities.
+
+	\end{abstract}
+
+	\paragraph{What Stratego is for}
+
+	Stratego is designed for the specification of automatic
+	program transformation systems. Typical application areas of
+	automatic program transformation are source-to-source
+	transformations, application generation, code generation,
+	program derivation and documentation generation.
+
+	Source-to-source transformation is the transformation of a
+	program to a program in the same language.  Examples of source
+	to source transformations are simplification, optimization and
+	desugaring, i.e., the elimination of syntactic abstractions.
+
+	Application generation is the translation of a program in a
+	high-level (end-user) application language to an
+	implementation in a general purpose programming language.
+
+	Code generation is the translation of program constructs to
+	sequences of machine code instructions.
+
+	Automatic program derivation is concerned with the generation
+	of programs from data.  Examples of program derivations are
+	the derivation of a constructor signature from a context-free
+	grammar and the derivation of a pretty-printer from a
+	context-free grammar \cite{BV96.gen}.
+
+	Documentation generation is the extraction of documentation
+	information from a program.
+
+	Program analysis is concerned with deriving properties about
+	elements of programs. Examples of program analysis are type
+	checking, type inference, and data flow analysis. Although
+	Stratego can be used to implement such analyses, it is not
+	particularly well supported. This aspect should probably be
+	strengthened.
+
+	\paragraph{What Stratego is not for}
+
+	Stratego is not necessarily applicable in other areas of
+	program manipulation related applications. In particular, it
+	is probably not the right platform for interactive program
+	transformation, theorem proving and general purpose
+	programming.
+
+	Interactive program transformation is concerned with the
+	gradual transformation from a high-level specification to an
+	implementation by intervention from a programmer. The
+	programmer has to decide what refinement steps to apply to
+	what part of the specification. However, Stratego can be used
+	to make program transformation scripts that automatically
+	transform a specific specification to an implementation. Such
+	scripts can be written incrementally to reflect the increased
+	understanding of the refinement.
+
+	Theorem proving is used for establishing correctness of
+	programs.  Stratego does not support theorem proving.
+	However, it can be used to generate proof obligations as input
+	for theorem provers.
+
+	Stratego is not a general purpose programming language to use
+	for application programming, user-interface implementation,
+	etc.  However, it can very well be used to generate or
+	transform programs in a general purpose language.
+
+	\begin{boxedfigure}{AppplicationAreas}{
+	Application areas
+	}
+	\begin{itemize}
+
+	\item Abstract and concrete syntax tree manipulation
+
+	\item Simplification
+
+	\item Optimization
+
+	\item Desugaring (eliminating syntactic abstractions)
+
+	\item Code generation
+
+	\item Application generation
+	
+	\item Documentation generation
+	
+	\item Program analysis
+
+	\end{itemize}
+
+	\end{boxedfigure}
+
+
+	\begin{boxedfigure}{NonAppplicationAreas}{
+	Non application areas
+	}
+
+	\begin{itemize}
+
+	\item Theorem proving
+	
+	\item Interactive program transformation / derivation
+
+	\item General purpose programming
+
+	\end{itemize}
+
+	\end{boxedfigure}
+
+\subsection{Stratego Features}
+
+	\begin{boxedfigure}{StrategoProperties}{
+	Key features of Stratego
+	}
+	\begin{itemize}
+	
+	\item Modular specification of transformation systems
+
+	\item Separation of rules and strategies
+
+	\item Reuse of rules
+
+	\item Primitive operators of rewriting
+
+	\item Concise specification of term traversals
+	
+	\item Administration of failure
+
+	\item Generic operations on (anonymous) trees
+
+	\item Persistent terms
+
+	\end{itemize}
+
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{StrategoNonProperties}{
+	Features not supported by Stratego
+	}
+	\begin{itemize}
+	
+	\item Higher-order abstract syntax
+
+	\end{itemize}
+
+	\end{boxedfigure}
+
+
+\subsection{Using the Stratego Documentation}
+
+	\begin{abstract}
+
+	To support the production of Stratego specifications, the
+	distribution comes with four documents: a tutorial, an
+	overview of the library, a reference manual and the
+	documentation of the compiler.
+
+	\end{abstract}
+
+\paragraph{The Stratego Tutorial}
+
+	The Stratego Tutorial shows how to install and use the
+	Stratego compiler and gives basic examples of Stratego
+	specifications.  The tutorial is basic reading material for
+	every Stratego user.
+
+\paragraph{The Stratego Library}
+
+	The Stratego Library documents all generic rules and
+	strategies in the standard library that comes with the
+	distribution.  The Library includes the declaration of all
+	primitive operations (I/O, string manipulation, arithmetic,
+	process creation, etc.).  Refer to the library to find common
+	strategies and to understand the primitive operations.
+
+\paragraph{The Stratego Reference Manual}
+
+	The Stratego Reference manual documents all constructs of the
+	language by giving their syntax and a description of the
+	semantics.  Refer to the reference manual to clarify syntactic
+	issues and understand the concepts of the semantics.
+
+\paragraph{The Stratego Compiler}
+
+	The Stratego Compiler contains the complete annotated source
+	of the compiler and run-time system.  The compiler should be
+	read by Stratego developers and those that want to get a
+	detailed understanding of the implementation of the
+	operational semantics.  It should not be necessary to read the
+	Compiler for ordinary use. However, it is a case study of the
+	use of Stratego and in which a number of idioms are used.
+
+\paragraph{Other Stratego Publications}
+
+	Several other publications introduce Stratego, discuss
+	applications, semantics and related work. See for example
+	\cite{JV99,LV97,Vis99,VB98,VBT98}.

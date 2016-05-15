@@ -1,0 +1,84 @@
+\def\sortunder#1{}
+\begin{thebibliography}{10}
+
+\bibitem{App98}
+Andrew~W. Appel.
+\newblock {\em Modern Compiler Implementation in {ML}}.
+\newblock Cambridge University Press, 1998.
+
+\bibitem{BKK97}
+Peter Borovansk{\'y}, Claude Kirchner, and H{\'e}l{\`e}ne Kirchner.
+\newblock Controlling rewriting by rewriting.
+\newblock In Jos{\'e} Meseguer, editor, {\em Proceedings of the First
+  International Workshop on Rewriting Logic and its Applications}, volume~4 of
+  {\em Electronic Notes in Theoretical Computer Science}, Asilomar, Pacific
+  Grove, CA, September 1996. Elsevier.
+
+\bibitem{BV94}
+Mark {\sortunder{Brand}}Van~den Brand and Eelco Visser.
+\newblock From {Box} to {\TeX}: {An} algebraic approach to the generation of
+  documentation tools.
+\newblock Technical Report P9420, Programming Research Group, University of
+  Amsterdam, July 1994.
+
+\bibitem{DHK96}
+A.~{\sortunder{Deursen}}Van~Deursen, J.~Heering, and P.~Klint, editors.
+\newblock {\em Language Prototyping. An Algebraic Specification Approach},
+  volume~5 of {\em AMAST Series in Computing}.
+\newblock World Scientific, Singapore, September 1996.
+
+\bibitem{DHH98}
+T.B. Dinesh, Magne Haveraaen, and Jan Heering.
+\newblock An algebraic programming style for numerical software and its
+  optimization.
+\newblock CWI Report SEN-R9844, CWI, Amsterdam, The Netherlands, December 1998.
+
+\bibitem{JV99}
+Patricia Johann and Eelco Visser.
+\newblock Warm fusion in {Stratego}: {A} case study in the generation of
+  program transformation systems.
+\newblock Technical report, Department of Computer Science, Universiteit
+  Utrecht, Utrecht, The Netherlands, 1999.
+
+\bibitem{LV97}
+Bas Luttik and Eelco Visser.
+\newblock Specification of rewriting strategies.
+\newblock In M.~P.~A. Sellink, editor, {\em 2nd International Workshop on the
+  Theory and Practice of Algebraic Specifications (ASF+SDF'97)}, Electronic
+  Workshops in Computing, Berlin, November 1997. Springer-Verlag.
+
+\bibitem{OdJ98}
+P.~A. Olivier and H.~A. de~Jong.
+\newblock Efficient annotated terms.
+\newblock Technical report, Programming Research Group, University of
+  Amsterdam, August 1998.
+
+\bibitem{Vis97.thesis}
+Eelco Visser.
+\newblock {\em Syntax Definition for Language Prototyping}.
+\newblock PhD thesis, University of Amsterdam, September 1997.
+
+\bibitem{Vis99}
+Eelco Visser.
+\newblock Strategic pattern matching.
+\newblock In P.~Narendran and M.~Rusinowitch, editors, {\em Rewriting
+  Techniques and Applications (RTA'99)}, volume 1631 of {\em Lecture Notes in
+  Computer Science}, pages 30--44, Trento, Italy, July 1999. Springer-Verlag.
+
+\bibitem{VB98}
+Eelco Visser and Zine-el-Abidine Benaissa.
+\newblock A core language for rewriting.
+\newblock {\em Electronic Notes in Theoretical Computer Science}, 15, September
+  1998.
+\newblock In C.~Kirchner and H.~Kirchner, editors, Proceedings of the Second
+  International Workshop on Rewriting Logic and its Applications (WRLA'98),
+  Pont-{\`a}-Mousson, France.
+
+\bibitem{VBT98}
+Eelco Visser, Zine-el-Abidine Benaissa, and Andrew Tolmach.
+\newblock Building program optimizers with rewriting strategies.
+\newblock {\em ACM SIGPLAN Notices}, 34(1):13--26, January 1999.
+\newblock Proceedings of the International Conference on Functional Programming
+  (ICFP'98).
+
+\end{thebibliography}

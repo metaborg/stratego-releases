@@ -1,0 +1,247 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\section{Quick Overview of the Language}
+	\label{Sec:Strategies}
+
+	This section introduces System~S, a calculus for the
+	definition of tree transformations, and Stratego, a
+	specification language providing syntactic abstractions for
+	System~S expressions. For an operational semantics see
+	\cite{VB98,VBT98}.
+
+\subsection{System S}
+
+	System~S is a hierarchy of operators for expressing term
+	transformations. The first level provides control constructs
+	for sequential non-deterministic programming, the second level
+	introduces combinators for term traversal and the third level
+	defines operators for binding variables and for matching and
+	building terms.
+
+	First-order terms are expressions over the grammar
+\begin{verbatim}
+        t := x | C(t1,...,tn) | [t1,...,tn] | (t1,...,tn)
+\end{verbatim}
+	where \verb|x| ranges over variables and \verb|C| over
+	constructors. The arity and types of constructors are declared
+	in signatures. The notation \verb|[t1,...,tn]| abbreviates the
+	list {\tt Cons(t1,...,Cons(tn,Nil))}. Transformations in
+	System~S are applied to ground terms, i.e., terms withouth
+	variables.
+
+	\paragraph{Level 1: Sequential Non-deterministic Programming}
+
+	Strategies are programs that attempt to transform ground terms
+	into ground terms, at which they may succeed or fail. In case
+	of success the result of such an attempt is a transformed
+	term. In case of failure the result is an indication of the
+	failure.  Strategies can be combined into new strategies by
+	means of the following operators: The \emph{identity} strategy
+\verb|id| 
+	leaves the subject term unchanged and always succeeds. The
+	\emph{failure} strategy
+\verb|fail| 
+	always fails.  The \emph{sequential composition}
+\verb|s1; s2| 
+	first attempts to apply \verb|s1| to the subject term and, if
+	that succeeds, applies \verb|s2| to the result.  The
+	\emph{non-deterministic choice}
+\verb|s1 + s2|
+	attempts to apply either \verb|s1| or \verb|s2|. It succeeds
+	if either succeeds and it fails if both fail; the order in
+	which \verb|s1| and \verb|s2| are tried is unspecified.  The
+	\emph{deterministic choice}
+\verb|s1 <+ s2|
+	attempts to apply either \verb|s1| or \verb|s2|, in that
+	order.  The \emph{recursive closure}
+\verb|rec x(s)|
+	attempts to apply \verb|s|, where at each occurence of the
+	variable \verb|x| in \verb|s|, the strategy \verb|rec x(s)| is
+	applied.  The \emph{test} strategy
+\verb|test(s)|
+	tries to apply \verb|s|. It succeeds if \verb|s| succeeds, and
+	reverts the subject term to the original term. It fails if
+	\verb|s| fails. The \emph{negation}
+\verb|not(s)|
+	succeeds (with the identity transformation) if \verb|s| fails
+	and fails if \verb|s| succeeds.  Two examples of strategies
+	defined with these operators are \verb|try| and \verb|repeat|
+	in Figure~\ref{Fig:traversals}.
+
+	\paragraph{Level 2: Term Traversal}
+
+	\begin{figure}[t]
+	\begin{boxedminipage}{\hsize}\small
+	\verbatiminput{xmpl/traversals.r}
+	\end{boxedminipage}
+	\caption{Specification of several generic term traversal strategies.}
+	\label{Fig:traversals}
+	\end{figure}
+
+	The Level~1 constructs apply transformations to the root of a
+	term. In order to apply transformations throughout a term it
+	is necessary to traverse it. For this purpose, System~S
+	provides the following operators: For each \verb|n|-ary
+	constructor \verb|C| the \emph{congruence} operator
+\verb|C(s1,...,sn)|
+	is defined. It applies to terms of the form
+	\verb|C(t1,...,tn)| and applies \verb|si| to \verb|ti| for
+	{\tt 1 <= i <= n}. An example of the use of congruences is the
+	operator \verb|map(s)| in Figure~\ref{Fig:traversals} that
+	applies \verb|s| to each element of a list.
+
+	Congruences can be used to define traversals over specific
+	data structures. Specification of generic traversals (e.g.,
+	pre- or post-order over arbitrary structures) requires more
+	generic operators. The operator
+\verb|all(s)|
+	applies \verb|s| to all children of a constructor application
+	\verb|C(t1,...,tn)|. In particular,  \verb|all(s)| is the
+	identity on constants (constructor applications without
+	children).  The strategy
+\verb|one(s)|
+	applies \verb|s| to one child of a constructor application
+	\verb|C(t1,...,tn)|; it is precisely the failure
+	strategy on constants. The strategy
+\verb|some(s)|
+	applies \verb|s| to some of the children of a constructor 
+	application \verb|C(t1,...,tn)|, i.e., to at least one and 
+	as many as possible. Like \verb|one(s)|, \verb|some(s)| fails 
+	on constants.
+
+	Figure~\ref{Fig:traversals} defines various traversals based
+	on these operators. For instance, \verb|oncetd(s)| tries to
+	find \emph{one} application of \verb|s| somewhere in the term
+	starting at the root working its way down; \verb|s <+ one(x)|
+	first attempts to apply \verb|s|, if that fails an application
+	of \verb|s| is (recursively) attempted at one of the children 
+	of the subject term.
+	If no application is found the traversal fails. Compare this
+	to the traversal \verb|alltd(s)|, which finds \emph{all}
+	outermost applications of \verb|s| and never fails.
+
+	\paragraph{Level 3: Match, Build and Variable Binding}
+
+	The operators introduced thus far are useful for repeatedly
+	applying transformation rules throughout a term.  Actual
+	transformation rules are constructed by means of pattern
+	matching and building of pattern instantiations.
+
+	A match \verb|?t| succeeds if the pattern term \verb|t|
+	matches the subject term. As a side-effect, any variables in
+	\verb|t| are bound to the corresponding subterms of the
+	subject term.  If a variable was already bound before the
+	match, then the binding only succeeds if the terms are the
+	same. This enables non-linear pattern matching, so that a
+	match such as \verb|?F(x, x)| succeeds only if the two
+	arguments of \verb|F| in the subject term are equal. This
+	non-linear behaviour can also arise accross other
+	operations. For example, the two consecutive matches
+\verb|?F(x, y); ?F(y, x)|
+	succeed exactly when the two arguments of \verb|F| are equal. 
+	Once a variable is bound it cannot be unbound.
+
+	A build \verb|!t| replaces the subject term with the
+	instantiation of the pattern \verb|t| using the current
+	bindings of terms to variables in \verb|t|.
+	A scope 
+\verb|{x1,...,xn: s}| 
+	makes the variables \verb|xi| local to the strategy
+	\verb|s|. This means that bindings to these variables outside
+	the scope are undone when entering the scope and are restored
+	after leaving it.
+%
+	The operation \verb|where(s)| applies the strategy \verb|s| to
+	the subject term. If successful, it restores the original
+	subject term, keeping only the newly obtained bindings to
+	variables.
+
+\subsection{Stratego}
+
+	The specification language Stratego provides syntactic
+	abstractions for System~S expressions. A specification
+	consists of a collection of modules that define signatures,
+	transformation rules and strategy definitions.
+
+	A signature declares the sorts and operations (constructors)
+	that make up the structure of the language(s) being
+	transformed. Example signatures are shown in the modules in
+	Figure~\ref{Fig:terms}.  A strategy definition
+	\verb|f(x1,...,xn) = s| introduces a new strategy operator
+	\verb|f| parameterized with strategies \verb|x1| through
+	\verb|xn| and with body \verb|s|. Such definitions cannot be
+	recursive, i.e., they cannot refer (directly or indirectly) to
+	the operator being defined. All recursion must be expressed
+	explicitly by means of the recursion operator \verb|rec|.
+	Labeled transformation rules are abbreviations of a particular
+	form of strategy definitions.  A conditional rule
+\verb|L : l -> r where s| with label \verb|L|, left-hand side \verb|l|,
+	right-hand side \verb|r|, and condition \verb|s| denotes a
+	strategy definition
+\verb|L = {x1,...,xn: ?l; where(s); !r}|. 
+	Here, the body of the rule first matches the left-hand side, and 
+	then
+	attempts to satisfy the condition \verb|s|. If that succeeds, 
+	then it builds the right-hand side \verb|r|. The rule is 
+	enclosed in a scope that makes all term variables \verb|xi|
+	occurring in \verb|l|, \verb|s| and \verb|r| local to the
+	rule. If more than one definition is provided with the same
+	name, e.g., \verb|f(xs) = s1| and \verb|f(xs) = s2|, this is
+	equivalent to a single definition with the sum of the original
+	bodies as body, i.e., \verb|f(xs) = s1 + s2|.
+
+	The following definitions provide a useful shorthand. The notation
+\verb|<s> t| 
+	denotes \verb|!t; s|, i.e., the strategy that builds the term
+	\verb|t| and then applies \verb|s| to it.  The notation
+\verb|s => t| 
+	denotes \verb|s; ?t|, i.e., the strategy that applies \verb|s|
+	to the current subject term and then matches the result
+	against \verb|t|.  The combined notation
+\verb|<s> t => t'| 
+	thus denotes \verb|(!t; s); ?t'|.  The \verb|<s> t| notation
+	can also be used in a build expression. For example, the
+	strategy expression
+\verb|!F(<s> t, t')| corresponds to \verb|{x: <s> t => x; !F(x,t')}|,
+	where \verb|x| is a new variable.
+
+ \subsection{Library}
+
+	The language comes with a growing library of strategy
+	operators with functionality for
+\begin{itemize}
+
+	\item Simple traversals (such as in Figure~\ref{Fig:traversals})
+
+	\item Fixed-point traversals
+
+	\item List operations
+
+	\item Tuple operations
+
+	\item Manipulation of expressions with (bound) variables, such
+	as variable renaming, substitution, collection of the set of
+	free variables etc. These operations are language independent
+	and can be specialized to a language by instantiation of
+	generic operations. Note that this concerns \emph{object}
+	variables in the language being manipulated, which are
+	different from the meta-variable used in rules.
+
+\end{itemize}
+

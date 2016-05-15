@@ -1,0 +1,10 @@
+SDef("main",[],Rec("im",Seq(All(Call(SVar("im"),[])),Rec("red",LChoice(
+
+Choice(
+Scope(["m_1"],
+Seq(Match(Op("Plus",[Op("Zero",[]),Var("m_1")])),Var("m_1"))),
+
+Scope(["n_1","o_1"],
+Seq(Match(Op("Plus",[Op("Succ",[Var("n_1")]),Var("o_1")])),
+BA(Call(SVar("red"),[]),Op("Succ",[
+BA(Call(SVar("red"),[]),Op("Plus",[Var("n_1"),Var("o_1")]))]))))),Id)))))

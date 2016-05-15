@@ -1,0 +1,4509 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD><TITLE>The Stratego Compiler</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+</HEAD>
+<BODY >
+<!--HEVEA command line is: hevea -I /intro/ -I ../../share/tex/ -I ../../spec/front/ -I ../../spec/match/ -I ../../spec/back/ -I ../../spec/sc/ -I ../../spec/lib/ -I ../../spec/opt/ -I ../../spec/rts/ -I ../../spec/sig/ doc.ltx -o html/Compiler.html -->
+<!--HTMLHEAD-->
+<!--ENDHTML-->
+<!--CUT DEF subsection 1 -->
+<BR>
+<BR>
+ 
+<H1 ALIGN=center>The Stratego Compiler</H1>
+
+<H3 ALIGN=center>Eelco Visser</H3>
+
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		
+<BR>
+<BR>
+This report documents the specification of the compiler for the
+strategy language Stratego. The compiler is specified in Stratego
+itself.
+<BR>
+<BR>
+	<BR><BR>	 
+<BR>
+<BR>
+	
+<BR>
+<BR>
+ 	
+	 	<BR><BR><BR>
+<BR>
+		<BR>
+<BR>
+	<BR><BR>	 
+ <BR>
+<BR>
+<!--TOC part Basics-->
+
+<H1 ALIGN=center>Part&nbsp;I<BR> Basics</H1><!--SEC END -->
+	
+<BR>
+<BR>
+<BR>
+<BR>
+	
+	
+
+
+
+
+<BR>
+<BR>
+
+<BR>
+<BR>
+<BR>
+<BR>
+	
+	
+ <!--TOC section Lexical Analyzer-->
+
+<H2>1&nbsp;&nbsp; Lexical Analyzer</H2><!--SEC END -->
+	
+	
+<BR>
+<BR>
+<BR>
+<BR>
+	The modules in this chapter define common operations on
+	Stratego data types.<BR>
+<BR>
+	
+	<BR>
+<BR>
+<!--TOC part Compilation-->
+
+<H1 ALIGN=center>Part&nbsp;II<BR> Compilation</H1><!--SEC END -->
+	
+<BR>
+<BR>
+<BR>
+<BR>
+	In this section we define the desugaring procedure that
+	translates a specification in the high-level syntax to an
+	expression in the core language.<BR>
+<BR>
+
+
+
+
+
+
+<BR>
+<BR>
+
+	
+<BR>
+<BR>
+<BR>
+<BR>
+	
+	
+<BR>
+<BR>
+<BR>
+<BR>
+	
+	
+	
+<BR>
+<BR>
+<BR>
+<BR>
+<!--TOC section Abstract Machine-->
+
+<H2>2&nbsp;&nbsp; Abstract Machine</H2><!--SEC END -->
+	In this section we define the abstract machine instructions
+	and a simplifier and peephole optimizer for abstract machine
+	programs.<BR>
+<BR>
+	
+	<BR>
+<BR>
+<!--TOC section Compilation-->
+
+<H2>3&nbsp;&nbsp; Compilation</H2><!--SEC END -->
+	In this section we define the translation from strategies to
+	abstract machine instructions.<BR>
+<BR>
+	(*** Consider transformation to an A-Normal-form like format. ***)<BR>
+<BR>
+	
+	
+	<BR>
+<BR>
+<!--TOC section Postproccesing-->
+
+<H2>4&nbsp;&nbsp; Postproccesing</H2><!--SEC END -->
+	The postprocessing phase of the compiler takes an abstract
+	machine program and derives initialization information from
+	it. Currently it only deals with the initialization of rule
+	counters by looking at the use of <CODE>CountRule</CODE>
+	instructions.<BR>
+<BR>
+	
+
+	
+<BR>
+<BR>
+<!--TOC section Experiments-->
+
+<H2>5&nbsp;&nbsp; Experiments</H2><!--SEC END -->
+	Consider as an example of optimization:
+<PRE>
+ conc . map(s)
+ zip(id) . unzip -&gt; id
+</PRE>
+	
+<BR>
+<BR>
+<BR>
+<BR>
+	In this chapter we put the compiler components developed in the
+	previous chapters together into the Stratego Compiler <EM>sc</EM>.<BR>
+<BR>
+ <!--TOC section Glue-->
+
+<H2>6&nbsp;&nbsp; Glue</H2><!--SEC END -->
+	<BR>
+<BR>
+<!--TOC part Run-Time System-->
+
+<H1 ALIGN=center>Part&nbsp;III<BR> Run-Time System</H1><!--SEC END -->
+	
+<BR>
+<BR>
+ <!--TOC paragraph Displays vs Static Links-->
+
+<H5> Displays vs Static Links</H5><!--SEC END -->
+	Dealing with static scope requires keeping track of the
+	currently enclosing scope. In simple cases it is sufficient
+	to take an offset from the top of the environment stack.
+<PRE>
+ environment[esp - o]
+</PRE>	But when several activations of the same scope can be created
+	due to recursion, this mechanism fails because the static
+	offsets to variables in outer scopes do not correspond to the
+	dynamic offsets on the actual stack.<BR>
+<BR>
+	Common solutions for this problem are static links, displays
+	and lambda lifting (e.g., [<A HREF="#App98"><CITE>App98</CITE></A>]).<BR>
+<BR>
+	Displays use a global array that give for each nesting depth
+	the most recent activation record for that nesting depth. This
+	gives fast access to the stack. However, it turns out that
+	this mechanism requires a lot of bookkeeping and it does not
+	combine well with backtracking. For each entry in the display
+	a stack of previous activation records has to be maintained.<BR>
+<BR>
+	A static link is a reference to the activation record of the
+	previous nesting level. Finding a stack offset using static
+	links requires following the links until the activation record
+	of the right level is found. <BR>
+<BR>
+	The Stratego run-time system uses static links. There is a
+	single stack that keeps track of static links. A static link
+	consists of a pointer to the environment stack, the nesting
+	depth and a pointer to the static link of the enclosing
+	activation record.<BR>
+<BR>
+ <!--TOC section stratego.h-->
+
+<H2>7&nbsp;&nbsp; stratego.h</H2><!--SEC END -->
+	

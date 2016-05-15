@@ -1,0 +1,50 @@
+
+Hi,
+
+Release 0.4.7 of the Stratego compiler has just been uploaded to the
+server. The following is new:
+
+LIBRARY
+
+   The memo operator in library module memo makes a strategy
+   into a memoizing strategy that looks up the term to be transformed
+   in a memo table and only computes the transformation if the
+   term is not found.
+
+EMACS SUPPORT
+
+   Otto Bagge contributed an emacs mode for Stratego. Now you can
+   edit your Stratego modules with syntax highlighting. See 
+   share/emacs/stratego.el
+
+LANGUAGE
+
+   Overloading of strategy operators is now supported. This means
+   that the same name can be used for two strategy operators with
+   different arity.
+
+   Recall that multiple definitions for an operator with the same
+   arity are equal to the choice of the bodies of the definitions.
+
+   Note that operators that are passed to an operator unapplied can
+   still not be overloaded.
+
+TESTING
+
+   The directory stratego/test contains regression tests for the
+   compiler. Contributions are welcome.
+
+DOWNLOAD
+
+   The distribution can be downloaded as usual from the web page:
+
+	http://www.cs.uu.nl/~visser/stratego/
+
+-- Eelco
+
+-------------------------------------------------------------------------
+Eelco Visser                 Dept. Computer Science, Universiteit Utrecht
+mail:visser@cs.uu.nl         P.O. Box 80089, 3508 TB Utrecht
+  or:visser@acm.org          The Netherlands
+http://www.cs.uu.nl/~visser/ Phone: +31-30-253 4592  Fax: +31-30-251 3791
+-------------------------------------------------------------------------

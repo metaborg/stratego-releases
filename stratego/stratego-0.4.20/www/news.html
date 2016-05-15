@@ -1,0 +1,979 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+
+   <title>Stratego: News</title>
+
+   <link rel=stylesheet type="text/css" href="style.css" title="style">
+
+</head>
+
+<body>
+
+<hr size=10>
+    <h1>News</h1>
+<hr size=10>
+
+<table>
+
+<tr>
+  <td valign = top>
+    <hr>
+	  2000/6/12
+  </td>
+  <td valign = top>
+    <hr>
+          Release 0.4.14
+<dl>
+
+	    <dt> SUMMARY of CHANGES
+
+	    <dd>
+
+	      In this version the language is extended with a couple
+	      of new language constructs and some existing constructs
+	      have been generalized and made more robust.
+
+	      <p>
+
+	      <ul>
+		<li> keyword quoting (<code>'id</code>, <code>'module</code>)
+		<li> overloading of constructors
+		<li> as patterns (<code>x @ t</code>)
+		<li> overloading of overlays and default build terms in overlays
+		  (<code>_ t</code>)
+		<li> distributing and threading congruences
+		  (<code>C^D(s1,...,sn)</code> and <code>C^T(s1,...,sn)</code>)
+		<li> several new strategies in the library
+	    <li> translation Cons/Nil lists to ATerm lists more robust
+	      </ul>
+	      
+	      <p>
+		
+		For a more detailed description of the changes see the <a
+		  href="release/0.4.14.html">announcement</a>.
+
+ <dd>
+
+</dl>
+</td>
+</tr>
+
+
+<tr>
+  <td valign = top>
+    <hr>
+	  2000/6/6
+  </td>
+  <td valign = top>
+    <hr>
+          Release 0.4.13
+<dl>
+
+ <dt>
+ LANGUAGE
+
+ <dd>
+
+  Real numbers have been added to the language.
+
+	      <p></p>
+
+  The identifiers new, kids and str_gt are no longer reserved
+  words. new has been defined as a primitive in the library module
+  string.r.
+
+	      <p></p>
+
+ <dt>
+  LIBRARY
+
+ <dd>
+
+  New modules conditional.r and iteration.r with many new operators.
+
+	      <p></p>
+
+  Two strategies for mapping a table into a list of pairs and the
+  other way around (by Otto Bagge)
+
+	      <p></p>
+
+  Module substitution.r contains the definition of operator
+  "substitute" which substitutes terms for (object) variables and
+  renames bound variables on the way to prevent free-variable
+  capture. It is a generalization of the generic renaming
+  operator. These generic strategies are documented in the WGP2000
+  paper on "Language Independent Traversals for Program
+  Transformation". See www.stratego-language.org.
+
+	      <p></p>
+
+  Primitive append-file opens a file in append mode (by Otto Bagge)
+
+	      <p></p>
+ <dt>
+  COMPILER
+
+ <dd>
+  Repaired two bugs that caused strange behaviour:-( (1) Filenames
+  with a . (e.g., ../bla.r) where cut in the wrong way (i.e., to .)
+  (2) The module packer wrote files to the fixed file /tmp/aaabb,
+  which causes problems with more people working on the same
+  machine. Thanks to Danny van Velzen and Eelco Dolstra for
+  discovering these bugs.
+
+	      <p></p>
+ <dt>
+  DOCUMENTATION
+
+ <dd>
+  The directory doc/tutorial/slides contains the LaTeX source of the
+  Stratego tutorial on slides with an introduction about The slides
+  are also available from www.stratego-language.org in PostScript.
+
+	      <p></p>
+
+  The reference manual has been reorganized and contains a definition
+  of the syntax of Stratego in SDF2.
+
+	      <p></p>
+
+  The xmpl/ directory is intended for examples. It now contains the
+  propositional formula transformation example.
+
+	      <p></p>
+
+  The documentation is now also available in pdf. Note that due to
+  some problem with unsupported specials for gpic the pictures are not
+  present in the pdf version. Anyone know how to solve this?
+  
+	      <p></p>
+
+ <dt>
+  TODO
+
+ <dd>
+  There is a long list of improvements to make to the language and
+  implementation has been structured. See the TODO file in the
+  distributions.
+
+	      <p></p>
+
+</dl>
+</td>
+</tr>
+
+
+<tr>
+  <td valign = top>
+    <hr>
+	  2000/3/25
+  </td>
+  <td valign = top>
+    <hr>
+          Release 0.4.11
+<dl>
+
+ <dt>
+ LANGUAGE
+
+ <dd>
+
+   Generic term construction and deconstruction is now captured in
+   syntax in the form <code>f#(xs)</code>. This denotes a constructor
+   application of <code>f</code> to the list of arguments
+   <code>xs</code>. This can be used, for example, in the
+   decomposition rule of a generic syntacticy unification algorithm
+   (see module unification.r in the library):
+   
+<pre>
+     UfDecompose : 
+        ([(f#(xs), f#(ys)) | ps], sbs) -> 
+        (&lt;conc&gt;(<zip(id)>(xs, ys), ps), sbs)
+</pre>
+
+   The syntax is currently implemented as follows:
+
+<pre>
+	?f#(xs)  ==  ?(f, xs) &lt;= explode-term
+	!f#(xs)  ==  &lt;mkterm&gt; (f, xs)
+	s1#(s2)  ==  explode-term; (s1, s2); mkterm
+</pre>
+
+  <p></p>
+
+ <dt>
+ LIBRARY
+
+ <dd>
+   Declared constructors in the library. There should be
+   no more warnings.
+
+  <p></p>
+
+  Module <code>env-traversal.r</code> defines several traversals that propagate
+   environments through a traversal.
+
+  <p></p>
+
+  Module <code>basic.r</code> defines many new loop constructs (while-do, for, 
+   repeat-until, etc.)
+
+  <p></p>
+
+  Module <code>substitution.r<code>: strategy <code>subs'<code> has
+  been renamed to subs.
+
+  <p></p>
+
+ <dt>
+ DOCUMENTATION
+<dd>
+The slides of the users day tutorial are available from the documentation page.
+
+  <p></p>
+
+ <dt>
+ COMPILER
+<dd>
+ Use the <code>-o</code> option to name the target to compile to.
+
+<pre>
+     sc -i spec -o target
+</pre>
+
+   This is especially useful in case the -m option is used as well to
+   name the executable after the strategy:
+
+<pre>
+     sc -i spec -m strat -o strat
+</pre>
+
+  <p></p>
+
+ Use the <code>--ast</code> option to let the compiler produce the abstract syntax
+   tree of the specification. This could be useful for other tools.
+
+  <p></p>
+
+ <dt>
+ RUN-TIME SYSTEM
+ <dd>
+  For some obscure reason the run-time system allocated a lot of static
+   memory for stacks. This has been greatly reduced.
+
+</dl>
+</td>
+</tr>
+
+
+<tr>
+  <td valign = top>
+    <hr>
+	  2000/3/9
+  </td>
+  <td valign = top>
+    <hr>
+          Release 0.4.10
+<dl>
+
+ <dt>
+ LANGUAGE
+
+ <dd>
+
+   In addition to the <code>(* ... *)</code> multiline comments, you
+   can now also write <code>//</code> comments.
+
+ <p></p>
+
+   Signatures currently use the keyword <code>operations</code> as in 
+
+<pre>
+     signature
+       sorts Exp
+       operations
+         Var : String -> Exp
+</pre>
+
+   Since operations are really constructors in Stratego, the keyword has
+   been changed to <code>constructors</code>:
+
+<pre>
+     signature
+       sorts Exp
+       constructors
+         Var : String -> Exp
+</pre>
+
+   The old syntax will still be supported for a while, but it is advised
+   to change to the new syntax.
+
+ <p></p>
+
+ <dt>
+ COMPILER
+
+ <dd>
+  As Joost Visser complained, the requirement to define a
+  <code>main</code> strategy to indicate the strategy to apply impedes
+  reuse of specifications. The commandline option <code>-m</code> or
+  <code>--main</code> can now be used to pass the name of the main
+  strategy to compile:
+
+<pre>
+	    sc --main transform-it -i transform.r
+</pre>
+
+   or
+
+<pre>
+	    sc -m transform-it -i transform.r
+</pre>
+
+   makes <code>transform-it</code> into the main strategy. If the
+   option is not passed <code>main</code> is assumed to be the main
+   strategy.
+
+ <p></p>
+
+   Note that the main strategy needs to handle its own IO as usual, that is, 
+   it should probably look like 
+
+<pre>
+	    transform-it = stdio(transform)
+</pre>
+   or
+<pre>
+	    transform-it = iowrap(transform)
+</pre>
+
+ <p></p>
+
+    Constructors used in rules and strategies are now matched against
+    the signature. Currently only a warning is generated if a constructor
+    is not declared. In the future constructor declaration will be
+    enforced. Therefore it is advised to act on the warnings generated
+    by the compiler and declare all constructors.
+
+ <p></p>
+
+    Note that only constructors that are actually used in the specification 
+    need to be declared. Anonymous constructors that are only traversed 
+    need not be declared.
+
+ <p></p>
+
+    Note that the library has not yet been cleaned up. Therefore the
+    compiler can generated quite a few warnings for which you are not
+    to blame. This will be repaired as soon as possible.
+
+ <p></p>
+
+ <dt>
+
+ LIBRARY
+
+ <dd>
+
+   The strategy <code>&lt;transform-file(s, suf)&gt; (base,
+   ext)</code> reads in the term from file <code>"base.ext"</code>,
+   applies strategy | to it and writes the result to the concatenation
+   of the strings <code>(base, <suf>())</code>.
+
+ <p></p>
+
+   There was a glitch in the io library module that caused the 0.4.9
+   version of the compiler to leave to many files open giving problems
+   on some systems. This should now have been repaired.
+
+</dl>
+</td>
+</tr>
+
+<tr>
+  <td valign = top>
+    <hr>
+	  2000/3/3
+  </td>
+  <td valign = top>
+    <hr>
+          Release 0.4.9
+<dl>
+
+ <dt>
+ LANGUAGE
+
+ <dd>
+   All sections of a specification can be empty. This was not the case
+   for the 'sorts' and 'operations' sections of a specification. This
+   makes it easier to generate Stratego specifications.
+
+	      <p></p>
+
+   Introduced new syntax for 'assignments'; the strategy expression
+   <code>?t <= s</code> is equivalent to <code>s; ?t</code> and to
+   <code>s => t</code>. The advantage of this new syntax is that it is
+   clearer than with the <code>s => t</code> syntax what the target of
+   the assignment is. If <code>s</code> is a large expression the
+   <code>t</code> can be difficult to spot in <code>s => t</code>.
+ 
+	      <p></p>
+
+   Jus as for rules, the scope of term variables used in the body of 
+   a strategy definition is declared implicitly. That means that instead of 
+
+<pre>
+  	f(s) = {x, y : ?(x, y); ...; s}
+</pre>
+
+    you can now write
+
+<pre>
+         f(s) = ?(x, y); ...; s
+</pre>
+
+	      <p></p>
+ <dt>
+ COMPILER
+
+ <dd>
+   The front-end of the compiler that combines the imported modules
+   of a specification into a single module has been specified in
+   Stratego by means of the pack-stratego component.
+
+	      <p></p>
+
+   Changes in the interface: the name of the specification to be
+   compiled can be given with or without extension. So "<code>sc -i
+   bla.r</code>" is now supported. The compiler no longer generates a
+   <code>%.r.dep</code> file but a <code>%.dep</code> files containing
+   dependency rules for the module being compiled for inclusion in
+   Makefiles.
+
+	      <p></p>
+
+ <dt>
+ LIBRARY
+
+ <dd>
+   Packing a module entails creating a list of all modules reachable
+   from some root module. This problem is defined generically and
+   is parameterized with the shape of module headers and imports.
+
+	      <p></p>
+
+   The renaming strategy has been redefined. It is now parameterized
+   with a strategy indicating in which arguments variables are bound
+   and another that defines how new variables replace the renamed
+   variables. The first parameter can also be used to instantiate
+   the new version of the free variable extraction algorithm. See The
+   Library for more details.
+
+	      <p></p>
+
+   Several of the traversal operators now have versions that have an
+   extra parameter for passing a skip strategy. It indicates for which
+   arguments recursion stops. See simple-traversal.r and list-set.r
+
+	      <p></p>
+
+ <dt>
+ INSTALLATION
+
+ <dd>
+   Reinstalling Stratego gave some problems in 0.4.8 because the
+   installed include files are read before the local include files. 
+   This is problematic when aterm and stratego installation directories 
+   coincide. One solution is to uninstall the stratego distribution before 
+   remaking. I have also changed the order of the includes in the makefiles 
+   to prevent this problem in the future.
+
+	      <p></p>
+
+   Succesful installation of 0.4.8 on a NetBSD machine was reported by
+   Jeroen Scheerder. This brings the list of supported platforms to:
+   Linux/x86, Sun/Solaris, HP-Unix, NetBSD. Please report problematic
+   or successful installation on other platforms.
+
+	      <p></p>
+
+ <dt>
+ MAKE
+   
+ <dd>
+   The file <code>share/Stratego.Make</code> contains generic
+   makerules for compiling Stratego specifications. Include it in
+   Makefiles as follows
+
+<pre>
+     include $(stratego)/share/Stratego.Make
+</pre>
+
+   where <code>$(stratego)</code> points to the prefix directory declared on 
+   configuration. 
+
+	      <p></p>
+
+ <dt>
+ AUTOMAKE
+
+ <dd>
+   Makefiles generated by automake think that .r files contain Fortran
+   source. This problem occurs when declaring
+
+<pre>
+     bin_PROGRAMS = spec
+</pre>
+ 
+   where <code>spec.r</code> is a Stratego module. Otto Bagge pointed
+   out that the solution is to use the <code>bin_SCRIPTS</code>
+   variable and include the dependency file generated by sc:
+
+<pre>
+     bin_SCRIPTS = spec
+     EXTRA_DIST = spec.r
+     CLEANFILES = spec *.dep
+     include spec.dep
+     include $(stratego)/share/Stratego.Make
+</pre>
+
+   where <code>$(stratego)</code> points to the prefix directory
+   declared on configuration of the stratego distribution. This will
+   install the executable created by sc on '<code>make install</code>'
+   and will include spec.r in the distribution of your package on
+   '<code>make dist</code>'.
+
+	      <p></p>
+
+   To pass inclusion flags to sc define the <code>SCFLAGS</code>
+   variable, e.g.,
+
+<pre>
+     SCFLAGS = -I $(srcdir)/../lib
+</pre>
+
+</dl>
+
+</td>
+</tr>
+
+<tr>
+  <td valign = top>
+    <hr>
+	  2000/2/21
+  </td>
+  <td valign = top>
+    <hr>
+          Release 0.4.8
+<dl>
+
+ <dt>
+ LANGUAGE
+	
+ <dd>
+   The syntax of lists has been extended with notation for list tails,
+   i.e., <code>[x, y | z]</code>, where x and y are the first two
+   elements and z is the tail. This is translated to
+   <code>Cons/Nil</code> notation. <code>[x, y | z]</code> is
+   equivalent to <code>Cons(x, Cons(y, z))</code>.
+
+   This entails the following equivalences:
+
+<pre>
+  Nil <-> []
+  Cons(x, xs) <-> [x | xs]
+  [a, b, c] <-> [a, b, c | []] 
+            <-> Cons(a, Cons(b, Cons(c, Nil)))
+</pre>
+
+   Of course, this syntax applies to terms as well as to congruences,
+   that is, <code>[s1, s2 | s3]</code> is the congruence strategy that
+   applies <code>s1</code> and <code>s2</code> to the first two
+   elements of the list and <code>s3</code> to the tail.
+
+   (Thanks to Otto Bagge for the suggestion)
+
+   <p>
+
+   The lexical syntax is changed such that comment can now contain *s
+   and quotes in strings are handled properly. (Thanks Merijn de Jonge
+   for the code)
+
+   <p>
+
+ <dt>
+ LIBRARY
+
+ <dd>
+   The io (file input/output operations) and abox (pretty-printing
+   interface) modules are now documented (see The Library). The abox
+   module has been split into abox.r for the kernel interface and 
+   abox-ext.r for extensions to the interface.
+
+   The implementation of command line option handling has been improved.
+   Instead of combining option parsing and handling, a separate option
+   parser can be used to transform the list of command line options
+   into a list of terms that can be propagated through the transformation
+   process. Module parse-options.r defines a generic parser for lists
+   of options of the form <code>["-i", "file", "-silent", "-o", "outfile"]</code> to
+   terms of the form <code>[Input("file"), Silent(), Output("outfile")]</code>.
+
+   Added <code>call-noisy/0</code>, which has the function of the
+   original <code>call/0</code> (calling an external process) and
+   replaced <code>call/0</code> by a silent version, which does not
+   print out the call.
+
+   <p>
+
+ <dt>
+ DOCUMENTATION
+
+ <dd>
+   Added the missing files to the distribution. (Thanks Karina)
+
+   <p>
+
+ <dt>
+ EMACS SUPPORT
+
+ <dd>
+   The indent on tab has been turned off because it didn't care enough
+   about the context. This part needs to be improved.
+
+   <p>
+
+ <dt>
+ INSTALLATION
+
+ <dd>
+   The www directory contains a list of working and problematic 
+   configurations for installation. If you (try to) install Stratego
+   on a configuration not in the list please let me know whether
+   it succeeded and what the parameters of the configuration are.
+
+</dl>
+
+</td>
+</tr>
+
+<tr>
+	<td valign = top>
+	  <hr>
+	  2000/2/6
+	</td>
+	<td valign = top>
+	  <hr>
+
+          Release 0.4.7
+<dl>
+
+ <dt>
+ LIBRARY
+
+ <dd>
+   The memo operator in library module memo makes a strategy
+   into a memoizing strategy that looks up the term to be transformed
+   in a memo table and only computes the transformation if the
+   term is not found.
+
+ <dt>
+ EMACS SUPPORT
+
+ <dd>
+   Otto Bagge contributed an emacs mode for Stratego. Now you can
+   edit your Stratego modules with syntax highlighting. See 
+   share/emacs/stratego.el
+
+ <dt>
+ LANGUAGE
+
+ <dd>
+   Overloading of strategy operators is now supported. This means
+   that the same name can be used for two strategy operators with
+   different arity.
+
+   Recall that multiple definitions for an operator with the same
+   arity are equal to the choice of the bodies of the definitions.
+
+   Note that operators that are passed to an operator unapplied can
+   still not be overloaded.
+
+ <dt>
+ TESTING
+
+ <dd>
+   The directory stratego/test contains regression tests for the
+   compiler. Contributions are welcome.
+
+
+</dl>
+
+	</td>  
+</tr>
+
+<tr>
+	<td valign = top>
+	  <hr>
+	  2000/1/20
+	</td>
+	<td valign = top>
+	  <hr>
+
+          Release 0.4.6
+<ul>
+<li>
+   Starting with this version, the Stratego distribution is covered by
+   the GNU General Public Licence (GPL). This means that you can
+   redistribute the compiler and make your own modifications to it, as
+   long as you keep the copyright notices in the source intact.  See
+   COPYING for more information. Although the license does not force
+   you to do so, I would appreciate hearing about modifications or
+   additions you make to Stratego.
+
+<p>
+
+  <li>share.r (library): introduction of explicit sharing by turning a
+  term into its underlying graph and then inlining those edges that
+  occur only once or have to be inlined anyway. (Inspired by a
+  question from Oege de Moor)
+
+<p>
+
+  <li>bin-tree[-set].r (library): binary trees for the representation
+   of sets with operations. (needs elaboration)
+
+<p>
+
+  <li> term.[cr] (library): getting and comparing the memory addresses of
+   terms
+
+</ul>
+
+	</td>  
+</tr>
+
+<tr>
+	<td valign = top>
+	  <hr>
+	  2000/1/5
+	</td>
+	<td valign = top>
+	  <hr>
+
+          Release 0.4.5
+<ul>
+<li>
+
+ New language construct
+ 
+ <p>
+
+   Added syntax and desugaring for `lambda rules' of the form 
+
+	<pre>\F(x, G(y)) -&gt; H(x, y)\</pre>
+
+   Such rules declare a new scope for the variables in the lhs of the
+   rule but not for the variables in the rhs and condition of the rule
+   that do not appear in the lhs.
+
+ <p>
+
+<li>
+ Refactoring of the library
+
+ <p>
+
+ <ul>
+   <li> The C implementation of the primitives in stratego-lib.c has now
+     been split into several files: time.c, exec.c, io.c, etc.
+
+   <li> New formulation of rename (now in module rename) with new interface
+
+   <li> Refactored strategy: vars
+
+   <li> New strategy: <code>collect-split(f, g)</code>
+     reduces terms with f and extracts information with g resulting
+     in a pair (t, xs) of a reduced term and the list of extracted
+     subterms.
+
+   <li> New primitive: print-stack that prints the top n elements of
+   the stack if applied as <code>&lt;print-stack&gt; n</code> or the entire
+   stack if applied to a non-integer term.
+
+   <li> Added some more useful abstractions to the abox module
+
+  </ul>
+
+ <p>
+
+<li>
+  Improvement of the tutorial
+
+ <p>
+
+    I deleted a number of empty sections that will have to wait for 
+    more time.
+
+</ul>
+
+	</td>  
+</tr>
+
+<tr>
+	<td valign = top>
+	  <hr>
+	  1999/12/15
+	</td>
+	<td valign = top>
+	  <hr>
+
+            The Stratego mailing list <a
+            href="mailto:stratego@cs.uu.nl">stratego@cs.uu.nl</a> is
+            used for the announcement of new releases and for
+            discussions about the language, its use and its
+            implementation.  To subscribe, send an email to <a
+            href="mailto:stratego-request@cs.uu.nl">stratego-request@cs.uu.nl</a>
+
+	</td>  
+</tr>
+
+<tr>
+	<td valign = top>
+	  <hr>
+	  1999/12/15
+	</td>
+	<td valign = top>
+	  <hr>
+
+          Release 0.4.4b is a minor maintenance release
+          <ul>
+            <li> Extended the tutorial
+            <li> Fixed the implode-string primitive strategy (thanks Merijn)
+
+            <li> sc produces an f executable for a f.r module (instead
+            of f.comp as it used to be)
+          </ul>
+
+	</td>  
+</tr>
+
+<tr>
+	<td valign = top>
+	  <hr>
+	  1999/12/5
+	</td>
+	<td valign = top>
+	  <hr>
+
+          New documents installed at the web site. The tutorial is
+          split into tutorial, reference manual and library
+          documentation. All are still drafts. See the <a
+          href="documentation.html">documentation page</a>.
+
+	</td>  
+</tr>
+
+<tr>
+	<td valign = top>
+	  <hr>
+	  1999/12/1
+	</td>
+	<td valign = top>
+	  <hr>
+Release 0.4.4a
+<ul>
+<li>
+ Complete configurable source distribution.
+
+<li>
+ Includes the Stratego sources of the compiler components.
+   This makes it possible to make new versions of the language.
+
+<li>
+ Separation of the library primitives from the run-time system.
+   The library primitives are in lib/stratego/src
+
+<li>
+ Documentation in four parts (drafts):
+<ul>
+<li>
+   The Stratego Tutorial
+<li>
+   The Stratego Reference Manual
+<li>
+   The Stratego Library
+<li>
+   The Stratego Compiler
+</ul>
+   These are still in draft form in this release; suggestions for
+   improvements are welcome.
+
+<li>
+ New web page: see www/index.html or
+   http://www.cs.uu.nl/~visser/stratego/
+
+<li>
+ Logo
+</ul>
+
+ Summary of changes to language/implementation
+
+<ul>
+<li>
+  Changes in interface to sc:
+<ul>
+<li>
+   -i mod instead of just mod
+<li>
+   -IL "-Ldir" to pass include directories to gcc
+<li>
+   -CL "-Ldir -llib" to pass libraries to gcc
+</ul>
+
+<li>
+  New features in the library
+ <ul>
+<li>
+   tables; an interface to aterm tables
+<li>
+   explode-term; inverse of mkterm
+</ul>
+
+<li>
+  Treatment of ATerm built-in lists as first-class
+   citizens is not yet in this release. Therefore, it
+   can still not deal with annotations.
+</ul>
+
+	</td>  
+</tr>
+
+<tr>
+	<td valign = top>
+	  <hr>
+	  1999/11/8
+	</td>
+	<td valign = top>
+	  <hr>
+	  Finally! The Stratego logo!
+	</td>
+</tr>
+<tr>
+	<td valign = top>
+	  <hr>
+	  1999/11/4
+	</td>
+	<td valign = top>
+	  <hr>
+	  New setup of the implementation
+	</td>
+</tr>
+
+</table>
+
+<hr size=10>
+</body>
+</html>
+

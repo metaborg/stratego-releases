@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  LIST-BASIC
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library018.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library020.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.3.3&nbsp;&nbsp;  LIST-BASIC</H3>	Basic functionality on lists. <BR>
+<BR>
+	Map: Apply strategy to each element of a list<BR>
+<BR>
+	Length of a list<BR>
+<BR>
+	Fetch: Find first list element for which s succeeds<BR>
+<BR>
+	At tail: apply a strategy to the tail of a list<BR>
+<BR>
+	At suffix: apply a strategy to some suffix of a list<BR>
+<BR>
+<PRE>
+module list-basic
+imports list-cons
+rules
+  Hd     : [x | l] -&gt; x
+  Tl     : [x | l] -&gt; l
+  Last   : [x] -&gt; x
+  MkCons : (x, []) -&gt; [x]
+  MkCons : (x, [y| z]) -&gt; [x, y | z]
+  MkSingleton : x -&gt; [x]
+strategies
+
+  is-list = [] + [id| id]
+
+  map(s) = rec x([] + [s| x])
+
+  list(s) = rec x([] + [s| x])
+
+  list-some(s) =
+    rec x([s| id]; [id| list(try(s))] &lt;+ [id| x])
+
+  list-some-filter(s) =
+    rec x([s| id]; [id| filter(s)] &lt;+ [id| x]; Tl)
+
+  length = rec x([]; !0 + Tl; x; \n -&gt; &lt;add&gt; (n, 1)\ )
+
+  fetch(s) = rec x([s | id] &lt;+ [id | x])
+
+  // split-fetch, splits a list in two at the point 
+  // where the argument strategy succeeds.
+
+  split-fetch(s) =
+    at-suffix([s|id];[id|?tl];![]); split(id, !tl)
+
+  at-tail(s) = [id | s]
+
+  at_tail(s) = 
+    obsolete(!"at_tail -&gt; at-tail");
+    [id | s]
+
+  at-end(s) = rec x([id | x] + []; s)
+  at_end(s) = 
+    obsolete(!"at_end -&gt; at-end");
+    rec x([id | x] + []; s)
+
+  at-suffix(s) = rec x(s &lt;+ [id | x])
+  at_suffix(s) = 
+    obsolete(!"at_suffix -&gt; at-suffix");
+    rec x(s &lt;+ [id | x])
+
+  at_last(s) = 
+    obsolete(!"at_last -&gt; at-last");
+    rec x([id]; s &lt;+ [id | x])
+
+  at-last(s) = rec x([id]; s &lt;+ [id | x])
+
+  listbu(s)       = rec x(([] + [id| x]); s)
+  listtd(s)       = rec x(s; ([] + [id| x]))
+  listdu(s)       = rec x(s; ([] + [id| x]); s)
+  listdu2(s1, s2) = rec x(s1; ([] + [id| x]); s2)
+
+rules
+
+  RevInit : xs -&gt; (xs, [])
+  Rev     : ([x| xs], ys) -&gt; (xs, [x| ys])
+  RevExit : ([], ys) -&gt; ys
+
+strategies
+
+  reverse = RevInit; repeat(Rev); RevExit
+
+rules
+
+  UptoInit : i -&gt; (i, [])
+  UptoExit : (i, xs) -&gt; xs where &lt;lt&gt; (i, 0)
+  UptoStep : (i, xs) -&gt; (&lt;minus&gt; (i, 1), [i| xs])
+
+strategies
+
+  upto = UptoInit; rec x(UptoExit &lt;+ UptoStep; x)
+
+rules
+
+  conc : (l1, l2) -&gt; &lt;at-end(!l2)&gt; l1
+  //Concat(x) : [l | ls] -&gt; &lt;at-end(&lt;x&gt; ls)&gt; l
+
+strategies
+
+  concat = rec x([] + \ [l | ls] -&gt; &lt;at-end(&lt;x&gt; ls)&gt; l\ )
+
+rules
+
+  Sep(s) : [x| xs] -&gt; [&lt;s&gt;(), x | xs]
+
+strategies
+
+  separate-by(s) = 
+    [] + [id| rec x([] + [id| x]; Sep(s))]
+</PRE>	
+ 	<HR>
+<A HREF="Library018.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library020.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

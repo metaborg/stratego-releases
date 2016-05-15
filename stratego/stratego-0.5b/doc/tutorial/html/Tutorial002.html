@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ When to use and not to use Stratego
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial001.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial003.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>1.2&nbsp;&nbsp; When to use and not to use Stratego</H3>
+	<blockquote><hr>
+	Stratego is designed for the scheduling of the application of
+	a series of local transformation rules on terms. Therefore,
+	the language is primarily useful in source to source program
+	transformation, application generation and code generation.
+	It is not designed for theorem proving, program analysis,
+	interactive program derivation or general purpose programming,
+	although it can be used to assist in these activities.
+	<hr></blockquote><BR>
+<BR>
+	
+<H5> What Stratego is for</H5>	Stratego is designed for the specification of automatic
+	program transformation systems. Typical application areas of
+	automatic program transformation are source-to-source
+	transformations, application generation, code generation,
+	program derivation and documentation generation.<BR>
+<BR>
+	Source-to-source transformation is the transformation of a
+	program to a program in the same language. Examples of source
+	to source transformations are simplification, optimization and
+	desugaring, i.e., the elimination of syntactic abstractions.<BR>
+<BR>
+	Application generation is the translation of a program in a
+	high-level (end-user) application language to an
+	implementation in a general purpose programming language.<BR>
+<BR>
+	Code generation is the translation of program constructs to
+	sequences of machine code instructions.<BR>
+<BR>
+	Automatic program derivation is concerned with the generation
+	of programs from data. Examples of program derivations are
+	the derivation of a constructor signature from a context-free
+	grammar and the derivation of a pretty-printer from a
+	context-free grammar [<A ><CITE>1</CITE></A>].<BR>
+<BR>
+	Documentation generation is the extraction of documentation
+	information from a program.<BR>
+<BR>
+	Program analysis is concerned with deriving properties about
+	elements of programs. Examples of program analysis are type
+	checking, type inference, and data flow analysis. Although
+	Stratego can be used to implement such analyses, it is not
+	particularly well supported. This aspect should probably be
+	strengthened.<BR>
+<BR>
+	
+<H5> What Stratego is not for</H5>	Stratego is not necessarily applicable in other areas of
+	program manipulation related applications. In particular, it
+	is probably not the right platform for interactive program
+	transformation, theorem proving and general purpose
+	programming.<BR>
+<BR>
+	Interactive program transformation is concerned with the
+	gradual transformation from a high-level specification to an
+	implementation by intervention from a programmer. The
+	programmer has to decide what refinement steps to apply to
+	what part of the specification. However, Stratego can be used
+	to make program transformation scripts that automatically
+	transform a specific specification to an implementation. Such
+	scripts can be written incrementally to reflect the increased
+	understanding of the refinement.<BR>
+<BR>
+	Theorem proving is used for establishing correctness of
+	programs. Stratego does not support theorem proving.
+	However, it can be used to generate proof obligations as input
+	for theorem provers.<BR>
+<BR>
+	Stratego is not a general purpose programming language to use
+	for application programming, user-interface implementation,
+	etc. However, it can very well be used to generate or
+	transform programs in a general purpose language.
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 4: 
+	Application areas
+	</DIV><BR>
+<A NAME="Fig:AppplicationAreas"></A>
+	<UL>
+<LI>
+	 Abstract and concrete syntax tree manipulation
+	
+<LI> Simplification
+	
+<LI> Optimization
+	
+<LI> Desugaring (eliminating syntactic abstractions)
+	
+<LI> Code generation
+	
+<LI> Application generation
+	
+<LI> Documentation generation
+	
+<LI> Program analysis
+	</UL>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 5: 
+	Non application areas
+	</DIV><BR>
+<A NAME="Fig:NonAppplicationAreas"></A><BR>
+	<UL>
+<LI>
+	 Theorem proving
+	
+<LI> Interactive program transformation / derivation
+	
+<LI> General purpose programming
+	</UL>	<DIV ALIGN=center><HR SIZE=2></DIV>
+<HR>
+<A HREF="Tutorial001.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial003.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

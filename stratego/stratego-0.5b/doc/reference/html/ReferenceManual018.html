@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Describing Deeply Embedded Patterns with Contexts
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual017.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual019.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.4&nbsp;&nbsp; Describing Deeply Embedded Patterns with Contexts</H3>	<blockquote><hr>
+	<hr></blockquote><BR>
+<BR>
+	For some applications matching with a fixed pattern is not
+	sufficient because some part of the pattern can be at an
+	arbitrary depth from the root. In such circumstances
+	contextual matching can be used.<BR>
+<BR>
+	For example, assume that our lambda terms satisfy the variable
+	assumption, i.e. no two bound variables are the same if their
+	binding positions are different, then we can define alpha
+	renaming by means of the rule
+<PRE>
+  Alpha : Lambda(x, e[Var(x)](sometd)) -&gt; Lambda(y, e[Var(y)])
+          where new =&gt; y
+</PRE>	This rule replaces the abstracted variable <CODE>x</CODE> and all
+	occurences of <CODE>Var(x)</CODE> in the body of the abstraction by
+	the fresh variable <CODE>Var(y)</CODE>. The strategy <CODE>sometd</CODE>
+	specified with the context determines what traversal strategy
+	to use to find occurences of <CODE>Var(x)</CODE>. (Later on we will
+	discuss how a bound variables can be renamed in order to
+	adhere to the variable assumption.)<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 20: </DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Contexts
+exports
+  context-free syntax
+    Identifier "[" Term "]" ("(" SVar ")")? -&gt; Term {cons("Con")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual017.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual019.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

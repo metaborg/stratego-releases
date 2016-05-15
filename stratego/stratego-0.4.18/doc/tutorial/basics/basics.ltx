@@ -1,0 +1,563 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\chapter{Stratego by Example}
+
+\subsection{Developing Transformation Systems with Stratego}
+
+	\begin{abstract}
+
+	A Stratego specification consists of a collection of modules
+	that contain signatures, rules and strategies that together
+	define a transformation system. The Stratego compiler
+	translates a specifiation to an executable program that can be
+	used to transform terms.
+
+	\end{abstract}
+
+	A Stratego specification defines a transformation on terms.  A
+	specification consists of a signature describing the structure
+	of the language, rules that define the steps of the
+	transformation, and strategies that combine the rules in a
+	transformation system.
+
+	All these elements can be mixed in any order in one big
+	file. However, to make specifications reusable, Stratego
+	provides a module system that can be used to spread
+	definitions over several files. Thus, a specification consists
+	of a collection of modules that define signatures, rules and
+	strategies.
+
+	It is usually a good idea to divide a specification over
+	several modules: one defining the language, several definining
+	various sorts of transformation rules and strategies, and one
+	definining the main strategy that applies these rules.
+	
+	An executable transformation system can be derived from a
+	specification by means of the Stratego compiler \emph{sc}.
+	Compiled specifications can be used to transform terms.
+
+	Specifications are rarely correct in one go. Some errors are
+	caught by the compiler, others have to be detected by
+	inspection of the specification and by debugging techniques.
+
+	\paragraph{Example: Simplification of Propositional Formulae}
+
+	As an example, consider the simplification of propositional
+	formulae. Figure~\ref{Fig:ImpGraph} shows the import graph for
+	the specification. An arrow points from the importing module
+	to the module that is imported. Module \verb|prop| defines the
+	signature of propositional formulae.  Module \verb|prop-truth|
+	defines the truth rules for the propositional
+	connectives. Module \verb|prop-laws| defines a number of rules
+	defining sound transformations on formulae.  Module
+	\verb|prop-simplify| imports modules \verb|prop-laws| and
+	\verb|prop-truth| and defines various ways of combining the
+	rules in simplifying transformations.  Module \verb|disjnf|
+	declares one of these transformations, i.e., the
+	simplification of a formula to disjunctive normal form, to be
+	the main transformation.
+
+	In addition, module \verb|prop-simplify| imports the module
+	\verb|simple-traversal|, which defines a number of standard
+	term traversals.  Module \verb|disjnf| imports \verb|io|,
+	which defines strategies for term input and output. The latter
+	two modules are part of the Stratego library.
+
+	\begin{boxedfigure}{}{The development process}
+
+	\begin{itemize}
+
+	\item Develop specification = collection of modules defining
+
+		\begin{itemize}
+
+		\item Signature
+
+		\item Rules
+
+		\item Strategies
+
+		\end{itemize}
+
+	\item Compile specification
+
+		\begin{itemize}
+
+		\item Repair syntactic errors
+
+		\end{itemize}
+
+	\item Use compiled specification
+
+		\begin{itemize}
+
+		\item Detect logical errors
+
+		\end{itemize}
+
+	\end{itemize}
+
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{ImpGraph}{Import graph of a specification}
+
+	\input{import-graph.ptx}
+
+	\end{boxedfigure}
+
+\section{Writing Specifications}
+
+\subsection{Describing Terms with Signatures}	
+
+	\begin{abstract}
+
+	Stratego specifications define transformations on terms. The
+	structure of terms can be described by means of signatures.
+
+	\end{abstract}
+
+	\paragraph{Terms}
+
+	In the Stratego model, programs and all other objects that are
+	transformed are represented by means of terms.  In their most
+	basic form, terms are described by the rule
+\verb|t := C(t1,...,tn)|.
+	That is, a term is an application of a constructor \verb|C| to
+	zero or more other terms.
+
+	An example term is
+\verb|Not(Or(And(Atom("B"), Atom("A")), Atom("A"))|
+
+	\paragraph{Tree Representation of Terms}
+
+	A term can be represented by means of a tree
+	diagram. Figure~\ref{Fig:Tree} shows a tree diagram for the
+	example term above.  Tree diagrams are a model for the
+	representation of terms in a computer's memory. Nodes
+	correspond to tree cells that contain a node tag and pointers
+	(arrows) to the cells corresponding to the sub-terms of the
+	node.
+
+	\paragraph{DAG Representation of Terms}
+
+	In fact, in the Stratego implementation terms are represented
+	by means of directed, acyclic graphs (dags) that share
+	sub-terms.  That is, occurences of the same sub-term are
+	actually represented by the same cell in memory. For instance,
+	the diagram in Figure~\ref{Fig:Dag} shows the sharing of the
+	sub-term \verb|Atom("A")| by the \verb|And| and the \verb|Or|
+	node.
+
+	\paragraph{Signatures}
+
+	A signature is used to describe the names of term constructors
+	and the number and type of their arguments. An operator
+	declaration
+\verb|C : s| 
+	defines a nullary constructor \verb|C|.  An operator declaration
+\verb|C : s1 * ... * sn -> s| 
+	defines an \verb|n|-ary constructor \verb|C|. A signature
+	characterizes a sub-set of the universal set of terms
+	described above.
+
+	For example, Figure~\ref{Fig:prop.r} shows module module
+	\verb|prop| (in file \verb|prop.r|), which defines the
+	structure of propositional formalae.  The signature defines
+	the sort \verb|Prop| of propositional formulae. The operations
+	or constructors of the language are \verb|Atom| that
+	constructs propositional letters, \verb|Not| for negation,
+	\verb|And| for conjunction, \verb|Or| for disjunction,
+	\verb|Impl| for implication and \verb|Eq| for equivalence. The
+	term in Figure~\ref{Fig:Term} is an example of a formula over
+	this signature.
+
+	\begin{boxedfigure}{Term}{A term representing a propositional formula
+	(file: prop.trm).}
+	\verbatiminput{../xmpl/prop.trm}
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{prop.r}{Signature of propostional formulae
+	(file: prop.r).}
+	\verbatiminput{../xmpl/prop.r}
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{Tree}{Tree structure of terms}
+	\input{tree.ptx}
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{Dag}{Directed-acyclic graph structure of terms}
+	\input{dag.ptx}
+	\end{boxedfigure}
+
+
+\subsection{Specifying Basic Transformations with Rules}
+
+	\begin{abstract}
+
+	Transformation rules are the basic components of
+	transformations defined in Stratego. A rule transforms a term
+	at the root if the term matches the left-hand side of the
+	rule. The result is the instantiation of the right-hand side
+	of the rule.
+
+	\end{abstract}
+
+	\paragraph{Transformation}
+
+	A transformation is a modification of a term.  An example of a
+	transformation on propositional formulae is the transformation
+	of an arbitrary formula to disjunctive normal form.
+
+	\paragraph{Rule}
+
+	Transformations can be achieved by consecutively applying a
+	number of small modifications to a term.  In Stratego, a
+	transformation rule defines a single transformation step.  A
+	rule consists of a label (e.g., \verb|DMO|), a left-hand side
+	term pattern (e.g, {\tt Not(Or(x, y))}) and a right-hand side
+	term pattern (e.g., \verb|And(Not(x), Not(y))|. 
+
+	Notation:
+\verb|DMO : Not(Or(x, y)) -> And(Not(x), Not(y))|
+
+	\paragraph{Term Patterns are Terms with Variables}
+
+	A term pattern is a term with variables. That is, term patterns
+	are described by the rule
+\verb+tp := x | C(tp1,...,tpn)+, 
+	where \verb|x| is a variable.  Variables do not have to be
+	declared. All nullary (i.e., non-applied) constructors that
+	are not declared in the signature are assumed to be variables.
+
+	\paragraph{Applying Transformation Rules}
+
+	A rule defines a one-step transformation \emph{at the root} of
+	a term. A rule applies to a term if the term matches the
+	left-hand side pattern of the rule. If that is the case the
+	term is replaced with the right-hand side of the term in which
+	the variables are replaced by the corresponding sub-terms that
+	were matched in the left-hand side. Thus a transformation rule
+	succeeds to apply if the left-hand side matches, and fails to
+	apply if that is not the case. In general, a transformation
+	may succeed or fail to apply to a term.
+
+	\par
+
+{\parskip0pt
+	For example, the De~Morgan rule \verb|DMO| transforms the term
+\begin{verbatim}
+  Not(Or(And(Atom("B"), Atom("A")), Atom("A")))
+\end{verbatim} 
+	to
+\begin{verbatim}
+  And(Not(And(Atom("B"), Atom("A"))), Not(Atom("A")))
+\end{verbatim}
+	Figure~\ref{Fig:DMOapplication} illustrates the effect of this
+	transformation on the tree structure of a term.
+}
+
+	\begin{boxedfigure}{DMOapplication}{Application of rule
+	{\tt DMO} to the root of term {\tt Not(Or(And(Atom("B"),
+	Atom("A")), Atom("A")))}. Note that the sharing of the
+	common subterm {\tt Atom("A")} is preserved.}
+	
+	\input{transformation.ptx}
+
+	\end{boxedfigure}
+
+\subsection{Simplification Rules for Propositional Formulae}
+
+	\begin{abstract}
+	
+	There are a great number of valid transformation rules on
+	propositional formulae. Although each is useful in itself,
+	together they form a non-terminating rewrite system.
+
+	\end{abstract}
+
+	Propositional formulae can be simplified using well-known
+	rules such as De Morgan's laws and distribution laws. Some of
+	these simplification rules are defined in module
+	\verb|prop-laws| (Figure~\ref{Fig:prop-laws.r}). Module
+	\verb|prop-truth| (Figure~\ref{Fig:prop-truth.r}) defines
+	rules for constant propagation in formulae.
+
+	Note that these rules give rise to a number of possible
+	normalizations of formulae. Interpretation of the rules as a
+	rewrite system is not useful since they define a
+	non-terminating system.  For example, rules DAOL and DOAL can
+	be applied alternately without reaching a normal-form.
+
+	\begin{boxedfigure}{prop-truth.r}{Truth rules for propositional
+	formulae.}
+	\verbatiminput{../xmpl/prop-truth.r}
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{prop-laws.r}{Simplification rules for
+	propositional formulae.}
+
+	\verbatiminput{../xmpl/prop-laws.r}
+
+	\end{boxedfigure}
+
+\subsection{Combining Rules into Transformation Systems with Strategies}
+
+	\begin{abstract}
+
+	Applying all transformation rules until none applies anymore,
+	is often not a good strategy in program transformation because
+	the transformation might not terminate or because many
+	different transformation paths are possible, one of which
+	needs to be chosen. Programmable strategies provide a way
+	to control the application of transformation rules.
+
+	\end{abstract}
+	
+	Standard term rewriting apply rules using a default strategy
+	in which all rules are applied as long as possible. Therefore,
+	for a rewrite system to be meaningful it should be terminating
+	and confluent, i.e., whatever transformation path is chosen
+	the same term results.  
+
+	In general, however, given a collection of meaningful
+	transformation rules many possible transformations on a term
+	are possible.  Depending on the desired outcome, different
+	rules should be applied.
+
+	For example, the rules for transformation of propositional
+	formulae can be used to transform formulae to a wide variety
+	of normal forms.  Formulae in \emph{disjunctive normal form}
+	are disjunctions of conjunctions of atoms or negations of
+	atoms. Furthermore, disjunctive normal forms do not contain
+	implications, equivalences or truth values. A formula in
+	\emph{conjunctive normal form} is a conjunction of
+	disjunctions of atoms or negations of atoms.  Finally, any
+	propositional formula can be expressed using just implication
+	and \verb|False|.
+
+	Each of these normal forms can be achieved by combining a
+	different selection of the rules from module
+	\verb|prop-laws| into a transformation.
+
+	\paragraph{Transformation Strategies}
+
+	Stratego supports user-definable strategies for the
+	application of transformation rules.  A strategy is a program
+	that specifies which rules to apply in what order to which
+	sub-terms of a term.  
+
+	Rule labels are basic strategies. Strategies are composed from
+	rule labels with a number of strategy operators. For example,
+	the specification in Figure~\ref{Fig:prop-simplify.r} uses
+	non-deterministic choice (\verb|+|), sequential composition
+	(\verb|;|), and recursive closure (\verb|rec x(s)|). 
+	Application of transformations below the root of a
+	term is achieved by means of traversal operators such as
+	\verb|all(s)|, which applies the strategy \verb|s| to all
+	direct sub-terms of the term to which it is applied.
+
+	In module \verb|prop-simplify| the rules from modules
+	\verb|prop-laws| and \verb|prop-truth| are combined into
+	strategies that simplify formulae.  Strategy \verb|disjnf|
+	transforms propositional formulae to disjunctive normal form.
+	It defines a traversal over a term that pushes \verb|Not|s
+	inwards on the way down and pushes \verb|And|s inwards on the
+	way up.  Strategy \verb|conjnf| transforms formulae to
+	conjunctive normal form in a similar way, but using
+	\verb|Or|-distributivity instead of \verb|And|-distributivity.
+	Strategy \verb|desugar| defines implication and equivalence in
+	terms of conjunction, disjunction, and negation. 
+
+	\begin{boxedfigure}{}{Simple traversal strategies. This is an
+	extract from the library module {\tt simple-traversal}. See
+	the Stratego Library for more example strategies.}
+	
+		\verbatiminput{../xmpl/simple-traversal.r}
+
+	\end{boxedfigure}
+
+	\begin{boxedfigure}{prop-simplify.r}{Simplification strategies
+	for propositional formulae.}
+
+		\verbatiminput{../xmpl/prop-simplify.r}
+
+	\end{boxedfigure}
+
+
+\section{Compiling Specifications}
+
+\subsection{Compiling Specifications to Executable Programs}
+
+	\begin{abstract}
+
+	A specification defines a transformation.  To make the
+	transformation executable on a computer, it is necessary to
+	compile it to a standard programming language. The Stratego
+	compiler translates a Stratego specification to a stand-alone
+	C program.
+
+	\end{abstract}
+
+	\paragraph{The Main Strategy}
+
+	In order to compile a specification it is necessary to
+	indicate the main transformation strategy that the compiled
+	program should apply to terms. The compiler assumes that a
+	definition for the strategy \verb|main| exists that indicates
+	the transformation to perform. For example, module
+	\verb|disjnf| in Figure~\ref{Fig:disjnf.r} defines the strategy
+	\verb|main| to first desugar the formula and then transform it
+	to disjunctive normal form.
+
+	Note the use of the strategy \verb|stdio| in the definition of
+	\verb|main|. Input/output behaviour needs to be defined in the
+	specifiation itself, i.e., it is not handled in a default
+	manner.  The \verb|stdio| strategy implements the most basic
+	interface, i.e., read a term from standard input and write the
+	result to standard output. \verb|stdio| is defined in the
+	library module \verb|io|.
+
+	\paragraph{Compiling Specifications}
+
+	A specification is compiled with the Stratego compiler \emph{sc}
+	by typing
+\\\verb|    > sc -i disjnf|\\
+	Note that the suffix \verb|.r| is not included in the name
+	provided to the compiler.  During compilation the compiler
+	gives diagnostic output to indicate the progress of the
+	compilation process.
+\\\verb|    > sc -i disjnf|
+\\\verb|     ...|
+\\\verb|    compilation succeeded|\\
+	Compilation creates the C program \verb|disjnf.c| and the
+	executable program \verb|disjnf|.
+
+	\paragraph{Using Compiled Specifications}
+
+	The executable {\tt disjn} can be applied to a term to
+	transform it.  For example, the formula in file
+	\verb|prop.trm| is transformed by typing:
+\\\verb|> disjnf < prop.trm|
+\\\verb|Or(Or(Atom("A"),Or(Not(Atom("B")),Not(Atom("C")))),Not(Atom("D")))|
+	If rewriting fails the output would read
+\\\verb|    rewriting failed|
+
+
+	\begin{boxedfigure}{disjnf.r}{Module defining {\tt main} strategy.}
+	\input{../xmpl/disjnf.r}
+	\end{boxedfigure}
+
+\subsection{Detecting Errors in Stratego Specifications}
+
+	\begin{abstract}
+
+	The errors made in Stratego programs can be classified into
+	syntactic errors and logical errors. Logical errors are errors
+	in the intended semantics of the specification. Syntactic
+	errors are violations of the syntax or static semantics of the
+	language.  Not all syntactic errors are currently caught by
+	the front-end of the compiler.
+
+	\end{abstract}
+
+	If compilation fails there is something wrong with the
+	specification.  The compiler should give an error message to
+	indicate what is wrong. The following types of errors may
+	occur.
+
+	\paragraph{Undefined Operator}
+	
+	If we forget the import of the library module {\tt prop-truth},
+	we get the error message
+\begin{verbatim}
+  error: operator T1 undefined
+\end{verbatim}
+	that indicates that the rule \verb|T1| is not defined.
+
+	\paragraph{Unbound Variable}
+
+	If in rule \verb|A9| we would make a typo:
+\begin{verbatim}
+  AO : Or(Or(x, y), z) -> Or(x, Or(y, s))
+\end{verbatim}
+	i.e., \verb|s| instead of \verb|z| in the right-hand side, we get
+	the error message
+\begin{verbatim}
+  error in rule AO : variable s: used, but not bound
+\end{verbatim}
+	that indicates that the rule is trying to build a term with an
+	uninstantiated variable.
+
+	\paragraph{Common Errors}
+
+	The following are common errors
+
+	- strategy operator with wrong number of arguments
+
+	- term constructor with wrong number of arguments (run-time error)
+
+	- using term where strategy is expected (failure because of
+	non-applicable congruence, undefined operator if some of the
+	constructors are not defined in the signature)
+
+	- using a strategy where a term is expected 
+
+\subsection{Debugging Stratego Programs}
+
+	\begin{abstract}
+
+	In order to detect logical errors in specification it
+	sometimes helps to understand what goes wrong at run-time (in
+	addition to carefully reading the specification).
+
+	\end{abstract}
+
+	\paragraph{Syntactic errors with run-time manifestation}
+
+	- the transformation crashes mentioning an assertion violation
+
+	- the transformation crashes with a segmentation fault
+	
+	these are caused by shortcomings in the implementation
+
+	\paragraph{Logical errors}
+ 
+	- the transformation fails while it is expected to succeed
+
+	- the transformation succeeds, but with a wrong result
+	
+	\paragraph{Splitting up the Specification}
+
+	Often it is useful to test components of a specification to
+	narrow down the place where the error occurs
+
+	- comment out tail end of a transformation pipeline
+
+	- narrow down the subject term 
+
+	\paragraph{The Debug Operator}
+
+	The \verb|debug| operator prints the current term to \verb|stderr|.
+
+	\paragraph{The PrintStack Operator}
+
+ 	The primitive \verb|print-stack| prints the top n elements of
+ 	the stack if applied to an integer term (as in
+ 	\verb|where(<print-stack> n)| or the entire stack if applied
+ 	to a non-integer term.

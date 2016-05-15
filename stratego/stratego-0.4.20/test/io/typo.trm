@@ -1,0 +1,7 @@
+[CEq(CVar("Y"), Sums( Mult(CVar("x0"), CCoef("c0"),
+                      Sums( Mult(CVar("x1"), CCoef("c1")),
+                            Mult(CVar("x2"), CCoef("c2"))
+                          )
+                    )
+    )
+]

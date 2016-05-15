@@ -1,0 +1,4 @@
+Enter passphrase for RSA key 'visser@loempia.cs.uu.nl': 
+cvs [status aborted]: received interrupt signal
+Killed by signal 2.
+cvs [status aborted]: received broken pipe signal

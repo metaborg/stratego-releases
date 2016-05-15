@@ -1,0 +1,57 @@
+\expandafter\ifx\csname graph\endcsname\relax \csname newbox\endcsname\graph\fi
+\expandafter\ifx\csname graphtemp\endcsname\relax \csname newdimen\endcsname\graphtemp\fi
+\setbox\graph=\vtop{\vskip 0pt\hbox{%
+    \special{pn 8}%
+    \special{pa 500 0}%
+    \special{pa 0 866}%
+    \special{fp}%
+    \special{pa 500 0}%
+    \special{pa 1000 866}%
+    \special{fp}%
+    \special{pa 1000 866}%
+    \special{pa 0 866}%
+    \special{fp}%
+    \special{pa 500 0}%
+    \special{pa 500 577}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 537 527}%
+    \special{pa 500 577}%
+    \special{pa 463 527}%
+    \special{pa 537 527}%
+    \special{fp}%
+    \special{pa 500 577}%
+    \special{pa 333 866}%
+    \special{fp}%
+    \special{pa 500 577}%
+    \special{pa 667 866}%
+    \special{fp}%
+    \special{pa 333 866}%
+    \special{pa 167 577}%
+    \special{fp}%
+    \special{pa 500 0}%
+    \special{pa 167 577}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 224 553}%
+    \special{pa 167 577}%
+    \special{pa 159 515}%
+    \special{pa 224 553}%
+    \special{fp}%
+    \special{pa 667 866}%
+    \special{pa 833 577}%
+    \special{fp}%
+    \special{pa 500 0}%
+    \special{pa 833 577}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 841 515}%
+    \special{pa 833 577}%
+    \special{pa 776 553}%
+    \special{pa 841 515}%
+    \special{fp}%
+    \hbox{\vrule depth0.866in width0pt height 0pt}%
+    \kern 1.000in
+  }%
+}%
+$\box\graph$

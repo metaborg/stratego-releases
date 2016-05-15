@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Developing Transformation Systems with Stratego
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial008.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial010.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.1&nbsp;&nbsp; Developing Transformation Systems with Stratego</H3>
+	<blockquote><hr>
+	A Stratego specification consists of a collection of modules
+	that contain signatures, rules and strategies that together
+	define a transformation system. The Stratego compiler
+	translates a specifiation to an executable program that can be
+	used to transform terms.
+	<hr></blockquote><BR>
+<BR>
+	A Stratego specification defines a transformation on terms. A
+	specification consists of a signature describing the structure
+	of the language, rules that define the steps of the
+	transformation, and strategies that combine the rules in a
+	transformation system.<BR>
+<BR>
+	All these elements can be mixed in any order in one big
+	file. However, to make specifications reusable, Stratego
+	provides a module system that can be used to spread
+	definitions over several files. Thus, a specification consists
+	of a collection of modules that define signatures, rules and
+	strategies.<BR>
+<BR>
+ 	It is usually a good idea to divide a specification over
+	several modules: one defining the language, several definining
+	various sorts of transformation rules and strategies, and one
+	definining the main strategy that applies these rules.
+	
+	An executable transformation system can be derived from a
+	specification by means of the Stratego compiler <EM>sc</EM>.
+	Compiled specifications can be used to transform terms.<BR>
+<BR>
+	Specifications are rarely correct in one go. Some errors are
+	caught by the compiler, others have to be detected by
+	inspection of the specification and by debugging techniques.<BR>
+<BR>
+	
+<H5> Example: Simplification of Propositional Formulae</H5>	As an example, consider the simplification of propositional
+	formulae. Figure&nbsp;<A HREF="#Fig:ImpGraph">12</A> shows the import graph for
+	the specification. An arrow points from the importing module
+	to the module that is imported. Module <CODE>prop</CODE> defines the
+	signature of propositional formulae. Module <CODE>prop-truth</CODE>
+	defines the truth rules for the propositional
+	connectives. Module <CODE>prop-laws</CODE> defines a number of rules
+	defining sound transformations on formulae. Module
+	<CODE>prop-simplify</CODE> imports modules <CODE>prop-laws</CODE> and
+	<CODE>prop-truth</CODE> and defines various ways of combining the
+	rules in simplifying transformations. Module <CODE>disjnf</CODE>
+	declares one of these transformations, i.e., the
+	simplification of a formula to disjunctive normal form, to be
+	the main transformation.<BR>
+<BR>
+	In addition, module <CODE>prop-simplify</CODE> imports the module
+	<CODE>simple-traversal</CODE>, which defines a number of standard
+	term traversals. Module <CODE>disjnf</CODE> imports <CODE>io</CODE>,
+	which defines strategies for term input and output. The latter
+	two modules are part of the Stratego library.
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 11: The development process</DIV><BR>
+<A NAME="Fig:"></A>
+	<UL>
+<LI>
+	 Develop specification = collection of modules defining
+		<UL>
+<LI>
+		 Signature
+		
+<LI> Rules
+		
+<LI> Strategies
+		</UL>
+	
+<LI> Compile specification
+		<UL>
+<LI>
+		 Repair syntactic errors
+		</UL>
+	
+<LI> Use compiled specification
+		<UL>
+<LI>
+		 Detect logical errors
+		</UL>
+	</UL>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 12: Import graph of a specification</DIV><BR>
+<A NAME="Fig:ImpGraph"></A>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial004.gif">
+	</DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV> 
+<BR>
+<HR>
+<A HREF="Tutorial008.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial010.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,1 @@
+[TCons("module3.mod",TCons(Module("module3",[Imports(["module1"]),Content("module3")]),TNil)),TCons("module2.mod",TCons(Module("module2",[Imports([]),Content("module2")]),TNil)),TCons("module1.mod",TCons(Module("module1",[Imports(["module2","module3"]),Content("module1")]),TNil))]

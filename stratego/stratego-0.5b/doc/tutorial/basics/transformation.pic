@@ -1,0 +1,86 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+%BEGIN IMAGE
+.PS
+	boxwid = 0.35
+	boxht = 0.15
+	
+	lineht = 0.2
+
+	down
+
+Root:	box "\tt Not"
+	arrow
+Or:	box "\tt Or"
+	arrow down left
+	down
+And:	box "\tt And"
+	arrow down left
+	down
+AtomB:  box "\tt Atom"
+	arrow
+	box "\tt \"B\""
+
+	move to And.s
+	arrow down right
+	down
+AtomA:  box "\tt Atom"
+	arrow
+	box "\tt \"A\""
+
+	move to Or.s
+
+	spline -> down right to AtomA.n
+
+	move to Root.e + (0.5,0)
+	arrow 1 "{\tt DMO}" ""
+	move right 0.5 up 0.075
+
+	down
+
+And1:	box "\tt And"
+	arrow down left
+	down
+Not1:	box "\tt Not"
+	arrow
+And2:	box "\tt And"
+	arrow down left
+	down
+AtomB:  box "\tt Atom"
+	arrow
+	box "\tt \"B\""
+
+	move to And2.s
+	arrow down right
+	down
+AtomA:  box "\tt Atom"
+	arrow
+	box "\tt \"A\""
+
+	move to And1.s
+	arrow down right
+	down
+Root:	box "\tt Not"
+
+	arrow -> to AtomA.n
+	
+.PE
+$$\box\graph$$
+%END IMAGE
+%HEVEA\imageflush

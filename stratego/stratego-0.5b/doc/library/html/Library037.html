@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  FILE
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library036.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library038.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>7.1.2&nbsp;&nbsp;  FILE</H3><PRE>
+module file
+imports io
+
+rules
+
+  find-in-path :
+    (file, path) -&gt; 
+    &lt;rec x(\ [dir|_] -&gt; &lt;concat-strings; file-exists&gt; [dir,"/",file] \
+           &lt;+ Tl; x)&gt; path
+
+strategies
+
+  find-in-path(mkpath) =
+        file-exists 
+        &lt;+ split(id, mkpath); find-in-path
+        &lt;+ \ x -&gt; &lt;fatal-error&gt; ["no such file: ", x] \
+
+  find-file(mkpath, ext) =
+        guarantee-extension(ext);
+        find-in-path(mkpath)
+</PRE>
+	<HR>
+<A HREF="Library036.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library038.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

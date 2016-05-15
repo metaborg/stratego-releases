@@ -1,0 +1,27 @@
+SDef("main",[],
+Rec("im",
+ Seq(
+  All(Call(SVar("im"),[])),
+
+  Rec("red",
+   LChoice(
+     Seq(
+
+      Choice(
+
+       Scope(["m_1"],
+        Seq(Match(Op("Plus",[Op("Zero",[]),Var("m_1")])),
+            Build(Var("m_1")))),
+
+       Scope(["n_1","o_1"],
+        Seq(Match(Op("Plus",[Op("Succ",[Var("n_1")]),Var("o_1")])),
+            Build(Op("Succ",[Op("Plus",[Var("n_1"),Var("o_1")])]))))),
+
+      Rec("r_1",
+       Seq(
+        All(Call(SVar("r_1"),[])),
+        Call(SVar("red"),[]))))
+
+     ,Id))
+  ))
+)

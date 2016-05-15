@@ -1,0 +1,27 @@
+\documentclass[a4paper]{stop-report}
+
+  \usepackage{latexsym}
+  \usepackage{hyperlatex}
+
+  \usepackage{tabverb}
+  \usepackage{lit-style}
+
+  \newcommand{\lib}{../../lib/stratego}
+  \renewcommand{\literate}[1][]{\section{#1}}
+
+  \usepackage{boxedminipage}
+  \usepackage{dir}
+
+  %\W\usepackage{sequential}
+  %\setcounter{htmldepth}{1}
+  \setcounter{secnumdepth}{3} 
+
+\begin{document}
+
+  \input{titlepages.ltx}
+  \input{body.ltx}
+  \bibliographystyle{plain}
+  \bibliography{strat,sos,trs,trans}
+
+\end{document}
+

@@ -1,0 +1,12 @@
+  lrename = rename(IsLvar, LBnd, LBoundIn, LPaste)
+
+  IsLvar(s) : Var(x,t) -> Var(<s>(x,t), t)
+
+  LPaste(nwvars) = 
+    Abs(nwvars; Hd, id, id)
+  + Let(nwvars; Hd, id, id, id)
+  + Letrec(split(id, nwvars); 
+              zip(\(Fdec(f, t, xs, e), g) -> Fdec(g, t, xs, e)\)
+          ,id)
+  + Fdec(id, id, nwvars, id)
+

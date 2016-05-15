@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Compiling Specifications to Executable Programs
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial013.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial015.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.6&nbsp;&nbsp; Compiling Specifications to Executable Programs</H3>
+	<blockquote><hr>
+	A specification defines a transformation. To make the
+	transformation executable on a computer, it is necessary to
+	compile it to a standard programming language. The Stratego
+	compiler translates a Stratego specification to a stand-alone
+	C program.
+	<hr></blockquote><BR>
+<BR>
+	
+<H5> The Main Strategy</H5>	In order to compile a specification it is necessary to
+	indicate the main transformation strategy that the compiled
+	program should apply to terms. The compiler assumes that a
+	definition for the strategy <CODE>main</CODE> exists that indicates
+	the transformation to perform. For example, module
+	<CODE>disjnf</CODE> in Figure&nbsp;<A HREF="#Fig:disjnf.r">22</A> defines the strategy
+	<CODE>main</CODE> to first desugar the formula and then transform it
+	to disjunctive normal form.<BR>
+<BR>
+	Note the use of the strategy <CODE>stdio</CODE> in the definition of
+	<CODE>main</CODE>. Input/output behaviour needs to be defined in the
+	specifiation itself, i.e., it is not handled in a default
+	manner. The <CODE>stdio</CODE> strategy implements the most basic
+	interface, i.e., read a term from standard input and write the
+	result to standard output. <CODE>stdio</CODE> is defined in the
+	library module <CODE>io</CODE>.<BR>
+<BR>
+	
+<H5> Compiling Specifications</H5>	A specification is compiled with the Stratego compiler <EM>sc</EM>
+	by typing<BR><CODE>    &gt; sc -i disjnf</CODE><BR>	Note that the suffix <CODE>.r</CODE> is not included in the name
+	provided to the compiler. During compilation the compiler
+	gives diagnostic output to indicate the progress of the
+	compilation process.<BR><CODE>    &gt; sc -i disjnf</CODE><BR><CODE>     ...</CODE><BR><CODE>    compilation succeeded</CODE><BR>	Compilation creates the C program <CODE>disjnf.c</CODE> and the
+	executable program <CODE>disjnf</CODE>.<BR>
+<BR>
+	
+<H5> Using Compiled Specifications</H5>	The executable <TT>disjn</TT> can be applied to a term to
+	transform it. For example, the formula in file
+	<CODE>prop.trm</CODE> is transformed by typing:<BR><CODE>&gt; disjnf &lt; prop.trm</CODE><BR><CODE>Or(Or(Atom("A"),Or(Not(Atom("B")),Not(Atom("C")))),Not(Atom("D")))</CODE>
+	If rewriting fails the output would read<BR><CODE>    rewriting failed</CODE><BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 22: Module defining <TT>main</TT> strategy.</DIV><BR>
+<A NAME="Fig:disjnf.r"></A>
+	<HR>
+<A HREF="Tutorial013.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial015.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

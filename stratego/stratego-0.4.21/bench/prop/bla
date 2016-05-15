@@ -1,0 +1,1 @@
+And(Or(Atom("d_0"),Atom("a")),Or(Atom("c_0"),Atom("a")),Atom("b"))

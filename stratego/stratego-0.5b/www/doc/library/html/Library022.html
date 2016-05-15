@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  LIST-MISC
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library021.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library023.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.3.6&nbsp;&nbsp;  LIST-MISC</H3><PRE>
+module list-misc
+imports list-cons list-basic
+strategies
+
+  member = (?x, fetch(?x))
+
+rules
+
+  FoldR1   : [x, y] -&gt; (x, y)
+  FoldR    : [x | xs] -&gt; (x, xs)
+  TFoldR   : TCons(x, xs) -&gt; (x, xs)
+
+  FoldL(s) : ([x | xs], y) -&gt; (xs, &lt;s&gt; (x, y))
+  FoldL(s) : ([], y) -&gt; y
+
+  lsplit(f, g) : x -&gt; [&lt;f&gt; x, &lt;g&gt; x]
+
+strategies
+
+  foldr1(s1,s2) = rec x([id]; s1 &lt;+ FoldR; (id, x); s2)
+
+  foldr1(s) = rec x((FoldR1 &lt;+ FoldR; (id, x)); s)
+
+  foldr(s1, s2)     = rec x([]; s1 + FoldR; (id, x); s2)
+
+  (* foldr(s1, s2, f)  = rec x([]; s1 + FoldR; (f, x); s2) *)
+
+  foldr(s1, s2, f)  = rec x([]; s1 + \ [y|ys] -&gt; (&lt;f&gt;y, &lt;x&gt;ys) \ ; s2)
+
+  tfoldr(s1, s2)    = rec x(TNil; s1 + TFoldR; (id, x); s2)
+
+  foldl(s) = repeat(FoldL(s))
+
+  mapfoldr(s1, s2, s3) = 
+    rec x([]; s1 &lt;+ [s2|x]; \ [a|b]-&gt;(a,b)\; s3)
+
+  mapfoldr1(s1, s2, s3) = 
+    rec x([id]; s1 &lt;+ [s2|x]; \ [a|b]-&gt;(a,b)\; s3)
+
+  last = rec x(Last &lt;+ Tl; x)
+
+  init = at-last(Tl)
+
+  copy = for(\ (n,t) -&gt; (n,t,[]) \
+            ,\ (0,t,ts) -&gt; ts \
+            ,\ (n,t,ts) -&gt; (&lt;subt&gt;(n,1), t, [t|ts]) where &lt;geq&gt;(n,1) \ )
+
+  copy(s) = for(\ (n,t) -&gt; (n,t,[]) \
+            ,\ (0,t,ts) -&gt; ts \
+            ,\ (n,t,ts) -&gt; (&lt;subt&gt;(n,1), t, [&lt;s&gt; t|ts]) where &lt;geq&gt;(n,1) \ )
+
+  thread-map(s) = 
+    rec x(Cons^T(s, x) + Nil^T)
+
+  take-while(s) = at-suffix([] + ([not(s)|id];![]))
+
+  take-until(s) = at-suffix([] + ([s|id];![]))
+
+  take(isn) = nzip0(id); take-until((isn,id)); map(Snd)
+
+  drop-while(s) = at-suffix([] + ([not(s)|id];?xs)); !xs
+
+  drop-until(s) = at-suffix([] + ([s|id];?xs)); !xs
+
+  drop(isn) = nzip0(id); drop-until((isn,id)); map(Snd)
+
+</PRE>	
+ 	<HR>
+<A HREF="Library021.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library023.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

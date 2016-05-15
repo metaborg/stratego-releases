@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  OPTIONS
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library037.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library039.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>7.1.3&nbsp;&nbsp;  OPTIONS</H3><PRE>
+module options
+imports io parse-options
+signature
+  constructors
+    Silent      : Option
+    Verbose     : Option
+    Version     : Option
+    Input       : String -&gt; Option
+    Output      : String -&gt; Option
+    Binary      : Option
+    Statistics  : Option
+    Help        : Option
+    Runtime     : Real   -&gt; Option
+    DeclVersion : String -&gt; Option
+</PRE>	The operator <CODE>iowrap</CODE> defines a default wrapper around a
+	strategy that handles processing of options and reading and
+	writing of terms from and to files.<BR>
+<BR>
+<PRE>
+strategies
+
+  iowrap(strat) = iowrapO((id, strat), fail)
+
+  iowrapO(strat, extra-options) =
+        (parse-options(extra-options &lt;+ io-options));
+        (need-help
+         &lt;+ input-file';
+            apply-strategy(strat);
+            output-file';
+            report-success
+         &lt;+ report-failure
+        )
+
+  iowrapNoOutput(strat, extra-options) =
+        (parse-options(extra-options &lt;+ io-options));
+        (need-help
+         &lt;+ input-file';
+            apply-strategy(strat);
+            report-success
+         &lt;+ report-failure
+        )
+</PRE>	Handling of options<BR>
+<BR>
+<PRE>
+strategies
+
+  io-options =
+        Option("-S",            !Silent())
+        + Option("--silent",    !Silent())
+        + Option("--verbose",   !Verbose())
+        + Option("-v",          !Version())
+        + Option("--version",   !Version())
+        + ArgOption("@version",  \x -&gt; DeclVersion(x)\ )
+        + ArgOption("-i",       \x -&gt; Input(x)\ )
+        + ArgOption("--input",  \x -&gt; Input(x)\ )
+        + ArgOption("-o",       \x -&gt; Output(x)\ )
+        + ArgOption("--output", \x -&gt; Output(x)\ )
+        + Option("-b",          !Binary())
+        + Option("-s",          !Statistics())
+        + Option("--help",      !Help())
+        + Option("-h",          !Help())
+        + Option("-?",          !Help())
+
+  usage' =
+         where(option-defined(?Program(prog));
+               &lt;printnl&gt;
+               (stderr,
+                ["usage : ", prog, 
+                 " [-S] [-i file] [-o file] [-b] [-s] [--help|-h|-?]"]);
+               &lt;exit&gt; 1)
+
+  need-help =
+        option-defined(Help + Undefined(id)); 
+        usage'
+
+  need-help(u) =
+        option-defined(Help + Undefined(id) + Version); u
+</PRE>	Input, strategy application and output<BR>
+<BR>
+<PRE>
+  input-file' =
+         where((option-defined(?Input(infile)) &lt;+ !stdin =&gt; infile));
+         split(id, &lt;ReadFromFile&gt; infile)
+
+  apply-strategy(strat) =
+         where(dtime);
+         strat;
+         where(dtime =&gt; runtime);
+         \(options, trm) -&gt; ([Runtime(runtime) | options], trm)\
+
+  output-file' =
+         where((option-defined(?Output(outfile)) &lt;+ !stdout =&gt; outfile, id)); 
+         (id, split(!outfile, id));
+         ((option-defined(?Binary()), WriteToBinaryFile)
+          &lt;+ (id, WriteToTextFile))
+
+  report-success =
+         where(try((not(option-defined(?Silent())), id);
+                   (option-defined(?Runtime(runtime)), id);
+                   (option-defined(?Program(prog)), id);
+                   &lt;printnl&gt; (stderr,
+                              [prog, " (", runtime, " secs)"])));
+         &lt;exit&gt; 0
+
+  report-failure =
+        &lt;printnl&gt; (stderr, ["rewriting failed"]); 
+        &lt;exit&gt; 1
+</PRE> <HR>
+<A HREF="Library037.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library039.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

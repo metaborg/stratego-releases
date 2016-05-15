@@ -1,0 +1,80 @@
+\def\firstsection#1{\begin{slide}{}\begin{center}\bf #1\end{center}}
+
+\def\part#1{\vspace*{\fill}\end{slide}\begin{slide}{}\begin{center}\Huge\bf #1\end{center}\vspace*{\fill}}
+
+\def\section#1{\vspace*{\fill}\end{slide}\begin{slide}{}\begin{center}\bf #1\end{center}}
+\def\subsection#1{\vspace*{\fill}\end{slide}\begin{slide}{}\begin{center}\bf #1\end{center}}
+\def\subsubsection#1{\vspace*{\fill}\end{slide}\begin{slide}{}\begin{center}\bf #1\end{center}}
+\def\paragraph#1{\begin{center}\bf #1\end{center}}
+\long\def\Note#1{\vspace*{\fill}\end{slide}\begin{note}\begin{center}\bf Note\end{center}#1\end{note}\begin{slide}}
+
+\def\newslide{\vspace*{\fill}\end{slide}\begin{slide}{}}
+
+\RequirePackage{version}
+
+\def\NOPROOFS{\excludeversion{Proof}}
+
+\RequirePackage{theorem}
+
+\newcommand{\QED}{\hspace*{\fill}\qed}
+\def\qed{\hbox{$\Box$}}
+
+\def\Proof{\vskip-\lastskip\par\noindent{\upshape\bfseries Proof.}\eatpar}
+\def\endProof{\par\bigskip}%\noindent\expandafter\ignorespaces\eatpar}
+
+\def\Proof{\par\noindent{\upshape\bfseries Proof.}\eatpar}
+
+\newenvironment{proof}{\Proof}{}
+
+\def\eatpar#1\par{#1}
+
+\newcounter{PAR}
+\def\thePAR{\arabic{PAR}}
+
+\theorembodyfont{\upshape}
+
+	\newtheorem{Definition}[PAR]{Definition}
+        \newtheorem{Def}[PAR]{Definition}
+        \newtheorem{Df}[PAR]{Definition}
+        \newtheorem{Algo}[PAR]{Algorithm}
+        \newtheorem{Example}[PAR]{Example}
+        \newtheorem{Question}[PAR]{Question}
+        \newtheorem{Remark}[PAR]{Remark}
+        \newtheorem{Discussion}[PAR]{Discussion}
+        \newtheorem{PS}[PAR]{Parsing Schema}
+	\newtheorem{ParseSchema}[PAR]{Parsing Schema}
+
+\theorembodyfont{\itshape}
+
+	\newtheorem{Proposition}[PAR]{Proposition}
+	\newtheorem{proposition}[PAR]{Proposition}
+        \newtheorem{Prop}[PAR]{Proposition}
+	\newtheorem{Thesis}[PAR]{Thesis}
+	\newtheorem{Theorem}[PAR]{Theorem}
+        \newtheorem{Th}[PAR]{Theorem}
+	\newtheorem{Conjecture}[PAR]{Conjecture}
+        \newtheorem{Conj}[PAR]{Conjecture}
+	\newtheorem{Claim}[PAR]{Claim}
+	\newtheorem{Lemma}[PAR]{Lemma}
+	\newtheorem{Corollary}[PAR]{Corollary}
+        \newtheorem{Cor}[PAR]{Corollary}
+        %\newtheorem{}[PAR]{}   
+              
+  	\newtheorem{Convention}[PAR]{{\sc Convention}}
+  	\newtheorem{Fact}[PAR]{{\sc Fact}}
+ 
+%\theoremheaderfont{\scshape}
+
+%\theoremstyle{change}
+%\theoremheaderfont{\scshape}
+\theoremheaderfont{\upshape\bfseries}
+
+\newenvironment{Exercise}[1][]{
+   \refstepcounter{PAR}
+   \paragraph{\protect\makebox[0pt][r]{#1}Exercise \thePAR}
+}{}            
+
+  \newcommand{\veryemptyslide}{\parskip1\baselineskip}
+  \newcommand{\emptyslide}{\parskip.7\baselineskip}
+  \newcommand{\fullslide}{\parskip.4\baselineskip}
+  \newcommand{\veryfullslide}{\parskip.3\baselineskip}

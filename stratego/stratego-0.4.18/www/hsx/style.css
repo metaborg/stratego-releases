@@ -1,0 +1,22 @@
+/* reminder: rgb(red, green, blue) */
+
+
+BODY {	
+	background-color : white
+}
+
+HR { background-color : olivedrab }
+
+H1 { 
+  align : center;
+  color : blue 
+}
+
+
+
+.alt-color { 
+	background-color : rgb(95%, 95%, 90%)
+}
+
+A { color : brique }
+

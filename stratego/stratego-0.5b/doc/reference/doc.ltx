@@ -1,0 +1,64 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\documentclass[a4paper]{stop-article}
+
+  %\usepackage{hyperlatex}
+  %\usepackage{tabverb}
+  \usepackage{moreverb}
+  %\usepackage{lit-style}
+  \usepackage{psfig}
+  \usepackage{titlepages}
+  \usepackage{hevea}
+  \usepackage{dir}
+
+  \newcommand{\sdfdir}{../../spec/sdf}
+  %\newcommand{\literate}[1][]{\section{#1}}
+
+  \newcommand{\inputverbatim}{\verbatimtabinput}
+
+  \title{The Stratego Reference Manual}
+  \author{Eelco Visser}
+  \date{\today}
+
+  %HEVEA\usepackage{bgcolor}
+  %HEVEA\renewcommand{\cuttingunit}{subsection}
+
+\begin{document}
+\begin{htmlonly}
+  \begin{rawhtml}
+    <A HREF="../../tutorial/html/index.html">
+       <IMG SRC ="previous_motif.gif" ALT="Next"></A>
+    <A HREF="../../index.html">
+       <IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+    <A HREF="../../library/html/index.html">
+       <IMG SRC ="next_motif.gif" ALT="Next"></A>
+    <hr>
+  \end{rawhtml}
+\end{htmlonly}
+  \maketitle
+\begin{htmlonly}
+  \begin{rawhtml}<hr>\end{rawhtml}
+  This document is also available in \url{../../RefMan.ps}{Postscript}.
+  \begin{rawhtml}<hr>\end{rawhtml}
+\end{htmlonly}
+  \tableofcontents
+  \clearpage
+  \input{body.ltx}
+  \input{related.ltx}
+\end{document}

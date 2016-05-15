@@ -1,0 +1,9 @@
+ Release 0.4.20 of the Stratego compiler is now available from 
+
+	http://www.stratego-language.org
+
+ COMPILER
+
+ * Bug fix: quotes and escapes in strings were not handled correctly.
+
+

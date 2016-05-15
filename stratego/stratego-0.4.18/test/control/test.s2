@@ -1,0 +1,1 @@
+[SDef("main",[],Scope(["a_0","b_0","c_0"],Choice(Scope(["d_0"],Seq(Seq(Id,Match(Op("F",[Var("a_0"),Var("d_0")]))),Build(Var("a_0")))),Scope(["e_0"],Seq(Seq(Id,Match(Op("F",[Var("e_0"),Op("G",[Var("c_0"),Var("b_0")])]))),Build(Var("c_0")))))))]

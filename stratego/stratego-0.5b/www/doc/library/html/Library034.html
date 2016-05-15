@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  PACK-MODULES
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library033.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library035.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>6.2.2&nbsp;&nbsp;  PACK-MODULES</H3>CHANGES (by Joost Visser)
+ * Strategy pack-modules(pack, dep-base) now takes two additonal 
+ options:
+ -dep target
+ -nodep
+ The first one specifies the maketarget and basename of the
+ dependency file that is created. If this option is not passed,
+ the argument dep-base is used instead. Finally, the -nodep option
+ can be used to disable this and prevent any dependency file to
+ be created. Note that -dep takes precendence over -nodep.
+ * An additional strategy pack-modules(pack) was added that behaves
+ like pack-modules, except no default for the dependency file 
+ base name needs to be specified. Hence, only the command line
+ options are relevant.<BR>
+<BR>
+<PRE>
+module pack-modules
+imports options pack-graph
+
+strategies
+
+  pack-module-options =
+    parse-options( io-options 
+                 + ArgOption("-I"  , \x -&gt; Include(x)\ )
+                 + Option   ("-nodep",     !NoDependency )
+                 + ArgOption("-dep", \x -&gt; Dependency(x)\ )
+                 )
+
+  pack-modules(pack)
+    = pack-modules(pack,fail)
+      &lt;+ &lt;fatal-error&gt; ["  packing failed"]
+
+  pack-modules(pack, dep-base) =
+    pack-module-options =&gt; options;
+    try(need-help(pack-modules-usage));
+    list(try( ?Program(prog)
+            + ?Input('in) + ?Output(out) //+ ?Binary;!bin
+            + ?Dependency(dep)
+            ));
+    filter( \Include(p)-&gt;p\ ) =&gt; path;
+    (!'in &lt;+ !stdin) =&gt; infile;
+    (!out &lt;+ !stdout) =&gt; outfile;
+    &lt;pack(!path)&gt; infile =&gt; (files, spec);
+    !options;
+    (
+       option-defined(?Binary);
+       &lt;WriteToBinaryFile&gt;(outfile, spec)
+    &lt;+
+       &lt;WriteToTextFile&gt;(outfile, spec)
+    );
+    try((!dep &lt;+ (not(&lt;option-defined(?NoDependency())&gt; options);
+                      dep-base)) =&gt; depfile;
+        &lt;create-dep-file(!depfile)&gt; (outfile, files)
+    );
+    dtime =&gt; time;
+    &lt;printnl&gt;(stderr, [prog, " (", time, " secs)"])
+
+  pack-modules-usage =
+    option-defined(?Program(prog));
+    &lt;printnl&gt; (stderr,
+               ["usage : ", prog, 
+                " [-S] [-I dir] [-i file]",
+                " [-o file] [-b] [-s] [--help|-h|-?]",
+                " [-dep target | -nodep]" ]);
+    &lt;exit&gt; 1
+
+rules
+  
+  create-dep-file(dep-base) :
+        (outfile, files) -&gt; (outfile, files)
+        where
+          &lt;dep-base&gt; outfile =&gt; out;  
+          &lt;add-extension; open-file&gt; (out, "dep") =&gt; dep;
+          &lt;printnl&gt;(dep, &lt;separate-by(!" ")&gt; [out, ":" | files])
+
+signature
+  constructors
+    NoDependency :         Option
+    Dependency : String -&gt; Option
+</PRE>
+	<HR>
+<A HREF="Library033.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library035.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

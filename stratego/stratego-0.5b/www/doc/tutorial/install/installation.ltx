@@ -1,0 +1,297 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\section{Installation}
+\subsection{Downloading Stratego}
+
+	\begin{abstract}
+	Stratego is available on the Internet. The Stratego
+	distribution contains the sources of the Stratego compiler and
+	the Stratego compiler. Utilities for use with Stratego are
+	available in separate packages.
+	\end{abstract}
+	
+	\paragraph{The Stratego Package}
+
+	The Stratego compiler is implemented in Stratego itself. The
+	distribution contains the bootstrapped C sources of the
+	compiler, the implementation of the run-time system, the
+	Stratego library, the Stratego sources of the compiler, and
+	the Stratego documentation.
+
+	\paragraph{Downloading}
+
+	The latest release of the Stratego compiler can be found at
+	the Stratego web page:
+	\verb|http://www.cs.uu.nl/~visser/stratego/|. Download the
+	latest release \verb|stratego-x.x.tar.gz|
+
+	\paragraph{Requirements}
+
+	 The following packages are required for the installation of
+	 Stratego:
+\begin{itemize}
+\item ATerm library
+\item gmake
+\item gcc [developed with version egcs-2.91.66]
+\item bison, flex
+\end{itemize}
+	Except for the ATerm library, these are all standard elements
+	of a GNU installation.
+
+	Starting with version 0.4.4a, the ATerm library is no longer
+	bundled with the Stratego distribution. It is available via
+	the Stratego web page though.
+
+	The distribution for Stratego version \StrategoVersion{} has
+	been tested on Linux (RedHat 6.0) on a Pentium II.  Previous
+	versions have been tested also on Sun4 and Solaris.
+	Installation under IRIX at SGI machines has been problematic
+	for previous versions. Installation under Windows NT with
+	Cygnus has not yet been attempted. I would be interested in
+	hearing any reports from such an attempt.
+
+	\clearpage
+
+\begin{latexonly}
+	\begin{boxedfigure}{}{The Stratego webpage
+	[http://www.cs.uu.nl/$\sim$visser/stratego/] contains the
+	distribution of the compiler, publications about Stratego.}
+
+	\psfig{file=../install/webpage.epsi,width=13cm}
+
+	\end{boxedfigure}
+\end{latexonly}
+
+\subsection{Installing Stratego}
+
+	\begin{abstract}
+	The Stratego distribution has been prepared with autoconf and
+	automake and should be portable to any platform with the
+	required packages. Installation requires only the
+	configuration of the package using a configuration script.
+	\end{abstract}
+
+	\paragraph{Installing the ATerm Library}
+
+	Choose a location for the installation of the aterm package, say
+	\verb|/loc/of/aterm/|.
+\\\verb|    > cd /loc/of/aterm/|\\
+	Download the ATerm package \verb|aterm-x.y.tar.gz|. Unpack it
+	using the command
+\\\verb|    > tar zxf aterm-x.y.tar.gz|\\
+	Configure the aterm package, setting the prefix to the
+	directory where the library should be installed, i.e., if
+	prefix points to directory \verb|dir|, then the library will
+	be installed in \verb|dir/lib| and the executables in
+	\verb|dir/bin|.
+\\\verb|    > cd aterm-x.y|
+\\\verb|    > ./configure --prefix=/installation/of/aterm|\\
+	make 
+\\\verb|    > gmake|\\
+	and install
+\\\verb|    > gmake install|
+
+	\paragraph{Unpacking the Stratego Package}
+
+	Choose a location for the installation of Stratego, say
+	\verb|/loc/of/stratego/|.
+\\\verb|    > cd /loc/of/stratego/|\\
+	Download the Stratego package \verb|stratego-x.y.z.tar.gz|.
+	Unpack it using the command:
+\\\verb|    > tar zxf stratego-x.y.z.tar.gz|
+\\\verb|    > cd stratego-x.y.z/|\\
+
+	\paragraph{Configuring the Stratego Package}
+
+	If you only intend to use the Stratego compiler and not work on its
+	development set prefix to any appropriate value when installing, e.g.,
+\\\verb|    > ./configure --prefix=/usr/local \|
+\\\verb|                  --with-aterm=/installation/of/aterm|\\
+	The directory \verb|/installation/of/aterm| should be the same
+	as the prefix you configured the aterm library with.  If
+	prefix points to directory \verb|dir|, then the Stratego
+	compiler will be installed in \verb|dir/bin|, the libraries in
+	\verb|dir/lib| and the Stratego library in {\tt
+	dir/share/stratego}.
+
+	If you intend to change the compiler specification in \verb|spec/|
+	and bootstrap the compiler, you need to set prefix to the
+	local directory.  Or at least a directory where you have write
+	permissions such that it is easy to re-install the
+	compiler. This is the what I usually do:
+\\\verb|    > ./configure --prefix=`pwd` \|
+\\\verb|                  --with-aterm=/installation/of/aterm|\\
+	This entails that you need to include \verb|`pwd`/bin| in your
+	\verb|PATH|.
+
+	Note that this last option may also be needed if you don't
+	have permissions to install in standard installation
+	directories.
+
+	\paragraph{Making and Installing}
+
+	For both kinds of configurations, make the compiler by
+\\\verb|    > gmake|
+\\\verb|    > gmake install|	
+
+	\paragraph{Setting the PATH}
+
+	Finally, extend the definition of your path to point to the
+	stratego compiler. In a user configuration, set
+\\\verb|    > PATH=/usr/local/bin:$PATH|\\
+	In a developer configuration, set
+\\\verb|    > PATH=/loc/of/stratego/bin:$PATH|
+
+	\paragraph{Checking the Installation}
+
+	Now check that the compiler is installed by typing
+\\\verb|    > which sc|\\
+	which should return something like
+\\\verb|    /loc/of/stratego/bin/sc|
+
+	\vspace*{\fill}
+
+	\begin{boxedfigure}{}{Summary of the installation procedure}
+
+\begin{verbatim}
+> cd /loc/of/stratego/
+> tar zxf stratego-x.y.z.tar.gz
+> cd stratego-x.y.z
+> ./configure --prefix=/usr/local \
+              --with-aterm=/installation/of/aterm
+> gmake
+> gmake install
+\end{verbatim}
+
+	\end{boxedfigure}
+
+	\vspace*{\fill}
+
+\subsection{Structure of the Distribution}
+
+	%Figure~\ref{Fig:dist-structure} shows
+
+\clearpage
+
+	\begin{boxedfigure}{dist-structure}{Structure of the Stratego distribution}
+	\begin{itemize}
+	\item spec : sources of the compiler components
+		\begin{itemize}
+		\item back : back-end 
+		\item form : format checking
+		\item front : front-end
+		\item lib : library of the compiler
+		\item match : matching automaton
+		\item opt : optimizer
+		\item post : post-processing
+		\item pp : pretty-printing
+		\item rts : run-time system
+		\item sc : the Stratego compiler; glues components together
+		\item si : the Stratego interpreter
+		\item sig : signatures
+		\item slib : Stratego library
+			\begin{itemize}
+			\item spec : specifications
+			\item src : C implementation of primitives
+			\end{itemize}
+		\item syn : syntax
+		\item test : regression tests
+		\end{itemize}
+	\item src : the bootstrapped compiler components
+		\begin{itemize}
+		\item a mirror of the spec tree with only the generated
+		C code, without specifications
+		\end{itemize}
+	\item test : regression tests 
+	\item doc : documentation
+		\begin{itemize}
+		\item compiler 
+		\item library
+		\item reference
+		\item tutorial
+		\end{itemize}
+	\item xmpl : example specifications
+	\item share
+		\begin{itemize}
+		\item tex : LaTeX packages
+		\item stratego : installed Stratego library
+		\item bib : Bib\TeX{} files
+		\end{itemize}
+	\item www : Stratego web page
+	\item bin : installed executables
+	\item include : installed include files
+	\item lib : installed binary libraries
+	\end{itemize}
+	\end{boxedfigure}
+
+\subsection{Bootstrapping the Stratego Compiler}
+
+	\begin{abstract}
+	The Stratego compiler is defined in Stratego. The distribution
+	contains the complete Stratego source of the compiler. This
+	makes it possible to adapt the language and/or its
+	implementation. In order to obtain a new working compiler it
+	is necessary to follow a careful bootstrapping procedure.
+	\end{abstract}
+
+	To create a new version of the compiler, edit the appropriate
+	files in the spec/* directories to reflect the change in the
+	run-time system, compiler, and/or parser. Then do the
+	following
+\\\verb|    > cd spec|
+\\\verb|    > make|
+\\\verb|    > make install|
+
+	Then use the generated compiler to compile some test
+	specifications.  If that seems to work, try to bootstrap by
+\\\verb|    > make bootstrap|\\
+	This will compile the compiler components with itself.
+
+	If this goes wrong at some point, you'll have to reinstall the stable
+	compiler in the src/ tree:
+\\\verb|    > cd ..|
+\\\verb|    > make install|
+
+	It can be useful to have two installations of the compiler,
+	one of them the stable compiler from src. To achieve this, do
+	the following.
+
+	\begin{itemize}
+	\item Make a user configuration as described above and make and
+	install the compiler with this configuration. This puts a
+	stable version of the compiler in a standard place like
+	/usr/local/bin.
+	\item Make a developer configuration as described above.
+	\item In one terminal use the stable compiler to compile the
+	compiler components, i.e., \verb|PATH=/usr/local/bin:$PATH|
+	\item In another terminal use the newly compiled compiler to test
+	your changes i.e., \verb|PATH=/path/to/stratego/bin:$PATH|
+	Now if something goes wrong it is easier to recompile the
+	compiler components.
+	\end{itemize}
+
+	\clearpage
+
+	\begin{boxedfigure}{}{The bootstrapping procedure}
+
+	
+
+	\end{boxedfigure}
+
+	\clearpage

@@ -1,0 +1,20 @@
+
+	* spec/front/use-def.r: Added spec-use-defIO to make standalone
+	tool.
+
+	* spec/front/check-constructors.r: Added CheckConstructorsIO to
+	make standalone tool.
+
+	* spec/front/inlining.r: Added inlineIO strategy to make
+	the inliner standalone.
+
+	* spec/front/frontend.r: Split the frontend into the proper
+	frontend that normalizes a specification and checks several
+	properties, the extractor that extracts needed definitions and the
+	inliner that inlines definitions. This was necessary because
+	frontend.c took to long to compile (using to much memory) on my
+	new Mandrake installing.
+
+	* spec/front/extract.r: Part of the frontend concerned with
+	extracting needed definitions and translating definitions into
+	core language.

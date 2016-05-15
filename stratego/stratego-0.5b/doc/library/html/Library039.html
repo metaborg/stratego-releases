@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  EXEC
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library038.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library040.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>7.2.1&nbsp;&nbsp;  EXEC</H3>	<blockquote><hr>
+	
+	Transformation systems often consist of multiple components, e.g.,
+	parsers, pretty-printers and several actual transformation
+	components.
+	To glue these components together this module defines the
+	process
+	control primitive <CODE>call</CODE>.<BR>
+<BR>
+	<hr></blockquote>
+	<BR>
+<BR>
+	The strategy <CODE>&lt;call&gt; (prog, args)</CODE> executes the program
+	with name <CODE>prog</CODE> and passes the list
+	of arguments <CODE>args</CODE> to it.<BR>
+<BR>
+	The strategy
+	<CODE>&lt;transform-file(s, suf)&gt; (base, ext)</CODE> reads in the
+	term from file "base.ext", applies strategy <CODE>s</CODE> to
+	it and write the result to the concatenation of the
+	strings <CODE>(base, &lt;suf&gt;())</CODE>.<BR>
+<BR>
+<PRE>
+module exec.r
+strategies
+
+  exit       = prim("_ST_exit")
+  call       = prim("_ST_call")
+  call-noisy = prim("_ST_call_noisy")
+
+  get-pid    = prim("_ST_get_pid")
+
+  rm-files = ?files; where(&lt;call&gt; ("rm", ["-f" | files]))
+
+  pipe(c, suf2) = pipe'(c, suf2, ![])
+
+  pipe'(c, suf2, args) = 
+    where(conc-strings =&gt; 'in);
+    (id, suf2);
+    where(conc-strings =&gt; out);
+    // where(&lt;debug(!"calling : ")&gt; [&lt;c&gt;(), 'in, out]);
+    where(&lt;call&gt; (&lt;c&gt;(), &lt;conc&gt; (&lt;args&gt;(), ["-i", 'in, "-o", out])))
+
+  transform-file(s, suf) =
+    where(conc-strings =&gt; 'in);
+    (id, suf);
+    where(conc-strings =&gt; out);
+    where(&lt;apply-to-file(s)&gt; ('in, out))
+
+  apply-to-file(s) =
+    ?('in, out);
+    where(&lt;ReadFromFile; s&gt; 'in =&gt; trm);
+    where(&lt;WriteToBinaryFile&gt; (out, trm))
+
+  copy-file(s, new-base, new-suf) =
+    ?(base, suf);
+    (new-base, new-suf); 
+    ?(nbase, nsuf);
+    where(&lt;apply-to-file(s)&gt; 
+            (&lt;conc-strings&gt; (base, suf),
+             &lt;conc-strings&gt; (nbase, nsuf)))
+</PRE> <HR>
+<A HREF="Library038.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library040.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,17 @@
+[
+
+SDef("main",[],Call(SVar("stdio"),[Call(SVar("Cons"),[Call(SVar("f"),[Call(SVar("A"),[])]),Call(SVar("Cons"),[Call(SVar("f"),[Call(SVar("A"),[]),Call(SVar("B"),[])]),Call(SVar("Nil"),[])])])]))
+
+,
+
+SDef("stdio",["e_14"],LChoice(Seq(Build(Op("stdin",[])),Seq(Call(SVar("ReadFromFile"),[]),Seq(Call(SVar("e_14"),[]),Seq(Call(SVar("split"),[Build(Op("stdout",[])),Id]),Call(SVar("WriteToTextFile"),[]))))),BA(Call(SVar("printnl"),[]),Op("TCons",[Op("stderr",[]),Op("TCons",[Op("Cons",[Str("rewriting failed"),Op("Nil",[])]),Op("TNil",[])])]))))
+
+,
+
+SDef("stdio",["e_14"],LChoice(Seq(Build(Op("stdin",[])),Seq(Call(SVar("ReadFromFile"),[]),Seq(Call(SVar("e_14"),[]),Seq(Call(SVar("split"),[Build(Op("stdout",[])),Id]),Call(SVar("WriteToTextFile"),[]))))),BA(Call(SVar("printnl"),[]),Op("TCons",[Op("stderr",[]),Op("TCons",[Op("Cons",[Str("rewriting failed"),Op("Nil",[])]),Op("TNil",[])])]))))
+
+,  
+
+RDef("Union",[],Rule(Op("TCons",[Op("TCons",[Var("u1"),Op("TCons",[Var("d1"),Op("TCons",[Var("e1"),Op("TNil",[])])])]),Op("TCons",[Op("TCons",[Var("u2"),Op("TCons",[Var("d2"),Op("TCons",[Var("e2"),Op("TNil",[])])])]),Op("TNil",[])])]),Op("TCons",[App(Call(SVar("union"),[]),Op("TCons",[Var("u1"),Op("TCons",[Var("u2"),Op("TNil",[])])])),Op("TCons",[App(Call(SVar("union"),[]),Op("TCons",[Var("d1"),Op("TCons",[Var("d2"),Op("TNil",[])])])),Op("TCons",[App(Call(SVar("union"),[]),Op("TCons",[Real(1.1),Op("TCons",[Var("e2"),Op("TNil",[])])])),Op("TNil",[])])])]),Id))
+
+]

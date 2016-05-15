@@ -1,0 +1,89 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\section{Introduction}
+
+	One of the shortcomings of implementing algebraic
+	specifications by means of term rewriting is the necessity to
+	encode the strategy to apply `equations' by means of
+	functions. This obscures the equational nature of
+	specifications and hampers their modularity because rules
+	become part of one particular strategy.  This observation was
+	done in several projects that used ASF+SDF \cite{DHK96} to
+	define language processors, in particular program
+	transformations. For example: normalization of box expressions
+	for pretty-printing \cite{BV94}; normalization of syntax
+	definitions \cite{Vis97.thesis}; transformation of C++
+	programs \cite{DHH98}.
+
+	Stratego is a language for the specification of program
+	transformations that overcomes this shortcoming by providing
+	user-definable rewriting strategies.  A rewriting strategy is
+	an expression in a language of strategy operators that combine
+	rules (usually via their labels) in a program that traverses a
+	term and applies the rules. 
+
+	The preliminary ideas for the strategy operators in Stratego,
+	inspired by the specification formalism ELAN \cite{BKK97},
+	include operators for sequential non-deterministic
+	programming, data-type specific and generic term traversal. In
+	\cite{LV97} an implementation of these operators in ASF+SDF is
+	described. That interpretive implementation style can be used
+	to write strategies for ASF+SDF equations and can be applied
+	in other settings as well; the traditional way of defining a
+	strategy with functions is replaced by a style in which an
+	evaluation function interprets a strategy expression. This
+	allows the concise specification of various strategies and the
+	use of one rule with many different strategies.
+
+	These preliminary ideas are further developed in
+	\cite{VB98,VBT98}. Rewrite rules are no longer primitives, but
+	are broken down into operations for matching, building and
+	variable scope. System~S, the resulting set of strategy
+	operators, provides the primitive operations for definining
+	both rewrite rules and strategies for applying them.  A
+	Stratego specification provides syntactic abstractions on top
+	of System~S. For example, a rewrite rule is an abstraction for
+	a sequence of operations that first matches the subject term
+	against a pattern, then satisfies a condition and finally
+	builds the instantiation of a term pattern. The identification
+	of this intermediate level allows the definition of very
+	expressive abstractions such as contextual rules and overlays
+	\cite{Vis99}.
+
+	The Stratego compiler first translates a high-level Stratego
+	specification to a System~S expresssion, which is then
+	translated to a list of abstract machine instructions that are
+	implemented in C.  The first compiler was written in
+	SML. Based on the first experience with that compiler an
+	improved compiler was specified in Stratego itself and
+	bootstrapped.  Bootstrapping proves to be a good approach for
+	developing the compiler and the language because it provides a
+	realistic case study and a good test case for the compiler.
+	The compiler is being used in several program transformation
+	case studies, such as a specificiation of an optimizer for a
+	functional language \cite{VBT98}, a deforestation algorithm
+	for a functional language \cite{JV99} and a transformation
+	tool to speed up C++ programs for high-performance computing.  
+
+	In this abstract we give an overview of System~S and Stratego,
+	present the architecture of the compiler and show some
+	examples of the use of strategies in the compiler.  In the
+	full paper we will further elaborate the application of
+	strategies in the compiler and give a first evaluation of the
+	use of strategies in program transformation.

@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  SUBSTITUTION
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library030.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library032.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>6.1.3&nbsp;&nbsp;  SUBSTITUTION</H3>	<blockquote><hr><BR>
+<BR>
+	Substituting terms for variables depends mainly on
+	the shape of variables.
+	This module implements several generic strategies for different
+	styles of parallel substitution, including ones that rename
+	bound variables to prevent name capture.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	A substitution is a mapping from variables to terms. Given a
+	substitution the strategy <CODE>substitute(...)</CODE> traverses
+	a term and replaces variables in the domain of the mapping by
+	their associated term.
+	The strategy can be applied in two ways; (1) to a pair of a
+	substitution and a term
+<CODE>&lt;substitute(...)&gt; (sbs, t)</CODE>
+	and (2) to a triple of a list of variables, a list of (equal
+	length) of terms and a term
+<CODE>&lt;substitute(...)&gt; (xs, ts, t)</CODE>. This entails that the type of
+	<CODE>substitute(...)</CODE> is either 
+<CODE>Prod([List(Prod([a,b])),b]) -&gt; b</CODE>
+	or
+<CODE>Prod([List(a),List(b),b]) -&gt; b</CODE>, with <CODE>a</CODE> the type of variables
+	and <CODE>b</CODE> the type of terms.<BR>
+<BR>
+	There are four versions of the substitution strategy that
+	depend on two factors; (1) renaming of bound variables in
+	terms substituted for variables (2) renaming of bound
+	variables in the context of substituted variables.<BR>
+<BR>
+	All versions are parameterized with a strategy <CODE>isvar</CODE>
+	recognizing variables and mapping them to a substitution key,
+	which can be the entire variable structure or just its
+	name. That is, <CODE>isvar</CODE> should have type <CODE>b -&gt; a</CODE>.<BR>
+<BR>
+	The substitution strategy can be parameterized with a variable
+	renaming strategy <CODE>ren</CODE> (of type <CODE>b -&gt; b</CODE>) that will
+	be applied to each term after it is substituted for a
+	variable. This
+	can be used to ensure that all bound variables are unique throughout
+	an abstract syntax tree and thus prevent free variable
+	capture.<BR>
+<BR>
+	A better way to ensure that free variables are not captured
+	when substituting under bindings requires renaming the bound variables
+	in the context of the variables that are substituted for. This
+	is achieved by combining the generic bound variable renaming techniques
+	from module <CODE>rename</CODE> with replacing a variable by a term.
+	For this purpose there are two variants of the
+	substitution strategy that are parameterized with strategies indicating
+	shape of variables, the bound variables, the arguments
+	that they are binding in and a replacement strategy.
+	See module <CODE>rename</CODE> for an explanation of these parameters.<BR>
+<BR>
+<PRE>
+module substitution
+imports simple-traversal tuple list rename
+
+strategies
+
+  // substitutions accept two types of input 
+  // 1) a pair of a substitution (is list of pairs) and a term
+  // 2) a triple of a list of variables, a list of terms that should
+  //    replace them, and a term
+
+  subs-args = 
+    ?(sbs, t) &lt;+ \ (xs, ys, t) -&gt; (&lt;zip(id)&gt; (xs, ys), t) \
+
+rules
+
+  // replacing a variable with its value in the substitution
+
+  SubsVar(isvar, mksbs) :
+    t -&gt; &lt;lookup&gt; (x, sbs)
+    where &lt;isvar&gt; t =&gt; x; mksbs =&gt; sbs
+
+strategies  
+
+  // substitute variables, no regard for variable bindings, and
+  // rename bound variables in substituted terms
+
+  substitute(isvar, ren) =
+    subs-args =&gt; (sbs,t); !t;
+    alltd(SubsVar(isvar, !sbs); ren)
+
+  // substitute variables, no regard for variable bindings
+
+  substitute(isvar) =
+    substitute(isvar, id)
+
+  // substitute all variables, rename bound variables on the way down,
+  // and rename the bound variables in the terms that are substituted
+  // for variables using the renaming strategy ren
+
+  substitute(isvar, varshape, bndvars, boundin, paste, ren) =
+    subs-args =&gt; (sbs,t); !(t, []);
+    rec x(env-alltd(RnVar(varshape)
+                    &lt;+ Fst; SubsVar(isvar, !sbs); ren
+                    &lt;+ RnBinding(bndvars, paste);
+                       DistBinding(x,boundin)))
+
+  // substitute variables and rename bound variables encountered
+  // on the way to prevent variable capture, don't rename
+  // substituted terms
+
+  substitute(isvar, varshape, bndvars, boundin, paste) =
+    substitute(isvar, varshape, bndvars, boundin, paste, id)
+</PRE>
+	<HR>
+<A HREF="Library030.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library032.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

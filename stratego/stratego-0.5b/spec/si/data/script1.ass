@@ -1,0 +1,1 @@
+[Eval(Call(SVar("debug"),[])),Import("lib"),Eval(Call(SVar("debug"),[])),Read("script1.trm"),Eval(Call(SVar("debug"),[]))]

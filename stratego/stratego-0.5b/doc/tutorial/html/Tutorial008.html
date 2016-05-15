@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Bootstrapping the Stratego Compiler
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial007.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial009.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>2.4&nbsp;&nbsp; Bootstrapping the Stratego Compiler</H3>	<blockquote><hr>
+	The Stratego compiler is defined in Stratego. The distribution
+	contains the complete Stratego source of the compiler. This
+	makes it possible to adapt the language and/or its
+	implementation. In order to obtain a new working compiler it
+	is necessary to follow a careful bootstrapping procedure.
+	<hr></blockquote><BR>
+<BR>
+	To create a new version of the compiler, edit the appropriate
+	files in the spec/* directories to reflect the change in the
+	run-time system, compiler, and/or parser. Then do the
+	following<BR><CODE>    &gt; cd spec</CODE><BR><CODE>    &gt; make</CODE><BR><CODE>    &gt; make install</CODE><BR>
+<BR>
+	Then use the generated compiler to compile some test
+	specifications. If that seems to work, try to bootstrap by<BR><CODE>    &gt; make bootstrap</CODE><BR>	This will compile the compiler components with itself.<BR>
+<BR>
+	If this goes wrong at some point, you'll have to reinstall the stable
+	compiler in the src/ tree:<BR><CODE>    &gt; cd ..</CODE><BR><CODE>    &gt; make install</CODE><BR>
+<BR>
+	It can be useful to have two installations of the compiler,
+	one of them the stable compiler from src. To achieve this, do
+	the following.<BR>
+<BR>
+	<UL>
+<LI>
+	 Make a user configuration as described above and make and
+	install the compiler with this configuration. This puts a
+	stable version of the compiler in a standard place like
+	/usr/local/bin.
+	
+<LI> Make a developer configuration as described above.
+	
+<LI> In one terminal use the stable compiler to compile the
+	compiler components, i.e., <CODE>PATH=/usr/local/bin:$PATH</CODE>
+	
+<LI> In another terminal use the newly compiled compiler to test
+	your changes i.e., <CODE>PATH=/path/to/stratego/bin:$PATH</CODE>
+	Now if something goes wrong it is easier to recompile the
+	compiler components.
+	</UL>	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 10: The bootstrapping procedure</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	
+		
+<BR>
+<BR>
+<HR>
+<A HREF="Tutorial007.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial009.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

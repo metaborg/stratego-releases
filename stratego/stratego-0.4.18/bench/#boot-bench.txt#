@@ -1,0 +1,17 @@
+
+compiling 0.4.17
+----------------
+
+with 0.4.18 ~= 17 min
+
+957.81user 63.97system 30:05.58elapsed 56%CPU (0avgtext+0avgdata 0maxresident)k
+0inputs+0outputs (296020major+741634minor)pagefaults 400swaps
+
+
+compiling 0.4.18
+----------------
+
+with 0.4.18 ~= 23 min
+
+1325.66user 75.43system 25:29.81elapsed 91%CPU (0avgtext+0avgdata 0maxresident)k
+0inputs+0outputs (368096major+1029963minor)pagefaults 57swaps

@@ -1,0 +1,1 @@
+Specification([Signature([Operations([])]),Rules([]),Strategies([SDef("main",[],Choice(Seq(AM(Id,Str("\\")),Build(Str("\\\""))),Choice(Build(Str("\\")),Build(Op("Cons",[Op("TNil",[]),Op("TNil",[])])))))])])

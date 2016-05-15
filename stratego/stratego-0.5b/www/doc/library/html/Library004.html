@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  SIMPLE-TRAVERSAL: One Pass Traversal
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library003.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library005.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.1.1&nbsp;&nbsp;  SIMPLE-TRAVERSAL: One Pass Traversal</H3>	<blockquote><hr>
+	
+	The primitive term traversal operators of Stratego (all, some, one)
+	can be combined with the other control operators in a wide
+	variety of ways to define full term traversals.
+	This module defines 
+	a collection of the most common generic one-pass traversals
+	over terms.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module simple-traversal
+imports conditional
+strategies
+</PRE>	Term traversals can be categorized into classes according to
+	how much of the term they traverse and to which parts
+	of the term they modify.<BR>
+<BR>
+	
+<H5> Everywhere</H5>	The most general class of traversals visits every node
+	of a term and applies a transformation to it. The following
+	operators define traversals that apply a strategy <CODE>s</CODE>
+	to all nodes of a term.<BR>
+<BR>
+<PRE>
+  topdown(s)       = rec x(s; all(x))
+  bottomup(s)      = rec x(all(x); s)
+  downup(s)        = rec x(s; all(x); s)
+  downup(s1, s2)   = rec x(s1; all(x); s2)
+  downup2(s1, s2)  = rec x(s1; all(x); s2)
+</PRE>	
+	The traversals above go through all constructors. If it
+	is not necessary to traverse the entire tree, the following
+	versions of the traversals can be used. They are parameterized
+	with a strategy operator <CODE>stop</CODE> that <BR>
+<BR>
+<PRE>
+  topdownS(s, stop)     = rec x(s; (stop(x) &lt;+ all(x)))
+  bottomupS(s, stop)    = rec x((stop(x) &lt;+ all(x)); s)
+  downupS(s, stop)      = rec x(s; (stop(x) &lt;+ all(x)); s)
+  downupS(s1, s2, stop) = rec x(s1; (stop(x) &lt;+ all(x)); s2)
+</PRE>	The strategy <CODE>don't-stop</CODE> is a unit for these traversals,
+	i.e., <CODE>topdown(s)</CODE> is equivalent
+	to <CODE>topdown(s,don't-stop)</CODE>.<BR>
+<BR>
+<PRE>
+  don't-stop(s) = fail
+</PRE>	
+<H5> Along a Spine</H5>	A spine of a term is a chain of nodes from the root to some
+	subterm.
+	<CODE>spinetd</CODE> goes down one spine and applies <CODE>s</CODE> along
+	the way to each node on the spine. The traversal stops when
+	<CODE>s</CODE> fails for all children of a node.<BR>
+<BR>
+<PRE>
+  spinetd(s) = rec x(s; try(one(x)))
+  spinebu(s) = rec x(try(one(x)); s)
+
+  spinetd'(s) = rec x(s; (one(x) + all(fail)))
+  spinebu'(s) = rec x((one(x) + all(fail)); s)
+</PRE>	
+<H5> Along all Spines</H5>	Apply <CODE>s</CODE> everywhere along al spines where <CODE>s</CODE> applies.<BR>
+<BR>
+<PRE>
+  somespinetd(s) = rec x(s; try(some(x)))
+  somespinebu(s) = rec x(try(some(x)); s)
+
+  spinetd'(s) = rec x(s; (one(x) + all(fail)))
+  spinebu'(s) = rec x((one(x) + all(fail)); s)
+</PRE>	
+<H5> Once</H5>	Apply s at one position. One s application has to succeed.<BR>
+<BR>
+<PRE>
+  oncetd(s) = rec x(s &lt;+ one(x))
+  oncebu(s) = rec x(one(x) &lt;+ s)
+
+  oncetd-stop(s, stop) = rec x(s &lt;+ not(stop); one(x))
+</PRE>	
+<H5> At Least Once</H5>	Apply s at some positions, but at least one. As soon as one is
+	found, searching is stopped, i.e., in the top-down case
+	searching in subtrees is stopped, in bottom-up case, searching
+	in upper spine is stopped.
+	
+<PRE>
+  sometd(s) = rec x(s &lt;+ some(x))
+  somebu(s) = rec x(some(x) &lt;+ s)
+</PRE>	
+<H5> Frontier</H5>	Find all topmost applications of <CODE>s</CODE>;<BR>
+<BR>
+<PRE>
+  alltd(s)           = rec x(s &lt;+ all(x))
+  alldownup2(s1, s2) = rec x((s1 &lt;+ all(x)); s2)
+
+  downup2'-obsolete(s1, s2) = rec x((s1 &lt;+ all(x)); s2)
+
+  alltd-fold(s1, s2) = rec x(s1 &lt;+ all(x); s2)
+</PRE>	
+	
+<H5> Leaves</H5><PRE>
+  leaves(s, is-leaf, skip) = 
+    rec x((is-leaf; s) &lt;+ skip(x) &lt;+ all(x))
+
+  leaves(s, is-leaf) =
+    rec x((is-leaf; s) &lt;+ all(x))
+
+  is-leaf = not(one(id))
+</PRE>	
+<H5> Many</H5>	Find as many applications as possible, but at least one.<BR>
+<BR>
+<PRE>
+  manybu(s) = rec x(some(x); try(s) &lt;+ s)
+  manytd(s) = rec x(s; all(try(x)) &lt;+ some(x))
+</PRE><PRE>
+  somedownup(s) = rec x(s ; all(x) ; try(s) &lt;+ some(x) ; try(s))
+</PRE><PRE>
+  breadthfirst(s) = rec x(all(s); all(x))
+</PRE>
+ 	<HR>
+<A HREF="Library003.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library005.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  TERM
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library006.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library008.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.2.1&nbsp;&nbsp;  TERM</H3>	Some primitives for the manipulation of terms.<BR>
+<BR>
+	<CODE>&lt;mkterm&gt; (f, [t1,...,tn])</CODE> builds the constructor application
+	<CODE>f(t1,...,tn)</CODE><BR>
+<BR>
+	<CODE>&lt;explode-term&gt; f(t1,...,tn)</CODE> is the inverse of <CODE>mkterm</CODE>
+	and produces <CODE>(f, [t1,...,tn])</CODE><BR>
+<BR>
+	Note: the primitive strategies <CODE>mkterm</CODE> and <CODE>explode-term</CODE>
+	have been turned into language constructs. The pattern
+	<CODE>f#(xs)</CODE> denotes
+	the decomposition of a term into its function symbol <CODE>f</CODE> and
+	its <EM>list</EM> of arguments <CODE>xs</CODE>. This pattern can be
+	used in matching <CODE>?f#(xs)</CODE> and building <CODE>!f#(xs)</CODE>
+	terms (so also in left- and right-hand sides of rules) and also
+	as a congruence <CODE>s1#(s2)</CODE>.<BR>
+<BR>
+	<CODE>&lt;address-lt&gt; (t1, t2)</CODE> compares the address of two terms
+	and succeeds if the address of the first is smaller than the
+	address of the second. This predicate induces a total ordering
+	on terms and can be used to sort terms. Note that this
+	relation is valid in one session (but what happens after
+	rehashing), but not necessarily between two sessions.<BR>
+<BR>
+	<CODE>&lt;address&gt; t</CODE> replaces <CODE>t</CODE> with its address (an integer).
+	This can be used to obtain a unique symbolic reference to a term.<BR>
+<BR>
+<PRE>
+module term
+strategies
+
+  mkterm       = prim("_ST_mkterm")
+  explode-term = prim("_ST_explode_term")
+  address-lt   = prim("_ST_address_lt")
+  address      = prim("_ST_address")
+</PRE>
+	<HR>
+<A HREF="Library006.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library008.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

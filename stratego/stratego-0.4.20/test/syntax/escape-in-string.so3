@@ -1,0 +1,1 @@
+[SDef("main",[],Choice(Scope(["c_0"],Let(SDef([DontInline],"d_0",[],Build(Str("\\\""))),Seq(Assign(Var("c_0")),Case("b_0",Var("c_0"),[Alt(Str("\\"),[],Call(SVar("d_0"),[]))],Fail)))),Choice(Build(Str("\\")),Build(Op("Cons",[Op("TNil",[]),Op("TNil",[])])))))]

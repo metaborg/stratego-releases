@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Installing Stratego
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial005.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial007.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>2.2&nbsp;&nbsp; Installing Stratego</H3>	<blockquote><hr>
+	The Stratego distribution has been prepared with autoconf and
+	automake and should be portable to any platform with the
+	required packages. Installation requires only the
+	configuration of the package using a configuration script.
+	<hr></blockquote><BR>
+<BR>
+	
+<H5> Installing the ATerm Library</H5>	Choose a location for the installation of the aterm package, say
+	<CODE>/loc/of/aterm/</CODE>.<BR><CODE>    &gt; cd /loc/of/aterm/</CODE><BR>	Download the ATerm package <CODE>aterm-x.y.tar.gz</CODE>. Unpack it
+	using the command<BR><CODE>    &gt; tar zxf aterm-x.y.tar.gz</CODE><BR>	Configure the aterm package, setting the prefix to the
+	directory where the library should be installed, i.e., if
+	prefix points to directory <CODE>dir</CODE>, then the library will
+	be installed in <CODE>dir/lib</CODE> and the executables in
+	<CODE>dir/bin</CODE>.<BR><CODE>    &gt; cd aterm-x.y</CODE><BR><CODE>    &gt; ./configure --prefix=/installation/of/aterm</CODE><BR>	make<BR><CODE>    &gt; gmake</CODE><BR>	and install<BR><CODE>    &gt; gmake install</CODE><BR>
+<BR>
+	
+<H5> Unpacking the Stratego Package</H5>	Choose a location for the installation of Stratego, say
+	<CODE>/loc/of/stratego/</CODE>.<BR><CODE>    &gt; cd /loc/of/stratego/</CODE><BR>	Download the Stratego package <CODE>stratego-x.y.z.tar.gz</CODE>.
+	Unpack it using the command:<BR><CODE>    &gt; tar zxf stratego-x.y.z.tar.gz</CODE><BR><CODE>    &gt; cd stratego-x.y.z/</CODE><BR>	
+<H5> Configuring the Stratego Package</H5>	If you only intend to use the Stratego compiler and not work on its
+	development set prefix to any appropriate value when installing, e.g.,<BR><CODE>    &gt; ./configure --prefix=/usr/local \</CODE><BR><CODE>                  --with-aterm=/installation/of/aterm</CODE><BR>	The directory <CODE>/installation/of/aterm</CODE> should be the same
+	as the prefix you configured the aterm library with. If
+	prefix points to directory <CODE>dir</CODE>, then the Stratego
+	compiler will be installed in <CODE>dir/bin</CODE>, the libraries in
+	<CODE>dir/lib</CODE> and the Stratego library in <TT>	dir/share/stratego</TT>.<BR>
+<BR>
+	If you intend to change the compiler specification in <CODE>spec/</CODE>
+	and bootstrap the compiler, you need to set prefix to the
+	local directory. Or at least a directory where you have write
+	permissions such that it is easy to re-install the
+	compiler. This is the what I usually do:<BR><CODE>    &gt; ./configure --prefix=`pwd` \</CODE><BR><CODE>                  --with-aterm=/installation/of/aterm</CODE><BR>	This entails that you need to include <CODE>`pwd`/bin</CODE> in your
+	<CODE>PATH</CODE>.<BR>
+<BR>
+	Note that this last option may also be needed if you don't
+	have permissions to install in standard installation
+	directories.<BR>
+<BR>
+	
+<H5> Making and Installing</H5>	For both kinds of configurations, make the compiler by<BR><CODE>    &gt; gmake</CODE><BR><CODE>    &gt; gmake install</CODE>	<BR>
+<BR>
+	
+<H5> Setting the PATH</H5>	Finally, extend the definition of your path to point to the
+	stratego compiler. In a user configuration, set<BR><CODE>    &gt; PATH=/usr/local/bin:$PATH</CODE><BR>	In a developer configuration, set<BR><CODE>    &gt; PATH=/loc/of/stratego/bin:$PATH</CODE><BR>
+<BR>
+	
+<H5> Checking the Installation</H5>	Now check that the compiler is installed by typing<BR><CODE>    &gt; which sc</CODE><BR>	which should return something like<BR><CODE>    /loc/of/stratego/bin/sc</CODE><BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 8: Summary of the installation procedure</DIV><BR>
+<A NAME="Fig:"></A><BR>
+<PRE>
+&gt; cd /loc/of/stratego/
+&gt; tar zxf stratego-x.y.z.tar.gz
+&gt; cd stratego-x.y.z
+&gt; ./configure --prefix=/usr/local \
+              --with-aterm=/installation/of/aterm
+&gt; gmake
+&gt; gmake install
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<BR>
+<BR>
+<HR>
+<A HREF="Tutorial005.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial007.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

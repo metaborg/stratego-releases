@@ -1,0 +1,1 @@
+[SDef("main",[],Rec("t_0",Seq(All(Call(SVar("t_0"),[])),Rec("x_0",LChoice(Seq(Choice(Scope(["u_0"],Seq(Match(Op("Plus",[Op("Zero",[]),Var("u_0")])),Build(Var("u_0")))),Scope(["v_0","w_0"],Seq(Match(Op("Plus",[Op("Succ",[Var("v_0")]),Var("w_0")])),Build(Op("Succ",[Op("Plus",[Var("v_0"),Var("w_0")])]))))),Rec("y_0",Seq(All(Call(SVar("y_0"),[])),Call(SVar("x_0"),[])))),Id)))))]

@@ -1,0 +1,3 @@
+\input{report.hva}
+\input{stop-common.hva}
+\renewcommand{\cuttingunit}{chapter}

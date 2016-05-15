@@ -1,0 +1,1 @@
+["the-program", "-i", "infile", "-silent", "-o", "outfile", "-bogus"]

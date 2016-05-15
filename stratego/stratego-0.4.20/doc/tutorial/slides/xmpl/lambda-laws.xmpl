@@ -1,0 +1,6 @@
+  Alpha : e -> <lrename> e
+  Beta  : App(Abs(x, t, e1), e2) -> <lsubs> ([x], [e2], e1)
+  LBeta : Let(x, t, e1, e2) -> <lsubs> ([x], [e1], e2)
+  Eta   : Abs(x, t, App(e, Var(x, t))) -> e
+          where <not(in)>(x, <lvars> e)
+  Dead  : Let(x, t, e1, e2) -> e2 where <not(in)>(x, <lvars> e2)

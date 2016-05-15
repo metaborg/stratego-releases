@@ -1,0 +1,72 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\expandafter\ifx\csname graph\endcsname\relax \csname newbox\endcsname\graph\fi
+\expandafter\ifx\csname graphtemp\endcsname\relax \csname newdimen\endcsname\graphtemp\fi
+\setbox\graph=\vtop{\vskip 0pt\hbox{%
+    \special{pn 8}%
+    \special{pa 1000 0}%
+    \special{pa 0 1732}%
+    \special{fp}%
+    \special{pa 1000 0}%
+    \special{pa 2000 1732}%
+    \special{fp}%
+    \special{pa 2000 1732}%
+    \special{pa 0 1732}%
+    \special{fp}%
+    \special{pa 1000 1155}%
+    \special{pa 1333 1732}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 1028 1254}%
+    \special{pa 1000 1155}%
+    \special{pa 1072 1229}%
+    \special{pa 1028 1254}%
+    \special{fp}%
+    \special{pa 1000 1155}%
+    \special{pa 1167 911}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 1090 979}%
+    \special{pa 1167 911}%
+    \special{pa 1131 1007}%
+    \special{pa 1090 979}%
+    \special{fp}%
+    \special{pa 1167 911}%
+    \special{pa 800 346}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 834 444}%
+    \special{pa 800 346}%
+    \special{pa 875 417}%
+    \special{pa 834 444}%
+    \special{fp}%
+    \special{pa 800 346}%
+    \special{pa 1000 0}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 928 74}%
+    \special{pa 1000 0}%
+    \special{pa 972 99}%
+    \special{pa 928 74}%
+    \special{fp}%
+    \hbox{\vrule depth1.732in width0pt height 0pt}%
+    \kern 2.000in
+  }%
+}%
+  $\box\graph$

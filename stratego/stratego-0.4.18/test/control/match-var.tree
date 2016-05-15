@@ -1,0 +1,1 @@
+Specification([Strategies([SDef("main",[],Seq(Call(SVar("f"),[]),Call(SVar("g"),[]))),SDef("f",[],Seq(AM(Id,Var("x")),Build(Op("TCons",[Var("x"),Op("TCons",[Var("x"),Op("TNil",[])])])))),SDef("g",[],LRule(Rule(Var("y"),Var("x"),Where(AM(BA(Call(SVar("f"),[]),Var("y")),Var("x"))))))])])

@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Simplification Rules for Propositional Formulae
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial011.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial013.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.4&nbsp;&nbsp; Simplification Rules for Propositional Formulae</H3>
+	<blockquote><hr>
+	There are a great number of valid transformation rules on
+	propositional formulae. Although each is useful in itself,
+	together they form a non-terminating rewrite system.
+	<hr></blockquote><BR>
+<BR>
+	Propositional formulae can be simplified using well-known
+	rules such as De Morgan's laws and distribution laws. Some of
+	these simplification rules are defined in module
+	<CODE>prop-laws</CODE> (Figure&nbsp;<A HREF="#Fig:prop-laws.r">19</A>). Module
+	<CODE>prop-truth</CODE> (Figure&nbsp;<A HREF="#Fig:prop-truth.r">18</A>) defines
+	rules for constant propagation in formulae.<BR>
+<BR>
+	Note that these rules give rise to a number of possible
+	normalizations of formulae. Interpretation of the rules as a
+	rewrite system is not useful since they define a
+	non-terminating system. For example, rules DAOL and DOAL can
+	be applied alternately without reaching a normal-form.<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 18: Truth rules for propositional
+	formulae.</DIV><BR>
+<A NAME="Fig:prop-truth.r"></A>
+	<PRE>module prop-truth
+imports prop
+
+rules
+
+  T1  : Not(True) -&gt; False       T2  : Not(False) -&gt; True
+
+  T3  : And(True, x) -&gt; x        T5  : And(False, x) -&gt; False  
+  T4  : And(x, True) -&gt; x        T6  : And(x, False) -&gt; False  
+  
+  T7  : Or(True, x) -&gt; True      T9  : Or(False, x) -&gt; x
+  T8  : Or(x, True) -&gt; True      T10 : Or(x, False) -&gt; x
+
+  T11 : Impl(True, x) -&gt; x       T14 : Impl(False, False) -&gt; True
+  T12 : Impl(x, True) -&gt; True    T15 : Impl(True, False) -&gt; False
+  T13 : Impl(False, x) -&gt; True
+
+  T16 : Eq(False, x) -&gt; Not(x)   T18 : Eq(True, x) -&gt; x
+  T17 : Eq(x, False) -&gt; Not(x)   T19 : Eq(x, True) -&gt; x</PRE>
+	<DIV ALIGN=center><HR SIZE=2></DIV>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 19: Simplification rules for
+	propositional formulae.</DIV><BR>
+<A NAME="Fig:prop-laws.r"></A><BR>
+	<PRE>module prop-laws
+imports prop
+rules
+
+  AA    : And(And(x, y), z) -&gt; And(x, And(y, z))
+  AO    : Or(Or(x, y), z) -&gt; Or(x, Or(y, z))
+  AI    : Impl(Impl(x, y), z) -&gt; Impl(x, Impl(y, z))
+  AE    : Eq(Eq(x, y), z) -&gt; Eq(x, Eq(y, z))
+  
+  CA    : And(x, y) -&gt; And(y, x) 
+  CO    : Or(x, y) -&gt; Or(y, x)
+  CE    : Eq(x, y) -&gt; Eq(y, x)
+
+  IDA   : And(x, x) -&gt; x
+  IDO   : Or(x, x) -&gt; x
+  IDI   : Impl(x, x) -&gt; True
+  IDE   : Eq(x, x) -&gt; True
+
+  DAOL  : And(Or(x, y), z) -&gt; Or(And(x, z), And(y, z))
+  DAOR  : And(z, Or(x, y)) -&gt; Or(And(z, x), And(z, y))
+  DOAL  : Or(And(x, y), z) -&gt; And(Or(x, z), Or(y, z))
+  DOAR  : Or(z, And(x, y)) -&gt; And(Or(z, x), Or(z, y))
+
+  DN    : Not(Not(x)) -&gt; x
+
+  DMA   : Not(And(x, y)) -&gt; Or(Not(x), Not(y))
+  DMO   : Not(Or(x, y))  -&gt; And(Not(x), Not(y))
+  DMI   : Not(Impl(x, y)) -&gt; And(x, Not(y))
+  DME   : Not(Eq(x, y)) -&gt; Or(And(Not(x), y), And(x, Not(y)))
+
+  DefN  : Not(x) -&gt; Impl(x, False)
+  DefI  : Impl(x, y) -&gt; Or(Not(x), y)
+  DefE  : Eq(x, y) -&gt; And(Impl(x, y), Impl(y, x))
+  DefO1 : Or(x, y) -&gt; Impl(Not(x), y)
+  DefO2 : Or(x, y) -&gt; Not(And(Not(x), Not(y)))
+  DefA1 : And(x, y) -&gt; Not(Or(Not(x), Not(y)))
+  DefA2 : And(x, y) -&gt; Not(Impl(x, Not(y)))
+
+  IDefI : Or(Not(x), y) -&gt; Impl(x, y)
+  IDefE : And(Impl(x, y), Impl(y, x)) -&gt; Eq(x, y)
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV>
+<HR>
+<A HREF="Tutorial011.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial013.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

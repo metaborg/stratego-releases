@@ -1,0 +1,271 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\T\newcommand{\dothis}{$\bullet$\ \ }
+\W\newcommand{\dothis}{}
+\newcommand{\envvar}[1]{\$\{#1\}}%$
+
+\chapter{Pragmatics}
+	\label{Chap:Pragmatics}
+
+	In this chapter we deal with the pragmatic issues in writing
+	specifications and using the programming environment to
+	actually transform terms.
+
+\section{Requirements}
+
+	The Stratego compiler is implemented in Stratego itself. The
+	distribution contains the bootstrapped C sources of the
+	compiler. The only requirements for installation are:
+\begin{itemize}
+
+	\item gmake
+
+	\item gcc
+
+	\item sh
+
+	\item ksh
+
+\end{itemize}
+
+	The ATerm library is part of the Stratego
+	distribution. Configuration and compilation of the ATerm
+	library has sometimes been problematic.
+
+	The distribution has been tested on
+\begin{itemize}
+	
+	\item Linux with RedHat 5.2 distribution
+
+	\item Sun
+
+\end{itemize}
+
+\section{Getting the Compiler}
+
+	The latest release of the Stratego compiler can be found at
+	the Stratego web page:
+\begin{verbatim}
+   http://www.cs.uu.nl/~visser/stratego/
+\end{verbatim}
+
+	Download the latest release \verb|stratego-x.x.tar.gz|
+
+\section{Installing the Compiler}
+
+	Installation of the compiler is achieved by the following
+	commands:
+\begin{verbatim}
+> tar zxf stratego-x.x.tar.gz
+> cd stratego-x.x/
+> gmake
+\end{verbatim}
+
+\section{Compiling Specifications}
+
+  	The compiler script \verb|sc| can be used to compile a
+  	specification as described in Chapter~\ref{Chap:Introduction}.
+  	Alternatively, a Makefile can be used to incrementally apply
+  	the stages of compilation. Figure~\ref{Fig:Makefile} shows how
+  	such a Makefile should be structured. The dependency rules for
+  	compiling a specfication are specified in
+  	\verb|$(impldir)/rts/implicit-rules|.
+
+	A specification can be compiled by means of the \verb|.comp| target:
+\begin{verbatim}
+> gmake prop-main.comp
+\end{verbatim}
+	This will produce an executable \verb|lambda.comp| that can be
+	applied to a term.
+
+	Only parsing the specification
+\begin{verbatim}
+> gmake prop-main.tree
+\end{verbatim}
+
+	Intermediate files
+
+	\verb|prop-main.c|:  generated C code for \verb|prop-main.r|
+
+	Command line options
+\begin{verbatim}
+  prop-main.comp [-silent] [-i file] [-o file] [-stats] [-help|-h]
+\end{verbatim}
+	
+	\begin{figure}[t]
+	\begin{boxedminipage}{\hsize}
+	\verbatiminput{xmpl/Makefile}
+	\end{boxedminipage}
+	\caption{Example Makefile}
+	\label{Fig:Makefile}
+	\end{figure}
+
+\section{Exporting Transformation Systems}
+
+	Specification + Stratego implementation
+
+	Binaries (architecture specific)
+
+	Compiled specification + run-time system	
+
+
+\endinput
+\T\newpage
+\section{Troubleshooting}
+
+	\input{trouble.ltx}
+
+\T\newpage
+
+\section{The SML Implementation (Obsolete)}
+
+ \subsection{Configuring the Environment}
+
+	\dothis Add \verb|/home/projects/pacsoft/tools/smlnj-110/bin/|
+	to your path in a configuration file such as .cshrc or .bashrc.
+
+	\dothis Make an alias of \verb|make| to \verb|gmake|, e.g.
+\begin{verbatim}
+   alias make /projects/unsupported/bin/sparc-sunos5/gmake
+\end{verbatim}
+
+	\dothis Create a directory \verb|DIR| for your specifications
+
+	\dothis Create a file \verb|\envvar{DIR}/sources.cm| containing the
+	following text:
+\begin{verbatim}
+     Group is /home/users/visser/implementation/src/sources.cm
+\end{verbatim}
+
+	\dothis Run SML
+\begin{verbatim}
+  > cd \envvar{DIR}/sources.cm
+  > sml-cm
+\end{verbatim}
+
+
+\subsection{Inside SML}
+
+	Now you are in the SML interactive shell. In the following,
+	\verb| - | stands for the SML prompt.
+
+	\dothis Initialize the strategies environment by the following
+	commands:
+\begin{verbatim}
+  - open CM;
+  - make();
+  - open R;
+\end{verbatim}
+
+	Now you can load and compile specifications.  The following
+	commands are available:
+
+\begin{verbatim}
+- loadspec "rml"; 
+\end{verbatim}
+	Load specification \verb|rml|. This will parse the module file
+	\verb|rml.r| in the current directory and all files that are
+	imported in the module. If successful the content of the
+	specification is made the \emph{current specification}.
+
+\begin{verbatim}
+- loadterm "x"; 
+\end{verbatim}
+	Load term \verb|x|. This will parse the term file \verb|x.trm| in
+	the current directory. A term should be of the form
+\begin{verbatim}
+   [strategy] term
+\end{verbatim}
+	Typically, the strategy is just the name of a strategy defined
+	in the current specification. This command will make
+	\verb|strategy| the \emph{current strategy} and \verb|term|
+	the \emph{current term}.
+ 
+\begin{verbatim}
+- showterm();   
+\end{verbatim}
+	Show the current term, i.e., the term that was read with the
+	last \verb|loadterm|.
+
+\begin{verbatim}
+- showstrat();  
+\end{verbatim}
+	Show the current strategy, i.e., the strategy that was read
+	with the last \verb|loadterm|.
+
+\begin{verbatim}
+- showestrat(); 
+\end{verbatim}
+	Show the expanded strategy, i.e., the current strategy with
+	all calls to defined strategies inlined and rules and contexts
+	defines in terms of match and build.
+
+\begin{verbatim}
+- compile' "rml.c";
+\end{verbatim}
+	Compile the current strategy to C code and write the code into
+	the file \verb|rml.c|.
+
+	The next commands are not supported and might be out of date.
+
+\begin{verbatim}
+- rew();        
+\end{verbatim}
+	Rewrite the current term.
+
+\begin{verbatim}
+- showred();    
+\end{verbatim}
+ 	Show the reduct of the last rewrite.
+
+ \subsection{Compiling Generated C Code}
+
+	The C code that is generated with the \verb|compile'| command
+	can be compiled using \verb|gcc| and a library defining
+	abstract machine instructions.
+
+	\dothis Create a \verb|Makefile| in your directory that looks
+	as follows:
+\begin{verbatim}
+  impldir = /home/users/visser/strategies/implementation/
+  all: comp.x
+  include \envvar{impldir}/toc/implicit-rules
+\end{verbatim}
+	Add a target \verb|comp.x| for each generated C file
+	\verb|comp.c|.
+
+	\dothis To compile a specific program \verb|comp.c| type
+\begin{verbatim}
+   make comp.x
+\end{verbatim}
+
+	\dothis To compile all programs listed after \verb|all:| 
+	simply type:
+\begin{verbatim}
+   make
+\end{verbatim}
+
+	A compiled program \verb|comp.x| reads a term from stdin,
+	applies the strategy to it and writes the result of the
+	transformation to stdout if it succeeded and a message
+	anouncing failure otherwise. Thus, you can use the program as
+	an ordinary Unix text processing command.
+\begin{verbatim}
+   comp.x < prog.rml > prog.comped
+\end{verbatim}

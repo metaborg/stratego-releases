@@ -1,0 +1,72 @@
+\def\sortunder#1{}\def\sortunder#1{}
+\begin{thebibliography}{10}
+
+\bibitem{BKK97}
+P.~Borovansk{\'y}, C.~Kirchner, and H.~Kirchner.
+\newblock Controlling rewriting by rewriting.
+\newblock In J.~Meseguer, editor, {\em Proceedings of the First International
+  Workshop on Rewriting Logic and its Applications}, volume~4 of {\em
+  Electronic Notes in Theoretical Computer Science}, Asilomar, Pacific Grove,
+  CA, September 1996. Elsevier.
+
+\bibitem{BV94}
+M.~{\sortunder{Brand}}Van~den Brand and E.~Visser.
+\newblock From {Box} to {\TeX}: {An} algebraic approach to the generation of
+  documentation tools.
+\newblock Technical Report P9420, Programming Research Group, University of
+  Amsterdam, July 1994.
+
+\bibitem{DHK96}
+A.~{\sortunder{Deursen}}Van~Deursen, J.~Heering, and P.~Klint, editors.
+\newblock {\em Language Prototyping. An Algebraic Specification Approach},
+  volume~5 of {\em AMAST Series in Computing}.
+\newblock World Scientific, Singapore, September 1996.
+
+\bibitem{DHH98}
+T.~Dinesh, M.~Haveraaen, and J.~Heering.
+\newblock An algebraic programming style for numerical software and its
+  optimization.
+\newblock CWI Report SEN-R9844, CWI, Amsterdam, The Netherlands, December 1998.
+
+\bibitem{LV97}
+B.~Luttik and E.~Visser.
+\newblock Specification of rewriting strategies.
+\newblock In M.~P.~A. Sellink, editor, {\em 2nd International Workshop on the
+  Theory and Practice of Algebraic Specifications (ASF+SDF'97)}, Electronic
+  Workshops in Computing, Berlin, November 1997. Springer-Verlag.
+
+\bibitem{OdJ98}
+P.~A. Olivier and H.~A. de~Jong.
+\newblock Efficient annotated terms.
+\newblock Technical report, Programming Research Group, University of
+  Amsterdam, August 1998.
+
+\bibitem{Vis97.thesis}
+E.~Visser.
+\newblock {\em Syntax Definition for Language Prototyping}.
+\newblock PhD thesis, University of Amsterdam, September 1997.
+
+\bibitem{Vis99}
+E.~Visser.
+\newblock Strategic pattern matching.
+\newblock In P.~Narendran and M.~Rusinowitch, editors, {\em Rewriting
+  Techniques and Applications (RTA'99)}, volume 1631 of {\em Lecture Notes in
+  Computer Science}, pages 30--44, Trento, Italy, July 1999. Springer-Verlag.
+
+\bibitem{VB98}
+E.~Visser and Z.-e.-A. Benaissa.
+\newblock A core language for rewriting.
+\newblock {\em Electronic Notes in Theoretical Computer Science}, 15, September
+  1998.
+\newblock In C.~Kirchner and H.~Kirchner, editors, Proceedings of the Second
+  International Workshop on Rewriting Logic and its Applications (WRLA'98),
+  Pont-{\`a}-Mousson, France.
+
+\bibitem{VBT98}
+E.~Visser, Z.-e.-A. Benaissa, and A.~Tolmach.
+\newblock Building program optimizers with rewriting strategies.
+\newblock {\em ACM SIGPLAN Notices}, 34(1):13--26, January 1999.
+\newblock Proceedings of the International Conference on Functional Programming
+  (ICFP'98).
+
+\end{thebibliography}

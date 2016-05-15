@@ -1,0 +1,1433 @@
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD><TITLE>The Stratego Reference Manual</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"></HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<!--HEVEA command line is: hevea -exec xxdate.exe doc.ltx -I ../../share//tex -o html/ReferenceManual.html -->
+<!--HTMLHEAD-->
+<!--ENDHTML-->
+<!--CUT DEF subsection 1 -->
+
+
+ 
+    <A HREF="../../tutorial/html/index.html">
+       <IMG SRC ="previous_motif.gif" ALT="Next"></A>
+    <A HREF="../../index.html">
+       <IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+    <A HREF="../../library/html/index.html">
+       <IMG SRC ="next_motif.gif" ALT="Next"></A>
+    <hr>
+  
+ 
+<H1 ALIGN=center>The Stratego Reference Manual</H1>
+
+<H3 ALIGN=center>Eelco Visser</H3>
+
+<H3 ALIGN=center>February 25, 2001</H3>
+ <hr>This document is also available in <A HREF="../../RefMan.ps">Postscript</A>.
+ <hr>
+ <!--TOC section Introduction-->
+
+<H2>1&nbsp;&nbsp; Introduction</H2><!--SEC END -->
+<!--TOC subsection Stratego: Specifying Program Transformation Systems Concisely-->
+
+<H3>1.1&nbsp;&nbsp; Stratego: Specifying Program Transformation Systems Concisely</H3><!--SEC END -->
+	<blockquote><hr>
+	Program transformations can be described concisely by means of
+	a combination of rewrite rules that describe basic
+	transformations and rewrite strategies that describe their
+	application to a program.
+	<hr></blockquote><BR>
+<BR>
+	Program transformations are often naturally described by means
+	of (term) rewrite rules. However, to achieve transformations
+	of an entire program such rules need to be applied with
+	care. Often a more fine grained control over their application
+	is needed than is offered by standard rewriting strategies
+	such as innermost or outermost normalization. <BR>
+<BR>
+	One solution to this problem is to encode the transformation
+	strategy in the rules. However, this leads to large
+	specifications in which traversal over the syntax structure of
+	a program needs to be spelled out explicitly. This is not
+	necessary in `pure' rewriting, since the built-in strategy
+	finds out where to apply a rule. In addition this style leads
+	to a loss of reusability of transformation rules. <BR>
+<BR>
+	Another solution is to make strategies programmable artifacts
+	of a transformation system. Stratego is a language for the
+	specification of transformation rules and transformation
+	strategies. <BR>
+<BR>
+	The main features of Stratego are summarized in
+	Figure&nbsp;<A HREF="#Fig:features">1</A>.<BR>
+<BR>
+	<!--TOC paragraph Audience-->
+
+<H5> Audience</H5><!--SEC END -->
+	This reference manual describes the Stratego language from
+	first principles. That means that it is organized along the
+	lines of the design of the language rather than along the
+	lines of learning the language. Therefore, it is aimed at
+	Stratego programmers and implementers with some experience
+	with the language who want to understand the details of its
+	definition.<BR>
+<BR>
+	The Stratego Tutorial [<A HREF="#Vis99.Tutorial"><CITE>11</CITE></A>] gives a
+	description of the language and its programming environment by
+	means of examples and is aimed at novice users. Several
+	publications exist that explore aspects of the language and
+	its applications; see the bibliography.<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 1: Features of Stratego</DIV><BR>
+<A NAME="Fig:features"></A><BR>
+	<UL>
+<LI>
+	 Program represented by means of abstract syntax trees (terms)
+	
+<LI> Basic transformations expressed as rewrite rules
+	
+<LI> Programmable strategies for control over application of rules
+	
+<LI> Matching and building patterns are first-class citizens
+	
+<LI> Organization of specifications into modules
+	
+<LI> Primitives for connection to the system
+	</UL>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Transforming Programs with Stratego-->
+
+<H3>1.2&nbsp;&nbsp; Transforming Programs with Stratego</H3><!--SEC END -->
+	<blockquote><hr>
+	Program transformation systems defined in Stratego are
+	combined with parsers and pretty-printers to create
+	source-to-source transformation systems.
+	<hr></blockquote><BR>
+<BR>
+	A transformation system defined by a Stratego specification
+	constitutes a program that transforms a term to another term
+	or fails.<BR>
+<BR>
+	Stratego programs define transformations on abstract syntax
+	trees. In order to transform programs that are represented as
+	texts, it is necessary to define a parser that transforms a
+	program text to an abstract syntax tree and a pretty-printer
+	that transforms an abstract syntax tree to text
+	(Figure&nbsp;<A HREF="#Fig:architecture">2</A>).<BR>
+<BR>
+	This manual will not go into the details of implementing such
+	tools. There is a wide range of possibilities for definining
+	parsers and pretty-printers. One possibility is the use of
+	SDF for parsing and the Box language of the GPP package for
+	pretty-printing. These packages are combined in the XT bundle
+	of transformation tools [<A HREF="#WWW-XT"><CITE>1</CITE></A>].<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 2: (** Architecture of program
+	transformation systems **)</DIV><BR>
+<A NAME="Fig:architecture"></A><BR>
+	program (text)<BR>
+<BR>
+	parser<BR>
+<BR>
+	abstract syntax tree (term)<BR>
+<BR>
+	transformer (generated from Stratego specification)<BR>
+<BR>
+	transformed abstract syntax tree (term)<BR>
+<BR>
+	pretty-printer<BR>
+<BR>
+	transformed program (text)<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Describing Stratego with SDF-->
+
+<H3>1.3&nbsp;&nbsp; Describing Stratego with SDF</H3><!--SEC END -->
+	<blockquote><hr>
+	This reference manual describes Stratego by means of a formal
+	syntax definition in the syntax definition formalism SDF2.
+	The semantics of the language is described informally.
+	<hr></blockquote><BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 3: </DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV>
+<!--TOC section Organization-->
+
+<H2>2&nbsp;&nbsp; Organization</H2><!--SEC END -->
+
+<!--TOC subsection Organizing Specifications into Modules-->
+
+<H3>2.1&nbsp;&nbsp; Organizing Specifications into Modules</H3><!--SEC END -->
+	<blockquote><hr>
+	A Stratego specification defines signatures, rules, strategies
+	and overlays. A specification can be divided into a collection
+	of modules.
+	<hr></blockquote><BR>
+<BR>
+	A specification consists of a set of basis specifications that
+	define signatures, rules, strategies and overlays
+	(Figure&nbsp;<A HREF="#Fig:Stratego-Specifications.sdf">4</A>). Each of these
+	items is introduced by one of the keywords <CODE>signature</CODE>,
+	<CODE>rules</CODE>, <CODE>strategies</CODE> and <CODE>overlays</CODE>, followed
+	by a list of basic signatures, rule definitions, strategy
+	definitions or overlays, respectively.<BR>
+<BR>
+	A specification can be divided into a collection of modules
+	(Figure&nbsp;<A HREF="#Fig:Stratego-Modules.sdf">5</A>). A module has a name
+	and combines a number of module items, which are basic
+	specifications or import declarations. A module with name
+	<CODE>Modname</CODE> is assumed to resided in a file with name
+	<CODE>Modname.r</CODE>. Note that <CODE>imports</CODE>, <CODE>signature</CODE>,
+	<CODE>rules</CODE> and <CODE>strategies</CODE> are reserved words that
+	cannot be used as module names.<BR>
+<BR>
+	An import of the form <CODE>imports m1 ... mn </CODE> denotes the
+	structural inclusion of the sections of the modules <CODE>mi</CODE>
+	into the importing module. Here structural inclusion means
+	inclusion at the level of abstract syntax as opposed to
+	textual inclusion as is in the C <CODE>#include</CODE> statement.<BR>
+<BR>
+	The complete syntax of Stratego is defined in a number of
+	modules, which are combined in module <CODE>Stratego-Syntax</CODE>
+	(Figure&nbsp;<A HREF="#Fig:Stratego-Syntax.sdf">6</A>).<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 4: Syntax of
+	Stratego specifications</DIV><BR>
+<A NAME="Fig:Stratego-Specifications.sdf"></A><BR>
+	<PRE>module Stratego-Specifications
+imports Stratego-Signatures Stratego-Overlays 
+        Stratego-Rules Stratego-Strategies
+exports
+  %%sorts BSpec Spec
+  context-free syntax
+    "specification" BSpec*   -&gt; Spec  {cons("Specification")}
+
+    "signature"     BSig*    -&gt; BSpec {cons("Signature")}
+    "rules"         RDef*    -&gt; BSpec {cons("Rules")}
+    "strategies"    SDef*    -&gt; BSpec {cons("Strategies")}
+    "overlays"      Overlay* -&gt; BSpec {cons("Overlays")}
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 5: Syntax of Stratego
+	modules</DIV><BR>
+<A NAME="Fig:Stratego-Modules.sdf"></A><BR>
+	<PRE>module Stratego-Modules
+imports Stratego-Specifications
+exports
+  sorts Module %% ModItem
+  context-free syntax
+    "module" ModName ModItem* -&gt; Module  {cons("Module")}
+    BSpec                     -&gt; ModItem
+    "imports" ModName*        -&gt; ModItem {cons("Imports")}
+
+  lexical syntax
+    [A-Za-z] [A-Za-z0-9\_\-]* -&gt; ModName
+    "imports"                 -&gt; ModName {reject}
+    "signature"               -&gt; ModName {reject}
+    "rules"                   -&gt; ModName {reject}
+    "strategies"              -&gt; ModName {reject}
+  lexical restrictions
+    ModName  -/- [A-Za-z0-9\_\'\-]</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 6: The syntax of
+	Stratego is defined in several modules.</DIV><BR>
+<A NAME="Fig:Stratego-Syntax.sdf"></A><BR>
+	<PRE>module Stratego-Syntax
+imports InstantiateLayout     
+        Stratego-Rules        Stratego-Signatures
+        Stratego-Application  Stratego-Specifications
+        Stratego-Congruences  Stratego-Strategic-Rules
+        Stratego-Contexts     Stratego-Strategies
+        Stratego-Layout       Stratego-Strategy-Definitions
+        Stratego-Lexicals     Stratego-Sugar
+        Stratego-Match-Build  Stratego-Syntax
+        Stratego-Modules      Stratego-Terms
+        Stratego-Overlays     Stratego-Traversal
+        Stratego-Primitives   
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Laying out and Commenting Specifications-->
+
+<H3>2.2&nbsp;&nbsp; Laying out and Commenting Specifications</H3><!--SEC END -->
+	<blockquote><hr>
+	The tokens making up a specification can be separated by means
+	of white space and comments.
+	<hr></blockquote><BR>
+<BR>
+	Spaces, tabs and newlines can be used at will in between
+	tokens of Stratego specifications, but not within tokens
+	(identifiers, keywords, literals, etc.).	<BR>
+<BR>
+	In addition various kinds of comments are supported. A small
+	comment on a single line can be inserted after <CODE>//</CODE>. All
+	characters after <CODE>//</CODE> until the end of the line are
+	comment. <BR>
+<BR>
+	A larger comment can be written between <CODE>(*</CODE> and
+	<CODE>*)</CODE>. No nested occurences of <CODE>*)</CODE> are allowed in
+	such comments.<BR>
+<BR>
+	To write large pieces of documenting text, the literate
+	programming convention can be used. A literate Stratego module
+	starts with the keyword <CODE>\literate</CODE>. Fragments of
+	specification text are enclosed in the phrases
+	<CODE>\begin{code}</CODE> and <CODE>\end{code}</CODE>. In between pieces
+	of code one can write arbitrary text. The general structure of
+	a literate Stratego specification is:
+<PRE>
+  \literate
+     LaTeX text
+  \begin{code}
+     specification text
+  \end{code}
+     LaTeX text
+  \begin{code}
+     specification text
+  \end{code}
+</PRE>	Only the code parts of a module are interpreted by the
+	compiler. A literate Stratego specification can be
+	<CODE>\input</CODE> directly in L<sup>A</sup>T<sub>E</sub>X. The code parts are set in
+	verbatim (provided the right style-file is used), the non-code
+	parts are interpreted as regular L<sup>A</sup>T<sub>E</sub>X material.<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 7: Syntax of layout</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module InstantiateLayout
+imports Stratego-Layout
+exports
+  lexical syntax
+    Whitespace -&gt; LAYOUT
+    Comment    -&gt; LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n] | [\(].[\*]</PRE> 	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 8: Syntax of layout</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Layout
+exports
+  %%sorts Identifier Natural Modname Variable String
+  lexical syntax
+    [\ \t\n]                             -&gt; Whitespace
+
+    "//" ~[\n]*                          -&gt; Comment
+
+    ~[\*]                                -&gt; CommentChar
+    Asterix                              -&gt; CommentChar
+    "(*" CommentChar* "*)"               -&gt; Comment
+
+    ~[]                                  -&gt; LChar
+    "\\literate"  LChar* "\\begin{code}" -&gt; Comment
+    "\\end{code}" LChar* "\\begin{code}" -&gt; Comment
+
+  lexical restrictions
+    Asterix -/- [\)]
+    LChar+ -/- [\\].[b].[e].[g].[i].[n].[\{].[c].[o].[d].[e].[\}]</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV>
+
+<!--TOC section Terms-->
+
+<H2>3&nbsp;&nbsp; Terms</H2><!--SEC END -->
+<!--TOC subsection Representing Programs by means of Terms-->
+
+<H3>3.1&nbsp;&nbsp; Representing Programs by means of Terms</H3><!--SEC END -->
+	<blockquote><hr>
+	Programs are represented by means of first-order terms.
+	<hr></blockquote><BR>
+<BR>
+	The abstract syntax of programs to be transformed is represented
+	by means of terms (Figure&nbsp;<A HREF="#Fig:Stratego-Terms.sdf">9</A>).<BR>
+<BR>
+	a constructor is an identifier<BR>
+<BR>
+	constructor application <CODE>Succ(Zero())</CODE><BR>
+<BR>
+	constant (parentheses) <CODE>Succ(Zero)</CODE><BR>
+<BR>
+	strings <CODE>App(Abs("x", "x"), Var("y"))</CODE>
+	
+	natural number <CODE>App(Abs(Var(1)), Var(2))</CODE><BR>
+<BR>
+	<!--TOC paragraph Lists-->
+
+<H5> Lists</H5><!--SEC END -->
+	lists abbreviations for Cons/Nil lists<BR>
+<BR>
+	<CODE>[a,b,c|[]]</CODE> <FONT FACE=symbol>º</FONT> <CODE>[a,b,c]</CODE><BR>
+<BR>
+	<!--TOC paragraph Tuples-->
+
+<H5> Tuples</H5><!--SEC END -->
+	tuples are abbreviations for ...<BR>
+<BR>
+	<!--TOC paragraph ATerms-->
+
+<H5> ATerms</H5><!--SEC END -->
+	Stratego terms are implemented by means of ATerms<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 9: Syntax of terms</DIV><BR>
+<A NAME="Fig:Stratego-Terms.sdf"></A><BR>
+	<PRE>module Stratego-Terms
+imports Stratego-Lexicals
+exports
+  %%sorts Term
+  context-free syntax
+    Identifier                      -&gt; Term {cons("Var")}
+    Identifier "(" {Term ","}* ")"  -&gt; Term {cons("Op")}
+    String                          -&gt; Term {cons("Str")}
+    Natural                         -&gt; Term {cons("Int")}
+    "[" {Term ","}* ("|" Term)? "]" -&gt; Term {cons("List")}
+    "(" {Term ","}* ")"             -&gt; Term {cons("Tuple")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Representing Constructors and Constants-->
+
+<H3>3.2&nbsp;&nbsp; Representing Constructors and Constants</H3><!--SEC END -->
+	<blockquote><hr>
+	The symbols are divided into identifiers, natural numbers and
+	strings.
+	<hr></blockquote><BR>
+<BR>
+	Figure&nbsp;<A HREF="#Fig:Stratego-Lexicals.sdf">10</A> defines the syntax of
+	the lexical tokens of Stratego.<BR>
+<BR>
+	Identifiers start with a letter and are followed by zero or
+	more letters, digits, underscores, primes or dashes. An
+	identifier may not be followed by any of these characters.<BR>
+<BR>
+	A natural number is a string of one or more decimal digits.<BR>
+<BR>
+	A string is list of characters enclosed by double quotes.<BR>
+<BR>
+	Figure&nbsp;<A HREF="#Fig:Stratego-Lexicals.sdf">10</A> also defines the
+	keywords of Stratego, i.e., the words that cannot be used as
+	identifiers.<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 10: The syntax of
+	lexicals</DIV><BR>
+<A NAME="Fig:Stratego-Lexicals.sdf"></A><BR>
+	<PRE>module Stratego-Lexicals
+exports
+  lexical syntax
+    [A-Za-z] [A-Za-z0-9\_\'\-]* -&gt; Identifier
+    [0-9]+                      -&gt; Natural
+    "\"" ~[\"\n]* "\""          -&gt; String
+
+  lexical restrictions
+    Identifier  -/- [A-Za-z0-9\_\'\-]
+    Natural     -/- [0-9]
+
+  lexical syntax
+    "module"            -&gt; Identifier {reject}
+    "signature"         -&gt; Identifier {reject}
+    "sorts"             -&gt; Identifier {reject}
+    "operations"        -&gt; Identifier {reject}
+    "rules"             -&gt; Identifier {reject}
+    "strategies"        -&gt; Identifier {reject}
+    "id"                -&gt; Identifier {reject}
+    "fail"              -&gt; Identifier {reject}
+    "all"               -&gt; Identifier {reject}
+    "some"              -&gt; Identifier {reject}
+    "one"               -&gt; Identifier {reject}
+    "thread"            -&gt; Identifier {reject}
+    "not"               -&gt; Identifier {reject}
+    "test"              -&gt; Identifier {reject}
+    "where"             -&gt; Identifier {reject}
+    "rec"               -&gt; Identifier {reject}
+    "let"               -&gt; Identifier {reject}
+    "imports"           -&gt; Identifier {reject}
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Declaring Constructors with Signatures-->
+
+<H3>3.3&nbsp;&nbsp; Declaring Constructors with Signatures</H3><!--SEC END -->
+	<blockquote><hr>
+	Constructors are declared by means of signatures
+	<hr></blockquote><BR>
+<BR>
+	A signature is of the form
+<PRE>
+  signature
+    sorts Sort ... Sort
+    operations OpDecl ... OpDecl
+</PRE>	
+	A constructor declaration of the form 
+<PRE>
+  C : Sort
+</PRE>	declares a nullary constructor (a constant) <CODE>C</CODE> of type
+	<CODE>Sort</CODE>. A declaration of the form
+<PRE>
+  C : Sort1 * ... * Sortn -&gt; Sort
+</PRE>	declares an <I>n</I>-ary constructor <CODE>C</CODE> that takes a tuple of
+	terms <CODE>(t1,...,tn)</CODE> where <CODE>ti</CODE> is of sort
+	<CODE>Sorti</CODE> into a term <CODE>C(t1,...,tn)</CODE> of sort
+	<CODE>Sort</CODE>.<BR>
+<BR>
+	Predefined sorts are <CODE>String</CODE> denoting strings of
+	characters between double quotes, and <CODE>Int</CODE> denoting
+	natural numbers in decimal notation.<BR>
+<BR>
+	For example, the following signature describes a language
+	of lambda expressions.
+<PRE>
+signature
+  sorts Exp
+  operations
+    Var    : String -&gt; Exp 
+    Apply  : Exp * Exp -&gt; Exp
+    Lambda : String * Exp -&gt; Exp
+</PRE>	Terms with variables are only used in a specification.
+	Transformations apply only to ground terms.<BR>
+<BR>
+	nullary constructors that are not declared are variables<BR>
+<BR>
+	(At this point typechecking is not done by the implementation.
+	It is nonetheless important to write signatures because the
+	definition of the congruence operators is derived from them.)<BR>
+<BR>
+	derivation of congruence operators<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 11: Syntax of Signatures</DIV><BR>
+<A NAME="Fig:Stratego-Signatures.sdf"></A><BR>
+	<PRE>module Stratego-Signatures
+exports
+  %%sorts BSig SortDecl OpDecl Type
+  context-free syntax
+    "signature"  BSig*       -&gt; BSpec    {cons("Signature")}
+    "sorts"      SortDecl*   -&gt; BSig     {cons("Sorts")}
+    "operations" OpDecl*     -&gt; BSig     {cons("Operations")}
+
+    Identifier ("(" {Identifier ","}* ")")? 
+                             -&gt; SortDecl {cons("Sort")}
+
+    Identifier ":" Type      -&gt; OpDecl   {cons("OpDecl")}
+    Term                     -&gt; Type     {cons("ConstType")}
+    {Term "*"}* "-&gt;" Term    -&gt; Type     {cons("FunType")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV>
+
+<!--TOC section Strategies-->
+
+<H2>4&nbsp;&nbsp; Strategies</H2><!--SEC END -->
+<!--TOC subsection Naming Transformations with Strategy Definitions-->
+
+<H3>4.1&nbsp;&nbsp; Naming Transformations with Strategy Definitions</H3><!--SEC END -->
+	<blockquote><hr>
+	A specification defines a strategy for transforming terms.
+	Strategies can be named by means of strategy definitions.
+	<hr></blockquote><BR>
+<BR>
+	The purpose of a Stratego specification is the definition of a
+	<EM>strategy</EM>, i.e., a program that transforms a term into
+	another term (or fails). Strategies are are built from
+	primitive transformations using strategy operators. There are
+	a number of standard operators. Other operators can be defined
+	in terms of the primitive operators by means of strategy
+	definitions.<BR>
+<BR>
+	A strategy section of a specification has the form
+<PRE>
+   strategies 
+     StrategyDefinition*
+</PRE>	and consists of a list of strategy definitions that give
+	names to strategy expressions.<BR>
+<BR>
+	A strategy definition has the form
+<PRE>
+   Id(Id1,...,Idn) = Strategy 
+</PRE>	Here <CODE>Id</CODE> is the strategy operator defined by the
+	definition, the <CODE>Idi</CODE> are strategy arguments to the
+	operator and <CODE>Strategy</CODE> is the body of the definition. A
+	call <CODE>Id(s1,...,sn)</CODE> to this operator is equivalent to
+	the body of the definition with the <CODE>si</CODE> substituted for
+	the <CODE>Idi</CODE>. Definitions cannot be recursive. Recursion is
+	defined using the recursion operator.<BR>
+<BR>
+	For example,
+<PRE>
+  strategies
+    repeat(s) = rec x(s; x &lt;+ id)
+</PRE>	defines the operator <CODE>repeat</CODE>.<BR>
+<BR>
+	A defined operator can be used by calling it <BR>
+<BR>
+	<!--TOC paragraph (** Overloading **)-->
+
+<H5> (** Overloading **)</H5><!--SEC END -->
+	Operators can be overloaded<BR>
+<BR>
+	<!--TOC paragraph (** Multiple Definitions **)-->
+
+<H5> (** Multiple Definitions **)</H5><!--SEC END -->
+	in case of multiple definitions for operators <EM>with the
+	same arity</EM> the bodies are shared.<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 12: Syntax
+	of strategy definitions</DIV><BR>
+<A NAME="Fig:Stratego-Strategy-Definitions.sdf"></A><BR>
+	<PRE>module Stratego-Strategy-Definitions
+exports
+  context-free syntax
+
+    "strategies" SDef* -&gt; BSpec {cons("Strategies")}
+
+    %% calling a strategy
+
+    Identifier                   -&gt; SVar  {cons("SVar")}
+    SVar ("(" {Strat ","}* ")")? -&gt; Strat {cons("Call")}
+
+    %% definition of a nullary strategy operators
+
+    Identifier "=" Strat -&gt; SDef
+
+    %% definition of a parameterized strategy operators
+
+    Identifier "(" {Identifier ","}* ")" 
+                                =" Strat -&gt; SDef  {cons("SDef")}
+
+    %% local strategy definition
+    %% Note: not yet supported in stratego-0.4.*
+
+    "let" SDef "in" Strat  -&gt; Strat {cons("Let")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection The Primitives of Transformation are Matching and 
+	Building Patterns-->
+
+<H3>4.2&nbsp;&nbsp; The Primitives of Transformation are Matching and 
+	Building Patterns</H3><!--SEC END -->
+	<blockquote><hr>
+	Rewrite rules are defined in terms of more primitive actions,
+	i.e., matching terms against patterns and building
+	instantiations of patterns.
+	<hr></blockquote><BR>
+<BR>
+	a strategy transforms a term<BR>
+<BR>
+	there is always a term that is the subject of transformation<BR>
+<BR>
+	a term pattern is a term with variables<BR>
+<BR>
+	<!--TOC paragraph Match-->
+
+<H5> Match</H5><!--SEC END -->
+	<CODE>?t</CODE> matches the subject term against the pattern <CODE>t</CODE><BR>
+<BR>
+	if <CODE>t</CODE> is a ground term, this entails that the subject
+	term is equal to <CODE>t</CODE><BR>
+<BR>
+	if <CODE>t</CODE> contains variables, this means that the subject
+	term corresponds to <CODE>t</CODE> as far as the pattern goes. at
+	the positions where <CODE>t</CODE> has variables any term can
+	occur. the variable are bound to the terms at the
+	corresponding positions in the subject term.<BR>
+<BR>
+	Example: <CODE>?App(Abs(x, e1), e2)</CODE><BR>
+<BR>
+	<!--TOC paragraph Build-->
+
+<H5> Build</H5><!--SEC END -->
+	<CODE>!t</CODE> builds an instantiation of the term pattern <CODE>t</CODE>, i.e.,
+	the subject term is replaced by (an instantiation of) <CODE>t</CODE>.<BR>
+<BR>
+	if <CODE>t</CODE> contains no variables then the subject term is replaced
+	by <CODE>t</CODE><BR>
+<BR>
+	if <CODE>t</CODE> contains variables then the subject term is
+	replaced by <CODE>t</CODE>, where the variables in <CODE>t</CODE> are
+	replaced by there bindings<BR>
+<BR>
+	Example: <CODE>!Let(x, e2, e1)</CODE><BR>
+<BR>
+	<!--TOC paragraph Transformation Rules-->
+
+<H5> Transformation Rules</H5><!--SEC END -->
+	A transformation rule first matches the subject term against a
+	pattern and then replaces it with the instantiatio of another
+	pattern. This can be formulated as the sequential composition
+	of a match and a build. For example,<BR>
+<BR>
+<PRE>
+  strategies
+    Beta = ?App(Abs(x, e1), e2); !Let(x, e2, e1)
+</PRE>	<!--TOC paragraph Scope-->
+
+<H5> Scope</H5><!--SEC END -->
+	In the definition above the variables <CODE>x</CODE>, <CODE>e1</CODE> and
+	<CODE>e2</CODE> are implicitly scoped by definition<BR>
+<BR>
+	variable scope: <CODE>{x1,...,xn: s}</CODE><BR>
+<BR>
+	For example, definition with explicit scope
+<PRE>
+  strategies
+    Beta = {x, e1, e2: ?App(Abs(x, e1), e2); !Let(x, e2, e1)}
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 13: Syntax of match and build primitives</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Match-Build
+exports
+  context-free syntax
+    "?" Term                            -&gt; Strat {cons("Match")}
+    "!" Term                            -&gt; Strat {cons("Build")}
+    "{" {Identifier ","}+ ":" Strat "}" -&gt; Strat {cons("Scope")}
+    "where" "(" Strat ")"               -&gt; Strat {cons("Where")}
+    "_"                                 -&gt; Term {cons("Wld")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Combining Strategies-->
+
+<H3>4.3&nbsp;&nbsp; Combining Strategies</H3><!--SEC END -->
+	<blockquote><hr>
+	Basic strategies can be combined into more complex strategies
+	by means of a number of primitive strategy operators.
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph Success and Failure-->
+
+<H5> Success and Failure</H5><!--SEC END -->
+ The operator <CODE>id</CODE> always
+	succeeds without any transformation. The operator <CODE>fail</CODE>
+	always fails.<BR>
+<BR>
+	<!--TOC paragraph Sequential Composition-->
+
+<H5> Sequential Composition</H5><!--SEC END -->
+ If <CODE>s1</CODE> and <CODE>s2</CODE>
+	are strategies, then <CODE>s1 ; s2</CODE> is the strategy that first
+	applies <CODE>s1</CODE> and if that succeeds applies <CODE>s2</CODE> to
+	the result.<BR>
+<BR>
+	<!--TOC paragraph Non-deterministic Choice-->
+
+<H5> Non-deterministic Choice</H5><!--SEC END -->
+ If <CODE>s1</CODE> and <CODE>s2</CODE> are
+	strategies, then <CODE>s1 + s2</CODE> is the strategy that chooses
+	either <CODE>s1</CODE> or <CODE>s2</CODE>, but such that the strategy
+	chosen succeeds.<BR>
+<BR>
+	<!--TOC paragraph Deterministic Choice-->
+
+<H5> Deterministic Choice</H5><!--SEC END -->
+ If <CODE>s1</CODE> and <CODE>s2</CODE>
+	are strategies, then <CODE>s1 &lt;+ s2</CODE> is the strategy that
+	first tries <CODE>s1</CODE> and if that succeeds is done. If
+	<CODE>s1</CODE> fails, then <CODE>s2</CODE> is applied to the original
+	term. The operator is also called <EM>left choice</EM> because
+	it prefers its left argument. An example of the use of left
+	choice is the definition of <CODE>try</CODE>:
+<PRE>
+  try(s) = s &lt;+ id
+</PRE>	The strategy <CODE>try(s)</CODE> succeeds with the result of
+	<CODE>s</CODE> if <CODE>s</CODE> succeeds. Otherwise, if <CODE>s</CODE> fails,
+	<CODE>s</CODE> succeeds without any effect.
+	
+	<!--TOC paragraph Recursion-->
+
+<H5> Recursion</H5><!--SEC END -->
+ If <CODE>s</CODE> is a strategy, then
+	<CODE>rec x. s</CODE> is the strategy that at each point in <CODE>s</CODE>
+	where the strategy variable <CODE>x</CODE> is called, calls itself.
+	An example of the use of recursion is the definition of
+	<CODE>repeat</CODE>:
+<PRE>
+  repeat(s)  = rec x ((s; x) &lt;+ id)
+</PRE>	The strategy <CODE>repeat(s)</CODE> applies the strategy <CODE>s</CODE>
+	as long as it succeeds.<BR>
+<BR>
+	<!--TOC paragraph Test-->
+
+<H5> Test</H5><!--SEC END -->
+ If <CODE>s</CODE> is a strategy, then
+	<CODE>test(s)</CODE> is the strategy that succeeds if <CODE>s</CODE>
+	succeeds, but throws away the effect of its transformation.<BR>
+<BR>
+	<!--TOC paragraph Negation-->
+
+<H5> Negation</H5><!--SEC END -->
+ If <CODE>s</CODE> is a strategy, then
+	<CODE>not(s)</CODE> is the strategy that fails if <CODE>s</CODE> succeeds
+	and succeeds if <CODE>s</CODE> fails.<BR>
+<BR>
+	<!--TOC paragraph Operator Precedence-->
+
+<H5> Operator Precedence</H5><!--SEC END -->
+	Operators in decreasing binding strength
+	<UL>
+<LI>
+	 <CODE>;</CODE>
+	
+<LI> <CODE>+</CODE>, <CODE>&lt;+</CODE> (mutually right associative)
+	</UL>	In other words 
+<CODE>a ; b + c &lt;+ d ; e</CODE> 
+	is parsed as 
+<CODE>(a ; b) + (c &lt;+ (d ; e))</CODE><BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 14: Syntax of sequential programming operators</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Strategies
+imports Stratego-Terms
+exports
+  %%sorts Strat SVar
+  context-free syntax
+    "id"                     -&gt; Strat {cons("Id")}
+    "fail"                   -&gt; Strat {cons("Fail")}
+    "test" "(" Strat ")"     -&gt; Strat {cons("Test")}
+    "not"  "(" Strat ")"     -&gt; Strat {cons("Not")}
+    Strat ";" Strat          -&gt; Strat {cons("Seq"), left}
+    Strat "+" Strat          -&gt; Strat {cons("Choice"), left}
+    Strat "&lt;+" Strat         -&gt; Strat {cons("LChoice"), left}
+    "rec" SVar "(" Strat ")" -&gt; Strat {cons("Rec")}
+    "(" Strat ")"            -&gt; Strat {bracket}
+  context-free priorities
+     Strat ";" Strat  -&gt; Strat
+  &gt; {left: 
+     Strat "+" Strat  -&gt; Strat 
+     Strat "&lt;+" Strat -&gt; Strat }</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Traversing Terms-->
+
+<H3>4.4&nbsp;&nbsp; Traversing Terms</H3><!--SEC END -->
+	<blockquote><hr>
+	To apply transformations below the root of a term it is
+	necessary to traverse it. Stratego provides a number of
+	traversal operators.
+	<hr></blockquote><BR>
+<BR>
+	The operators defined above combine strategies that apply
+	transformations to the root of a term into strategies that
+	repeatedly apply transformations to the root of a term. In
+	order to achieve transformations throughout a term we need
+	operators to traverse the term.<BR>
+<BR>
+	<!--TOC paragraph Congruence-->
+
+<H5> Congruence</H5><!--SEC END -->
+ 	If <CODE>C</CODE> is an <I>n</I>-ary operator defined in the signature,
+	and <CODE>s1</CODE>, ..., <CODE>sn</CODE> are strategies, then
+	<CODE>C(s1,...,sn)</CODE> is a strategy that only applies to
+	<CODE>C</CODE> terms and then applies <CODE>si</CODE> to the <I>i</I>-th. For
+	example, consider the following signature defining the list
+	constructors <CODE>Nil</CODE> and <CODE>Cons</CODE>:
+<PRE> 
+  signature
+    operations
+      Nil  : List(a)
+      Cons : a * List(a) -&gt; List(a)
+</PRE>	The strategy <CODE>Nil</CODE> applies to the term <CODE>Nil</CODE> without
+	any change and fails for all other terms. The strategy
+	<CODE>Cons(s1, s2)</CODE> applies to a term <CODE>Cons(t1, t2)</CODE> if
+	<CODE>si</CODE> applies to <CODE>ti</CODE> with result <CODE>ti'</CODE> and has
+	as result <CODE>Cons(t1', t2')</CODE>. Using these operators we can
+	define the operator <CODE>map</CODE> as:
+<PRE>
+  map(s) = rec x(Nil + Cons(s, x))
+</PRE>	The strategy <CODE>map(s)</CODE> applies a strategy <CODE>s</CODE> to each
+	element of a list. Observe how recursion is used to apply the
+	strategy to the tail of the list.<BR>
+<BR>
+	<!--TOC paragraph Congruences on Strings and Numbers-->
+
+<H5> Congruences on Strings and Numbers</H5><!--SEC END -->
+	each string and numeric constant is congruence on itself<BR>
+<BR>
+	<!--TOC paragraph Congruences on Lists-->
+
+<H5> Congruences on Lists</H5><!--SEC END -->
+	list congruences can also be defined using the <CODE>[]</CODE> syntax
+	for lists.<BR>
+<BR>
+	for example,
+<PRE>
+  map(s) = rec x([] + [s|x])
+</PRE>	<!--TOC paragraph Congruences on Tuples-->
+
+<H5> Congruences on Tuples</H5><!--SEC END -->
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 15: Syntax of congruence traversal operators</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Congruences
+exports
+  context-free syntax
+    String                         -&gt; Strat {cons("StrCong")}
+    Natural                        -&gt; Strat {cons("IntCong")}
+    "(" Strat "," {Strat ","}+ ")" -&gt; Strat {cons("TupleCong")}
+    "[" {Strat ","}* "]"           -&gt; Strat {cons("ListCong")}
+
+    SVar "^" Id "("(" {Strat ","}* ")")? -&gt; Strat {cons("CallModified")}
+
+    %% Note: for each constructor there is a corresponding 
+    %% congruence operator with the following syntax:
+    %%
+    %% Identifier "(" {Strat ","}* ")" -&gt; Strat {cons("Cong")}
+    %%
+    %% since this syntax overlaps with the syntax for strategy
+    %% operator applications, congruences are defined implicitly
+    %% by means of strategy definitions:
+    %%
+    %% strategies
+    %%   C(s1,...,sn) = Cong(C)(s1,...,sn)
+    %% 
+    %% where Cong(S) is a construct in the abstract syntax only.
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Generically Traversing Terms-->
+
+<H3>4.5&nbsp;&nbsp; Generically Traversing Terms</H3><!--SEC END -->
+	<blockquote><hr>
+	Congruences define traversals over known
+	constructors. Stratego also provides several operators to
+	define traversals generically.
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph Path-->
+
+<H5> Path</H5><!--SEC END -->
+ If <CODE>s</CODE> is a strategy, then <CODE>n(s)</CODE>
+	(with <CODE>n</CODE> a natural number) is the strategy that applies
+	<CODE>s</CODE> to the <I>n</I>-th argument of the term. It fails if the
+	term has less then <I>n</I> arguments, or if <CODE>s</CODE> fails on the
+	<I>n</I>-th argument.<BR>
+<BR>
+	<!--TOC paragraph All-->
+
+<H5> All</H5><!--SEC END -->
+ If <CODE>s</CODE> is a strategy, then <CODE>all(s)</CODE>
+	is the strategy that applies <CODE>s</CODE> to each of the children
+	of the root of the term. It succeeds if each of these
+	applications succeeds and fails otherwise. In particular,
+	<CODE>all(s)</CODE> succeeds on a term that has no arguments (a
+	constant). For example, the following strategies apply a
+	strategy <CODE>s</CODE> to each node in a term, in preorder
+	(top-down), postorder (bottom-up) and a combination of pre-
+	and postorder (downup):
+<PRE>
+  bottomup(s) = rec x(all(x); s)
+  topdown(s)  = rec x(s; all(x))
+  downup(s)   = rec x(s; all(x); s)
+</PRE>	A typical usage of these operators is the strategy
+<PRE>
+  bottomup(try(s))
+</PRE>	that tries to apply <CODE>s</CODE> at each node of a term.<BR>
+<BR>
+	<!--TOC paragraph One-->
+
+<H5> One</H5><!--SEC END -->
+ The strategy <CODE>one(s)</CODE> applies <CODE>s</CODE>
+	non-deterministically to one direct subterm. It fails if there
+	is no subterm for which it succeeds. In particular, it fails
+	for constants, since they have no child for which <CODE>s</CODE> can
+	succeed. As we did with <CODE>all</CODE> we can construct bottom-up
+	and top-down traversals with <CODE>one</CODE>:
+<PRE>
+  oncebu(s) = rec x(one(x) &lt;+ s)
+  oncetd(s) = rec x(s &lt;+ one(x))
+</PRE>	These strategies succeed if they find a single node in the
+	term where the application of <CODE>s</CODE> is successful. The
+	first one searches the term in bottom-up order: it first tries
+	to find a succesfull application in one of the children
+	<CODE>one(x)</CODE> and otherwise tries <CODE>s</CODE> at the root.<BR>
+<BR>
+	<!--TOC paragraph Some-->
+
+<H5> Some</H5><!--SEC END -->
+ The strategy <CODE>some(s)</CODE> applies <CODE>s</CODE>
+	to as many children as possible, but at least to one.<BR>
+<BR>
+	Examples of the use of <CODE>some</CODE> are:
+<PRE>
+  somebu(s)     = rec x(some(x); try(s) &lt;+ s)
+  sometd(s)     = rec x(s; all(try(x)) &lt;+ some(x))
+  somedownup(s) = rec x(s; all(x); try(s) &lt;+ some(x); try(s))
+</PRE>	<!--TOC paragraph Thread-->
+
+<H5> Thread</H5><!--SEC END -->
+	threading environments through a traversal<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 16: Syntax of generic traversal operators</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Traversal
+exports
+  context-free syntax
+    Natural  "(" Strat ")"  -&gt; Strat {cons("Path")}
+    "one"    "(" Strat ")"  -&gt; Strat {cons("One")}
+    "some"   "(" Strat ")"  -&gt; Strat {cons("Some")}
+    "all"    "(" Strat ")"  -&gt; Strat {cons("All")}
+    "thread" "(" Strat ")"  -&gt; Strat {cons("Thread")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Carrying Information along a Traversal-->
+
+<H3>4.6&nbsp;&nbsp; Carrying Information along a Traversal</H3><!--SEC END -->
+	<blockquote><hr>
+	Environment distribution and threading congruences
+	<hr></blockquote><BR>
+<BR>
+	Distributing congruences: for each constructor c there is a
+	corresponding distributing congruence operator <CODE>c^D</CODE>
+	defined according to the following scheme:<BR>
+<BR>
+<PRE>
+  Pair(t1,e) -- s1 --&gt; t1'    ...    Pair(tn,e) -- sn --&gt; tn'
+  -----------------------------------------------------------
+  Pair(F(t1,....,tn),e) -- F^D(s1,...,sn) --&gt; F(t1',...,tn')
+</PRE>	Threading congruences: for each constructor c there is a
+	corresponding threading congruence operator <CODE>c^T</CODE> defined
+	according to the following scheme:<BR>
+<BR>
+<PRE>
+  Pair(t1,e1) -- s1 --&gt; Pair(t1',e2) ... Pair(tn,en) -- sn --&gt; Pair(tn',e')
+  -------------------------------------------------------------------------
+  Pair(F(t1,....,tn),e1) -- F^T(s1,...,sn) --&gt; Pair(F(t1',...,tn'),e')
+</PRE>	<!--TOC paragraph Implementation-->
+
+<H5> Implementation</H5><!--SEC END -->
+ 	These congruences can be generated at compile time by need,
+ 	i.e., whenever there is a call to <CODE>D(F)</CODE> or <CODE>T(F)</CODE>,
+ 	the instantation of the schemes above should be
+ 	generated. This can be done during needed definition
+ 	computation.<BR>
+<BR>
+<PRE>
+ c^D(s1,...,sn) : Pair(c(x1,...,xn),env) -&gt; c(y1,...,yn)
+        where &lt;s1&gt; Pair(x1,env) =&gt; y1;
+              ...;
+              &lt;sn&gt; Pair(xn, envn) =&gt; yn
+</PRE><PRE>
+ c^T(s1,...,sn) : Pair(c(x1,...,xn),e1) -&gt; Pair(c(y1,...,yn), e-last)
+        where &lt;s1&gt; Pair(x1,e1) =&gt; Pair(y1,e2);
+              ...
+              &lt;sn&gt; Pair(xn, en) =&gt; Pair(yn, e-last)
+</PRE>
+<!--TOC section Rules-->
+
+<H2>5&nbsp;&nbsp; Rules</H2><!--SEC END -->
+<!--TOC subsection Defining Basic Transformations with Rules-->
+
+<H3>5.1&nbsp;&nbsp; Defining Basic Transformations with Rules</H3><!--SEC END -->
+	<blockquote><hr>
+	Standard rewrite rules are a notation for a special kind
+	of strategies.
+	<hr></blockquote><BR>
+<BR>
+	A rule section has the form
+<PRE>
+  rules 
+    Rule*
+</PRE>	A rule has the form
+<PRE>
+  Label : Term -&gt; Term 
+</PRE>	An example is the following rule that defines beta-reduction
+	on lambda expressions.
+<PRE>
+  rules
+    Beta : Apply(Lambda(x, e1), e2) -&gt; Subs(e2, x, e1)
+</PRE>	denotes
+<PRE>
+  strategies
+    Beta = ?App(Abs(x, e1), e2); !Let(x, e2, e1)
+</PRE>	A rewrite rule defines a one step transformation on terms. If
+	the term matches the left-hand side of the rule it is replaced
+	by the appropriately instantiated right-hand side of the rule.
+	This transformation happens at the root of a term. Later on we
+	will introduce ways to apply rules to the subterms of a term.<BR>
+<BR>
+	<!--TOC paragraph Conditional Rules-->
+
+<H5> Conditional Rules</H5><!--SEC END -->
+	The simple rules that we introduced above apply if the
+	left-hand side of the rule matches the root of the
+	term. Sometimes we want to restrict the applicability of a
+	rule to a subset of terms that match the pattern of the
+	left-hand side. A conditional rule of the form
+<PRE>
+  Label : Term -&gt; Term where Strategy
+</PRE>	applies if the left-hand side matches and in addition the
+	strategy in the where clause succeeds when applied to the
+	term.
+	
+	For example, let <CODE>in</CODE> be the strategy that when applied
+	to a pair <CODE>(t1, t2)</CODE> of terms, determines whether
+	<CODE>t1</CODE> occurs as a subterm of <CODE>t2</CODE>, then the following
+	conditional rule defines eta reduction of a lambda term:
+<PRE>
+  Eta : Lambda(x, Apply(e, Var(x))) -&gt; e
+        where &lt;not(in)&gt; (Var(x), e)
+</PRE>	The notation 
+<PRE>
+   &lt;Strategy&gt; Term
+</PRE>	is used to build an intermediate term to which the testing
+	strategy should be applied.
+	
+	If more than one condition has to hold, they can be composed
+	using the strategy operators introduced in previous sections.<BR>
+<BR>
+	<!--TOC paragraph Anonymous Rules-->
+
+<H5> Anonymous Rules</H5><!--SEC END -->
+	sometimes useful to define rule without a name<BR>
+<BR>
+	<CODE>\ t1 -&gt; t2 where s \ </CODE><BR>
+<BR>
+	<!--TOC paragraph Parameterized and Overloaded Rules-->
+
+<H5> Parameterized and Overloaded Rules</H5><!--SEC END -->
+	follows mapping to strategy definitions<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 17: Syntax of rules</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Rules
+imports Stratego-Strategies
+exports
+  %%sorts Rule RDef
+  context-free syntax
+    "rules" RDef*    -&gt; BSpec {cons("Rules")}
+
+    %% parameterized rule definition
+
+    Identifier ("(" {Identifier ","}* ")")? 
+      ":"  Rule -&gt; RDef {cons("RDef")} 
+
+    %% standard rewrite rule
+
+    Term "-&gt;" Term ("where" Strat)? -&gt; Rule {cons("Rule")}
+
+    %% anonymous rule
+
+    "\\" Rule "\\" -&gt; Strat {cons("LRule")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Applying Strategies in Terms and Matching Terms in Strategies-->
+
+<H3>5.2&nbsp;&nbsp; Applying Strategies in Terms and Matching Terms in Strategies</H3><!--SEC END -->
+	<blockquote><hr>
+	Strategies can be applied to (sub)terms of build patterns.
+	<hr></blockquote><BR>
+<BR>
+	The notation 
+<PRE>
+   &lt;Strategy&gt; Term
+</PRE>	is used to build an intermediate term to which the testing
+	strategy should be applied.
+	
+	If more than one condition has to hold, they can be composed
+	using the strategy operators introduced in previous sections.<BR>
+<BR>
+	<!--TOC paragraph Matching Conditions-->
+
+<H5> Matching Conditions</H5><!--SEC END -->
+
+	
+	Conditions can also be used to compute an intermediate result
+	to be used in the right-hand side of the rule. A strategy of
+	the form
+<PRE>
+  Strategy =&gt; Term
+</PRE>	applies a strategy to the current term and matches the result
+	against the term. This can have the effect of binding the
+	variables in the term, which can then be used in the
+	right-hand side of the rule.
+	
+	For example, the following rule defines the eta expansion
+	of a lambda expression.
+<PRE>
+  EtaExp: e -&gt; Lambda(x, Apply(e, Var(x)))
+          where new =&gt; x
+</PRE>	The condition <CODE>new =&gt; x</CODE> generates a new string and
+	matches the result against the variable <CODE>x</CODE>.<BR>
+<BR>
+	<!--TOC paragraph Strategy Applications-->
+
+<H5> Strategy Applications</H5><!--SEC END -->
+	Application of a strategy to a subterm in the right-hand
+	side of a rule.
+<PRE>
+  &lt;Strategy&gt; Term
+</PRE>	
+	For example, let <CODE>subs</CODE> be the strategy that when applied
+	to a triple <CODE>(a, b, c)</CODE> replaces occurences of <CODE>b</CODE>
+	in <CODE>c</CODE> by <CODE>a</CODE>, then beta reduction can also be
+	defined using the following rule:
+<PRE>
+  Beta : Apply(Lambda(x, e1), e2) -&gt; &lt;subs&gt; (e2, Var(x), e1)
+</PRE>	Using matching conditions this rule is a shorthand for the
+	rule
+<PRE>
+  Beta : Apply(Lambda(x, e1), e2) -&gt; e3
+         where &lt;subs&gt; (e2, Var(x), e1) =&gt; e3
+</PRE>	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 18: Syntax of strategy application</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Application
+imports Stratego-Strategies
+exports
+  context-free syntax
+    "&lt;" Strat "&gt;" Term     -&gt; Term    {cons("App")}
+
+    Strat "=&gt;" Term        -&gt; Strat   {cons("AM")}
+    "&lt;" StratAux "&gt;" Term  -&gt; Strat   {cons("BA")}
+    Strat                  -&gt; StratAux
+  context-free priorities
+    "&lt;" StratAux "&gt;" Term -&gt; Strat &gt;
+    Strat "=&gt;" Term -&gt; Strat &gt;
+    Strat ";" Strat -&gt; Strat</PRE>
+	
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Strategic Pattern Matching Rules-->
+
+<H3>5.3&nbsp;&nbsp; Strategic Pattern Matching Rules</H3><!--SEC END -->
+	<blockquote><hr>
+	<hr></blockquote><BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 19: </DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Strategic-Rules
+exports 
+  context-free syntax
+    %% rule with strategic patterns
+
+    Strat "--&gt;" Strat ("where" Strat)? 
+                                -&gt; SRule {cons("StratRule")}
+
+    Identifier ("(" {Identifier ","}* ")")? 
+      "::"  SRule -&gt; RDef {cons("RDef")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Describing Deeply Embedded Patterns with Contexts-->
+
+<H3>5.4&nbsp;&nbsp; Describing Deeply Embedded Patterns with Contexts</H3><!--SEC END -->
+	<blockquote><hr>
+	<hr></blockquote><BR>
+<BR>
+	For some applications matching with a fixed pattern is not
+	sufficient because some part of the pattern can be at an
+	arbitrary depth from the root. In such circumstances
+	contextual matching can be used.<BR>
+<BR>
+	For example, assume that our lambda terms satisfy the variable
+	assumption, i.e. no two bound variables are the same if their
+	binding positions are different, then we can define alpha
+	renaming by means of the rule
+<PRE>
+  Alpha : Lambda(x, e[Var(x)](sometd)) -&gt; Lambda(y, e[Var(y)])
+          where new =&gt; y
+</PRE>	This rule replaces the abstracted variable <CODE>x</CODE> and all
+	occurences of <CODE>Var(x)</CODE> in the body of the abstraction by
+	the fresh variable <CODE>Var(y)</CODE>. The strategy <CODE>sometd</CODE>
+	specified with the context determines what traversal strategy
+	to use to find occurences of <CODE>Var(x)</CODE>. (Later on we will
+	discuss how a bound variables can be renamed in order to
+	adhere to the variable assumption.)<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 20: </DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Contexts
+exports
+  context-free syntax
+    Identifier "[" Term "]" ("(" SVar ")")? -&gt; Term {cons("Con")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection Abstracting from Patterns with Overlays-->
+
+<H3>5.5&nbsp;&nbsp; Abstracting from Patterns with Overlays</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	<hr></blockquote> <BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 21: Syntax of overlays</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Overlays
+exports
+  %%sorts Overlay
+  context-free syntax
+    Identifier ("(" {Identifier ","}* ")")?
+      "=" Term -&gt; Overlay {cons("Overlay")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<!--TOC subsection As Patterns-->
+
+<H3>5.6&nbsp;&nbsp; As Patterns</H3><!--SEC END -->
+	As patterns of the form x @ t can be used to deconstruct a
+	term using pattern matching and at the same time bind the
+	entire term to the variable x. For example, given the rule<BR>
+<BR>
+<PRE>
+       rules
+         R : F(x, y @ G(A, z)) -&gt; H(x, y, z)
+</PRE> 	we have that<BR>
+<BR>
+<PRE>
+       &lt;R&gt; F(B,G(A,C)) =&gt; H(B,G(A,C),C)
+</PRE>
+<!--TOC section Connecting-->
+
+<H2>6&nbsp;&nbsp; Connecting</H2><!--SEC END -->
+
+<!--TOC subsection Connecting to the World through Primitives-->
+
+<H3>6.1&nbsp;&nbsp; Connecting to the World through Primitives</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	<hr></blockquote> <BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 22: Syntax of primitives</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Primitives.sdf
+exports
+  context-free syntax
+    "prim" "(" String ")" -&gt; Strat</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV>
+ <!--TOC section Related Work-->
+
+<H2>7&nbsp;&nbsp; Related Work</H2><!--SEC END -->
+
+<!--TOC subsection References to Related Work-->
+
+<H3>7.1&nbsp;&nbsp; References to Related Work</H3><!--SEC END -->
+ 	<blockquote><hr>
+	The application of Stratego is described in several
+	publications.
+	<hr></blockquote><BR>
+<BR>
+ 
+ 
+ 
+<!--TOC section References-->
+
+<H2>References</H2><!--SEC END -->
+<DL COMPACT=compact>
+<DT><A NAME="WWW-XT"><FONT COLOR=purple>[1]</FONT></A><DD>
+http://www.cs.uu.nl/~visser/xt/.<BR>
+<BR>
+
+<DT><A NAME="WWW-Stratego"><FONT COLOR=purple>[2]</FONT></A><DD>
+www.stratego-language.org.<BR>
+<BR>
+
+<DT><A NAME="BJKO2000"><FONT COLOR=purple>[3]</FONT></A><DD>
+M.&nbsp;G.&nbsp;J. van&nbsp;den Brand, H.&nbsp;A. de&nbsp;Jong, P.&nbsp;Klint, and P.&nbsp;A.
+ Olivier.
+Efficient annotated terms.
+<EM>Software---Practice &amp; Experience</EM>, 30:259--291, 2000.<BR>
+<BR>
+
+<DT><A NAME="JV2000"><FONT COLOR=purple>[4]</FONT></A><DD>
+Patricia Johann and Eelco Visser.
+Warm fusion in Stratego: A case study in the generation of
+ program transformation systems.
+<EM>Annals of Mathematics and Artificial Intelligence</EM>, 2000.
+(Accepted for publication).<BR>
+<BR>
+
+<DT><A NAME="JV2000.tr"><FONT COLOR=purple>[5]</FONT></A><DD>
+Patricia Johann and Eelco Visser.
+Warm fusion in Stratego: A case study in the generation of
+ program transformation systems.
+Technical report, Institute of Information and Computing Sciences,
+ Universiteit Utrecht, Utrecht, The Netherlands, 2000.<BR>
+<BR>
+
+<DT><A NAME="LV97"><FONT COLOR=purple>[6]</FONT></A><DD>
+Bas Luttik and Eelco Visser.
+Specification of rewriting strategies.
+In M.&nbsp;P.&nbsp;A. Sellink, editor, <EM>2nd International Workshop on the
+ Theory and Practice of Algebraic Specifications (ASF+SDF'97)</EM>, Electronic
+ Workshops in Computing, Berlin, November 1997. Springer-Verlag.<BR>
+<BR>
+
+<DT><A NAME="Vis99"><FONT COLOR=purple>[7]</FONT></A><DD>
+Eelco Visser.
+Strategic pattern matching.
+In P.&nbsp;Narendran and M.&nbsp;Rusinowitch, editors, <EM>Rewriting
+ Techniques and Applications (RTA'99)</EM>, volume 1631 of <EM>Lecture Notes in
+ Computer Science</EM>, pages 30--44, Trento, Italy, July 1999. Springer-Verlag.<BR>
+<BR>
+
+<DT><A NAME="Vis99.compiler"><FONT COLOR=purple>[8]</FONT></A><DD>
+Eelco Visser.
+<EM>The </EM><EM>Stratego</EM><EM> Compiler</EM>.
+Institute of Information and Computing Sciences, Universiteit
+ Utrecht, Utrecht, The Netherlands, 1999.<BR>
+<BR>
+
+<DT><A NAME="Vis99.lib"><FONT COLOR=purple>[9]</FONT></A><DD>
+Eelco Visser.
+<EM>The </EM><EM>Stratego</EM><EM> Library</EM>.
+Institute of Information and Computing Sciences, Universiteit
+ Utrecht, Utrecht, The Netherlands, 1999.<BR>
+<BR>
+
+<DT><A NAME="Vis99.refman"><FONT COLOR=purple>[10]</FONT></A><DD>
+Eelco Visser.
+<EM>The </EM><EM>Stratego</EM><EM> Reference Manual</EM>.
+Institute of Information and Computing Sciences, Universiteit
+ Utrecht, Utrecht, The Netherlands, 1999.<BR>
+<BR>
+
+<DT><A NAME="Vis99.Tutorial"><FONT COLOR=purple>[11]</FONT></A><DD>
+Eelco Visser.
+<EM>The </EM><EM>Stratego</EM><EM> Tutorial</EM>.
+Institute of Information and Computing Sciences, Universiteit
+ Utrecht, Utrecht, The Netherlands, 1999.<BR>
+<BR>
+
+<DT><A NAME="Vis2000"><FONT COLOR=purple>[12]</FONT></A><DD>
+Eelco Visser.
+Language independent traversals for program transformation.
+In Johan Jeuring, editor, <EM>Workshop on Generic Programming
+ (WGP2000)</EM>, Ponte de Lima, Portugal, July 6, 2000. Technical Report
+ UU-CS-2000-19, Universiteit Utrecht.<BR>
+<BR>
+
+<DT><A NAME="VB98"><FONT COLOR=purple>[13]</FONT></A><DD>
+Eelco Visser and Zine-el-Abidine Benaissa.
+A core language for rewriting.
+<EM>Electronic Notes in Theoretical Computer Science</EM>, 15, September
+ 1998.
+In C.&nbsp;Kirchner and H.&nbsp;Kirchner, editors, Proceedings of the Second
+ International Workshop on Rewriting Logic and its Applications (WRLA'98),
+ Pont-à-Mousson, France.<BR>
+<BR>
+
+<DT><A NAME="VBT98"><FONT COLOR=purple>[14]</FONT></A><DD>
+Eelco Visser, Zine-el-Abidine Benaissa, and Andrew Tolmach.
+Building program optimizers with rewriting strategies.
+<EM>ACM SIGPLAN Notices</EM>, 34(1):13--26, January 1999.
+Proceedings of the International Conference on Functional Programming
+ (ICFP'98).</DL>
+
+
+<!--HTMLFOOT-->
+<!--ENDHTML-->
+
+<!--FOOTER-->
+<HR SIZE=2>
+<BLOCKQUOTE><EM>This document was translated from L<sup>A</sup>T<sub>E</sub>X by
+</EM><A HREF="http://pauillac.inria.fr/~maranget/hevea/index.html"><EM>H</EM><EM><FONT SIZE=2><sup>E</sup></FONT></EM><EM>V</EM><EM><FONT SIZE=2><sup>E</sup></FONT></EM><EM>A</EM></A><EM>.
+</EM></BLOCKQUOTE></BODY>
+</HTML>
+

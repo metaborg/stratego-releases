@@ -1,0 +1,81 @@
+$Id: CHANGES,v 1.1.1.1 1999/11/12 10:51:58 visser Exp $
+
+Mon Nov  1 14:31:04 GMT 1999
+
+ * Left and right zip: keep one argument constants and combine it
+   into pairs with the elements from the list in the other argument.
+   Similar: left and right zipFetch.
+ * zip-skip: skip elements of either the lists depending on a predicate.
+
+Sat Oct 23 22:24:27 BST 1999
+
+ * Wrote an abstract as introduction to the library.
+
+Sat Oct 23 17:44:47 BST 1999
+
+ * tables.r: interface to ATerm tables with operators:
+   - <create-table> table
+   - <destroy-table> table
+   - <table-put> (table, key, value)
+   - <table-get> (table, key)
+   - <table-keys> table
+
+ * options.r: command-line option handling (from io.r)
+ * abox.r: interface to Merijn de Jonge's Box package
+ * substitution.r: formerly subs.r
+ * unification.r: generic implementation of unification parameterized
+   with shape of variables
+ * term.r: explode-term into function name and list of arguments
+ * list-zip.r: more variants
+
+ * io-text.r: obsolete interface to text.r in iowrap
+
+ * doc/: stand-alone documentation of the library (The Stratego Library)
+
+Wed Oct 20 18:41:23 MET DST 1999
+
+ * Text is no longer to be used for pretty-printing; rather
+   use Merijn de Jonge's Box package
+ * Create versions of io wrappers that pass (remaining) options 
+   to the strategy.
+ * Also new strategies for transforming a list of options, instead
+   of binding variables.
+ * init gives initial elements of a list, i.e., without the last
+   element
+ * zip-tail gives the tail of the second list after the first list
+   is exhausted.
+
+Mon May 31 12:48:54 CEST 1999
+
+ * Added subs.r to documentation
+ * map now also called list
+ * primitive min is now for minimum, minus or subt should be used for
+   subtraction
+ * number of occurrences; from warm fusion specification
+ * spine traversals; only apply s along a spine of the tree
+ * tcata and tconcat' (allows setting of initial value)
+
+Fri Mar 12 12:03:58 CET 1999
+
+ * text.r: Added variadic versions of horizontal and vertical 
+   composition; Hs, Vs
+
+Tue Mar  9 13:07:02 CET 1999
+
+ * New variant renaming' of renaming that takes advantage of new higher-order
+   feature in compiler.
+
+Mon Mar  1 09:50:51 CET 1999
+
+ * FAIL in basic.r is a failing strategy that is not recognized by the
+   simplifier.
+ * isect: set intersection in list-set
+ * concat-strings: concatenate strings in list of strings
+ * at_tail renamed to at_end (thanks Daan & Lambert)
+ * renamings in foldl/r definitions
+ * Documentation in library.ltx
+
+February 1999
+
+ * Set up library; unified version of libraries used in case studies and
+   compiler

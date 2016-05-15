@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  IO: Input and Output
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library035.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library037.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>7.1.1&nbsp;&nbsp;  IO: Input and Output</H3>	<blockquote><hr><BR>
+<BR>
+	A transformation system needs to input terms to transform
+	and output transformed terms. Instead of providing a single
+	fixed mechanism for IO, this module
+	defines primitives for file input and output of
+	terms and strings. These primitives can be used in a variety
+	of ways to define customized IO.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	A compiled Stratego specification applies the strategy
+	<CODE>main</CODE> to the command line options that it gets. When
+	interpreting these it will probably be necessary to read in
+	a term from file and later write the transformed term back
+	to (another) file. This module provides the primitives for
+	doing file input and output. Module <CODE>options</CODE> defines
+	strategies to parse and analyze the command line options.<BR>
+<BR>
+<PRE>
+module io
+imports list string tuple integers time exec
+</PRE>	A <CODE>file</CODE> can be a string or one of the terms
+	<CODE>stdin</CODE>, <CODE>stdout</CODE>, <CODE>stderr</CODE>.<BR>
+<BR>
+<PRE>
+signature
+  sorts File
+  constructors
+    stdin  : File
+    stdout : File
+    stderr : File
+</PRE>	<CODE>&lt;ReadFromFile&gt; file</CODE> reads the term in <CODE>file</CODE>. The
+	<CODE>file</CODE> needs to be in textual or binary ATerm format.<BR>
+<BR>
+	<CODE>&lt;WriteToTextFile&gt; (file, term)</CODE> writes <CODE>term</CODE> to
+	file in textual ATerm format.<BR>
+<BR>
+	<CODE>&lt;WriteToBinaryFile&gt; (file, term)</CODE> writes <CODE>term</CODE> to
+	file in BAF format.<BR>
+<BR>
+ 	<CODE>&lt;print&gt; (file, [t1,...,tn])</CODE> prints the terms <CODE>ti</CODE>
+	to file. If <CODE>ti</CODE> is a string it is printed without quotes,
+	otherwise it is printed as a term. <CODE>printnl</CODE> has the same
+	behaviour, but also prints a newline after <CODE>tn</CODE>.<BR>
+<BR>
+	Before printing to a file the file should be opened using
+	<CODE>&lt;open-file&gt; filename</CODE>, which truncates the file, or creates
+	it if it doesn't exist. To append to a file, open the file
+	with <CODE>&lt;append-file&gt; filename</CODE>. The file is created if it
+	doesn't exist.<BR>
+<BR>
+<PRE>
+strategies
+
+  print             = prim("_ST_print")
+  printnl           = prim("_ST_printnl")
+  printascii        = prim("_ST_printascii")
+
+  file-exists       = prim("_ST_file_exists")
+  open-file         = prim("_ST_open_file")
+  append-file       = prim("_ST_append_file")
+  close-file        = prim("_ST_close_file")
+
+  ReadFromFile      = prim("_ST_ReadFromFile")
+  WriteToBinaryFile = prim("_ST_WriteToBinaryFile")
+  WriteToTextFile   = prim("_ST_WriteToTextFile")
+</PRE> 	The primitive <CODE>print-stack</CODE> prints the top n elements of
+ 	the stack if applied as <CODE>&lt;print-stack&gt;</CODE> n or the entire
+	stack if
+ 	applied to a non-integer term.<BR>
+<BR>
+<PRE>
+  print-stack       = prim("_ST_PrintStack")
+</PRE>	The strategy <CODE>debug</CODE> prints the
+	current term to <CODE>stderr</CODE> without changing it. This is
+	a useful strategy for debugging specifications (hence its
+	name).<BR>
+<BR>
+<PRE>
+strategies
+
+  open(file) = file; ReadFromFile
+
+  save(file) = split(file, id); WriteToTextFile
+
+  debug      = where(split(!stderr, \x -&gt; [x]\); printnl)
+  debug(msg) = where(split(!stderr, \x -&gt; [&lt;msg&gt;(),x]\); printnl)
+
+  say(msg)   = where(msg; debug)
+
+  echo       = where(split(!stdout, \x -&gt; [x]\); printnl)
+  echo(msg)  = where(split(!stdout, \x -&gt; [&lt;msg&gt;(),x]\); printnl)
+
+  debug-stdout(msg) = 
+    say(!"debug-stdout obsolete; use echo");
+    where(split(!stdout, \x -&gt; [&lt;msg&gt;(),x]\); printnl)
+
+  trace(msg,s) =
+    debug(msg); (s; debug(!"succeeded: ") &lt;+ debug(!"failed: "))
+
+  error = where(split(!stderr, id); printnl)
+
+  fatal-error = where(error; &lt;exit&gt; 1)
+
+  giving-up   = &lt;fatal-error&gt;["giving-up"]
+
+  printchar   = where(split(!stdout, \x -&gt; [x]\ ); printascii)
+
+  printstring = where(split(!stdout, \x -&gt; [x]\ ); print)
+
+  print-strings-nl(out) = where(split(out, id); printnl)
+
+  obsolete(msg) = where(&lt;debug(msg)&gt; ": obsolete library strategy")
+</PRE>	The operator <CODE>stdio</CODE> implements a simple user-interface
+	for transformers. A term is read from standard input,
+	transformed with parameter strategy <CODE>s</CODE> and then written
+	to standard output. If the transformation failed the text
+	<CODE>rewriting failed</CODE> is written to standard error.<BR>
+<BR>
+<PRE>
+strategies
+
+  stdio(s) = &lt;ReadFromFile&gt; stdin;
+             s; 
+             split(!stdout, id); WriteToTextFile
+          &lt;+ &lt;fatal-error&gt; ["** rewriting failed"]
+</PRE>	A variant of this strategy provides a pair of the command-line
+	options and the input file to the strategy.<BR>
+<BR>
+<PRE>
+strategies
+
+  stdioO(s) = split(id, &lt;ReadFromFile&gt; stdin); 
+              s;
+              split(!stdout, id); WriteToTextFile
+           &lt;+ &lt;fatal-error&gt; ["** rewriting failed"]
+</PRE>
+	<HR>
+<A HREF="Library035.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library037.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

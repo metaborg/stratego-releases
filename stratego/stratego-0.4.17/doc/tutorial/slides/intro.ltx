@@ -1,0 +1,135 @@
+\section{Language Independent Algorithms?}
+	
+	\begin{itemize}
+
+	\item collect free variables
+
+	\item rename bound variables
+
+	\item flatten a module
+
+	\item find modules imported by a module
+
+	\item compute call graph
+
+	\item unify two expressions
+
+	\end{itemize}
+
+\section{Representation Spoils the Fun}
+	
+	\begin{itemize}
+
+	\item generic algorithm needs to be adapted to specific
+	representation, or
+
+	\item specific representation is encoded in generic
+	representation suitable for generic algorithm
+
+	\end{itemize}
+
+\section{Generic vs Specific}
+	
+	\begin{itemize}
+
+	\item Generic representation
+
+		\begin{itemize}
+
+		\item Examples: XML, AsFix, universal datatype
+
+		\item Generic algorithms expressed concisely
+
+		\item Data type specific algorithms encoded
+
+		\end{itemize}
+
+	\item Specific representation
+
+		\begin{itemize}
+
+		\item Examples: C++ abstract syntax
+
+		\item Data type specific algorithms expressed directly, but
+
+		\item No generic algorithms
+
+		\item Solution: Generate generic functionality
+
+		\end{itemize}
+
+	\end{itemize}
+
+\section{Stratego: Generic and Specific}
+
+	\begin{itemize}
+
+	\item Specific rules
+
+	\item Generic strategies/traversals
+
+	\item Abstract from the details (shape) of the representation
+
+	\item Generic algorithm for class of representations
+
+	\end{itemize}
+
+\section{Outline}
+
+	\parskip.45\baselineskip
+
+	\begin{itemize}
+
+	\item Stratego constructs (reference)
+
+	\item Shortcutting recursion in generic traversals
+
+		\begin{itemize}
+
+		\item asource: printing leaves of parse tree
+
+		\end{itemize}
+
+	\item Collecting subterms
+
+		\begin{itemize}
+
+		\item get imports of module
+
+		\item get ambiguity nodes in parse tree
+
+		\end{itemize}
+
+	\item Restricted collection
+
+		\begin{itemize}
+
+		\item collecting free variables
+
+		\end{itemize}
+
+	\item Environment passing transformation
+
+		\begin{itemize}
+
+		\item renaming bound variables
+
+		\end{itemize}
+
+	\item Graph closure
+
+		\begin{itemize}
+
+		\item creating SDF2 definition file 
+
+		\end{itemize}
+
+	\item Term destruction
+
+		\begin{itemize}
+
+		\item syntactic unification
+
+		\end{itemize}
+
+	\end{itemize}

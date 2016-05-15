@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  ITERATION
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library002.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library004.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>2.0.3&nbsp;&nbsp;  ITERATION</H3>	<CODE>repeat(s,c)</CODE> repeats <CODE>s</CODE> as long as possible and
+	finishes with <CODE>c</CODE><BR>
+<BR>
+	<CODE>repeat1(s,c)</CODE> applies <CODE>s</CODE> at least once.<BR>
+<BR>
+<PRE>
+module iteration
+strategies
+
+  repeat(s, c)       = rec x(s; x &lt;+ c)
+  repeat(s)          = repeat(s, id)
+
+  repeat1(s, c)      = rec x(s; (x &lt;+ c))
+  repeat1(s)         = repeat1(s, id)
+
+  repeat-until(s, c) = rec x(s; (c &lt;+ x))
+
+  while(c, s)        = rec x(try(c; s; x))
+  do-while(s, c)     = rec x(s; try(c; x))
+
+  while-not(c, s)    = rec x(c &lt;+ s; x)   
+
+  for(i, c, s)       = i; repeat-until(s, c)
+</PRE><HR>
+<A HREF="Library002.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library004.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

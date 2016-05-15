@@ -1,0 +1,22 @@
+
+Theorem:  rec x(s; (x <+ c)) <+ c  =   rec x(s; x <+ c)
+	
+Proof
+	    (s; (rec x(s; x <+ c)) <+ c)
+
+	y =       rec x(s; (x <+ c)) <+ c
+
+
+	y = (s; ((rec x(s; (x <+ c)) <+ c) <+ c)) <+ c
+
+	y = (s; (rec x(s; (x <+ c)) <+ c)) <+ (s; c) <+ c
+
+	y = (s; rec x(s; (x <+ c))) <+ (s; c) <+ (s; c) <+ c
+
+	y = (s; rec x(s; (x <+ c))) <+ (s; c) <+ c
+
+	y = s; (rec x(s; (x <+ c)) <+ c) <+ c
+
+	y = s; y <+ c
+
+	y = rec x(s; x <+ c)

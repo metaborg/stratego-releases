@@ -1,0 +1,1 @@
+Specification([Signature([Operations([])]),Rules([]),Strategies([SDef("main",[],Choice(Scope(["x"],Seq(AM(Id,Op("F",[Var("A"),Var("x")])),Build(Var("A")))),Scope(["y"],Seq(AM(Id,Op("F",[Var("y"),Op("G",[Var("B"),Var("C")])])),Build(Var("B"))))))])])

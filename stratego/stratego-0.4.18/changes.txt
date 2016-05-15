@@ -1,0 +1,21 @@
+
+	* spec/match/match-to-matrix.r: Defined merging of matrices also
+	if not all elements of a choice or lchoice are matrices by merging
+	adjacent matrices.
+
+	* spec/opt/congruence-laws.r: Defined TransformingCongruence law
+	that defines congruence in terms of matching and building. Needs
+	to be improved before incorporation in the compiler.
+
+	* spec/back/compiler.r: Defined matching of function symbol
+	for congruence with TestFunTop that uses cached AFun. Removed
+	obsolete code.
+
+	* spec/slib/spec/options.r: Added strategy iowrapNoOutput that
+	does not write the result term to the output file, instead leaving
+	this to the wrapped strategy. This is useful for strategies that
+	produce output by means of printing.
+
+	* spec/pp/pp-instructions.r: Defined pretty-printing of
+	instructions in Stratego (was implemented in C). Now easier to
+	adapt.

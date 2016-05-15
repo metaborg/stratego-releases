@@ -1,0 +1,49 @@
+BOOTSTRAPPING SUCCEEDED
+
+~= 62 min
+
+3473.04user 260.27system 1:38:52elapsed 62%CPU (0avgtext+0avgdata 0maxresident)k
+0inputs+0outputs (1380870major+3386322minor)pagefaults 7619swaps
+
+
+   7686 back/backend.c
+    370 bak.rts/aterm-extension.c
+     25 bak.rts/debug.c
+     97 bak.rts/options.c
+    418 bak.rts/stratego.c
+     62 bak.rts/stratego-main.c
+     38 bak.rts/test.c
+    123 bak.rts/wrap.c
+   7936 front/extract.c
+   9269 front/frontend.c
+   4539 front/inline.c
+   8293 match/compile-match.c
+   4685 match/optimize1.c
+   4633 match/optimize2.c
+   1278 post/postprocess.c
+   2179 pp/pp-instructions.c
+    370 rts/aterm-extension.c
+     25 rts/debug.c
+     97 rts/options.c
+    417 rts/stratego.c
+    153 rts/stratego-main.c
+     38 rts/test.c
+    123 rts/wrap.c
+   4669 sc/proto-sc.c
+   2420 sig/Abstract-Machine-Format.c
+   1833 sig/Stratego-Normal-Format.c
+   2127 sig/Stratego-Optimized-Format.c
+   3209 syn/pack-stratego.c
+    177 syn/parse-mod.c
+    181 syn/parse-stratego.c
+   1788 syn/stratego.grm.tab.c
+   2332 syn/stratego.yy.c
+     16 test/aaa.c
+     16 test/bbb.c
+     16 test/blablabla.c
+     11 test/test1.c
+    187 test/test3.c
+     55 test/test4.c
+     62 test/test6.c
+    148 test/test7.c
+  72101 total

@@ -1,0 +1,41 @@
+/AUTHORS/1.2/Wed Jan 19 16:23:23 2000//
+/BUGS/1.4/Wed Mar 15 15:27:55 2000//
+/CHANGES/1.1.1.1/Fri Nov 12 10:51:49 1999//
+/COPYING/1.2/Wed Jan 19 16:23:23 2000//
+/INSTALL/1.1/Thu Jan 27 11:21:27 2000//
+/NOTES/1.1/Wed Dec  8 22:01:35 1999//
+/README-alpha/1.1.1.1/Fri Nov 12 10:51:49 1999//
+/README.in/1.5/Sun Aug 27 13:58:11 2000//
+/THANKS/1.3/Wed Jan 19 16:23:24 2000//
+/TIME/1.2/Mon Jun 12 15:53:27 2000//
+/check-dist.in/1.1/Sun Jun 25 09:49:24 2000//
+/config.h.in/1.1.1.1/Fri Nov 12 10:51:49 1999//
+/distdiff/1.1/Sun Nov  5 21:27:18 2000//
+/install-sh/1.1/Sun Feb  6 22:33:32 2000//
+/missing/1.1/Sun Feb  6 22:33:32 2000//
+/mkinstalldirs/1.1/Sun Feb  6 22:33:32 2000//
+/reconf/1.3/Wed Sep 20 08:14:15 2000//
+/stdconfigure/1.2/Sat Mar 11 17:19:58 2000//
+D/bench////
+D/bin////
+D/build////
+D/doc////
+D/include////
+D/lib////
+D/rpm////
+D/share////
+D/spec////
+D/src////
+D/test////
+D/utils////
+D/www////
+D/xmpl////
+/TODO/1.46/Thu Jan 18 15:49:48 2001//
+/dependencies/1.2/Thu Dec 21 15:29:13 2000//
+D/interpreter////
+/ChangeLog/1.100/Wed Jan 31 12:27:13 2001//
+/Makefile.am/1.15/Wed Jan 31 15:47:42 2001//
+/NEWS/1.38/Wed Jan 31 15:47:42 2001//
+/configure.in/1.48/Wed Jan 31 15:47:42 2001//
+/aclocal.m4/1.2/Wed Jan 31 16:56:03 2001//
+/configure/1.41/Wed Jan 31 16:56:03 2001//

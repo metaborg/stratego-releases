@@ -1,0 +1,18 @@
+/home/visser/res/xt/bin/pack-stratego (0.02 secs)
+warning: in rule B: constructor ZZZ/2 not declared
+warning: in rule B: constructor BBB/1 not declared
+/home/visser/res/xt/bin/frontend (0.03 secs)
+/home/visser/res/xt/bin/extract (0.04 secs)
+/home/visser/res/xt/bin/inline (0.02 secs)
+/home/visser/res/xt/bin/Stratego-Normal-Format (0.00 secs)
+/home/visser/res/xt/bin/optimize1 (0.01 secs)
+/home/visser/res/xt/bin/compile-match (0.10 secs)
+/home/visser/res/xt/bin/optimize2 (0.04 secs)
+/home/visser/res/xt/bin/Stratego-Optimized-Format (0.00 secs)
+/home/visser/res/xt/bin/backend (0.05 secs)
+/home/visser/res/xt/bin/Abstract-Machine-Format (0.00 secs)
+/home/visser/res/xt/bin/postprocess (0.00 secs)
+/home/visser/res/xt/bin/pp-instructions (0.02 secs)
+compiling
+linking
+compilation succeeded

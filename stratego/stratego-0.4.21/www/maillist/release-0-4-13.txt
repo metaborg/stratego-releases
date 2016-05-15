@@ -1,0 +1,65 @@
+ Release 0.4.13 of the Stratego compiler is now available from 
+
+	http://www.stratego-language.org/
+
+  SUMMARY of CHANGES
+
+  - Cleanup of keywords
+  - Real numbers supported
+  - Additions to the library
+  - Repair of two bugs in the compiler
+  - Restructuring of the reference manual
+
+  LANGUAGE
+
+  * Real numbers have been added to the language.
+
+  * The identifiers new, kids and str_gt are no longer reserved
+    words. new has been defined as a primitive in the library module 
+    string.r.
+
+  LIBRARY
+
+  * New modules conditional.r and iteration.r with many new operators.
+
+  * Two strategies for mapping a table into a list of pairs and the other way
+    around (by Otto Bagge)
+
+  * Module substitution.r contains the definition of operator "substitute" 
+    which substitutes terms for (object) variables and renames bound
+    variables on the way to prevent free-variable capture. It is a
+    generalization of the generic renaming operator. These generic strategies 
+    are documented in the WGP2000 paper on "Language Independent
+    Traversals for Program Transformation". See www.stratego-language.org.
+
+  * Primitive append-file opens a file in append mode (by Otto Bagge)
+
+  COMPILER
+
+  * Repaired two bugs that caused strange behaviour:-( (1) Filenames with
+    a . (e.g., ../bla.r) where cut in the wrong way (i.e., to .) (2) The
+    module packer wrote files to the fixed file /tmp/aaabb, which causes
+    problems with more people working on the same machine. Thanks to
+    Danny van Velzen and Eelco Dolstra for discovering these bugs.
+
+  DOCUMENTATION
+
+  * The directory doc/tutorial/slides contains the LaTeX source of the Stratego
+    tutorial on slides with an introduction about
+    The slides are also available from www.stratego-language.org in PostScript.
+
+  * The reference manual has been reorganized and contains a definition of the
+    syntax of Stratego in SDF2. 
+
+  * The xmpl/ directory is intended for examples. It now contains the 
+    propositional formula transformation example.
+
+  * The documentation is now also available in pdf. Note that due to
+    some problem with unsupported specials for gpic the pictures are 
+    not present in the pdf version. Anyone know how to solve this?
+  
+  TODO
+
+  * There is a long list of improvements to make to the language and
+    implementation has been structured. See the TODO file in the
+    distributions.

@@ -1,0 +1,20 @@
+Hoi
+
+Ik heb ff een paar spec filetjes gebouwd voor die 2 progjes
+
+1. kopieer de sources naar /usr/src/RPM/SOURCES
+2. run "rpm -ba aterm.spec"
+3. run "rpm -Uvh /usr/src/RPM/RPMS/i686/aterm*.rpm"
+4. run "rpm -ba stratego.spec"
+5. run "rpm -Uvh /usr/src/RPM/RPMS/i686/stratego*.rpm"
+
+
+Veel plezier ermee
+
+
+Tot euh........... (goeie vraag)
+
+========================================================
+Gek zijn is gezond....          Althans volgens Stef Bos
+                          Ik hoop dat ie gelijk heeft...
+========================================================

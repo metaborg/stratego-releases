@@ -1,0 +1,229 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\section{The Compiler}
+
+	A Stratego specification defines a transformation on
+	terms. The Stratego compiler translates a specification to an
+	executable program that reads in a term, transforms it
+	according to the specification and outputs the resulting
+	transformed term.  In this section we discuss the architecture
+	of the compiler and the run-time system used in the generated
+	programs. In the next section we give some examples of the
+	specification of the compiler in Stratego itself.
+
+ \subsection{Architecture}
+	
+	\begin{figure}[p]
+	\begin{boxedminipage}{\hsize}\small
+	\input{architecture.ptx}
+	\end{boxedminipage}
+	\caption{Architecture of the Stratego compiler (sc)}
+	\label{Fig:architecture}
+	\end{figure}
+
+	The overall architecture of the compiler is shown in
+	Figure~\ref{Fig:architecture}. The compiler consists of four
+	main components: front-end, optimizer, matching-tree, and
+	back-end.
+
+	The front-end takes a Stratego specification (in abstract
+	syntax form) and translates it to a list of System~S
+	expressions (SSE).  The front-end itself is composed of five
+	stages: joining sections of the same kind (normalization);
+	translation of rules and signatures to strategy definitions;
+	extraction of the definitions that are actually needed for
+	implementation of the operator \verb|main|; elimination of the
+	syntactic abstractions (sugar) of the Stratego level; and
+	(selective) inlining definitions.  The result of this stage is
+	a list of strategy definitions for parameterless operators.
+
+	The optimizer simplifies a System~S expression by applying
+	algebraic laws. The matching-tree automaton transformer
+	targets expressions that are choices of strategies starting
+	with a match. Common prefixes are extracted to prevent
+	inspecting a term more than once.  The back-end translates an
+	expression to abstract machine instructions.
+
+ \subsection{Run-time System}
+
+	The abstract machine instructions produced by the compiler are
+	implemented as macros or procedures in C. These procedures
+	make use of a run-time system that supports stack and term
+	management. The return- and choice-stacks are needed for
+	control. The term-stack is used to deconstruct terms in
+	matching and term traversal.  For the representation of terms
+	the ATerms package \cite{OdJ98} is used. This package provides
+	an implementation of terms based on hash-consing and supports
+	garbage collection.
+	
+	The run-time system is implemented in C. Therefore, the
+	compiler and generated transformation programs only depend on
+	\verb|gcc|.  The Stratego compiler (sc) is being developed on
+	a Linux platform and is also used on Sun machines.  Although
+	this has not been done, there should be no problem in porting
+	the compiler to Windows NT platforms with GNU software.
+
+\section{Examples}
+
+	In this section we give some examples to illustrate the
+	specification of the compiler in Stratego.
+
+ \subsection{Example 1: Pipelines}
+
+	The \verb|main| strategy of the front-end defines a pipeline
+	of operations.  In addition to the operations discussed in the
+	previous section, use-def analysis is used to determine if
+	variables are used in builds without being bound in match
+	operations. 
+
+	Note that in general such a pipeline may fail to apply to a
+	term.  In this case, if an error is detected either in the
+	\verb|use-def| analysis (due to undeclared or unitialized
+	variables) or in the \verb|needed-defs| transformation
+	(missing definition), the pipeline fail. In these cases an
+	error message is derived from the failure.
+
+\begin{figure}[h]
+	\noindent
+\begin{boxedminipage}{\hsize}
+\begin{verbatim}
+module frontend
+imports normalize-spec spec-to-sdefs needed-defs 
+        desugar inlining use-def
+strategies
+ 
+  main = normalize-spec;   
+         where(spec-use-def);
+         spec-to-sdefs; 
+         needed-defs;  
+         desugar-spec;
+         inline
+\end{verbatim}
+\end{boxedminipage}
+\end{figure}
+
+ \subsection{Example 2: Desugaring}
+
+	The following specification is a fragment from module
+	\verb|desugar.r| that defines the elimination of syntactic
+	abstractions (sugar). Rules \verb|Bapp2| transforms a build
+	expression such as \verb|!F(<s> G(y))| to 
+\verb|{x: <s> G(y) => x; !F(x)}| 
+	in order to extract the strategy application inside the
+	build. 
+
+	Rule \verb|Bapp2| uses a contextual pattern 
+\verb|t[App(s, t')]| 
+	to reach an application \verb|App(s, t')| at an arbitrary
+	depth inside the term matching \verb|t|. This application is
+	replaced with the newly generated variable \verb|Var(x)| in
+	the right-hand side by means of the context \verb|t[Var(x)]|.
+	The right-hand side replaces the build by a scope construct
+	that declares a new local variable \verb|x|. Inside the scope
+	first \verb|s| is applied to \verb|t'| and the result matched
+	against the new variable \verb|x|. This variable is then used
+	inside the term \verb|t| in the build.
+
+	The strategy \verb|desugar| desugars an expression
+	by applying a set of rules, including \verb|Bapp2|, repeatedly
+	in a topdown traversal. The strategy {\tt desugar-spec}
+	applies this strategy to each definition body in a list of
+	definitions.
+
+\begin{figure}[h]
+	\noindent
+\begin{boxedminipage}{\hsize}
+\begin{verbatim}
+module desugar
+ ...
+rules
+
+  Bapp2 : Build(t[App(s, t')]) -> 
+          Scope([x], Seq(BAM(s, t', Var(x)), Build(t[Var(x)])))
+          where new => x
+
+strategies
+
+  desugar = topdown(try(desugarRule); 
+                    repeat(HL + (Bapp0 <+ Bapp1 <+ Bapp2)))
+
+  desugar-spec = map(SDef(id, id, desugar))
+\end{verbatim}
+\end{boxedminipage}
+\end{figure}
+
+ \subsection{Example 3: Compilation}
+	
+	The back-end of the compiler translates expressions to lists
+	of abstract machine instructions. For each language construct
+	a rule defines the pattern of instructions it corresponds to.
+	For example, the following rules define the translation of
+	left choice \verb|<+| and the generic traversal operator
+	\verb|all|.
+
+\begin{figure}[h]
+\noindent
+\begin{boxedminipage}{\hsize}
+\begin{verbatim}
+module compiler
+ ...
+rules
+  C : Instr(LChoice(s1, s2), env, rcs) -> 
+      Block([Cpush(fc),
+             Instr(s1, env, rcs), Cpop, Goto(sc),
+             Label(fc), Instr(s2, env, rcs),
+             Label(sc)])
+      where new => sc ; new => fc
+
+  C : Instr(All(s), env, rcs) -> 
+      Block([AllInit,
+             Label(c1), 
+             AllNextSon(c2), 	 
+             Instr(s, env, rcs), 
+             Goto(c1),           
+             Label(c2),
+             AllBuild])
+      where new => c1 ; new => c2
+\end{verbatim}
+\end{boxedminipage}
+\end{figure}
+
+	\noindent These rules are combined in the compilation strategy
+	\verb|compile|.  The default \verb|C| rules are applied after
+	the specialized \verb|Cs| rules. After translation the nested
+	code is flattened to a single list. Some simple optimizations
+	are performed by \verb|peephole| and finally, the code is
+	wrapped in some support code by \verb|Assemble|.
+
+\begin{figure}[h]
+\noindent
+\begin{boxedminipage}{\hsize}
+\begin{verbatim}
+module backend
+  ...
+strategies
+
+  compile = map(MkInstr; 
+                topdown(repeat(Cs <+ C))); 
+            flatten-blocks; 
+            peephole;
+            Assemble
+\end{verbatim}
+\end{boxedminipage}
+\end{figure}

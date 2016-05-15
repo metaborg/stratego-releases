@@ -1,0 +1,1 @@
+[SDef("main",[],Call(SVar("a_0"),[])),SDef("a_0",[],Id)]

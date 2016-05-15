@@ -1,0 +1,100 @@
+\documentclass[landscape]{course-slides}
+
+  \usepackage{myslides}
+  \usepackage{tabverb}
+  \usepackage{dir}
+
+  \title{Stratego}
+
+  \author{Eelco Visser\\
+	  Universiteit Utrecht\\
+	  visser@acm.org\\
+	  \ \\
+	  www.stratego-language.org\\\ \\}
+
+  %\newcommand{\veryemptyslide}{\parskip1\baselineskip}
+  %\newcommand{\emptyslide}{\parskip.7\baselineskip}
+  %\newcommand{\fullslide}{\parskip.4\baselineskip}
+  %\newcommand{\veryfullslide}{\parskip.3\baselineskip}
+
+  \newcommand{\lambdadir}{/home/visser/res/app/lambda/lambda/}
+
+\begin{document}
+
+  \parskip.5\baselineskip
+
+  
+\begin{slide}{}
+
+  \maketitle
+
+\end{slide}
+
+\begin{slide}{}
+
+\doublelist{
+	\item {\bf Paradigm}
+	\begin{itemize}
+	\item Term transformation
+	\item Named transformation rules
+	\item Programmable strategies for controlling application of rules
+	\end{itemize}
+
+	\item {\bf Language}
+	\begin{itemize}
+	\item Conditional rewrite rules
+	\item Strategy combinators
+	\item Strategy definitions
+	\item Match and build first-class
+	\item Modules
+	\item Pattern abstraction (overlays, strategic patterns, contexts)
+	\item Failure
+	\end{itemize}
+}{
+	\item {\bf Implementation}
+	\begin{itemize}
+	\item Compilation to C
+	\item ATerm based
+	\item Foreign function interface
+	\item Non-expansive implementation of traversal
+	\end{itemize}
+
+	\item {\bf Library}
+	\begin{itemize}
+	\item Generic traversals
+	\item Standard data types
+
+	\item Generic algorithms (free variables, variable renaming,
+	unification, ...)
+	
+	\item System interface (I/O, processes)
+
+	\end{itemize}
+}	
+
+\end{slide}
+  
+\begin{slide}{}
+
+\doublelist{
+	\item {\bf Applications}
+	\begin{itemize}
+	\item Compilation by transformation (Stratego)
+	\item Grammar tools (SDF2,...)
+	\item Domain-specific optimization (CodeBoost)
+	\item Document transformation (XML)
+	\item Program optimization (Warm fusion, ...)
+	\item Software renovation (?)
+	\end{itemize}
+}{
+	\item {\bf Limitations}
+	\begin{itemize}
+	\item Not: rules on concrete syntax
+	\item Not: type system
+	\item Strategy is explicit, no standard normalization
+	\end{itemize}
+}
+\end{slide}
+
+
+\end{document}

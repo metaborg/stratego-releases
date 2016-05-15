@@ -1,0 +1,2 @@
+Not(And(Not(Or(Atom("A"), Not(And(Atom("B"), Atom("C"))))),
+        Atom("D")))

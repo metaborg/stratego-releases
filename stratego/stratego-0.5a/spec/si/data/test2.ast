@@ -1,0 +1,1 @@
+App(Scope(["x","y"],Seq(Match(Var("x")),Seq(Scope(["x"],Seq(Match(Op("F",[Var("x")])),Build(Op("H",[Var("x")])))),Seq(Match(Var("y")),Build(Op("Pair",[Var("x"),Var("y")])))))),Op("F",[Op("A",[])]))

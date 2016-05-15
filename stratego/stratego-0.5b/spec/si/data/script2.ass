@@ -1,0 +1,1 @@
+[Eval(Build(Op("F",[Op("F",[Op("A",[])])]))),SDef("A",[],Scope(["x"],Seq(Match(Op("F",[Var("x")])),Build(Op("G",[Var("x")]))))),Eval(Call(SVar("A"),[])),Eval(Match(Var("t"))),Eval(Build(Op("Pair",[Var("t"),Str("a"),Int(1),Real(1.200000)]))),Eval(Match(Op("Pair",[Wld,Var("a"),Int(1),Wld])))]

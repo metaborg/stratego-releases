@@ -1,0 +1,1282 @@
+\firstsection{Program Transformation}
+
+ 	\begin{itemize}
+
+	\item Changing a program into another program for 
+
+ 		\begin{itemize}
+
+		\item Compilation
+
+		\item Optimization
+
+		\item Code generation
+
+		\item Desugaring/preprocessing
+
+		\item Application generation
+
+		\item Software migration
+
+		\item Software renovation
+
+		\item Documentation generation
+
+		\end{itemize}
+
+	\end{itemize}
+
+ \subsection{Compilation}
+
+ 	\begin{itemize}
+
+	\item Transform source code to target code
+
+	\item Examples
+
+ 		\begin{itemize}
+
+		\item Compilation by transformation (GHC: Haskell compiler)
+
+		\end{itemize}
+
+	\item Stages
+
+ 		\begin{itemize}
+
+		\item Desugaring
+
+		\item Optimization
+
+		\item Code generation
+
+		\end{itemize}
+
+	\end{itemize}
+
+
+ \subsection{Desugaring/Preprocessing}
+
+	\fullslide
+
+ 	\begin{itemize}
+
+	\item Transform program to program in core language
+
+	\item Examples
+
+ 		\begin{itemize}
+
+		\item Haskell to Core Haskell
+
+ 			\begin{itemize}
+
+			\item Define pattern matching
+
+			\item List comprehensions
+
+			\item Do notation
+
+			\end{itemize}
+
+		\item Stratego desugaring
+
+ 			\begin{itemize}
+
+			\item Rules to strategies
+
+			\item Contexts
+
+			\item Overlays
+
+			\end{itemize}
+
+		\item Aspect-oriented programming (AspectJ)
+
+		\end{itemize}
+
+	\end{itemize}
+
+ \subsection{Optimization}
+
+	%\veryfullslide
+
+ 	\begin{itemize}
+
+	\item Transform source code to source code
+
+	\item Objectives
+
+ 		\begin{itemize}
+
+		\item Increase speed
+
+		\item Reduce memory usage
+
+		\item Keep code size small
+
+		\end{itemize}
+
+	\item Examples
+
+ 		\begin{itemize}
+
+		\item Optimizing compilers (e.g., GHC, gcc)
+
+		\item Application extraction
+
+		\item Domain-specific optimization (CodeBoost)
+
+		\end{itemize}
+
+	\end{itemize}
+
+ \subsection{Optimization (2)}
+
+	\veryfullslide
+
+ 	\begin{itemize}
+
+	\item Example optimizations
+
+ 		\begin{itemize}
+
+		\item Algebraic simplification
+
+		\item Dead code elimination
+
+		\item Inlining
+
+		\item Loop fusion
+
+		\item Tail-recursion elimination
+
+		\item Partial evaluation
+
+		\item Deforestation 
+
+		\item Constant propagation
+
+		\item Copy propagation
+
+		\item Common subexpression elimination
+
+		\item ...
+
+		\end{itemize}
+
+	\end{itemize}
+
+ \subsection{Code Generation}
+
+ 	\begin{itemize}
+
+	\item Transform intermediate representation to machine
+	instructions
+
+	\item Issues
+
+ 		\begin{itemize}
+
+		\item Instruction selection
+
+		\item Register allocation
+	
+		\item Software pipelining
+
+		\item Peephole optimization
+
+		\end{itemize}
+
+	\item Examples
+
+ 		\begin{itemize}
+
+		\item Back-end of compiler
+
+		\item Bottom-up rewriting
+
+		\end{itemize}
+
+	\end{itemize}
+
+ \subsection{Application Generation}
+
+ 	\begin{itemize}
+
+	\item Transform domain-specific program to program in general
+	purpose language
+	
+	\item Examples
+
+ 		\begin{itemize}
+
+		\item Risla to Cobol
+
+		\item Parser generation: YACC to C, SDF2 to parse table
+
+		\item Pretty-printer generation: SDF2 to
+		pretty-printer skeleton
+
+		\end{itemize}
+
+	\end{itemize}
+
+ \subsection{Software Migration}
+
+ 	\begin{itemize}
+
+	\item Transform program to new version of programming language
+
+	\item Examples
+
+ 		\begin{itemize}
+
+		\item Fortran77 to Fortran90
+
+		\end{itemize}
+
+	\end{itemize}
+
+ \subsection{Software Renovation}
+
+ 	\begin{itemize}
+
+	\item Transforming programs to repair defects
+
+	\item Examples
+
+ 		\begin{itemize}
+
+		\item Refactoring
+
+		\item Y2K
+
+		\item Euro
+
+		\end{itemize}
+
+	\end{itemize}
+
+ \subsection{Documentation Generation}
+
+ 	\begin{itemize}
+
+	\item Transform program to higher-level description
+
+	\item Examples
+
+ 		\begin{itemize}
+
+		\item Cobol to diagrams (DocGen)
+
+		\item Reverse engineering Java to UML
+
+		\end{itemize}
+
+	\end{itemize}
+
+\part{Implementing Transformation Systems}
+
+\section{Goals}
+
+ 	\begin{itemize}
+
+	\item High-level specification
+
+	\item Modular
+
+	\end{itemize}
+
+
+\section{Term Rewriting}
+
+ 	\begin{itemize}
+
+	\item Represent programs as terms (trees)
+
+	\item Define transformations as rewrite rules
+
+	\item Fixed rewriting strategy: apply rules until none applicable
+
+	\item Not adequate:
+
+ 		\begin{itemize}
+
+		\item Termination
+
+		\item Confluence
+
+		\item Need control over application of rules
+
+		\end{itemize}
+
+	\end{itemize}
+
+\section{Program Transformation with\\ Rewriting Strategies}
+
+ 	\begin{itemize}
+
+	\item Basic idea
+
+ 		\begin{itemize}
+
+		\item Programs represented by means of terms
+
+		\item Rules define basic transformations
+
+		\item Strategies combine rules into full transformations
+
+		\end{itemize}
+
+	\item Motivation
+
+ 		\begin{itemize}
+
+		\item Selection of rules to be applied
+
+		\item Control over strategy of rule application 
+
+		\item Rules can be reused
+
+		\end{itemize}
+
+	\end{itemize}
+
+\part{Terms}
+
+\section{Theory: Terms}
+	
+	\begin{itemize}
+
+	\item Basic terms
+\begin{verbatim}
+  t := C(t1,...,tn) | C 
+\end{verbatim}
+
+	\item 
+\begin{verbatim}
+Add(Succ(Zero), Zero)
+\end{verbatim}
+
+	\item Basic data types
+\begin{verbatim}
+  t := C(t1,...,tn) | C 
+     | string 
+     | int
+\end{verbatim}
+
+	\item 
+\begin{verbatim}
+Abs(Var("x"), Var("x"))
+
+Add(Int(23), Mul(Var("x"), Int(17)))
+\end{verbatim}
+
+	\end{itemize}
+
+\section{Terms with Lists and Tuples}
+
+	\begin{itemize}
+
+	\item 
+\begin{verbatim}
+  t := C(t1,...,tn) | C | string | int
+     | [t1,...,tn] 		// list
+     | [t1,...,tn|t] 		// list
+     | (t1,...,tn)		// tuple
+\end{verbatim}
+
+	\item 
+\begin{verbatim}
+Apply(Var("f"), [Var("x"), Int(3)])
+\end{verbatim}
+
+	\item Semantics
+\begin{verbatim}
+[a,b]   = Cons(a,Cons(b,Nil))
+[a|b]   = Cons(a,b)
+[a,b|c] = Cons(a,Cons(b,c))
+(a,b,c) = TCons(a,TCons(b,TCons(c,TNil)))
+\end{verbatim}
+
+	%\item Future
+%\begin{verbatim}
+%(a,b,c) = Tuple3(a,b,c)
+%\end{verbatim}
+
+	\end{itemize}
+
+ \subsection{Stratego Terms vs ATerms}
+
+	\begin{itemize}
+
+	\item Terms implemented with ATerms
+
+	\item ATerm library (CWI/UvA)
+
+		\begin{itemize}
+
+		\item Maximal sharing
+
+		\item (Binary) import/export of terms
+
+		\item Garbage collection
+
+		\item Hash tables
+
+		\end{itemize}
+	
+	\item Notation
+
+		\begin{itemize}
+
+		\item ATerm lists are translated to Cons/Nil lists internally
+
+		\item ATerm library does not support tuple notation
+
+		\end{itemize}
+
+	\end{itemize}
+
+ \subsection{Term Transformation}
+	
+	A \emph{strategy} is a program that transforms a term
+	(producing a transformed term) or fails
+
+\part{An Example}
+
+\section{Example: Simplifying Propositional Formulae}
+
+	\begin{itemize}
+
+	\item Signatures
+
+	\item Transformation rules
+
+	\item Combining rules with strategies 
+
+	\end{itemize}
+
+ \subsection{Propositional Formulae}
+
+	\noindent
+	\inputverbatim{../xmpl/prop.r}
+
+ \subsection{Constant Folding}
+
+	\inputverbatim{../xmpl/prop-truth.r}
+
+ \subsection{Algebraic Simplification}
+
+	\inputverbatim{../xmpl/prop-laws.r}
+
+ \subsection{Simplification Strategies}
+
+	\inputverbatim{../xmpl/prop-simplify.r}
+
+
+\part{Running Stratego}
+
+\section{Pragmatics: Running Stratego}
+
+	\veryemptyslide
+
+	\begin{itemize}
+
+	\item Installing Stratego
+
+	\item Main strategy, I/O
+
+	\item Compiling specifications
+
+	\item Applying transformations
+
+	\end{itemize}
+
+  \subsection{Installing Stratego}
+
+	\veryemptyslide
+
+	\begin{itemize}
+
+	\item GNU tools: gcc, gmake
+
+	\item ATerm library: \verb|ftp://ftp.cwi.nl/pub/gipe/aterm/|
+
+	\item \verb|http://www.stratego-language.org/|
+
+	\item (also part of XT bundle of transformation tools)
+
+	\end{itemize}
+
+  \subsection{The Installation Procedure}
+
+	\fullslide
+
+\begin{verbatim}
+# install aterm library
+
+tar zxf aterm-0.xx.tar.gz
+cd aterm-0.xx
+./configure --prefix=`pwd`/..
+gmake install
+cd ..
+
+# install stratego
+
+tar zxf stratego-0.xx.tar.gzip
+./configure --prefix=`pwd`/..
+gmake install
+cd ..
+\end{verbatim}
+
+	(With XT even easier)
+
+  \subsection{Main Strategies and I/O}
+
+	\inputverbatim{../xmpl/prop-main.r}
+	
+  \subsection{Compiling a Specification}
+
+	\fullslide
+
+	\begin{itemize}
+
+	\item Compiling \verb|main|
+\begin{verbatim}
+> sc -i prop-main.r
+...
+compilation succeeded
+\end{verbatim}
+
+	\item Compiling \verb|simplify|
+\begin{verbatim}
+> sc -i prop-main.r --main simplify -o simplify
+...
+compilation succeeded
+\end{verbatim}
+
+	\item Result
+\begin{verbatim}
+> ls prop-main* simplify*
+prop-main*  prop-main.c  prop-main.dep  
+prop-main.r  prop-main.tree1  simplify*
+\end{verbatim}
+
+	\end{itemize}
+
+  \subsection{Applying a Transformation}
+
+	\veryemptyslide
+
+\begin{verbatim}
+> cat prop.trm 
+Not(And(Not(Or(Atom("A"),Not(And(Atom("B"),Atom("C"))))),Atom("D")))
+
+> prop-main < prop.trm
+Or(Or(Atom("A"),Or(Not(Atom("B")),Not(Atom("C")))),Not(Atom("D")))
+\end{verbatim}
+
+
+\part{Strategies}
+
+\section{Theory: Defining Strategies}
+
+	\veryemptyslide
+
+       	\begin{itemize}
+
+       	\item Sequential control primitives
+
+	\item Defined sequential control constructs
+
+	\item Primitive traversal
+
+	\item Defined traversals
+
+	\end{itemize}
+
+
+ \subsection{Sequential Control}
+
+	\fullslide
+
+       	\begin{itemize}
+
+       	\item \verb|<id> t ==> t|
+
+	\item \verb+<fail> t ==> _|_+
+
+        \item \verb|<s1; s2> t ==> <s2> <s1> t|
+
+        \item \verb|<s1 <+ s2> t ==> <s1> t or <s2> t|
+
+        \item \verb|<s1 + s2> t ==> <s1> t or <s2> t| \\
+                (order undefined)
+
+        \item \verb|<rec x(s[x])> t ==> <s[rec x(s)]> t|
+
+	\item \verb|<test(s)> t ==> t if <s> t ==> t'|
+
+	\item \verb+<not(s)> t ==> t if <s> t ==> _|_+
+
+       	\end{itemize}
+
+ \subsection{Iteration}
+
+\begin{verbatim}
+  try(s)             = s <+ id
+
+  repeat(s, c)       = rec x(s; x <+ c)
+  repeat(s)          = repeat(s, id)
+
+  repeat1(s, c)      = rec x(s; (x <+ c))
+  repeat1(s)         = repeat1(s, id)
+
+  repeat-until(s, c) = rec x(s; (c <+ x))
+
+  while(c, s)        = rec x(try(c; s; x))
+  do-while(s, c)     = rec x(s; try(c; x))
+  while-not(c, s)    = rec x(c <+ s; x)   
+
+  for(i, c, s)       = i; repeat-until(s, c)
+\end{verbatim}
+
+ \subsection{Primitive Traversal}
+
+	\veryemptyslide
+
+	\begin{itemize}
+
+         \item 
+\begin{verbatim}
+<all(s)> C(t1,...,tn) ==> C(<s>t1, ...,<s>tn)
+\end{verbatim}
+
+         \item 
+\begin{verbatim}
+<one(s)> C(t1,...,tn) ==> C(<s>t1,...,tn) 
+                          or ...
+                          or C(t1,...,<s>tn)
+\end{verbatim}
+
+         \item 
+\begin{verbatim}
+<some(s)> C(t1,...,tn) ==> C(<s>t1, ...,<s>tn)
+                           or C(<s>t1,...,tn) 
+                           or ...
+                           or C(t1,...,<s>tn)
+\end{verbatim}
+
+         \end{itemize}
+
+ \subsection{One-Pass Traversals}
+
+	\veryfullslide
+
+	\begin{itemize}
+
+        \item All
+\begin{verbatim}
+  topdown(s)  = rec x(s; all(x))
+  bottomup(s) = rec x(all(x); s)
+  downup(s)   = rec x(s; all(x); s)
+  alltd(s)    = rec x(s <+ all(x))
+\end{verbatim}
+
+        \item One
+\begin{verbatim}
+  oncetd(s)   = rec x(s <+ one(x))
+  oncebu(s)   = rec x(one(x) <+ s)
+  spinetd(s)  = rec x(s; try(one(x)))
+  spinebu(s)  = rec x(try(one(x)); s)
+\end{verbatim}
+
+        \item Some
+\begin{verbatim}
+  sometd(s)   = rec x(s <+ some(x))
+  somebu(s)   = rec x(some(x) <+ s)
+\end{verbatim}
+
+	\end{itemize}
+
+ \subsection{Fixed-Point Traversals}
+
+\begin{verbatim}
+  reduce(s)        = repeat(rec x(one(x) + s))
+
+  reduce-par(s)    = repeat(rec x(some(x) + s))
+
+  outermost(s)     = repeat(oncetd(s))
+
+  innermost(s)     = repeat(oncebu(s))
+
+  innermost-par(s) = rec x(all(x); (s; x <+ id))
+\end{verbatim}
+
+\part{Lambda Reduction}
+
+\section{Example: Normalizing Lambda Calculus Expressions}
+
+	\veryemptyslide
+
+	\begin{itemize}
+
+	\item Conditional rules
+
+	\item Strategy application in rules
+
+	\item Data type specific traversal (congurences)
+
+	\item Normalization strategies
+
+	\item Transformation primitives: match, build, scope
+
+	\end{itemize}
+
+ \subsection{Lambda Calculus Expressions}
+
+	\inputverbatim{\lambdadir/lambda.r} 
+
+ \subsection{Reduction Laws}
+
+	\fullslide
+
+	\inputverbatim{\lambdadir/lambda-red.r}
+
+\part{Congruence Operator}
+
+\section{Theory: Data Type Specific Traversals}
+	
+	\veryemptyslide
+
+	\begin{itemize}
+
+	\item Congruences
+
+	\item Recursive patterns
+
+	\end{itemize}
+
+ \subsection{Congruences}
+
+	\begin{itemize}
+                
+	\item 
+\begin{verbatim}
+<C(s1,...,sn)> C(t1,...,tn) ==> C(<s1>t1, ...,<sn>tn)
+\end{verbatim}
+
+	\item \verb|C(id,...,id)| checks that term has form
+	\verb|C(_,...,_)|
+
+	\item A {\bf recursive pattern} recursively checks form of term
+
+	\item Example: disjunctive and conjunctive normal forms
+
+	\inputverbatim{../xmpl/prop-nf.r}
+
+	\end{itemize}
+
+ \subsection{Reduction Strategies}
+
+	\inputverbatim{\lambdadir/lambda-norm.r}
+
+\part{Breaking the Rules}
+
+\section{Theory: Transformation Primitives}
+	
+	\veryemptyslide
+
+	\begin{itemize}
+
+	\item Match, Build, Scope
+
+	\item Target for desugaring
+
+	\item Generic term (de)construction
+
+	\end{itemize}
+
+ \subsection{Match, Build, Scope (by Example)}
+	
+	\veryemptyslide
+
+        \begin{itemize}
+
+        \item \verb|<?F(x,y)> F(A,B) ==> F(A,B) / [(x,A),(y,B)]|
+
+        \item \verb|<!F(x,y)> G(C,D) / [(x,A),(y,B)] ==> F(A,B)|
+
+        \item \verb|<{x: s}> t / [(x,A)] ==> <s> t / []|
+
+        \end{itemize}
+
+ \subsection{Syntactic Sugar}
+
+        \begin{itemize}
+
+        \item Rules
+
+                \begin{itemize}
+
+                \item \verb|R : t1 -> t2 where s| \\
+                $\equiv$ \verb|R = {xs : ?t1; where(s); !t2}|\\
+		with \verb|xs| the free variables of \verb|t1|, \verb|t2| and
+		\verb|s|.
+
+                \item \verb|\ t1 -> t2 where s\| \\
+                $\equiv$ \verb|{xs : ?t1; where(s); !t2}|\\
+		with \verb|xs| the free variables of \verb|t1|
+
+                \end{itemize}
+
+        \item Build, apply and match
+
+                \begin{itemize}
+        
+                \item \verb|<s> t| $\equiv$ \verb|!t; s|
+
+                \item \verb|s => t| $\equiv$ \verb|s; ?t|
+
+                \item \verb|?t <= s| $\equiv$ \verb|s; ?t|
+
+                \end{itemize}
+
+        \end{itemize}
+
+\section{Theory: Other Features}
+
+	\veryemptyslide
+
+	\begin{itemize}
+
+	\item Overlays (pattern abstraction)
+
+	\item Contexts
+
+	\item Generic term (de)construction
+
+	\item Primitives/foreign language interface
+
+	\end{itemize}
+
+\section{Theory: Adapting generic traversals}
+	
+	\begin{itemize}
+
+	\item Adapting generic traversals
+
+	\end{itemize}
+
+ \subsection{Shortcutting Recursion}
+
+        \begin{itemize}
+
+        \item \verb|skip| selects subterms to recurse on 
+
+\begin{verbatim}
+topdown(s, skip) = 
+  rec x(s; (skip(x) <+ all(x)))
+
+bottomup(s, skip) = 
+  rec x((skip(x) <+ all(x)); s)
+
+downup(s, skip) = 
+  rec x(s; (skip(x) <+ all(x)); s)
+
+oncetd(s, skip) =
+  rec x(s <+ skip(x) <+ not(skip(id)); one(x))
+\end{verbatim}
+
+        \end{itemize}
+
+\section{Theory: Standard Data Types}
+	
+	\veryemptyslide
+
+	\begin{itemize}
+
+	\item Strings
+
+	\item Integers
+
+	\item Tuples
+
+	\item Option
+
+	\item Lists
+
+	\end{itemize}
+
+\section{Example: Transforming Lists}
+
+	\begin{itemize}
+
+	\item
+\begin{verbatim}
+module list-cons
+signature
+  sorts List(Type)
+  constructors
+    Nil  : List(a)
+    Cons : a * List(a) -> List(a)
+\end{verbatim}
+
+	\item notation: \verb+[a | List(a)] -> List(a)+
+
+	\end{itemize}
+
+
+ \subsection{List Strategies}
+
+\begin{verbatim}
+  Hd     : Cons(x, l)      -> x
+  Tl     : Cons(x, l)      -> l
+
+  map(s)   = rec x(Nil + Cons(s, x))
+  list(s)  = map(s)
+
+  fetch(s) = rec x(Cons(s, id) <+ Cons(id, x))
+
+  filter(s) = rec x(Nil + (Cons(s, x) <+ Tl; x))
+\end{verbatim}
+
+ \subsection{Zip}
+
+\begin{verbatim}
+module list-zip
+imports list-cons
+imports tuple
+rules
+
+  Zip1   : (Nil, Nil) -> Nil
+  Zip1a' : (Nil, _) -> Nil
+  Zip1b' : (_, Nil) -> Nil
+  Zip2   : (Cons(x, xs), Cons(y, ys)) -> 
+           ((x, y), (xs, ys))
+  Zip3   : (x, xs) -> Cons(x, xs)
+
+strategies
+
+  genzip(a, b, c, s) = rec x(a + b; (s, x); c)
+
+  zip(s)  = genzip(Zip1,      Zip2, Zip3, s)
+  zip'(s) = genzip(Zip1a' 
+                   <+ Zip1b', Zip2, Zip3, s)
+  zipl(s) = genzip(Zip1a',    Zip2, Zip3, s)
+  zipr(s) = genzip(Zip1b',    Zip2, Zip3, s)
+\end{verbatim}
+
+\section{Example: Free and Bound Variables}
+
+	\veryemptyslide
+
+        \begin{itemize}
+                
+	\item Generic term (de)construction
+
+	\end{itemize}
+
+ \subsection{Theory: Generic Term (De)construction}
+
+	\veryemptyslide
+
+        \begin{itemize}
+                
+	\item 
+\begin{verbatim}
+<?f#(xs)> F(A,B) ==> F(A,B) [("F",f), ([A, B],xs)]
+\end{verbatim}
+
+        \item 
+\begin{verbatim}
+<!f#(xs)> t / [("F",f), ([A, B],xs)] ==> F(A,B)
+\end{verbatim}
+
+        \end{itemize}
+
+ \subsection{Collecting Subterms}
+
+\begin{verbatim}
+  foldr-kids(zero,sum,s) : 
+     _#(xs) -> <foldr(zero, sum, s)> xs
+
+  collect-kids(s) = foldr-kids(![],union,s)
+
+  collect(s) =
+    rec x(s; \y -> [y]\ 
+          <+ collect-kids(x))
+
+  vars = collect(?Var(_))
+\end{verbatim}
+
+ \subsection{Bound Variables}
+
+	\inputverbatim{\lambdadir/lambda-vars.r}
+
+ \subsection{Collecting Free Variables}
+
+\begin{verbatim}
+free-vars(getvars, boundvars, boundin) = 
+  rec x(getvars 
+        <+ {vs: where(?vs <= boundvars); 
+            boundin(split(x, !vs); diff, x, ![])};
+           collect-kids(id)
+        <+ collect-kids(x))
+\end{verbatim}
+
+
+ \subsection{Pasting}
+
+\begin{verbatim}
+  LPaste(nwvars) = 
+    Abs(nwvars; Hd, id)
+  + Let(nwvars; Hd, id, id)
+
+  lrename = rename(Var, Bnd, LBoundIn, LPaste)
+\end{verbatim}
+
+
+
+ \subsection{Renaming Bound Variables}
+
+\begin{verbatim}
+rename(isvar, bndvars, boundin, paste) = 
+  \ t -> (t, []) \ ;
+  rec x(env-alltd(RnVar(isvar)
+                  <+ RnBinding(bndvars, paste);
+                     DistBinding(boundin, x)))
+
+RnVar(isvar) :
+  (t, env) -> <isvar(split(id, !env); lookup)> t
+
+RnBinding(bndvrs, paste) :
+  (t, env1) -> (<paste(!ys)> t, env1, env2)
+  where <bndvrs> t => xs; map(new) => ys; 
+        <conc>(<zip(id)>(xs,ys), env1) => env2
+
+DistBinding(boundin, s) :
+  (t, env1, env2) -> <boundin(\x -> <s>(x, env2)\
+                             ,\x -> <s>(x, env1)\
+                             ,id)> t
+\end{verbatim}
+
+
+%\section{Theory: Traversals with Environments}
+
+%\section{Pragmatics: Debugging Specifications}
+
+% \subsection{Tracing with debug}
+
+
+%\section{Pragmatics: Input/Output}
+
+% \subsection{Input/Output}
+
+% \subsection{Command-line Options}
+
+% \subsection{Parsing}
+
+% \subsection{Pretty-Printing}
+
+
+\section{Theory/Pragmatics: Primitives}
+
+	\begin{itemize}
+
+	\item I/O primitives
+\begin{verbatim}
+strategies
+
+  print             = prim("_ST_print")
+  printnl           = prim("_ST_printnl")
+  printascii        = prim("_ST_printascii")
+
+  file-exists	    = prim("_ST_file_exists")
+  open-file	    = prim("_ST_open_file")
+  close-file	    = prim("_ST_close_file")
+
+  ReadFromFile      = prim("_ST_ReadFromFile")
+  WriteToBinaryFile = prim("_ST_WriteToBinaryFile")
+  WriteToTextFile   = prim("_ST_WriteToTextFile")
+\end{verbatim}
+
+	\end{itemize}
+
+ \subsection{Linking Additional Primitives}
+
+	
+	\begin{itemize}
+
+	\item \verb|mylib.r|: \verb|myprim = prim("_myprim")|
+
+	\item \verb|mylib.h|: Header for primitive
+
+	\item \verb|mylib.c|: C implementation of primitive
+
+	\item compilation
+\begin{verbatim}
+  sc -CI -I/my/include/dir \
+     -CL -L/my/lib/dir -lmylib \
+     -i spec 
+\end{verbatim}
+
+	\end{itemize}
+
+\section{Pragmatics: Library}
+
+	\fullslide
+
+	\begin{itemize}
+
+	\item Generic term traversal
+
+	\item Integers
+
+	\item Strings
+
+	\item Tables (interface to ATerm tables)
+
+	\item Standard data types
+
+		\begin{itemize}
+
+		\item Options
+
+		\item Tuples
+
+		\item Lists
+
+		\item Binary trees
+
+		\end{itemize}
+		
+	\item Generic algorithms
+
+		\begin{itemize}
+
+		\item Free variables
+
+		\item Substitution
+
+		\item Bound variable renaming
+
+		\item Syntactic Unification
+
+		\item Graph packing (module flattening)
+
+		\end{itemize}
+
+	\item System interface
+
+		\begin{itemize}
+
+		\item I/O
+	
+		\item Processes
+
+		\item Time
+
+		\end{itemize}
+
+	\item Component interface
+
+		\begin{itemize}
+
+		\item ABox: input for GPP
+
+		\end{itemize}
+
+	\end{itemize}
+
+
+\section{Ongoing Projects}
+
+	\fullslide
+
+	\begin{itemize}
+
+	\item The Stratego Compiler
+
+	\item Warm Fusion : deforestation 
+
+	\item CodeBoost : C++ transformations for HPC
+
+	\item Generic Instrumentation (for Test Coverage Analysis)
+
+	\item Grammar Tools : transformation of and derivation of
+	tools from grammars
+
+	\item RML Compiler : optimization
+
+	\item DSP Transformations : formalizing program derivations
+
+	\item DSL transformations : evaluating effect of optimizing
+	transformations
+
+	\end{itemize}
+
+\section{Documentation}
+
+	\veryemptyslide
+
+	\begin{itemize}
+
+	\item The Stratego Tutorial
+
+	\item The Stratego Reference Manual
+
+	\item The Stratego Library
+
+	\item The Stratego Compiler
+
+	\item StrategoWiki : online documentation
+
+	\end{itemize}
+
+\section{Publications}
+
+	\begin{itemize}
+
+	\item Specification of Rewriting Strategies (ASF+SDF 1997)
+
+	\item A Core Language for Rewriting (WRLA'98)
+
+	\item Building Program Optimizers with Rewriting Strategies (ICFP 1998)
+
+	\item Strategic Pattern Matching (RTA 1999)
+
+	\item A Bootstrapped Compiler for Strategies (SIAD 1999)
+
+	\item Language Independent Traversals for Program
+	Transformation (GP 2000)
+
+	\item Warm Fusion in Stratego (AMAI 2000)
+
+	\end{itemize}
+
+
+
+\section{XT: A Bundle of Transformation Tools}
+
+	\emptyslide
+
+	\begin{itemize}
+
+	\item \verb|http://www.cs.uu.nl/~visser/xt|
+
+	\item ATerm library
+	
+	\item Stratego : transformation with rewriting strategies
+
+	\item SDF2 : syntax definition
+
+	\item GPP : pretty-printing
+
+	\item GT : grammar tools
+
+	\item GB : grammar base
+
+	\end{itemize}

@@ -1,0 +1,88 @@
+diff -ru stratego-0.4.12/spec/slib/spec/io.r stratego-0.4.12-iopatch/spec/slib/spec/io.r
+--- stratego-0.4.12/spec/slib/spec/io.r	Fri Mar 17 19:57:51 2000
++++ stratego-0.4.12-iopatch/spec/slib/spec/io.r	Fri Apr 28 18:35:19 2000
+@@ -59,7 +59,7 @@
+ 	\verb|<WriteToTextFile> (file, term)| writes \verb|term| to
+ 	file in textual ATerm format.
+ 
+-	\verb|<WriteToBinarFile> (file, term)| writes \verb|term| to
++	\verb|<WriteToBinaryFile> (file, term)| writes \verb|term| to
+ 	file in BAF format.
+ 
+  	\verb|<print> (file, [t1,...,tn])| prints the terms \verb|ti|
+@@ -68,7 +68,10 @@
+ 	behaviour, but also prints a newline after \verb|tn|.
+ 
+ 	Before printing to a file the file should be opened using
+-	\verb|<open-file> filename|.
++	\verb|<open-file> filename|, which truncates the file, or creates
++	it if it doesn't exist.  To append to a file, open the file
++	with \verb|<append-file> filename|.  The file is created if it
++	doesn't exist.
+ 
+ \begin{code}
+ strategies
+@@ -79,6 +82,7 @@
+ 
+   file-exists	    = prim("_ST_file_exists")
+   open-file	    = prim("_ST_open_file")
++  append-file	    = prim("_ST_append_file")
+   close-file	    = prim("_ST_close_file")
+ 
+   ReadFromFile      = prim("_ST_ReadFromFile")
+diff -ru stratego-0.4.12/spec/slib/src/io.c stratego-0.4.12-iopatch/spec/slib/src/io.c
+--- stratego-0.4.12/spec/slib/src/io.c	Sun Mar 26 13:36:45 2000
++++ stratego-0.4.12-iopatch/spec/slib/src/io.c	Fri Apr 28 18:34:16 2000
+@@ -77,6 +77,31 @@
+   return NULL;
+ }
+ 
++void *ST_append_file(void)
++{
++  FILE *file;
++  ATerm name;
++
++  if(ST_file_table == NULL)
++    ST_file_table_init();
++  
++  name = Ttop();
++  if(ATmatch(name, "stdout"))
++    file = stdout;
++  else if(ATmatch(name, "stderr"))
++    file = stderr;
++  else if(ATmatch(name, "stdin"))
++    file = stdin;
++  else if(t_is_string(name))
++    {
++      file = fopen(t_string(name), "a");
++      if(file == NULL)
++	return fail_address;
++      ATtablePut(ST_file_table, name, ATmake("<int>", (int)file));      
++    }
++  return NULL;
++}
++
+ FILE *_ST_file_table_lookup(ATerm name)
+ {
+   ATerm desc;
+diff -ru stratego-0.4.12/spec/slib/src/stratego-lib.h stratego-0.4.12-iopatch/spec/slib/src/stratego-lib.h
+--- stratego-0.4.12/spec/slib/src/stratego-lib.h	Thu Feb 24 00:17:39 2000
++++ stratego-0.4.12-iopatch/spec/slib/src/stratego-lib.h	Fri Apr 28 18:34:24 2000
+@@ -92,6 +92,8 @@
+ 
+ void *ST_file_exists(void);
+ void *ST_open_file(void);
++void *ST_append_file(void);
++void *ST_close_file(void);
+ void *ST_print(void);
+ void *ST_printascii(void);
+ void *ST_printnl(void);
+@@ -103,6 +105,8 @@
+ 
+ #define _ST_file_exists()       GO(ST_file_exists())
+ #define _ST_open_file()         GO(ST_open_file())
++#define _ST_append_file()       GO(ST_append_file())
++#define _ST_close_file()        GO(ST_close_file())
+ #define _ST_print()             GO(ST_print())
+ #define _ST_printnl()           GO(ST_printnl())
+ #define _ST_printascii()        GO(ST_printascii())

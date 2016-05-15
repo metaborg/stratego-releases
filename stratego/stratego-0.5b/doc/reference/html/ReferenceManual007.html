@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Representing Constructors and Constants
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual006.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual008.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.2&nbsp;&nbsp; Representing Constructors and Constants</H3>	<blockquote><hr>
+	The symbols are divided into identifiers, natural numbers and
+	strings.
+	<hr></blockquote><BR>
+<BR>
+	Figure&nbsp;<A HREF="#Fig:Stratego-Lexicals.sdf">10</A> defines the syntax of
+	the lexical tokens of Stratego.<BR>
+<BR>
+	Identifiers start with a letter and are followed by zero or
+	more letters, digits, underscores, primes or dashes. An
+	identifier may not be followed by any of these characters.<BR>
+<BR>
+	A natural number is a string of one or more decimal digits.<BR>
+<BR>
+	A string is list of characters enclosed by double quotes.<BR>
+<BR>
+	Figure&nbsp;<A HREF="#Fig:Stratego-Lexicals.sdf">10</A> also defines the
+	keywords of Stratego, i.e., the words that cannot be used as
+	identifiers.<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 10: The syntax of
+	lexicals</DIV><BR>
+<A NAME="Fig:Stratego-Lexicals.sdf"></A><BR>
+	<PRE>module Stratego-Lexicals
+exports
+  lexical syntax
+    [A-Za-z] [A-Za-z0-9\_\'\-]* -&gt; Identifier
+    [0-9]+                      -&gt; Natural
+    "\"" ~[\"\n]* "\""          -&gt; String
+
+  lexical restrictions
+    Identifier  -/- [A-Za-z0-9\_\'\-]
+    Natural     -/- [0-9]
+
+  lexical syntax
+    "module"            -&gt; Identifier {reject}
+    "signature"         -&gt; Identifier {reject}
+    "sorts"             -&gt; Identifier {reject}
+    "operations"        -&gt; Identifier {reject}
+    "rules"             -&gt; Identifier {reject}
+    "strategies"        -&gt; Identifier {reject}
+    "id"                -&gt; Identifier {reject}
+    "fail"              -&gt; Identifier {reject}
+    "all"               -&gt; Identifier {reject}
+    "some"              -&gt; Identifier {reject}
+    "one"               -&gt; Identifier {reject}
+    "thread"            -&gt; Identifier {reject}
+    "not"               -&gt; Identifier {reject}
+    "test"              -&gt; Identifier {reject}
+    "where"             -&gt; Identifier {reject}
+    "rec"               -&gt; Identifier {reject}
+    "let"               -&gt; Identifier {reject}
+    "imports"           -&gt; Identifier {reject}
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual006.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual008.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  PACK: Packing and Flattening Modules
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library034.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library036.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>6.2.3&nbsp;&nbsp;  PACK: Packing and Flattening Modules</H3>	<blockquote><hr>
+	
+	Module systems allow the definition of a program to be
+	split into separate units stored in separate files. For
+	languages that do not support separate compilation (such
+	as grammar formalisms) these separate units need to be
+	combined to create the whole program.
+	This module defines generic strategies for packing a
+	set of modules reachable from a root module and for
+	flattening a set of modules into a single program.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+
+<H5> Analysis</H5>	Aspects of module packing and flattening<BR>
+<BR>
+	<OL type=1>
+<LI><BR>
+<BR>
+	 finding the module associated with the module name<BR>
+<BR>
+	
+<LI> doing something with the module, i.e., adding it
+	to the result<BR>
+<BR>
+	
+<LI> finding the imports in a module<BR>
+<BR>
+	
+<LI> keeping track of which modules have already been inlined<BR>
+<BR>
+	</OL>
+	
+<PRE>
+module pack
+imports string pack-graph
+</PRE>	
+
+<H5> Packing</H5>	Packing a module consists of collecting all modules into
+	a single file.<BR>
+<BR>
+<PRE>
+rules
+
+  PackInit : root -&gt; (root, (), [])
+
+strategies
+
+  pack(parser, imp) = 
+        PackInit; 
+        graph-nodes(Fst; parser, get-imports(imp), \ (n,x,xs) -&gt; [x|xs] \ )
+
+  get-imports(imp) =
+        collect(imp); 
+        concat
+</PRE>
+<H5> Unpacking</H5>
+	
+	Unpacking is the reverse of packing, i.e., writing each module
+	in a list of modules to a separate file.<BR>
+<BR>
+<PRE>
+rules
+
+  WriteMod(getname, write, ext) : 
+    mod -&gt; &lt;write&gt;(&lt;add-extension&gt;(&lt;getname&gt;mod, &lt;ext&gt;()), mod)
+
+strategies
+
+  unpack(wrapper, getname, ext) = 
+        wrapper(WriteMod(getname, WriteToTextFile, ext))
+</PRE>
+<H5> Flatten</H5>	<CODE>&lt;flatten&gt; (root, mods)</CODE> produces a flattened version
+	of the root module.<BR>
+<BR>
+<PRE>
+strategies
+
+  flatten(imp, nameeq, getcontent) = 
+        FlattenInit;
+        graph-nodes(lookup(nameeq),
+                 get-imports(imp), 
+                 Ttl; (getcontent, id); conc)
+
+rules
+
+  FlattenInit : (root, mods) -&gt; (root, mods, [])
+</PRE><HR>
+<A HREF="Library034.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library036.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

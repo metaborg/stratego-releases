@@ -1,0 +1,1030 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 24 24 588 768
+%%Title: Enscript Output
+%%For: 
+%%Creator: GNU enscript 1.6.1
+%%CreationDate: Thu May 11 15:29:59 2000
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 1
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 1
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 10 10 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-simple 1.6 1
+
+/do_header {	% print default simple header
+  gsave
+    d_header_x d_header_y HFpt_h 3 div add translate
+
+    HF setfont
+    user_header_p {
+      5 0 moveto user_header_left_str show
+
+      d_header_w user_header_center_str stringwidth pop sub 2 div
+      0 moveto user_header_center_str show
+
+      d_header_w user_header_right_str stringwidth pop sub 5 sub
+      0 moveto user_header_right_str show
+    } {
+      5 0 moveto fname show
+      45 0 rmoveto fmodstr show
+      45 0 rmoveto pagenumstr show
+    } ifelse
+
+  grestore
+} def
+%%EndResource
+/d_page_w 564 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 729 def
+/d_header_w 564 def
+/d_header_h 15 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 564 def
+/d_footer_h 0 def
+/d_output_w 564 def
+/d_output_h 729 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (InstantiateLayout.sdf) def
+/fdir () def
+/ftail (InstantiateLayout.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module InstantiateLayout) s
+5 705 M
+(imports Stratego-Layout) s
+5 694 M
+(exports) s
+5 683 M
+(  lexical syntax) s
+5 672 M
+(    Whitespace -> LAYOUT) s
+5 661 M
+(    Comment    -> LAYOUT) s
+5 650 M
+(  context-free restrictions) s
+5 639 M
+(    LAYOUT? -/- [\\ \\t\\n] | [\\\(].[\\*]) s
+_R
+S
+%%Page: (1) 2
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Main.sdf) def
+/fdir () def
+/ftail (Main.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Main) s
+5 705 M
+(imports Stratego ) s
+_R
+S
+%%Page: (1) 3
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Layout.sdf) def
+/fdir () def
+/ftail (Stratego-Layout.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Layout) s
+5 705 M
+(exports) s
+5 694 M
+(  %%sorts Identifier Natural Modname Variable String) s
+5 683 M
+(  lexical syntax) s
+5 672 M
+(    ~[\\*]                       -> CommentChar) s
+5 661 M
+(    "*" ~[\\\)]                   -> CommentChar) s
+5 650 M
+(    "\(*" CommentChar* "*\)"      -> Comment) s
+5 639 M
+(    [\\ \\t\\n]                    -> Whitespace) s
+5 617 M
+(    "\\\\literate"  LChar* "\\\\begin{code}" -> Comment) s
+5 606 M
+(    "\\\\end{code}" LChar* "\\\\begin{code}" -> Comment) s
+5 584 M
+(    ~[] -> LChar) s
+5 562 M
+(  %%lexical restrictions) s
+5 551 M
+(  %%  LChar+ -/- [\\\\].[b].[e].[g].[i].[n].[\\{].[c].[o].[d].[e].[\\}]) s
+_R
+S
+%%Page: (1) 4
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Layout0.sdf) def
+/fdir () def
+/ftail (Stratego-Layout0.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Layout0) s
+5 705 M
+(exports) s
+5 694 M
+(  %%sorts Identifier Natural Modname Variable String) s
+5 683 M
+(  lexical syntax) s
+5 672 M
+(    ~[\\*]                       -> CommentChar) s
+5 661 M
+(    "*" ~[\\\)]                   -> CommentChar) s
+5 650 M
+(    "\(*" CommentChar* "*\)"      -> LAYOUT) s
+5 639 M
+(    [\\ \\t\\n]                    -> LAYOUT) s
+5 628 M
+(  context-free restrictions) s
+5 617 M
+(    LAYOUT? -/- [\\ \\t\\n] | [\\\(].[\\*]) s
+_R
+S
+%%Page: (1) 5
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Lexicals.sdf) def
+/fdir () def
+/ftail (Stratego-Lexicals.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Lexicals) s
+5 705 M
+(exports) s
+5 694 M
+(  lexical syntax) s
+5 683 M
+(    [A-Za-z] [A-Za-z0-9\\_\\'\\-]* -> Identifier) s
+5 672 M
+(    [A-Za-z] [A-Za-z0-9\\_\\-]*   -> ModName) s
+5 650 M
+(    [0-9]+                      -> Natural) s
+5 639 M
+(    "\\"" ~[\\"\\n]* "\\""          -> String) s
+5 617 M
+(  lexical restrictions) s
+5 606 M
+(    Identifier ModName  -/- [A-Za-z0-9\\_\\'\\-]) s
+5 595 M
+(    Natural             -/- [0-9]) s
+5 573 M
+(  lexical syntax) s
+5 562 M
+(    "module"            -> Identifier {reject}) s
+5 551 M
+(    "signature"         -> Identifier {reject}) s
+5 540 M
+(    "sorts"             -> Identifier {reject}) s
+5 529 M
+(    "operations"        -> Identifier {reject}) s
+5 518 M
+(    "rules"             -> Identifier {reject}) s
+5 507 M
+(    "strategies"        -> Identifier {reject}) s
+5 496 M
+(    "id"                -> Identifier {reject}) s
+5 485 M
+(    "fail"              -> Identifier {reject}) s
+5 474 M
+(    "all"               -> Identifier {reject}) s
+5 463 M
+(    "some"              -> Identifier {reject}) s
+5 452 M
+(    "one"               -> Identifier {reject}) s
+5 441 M
+(    "thread"            -> Identifier {reject}) s
+5 430 M
+(    "not"               -> Identifier {reject}) s
+5 419 M
+(    "test"              -> Identifier {reject}) s
+5 408 M
+(    "where"             -> Identifier {reject}) s
+5 397 M
+(    "rec"               -> Identifier {reject}) s
+5 386 M
+(    "let"               -> Identifier {reject}) s
+5 375 M
+(    %%"in"              -> Identifier {reject}) s
+5 364 M
+(    "imports"           -> Identifier {reject}) s
+5 342 M
+(    "imports"           -> ModName {reject}) s
+5 331 M
+(    "signature"         -> ModName {reject}) s
+5 320 M
+(    "rules"             -> ModName {reject}) s
+5 309 M
+(    "strategies"        -> ModName {reject}) s
+_R
+S
+%%Page: (1) 6
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Modules.sdf) def
+/fdir () def
+/ftail (Stratego-Modules.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 22:22:22 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Modules) s
+5 705 M
+(imports Stratego-Specifications) s
+5 694 M
+(exports) s
+5 683 M
+(  sorts Module %% ModItem) s
+5 672 M
+(  context-free syntax) s
+5 661 M
+(    "module" ModName ModItem* -> Module  {cons\("Module"\)}) s
+5 650 M
+(    BSpec                     -> ModItem) s
+5 639 M
+(    "imports" ModName*        -> ModItem {cons\("Imports"\)}) s
+_R
+S
+%%Page: (1) 7
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Overlays.sdf) def
+/fdir () def
+/ftail (Stratego-Overlays.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Overlays) s
+5 705 M
+(exports) s
+5 694 M
+(  %%sorts Overlay) s
+5 683 M
+(  context-free syntax) s
+5 672 M
+(    Identifier "\(" {Identifier ","}* "\)" "=" Term -> Overlay {cons\("Overlay"\)}) s
+_R
+S
+%%Page: (1) 8
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Rules.sdf) def
+/fdir () def
+/ftail (Stratego-Rules.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Rules) s
+5 705 M
+(imports Stratego-Strategies) s
+5 694 M
+(exports) s
+5 683 M
+(  %%sorts Rule RDef) s
+5 672 M
+(  context-free syntax) s
+5 661 M
+(    Term "->"   Term  \("where" Strat\)? -> Rule {cons\("Rule"\)}) s
+5 650 M
+(    Strat "-->" Strat \("where" Strat\)? -> Rule {cons\("StratRule"\)}) s
+5 628 M
+(    Identifier \("\(" {Identifier ","}* "\)"\)? ":"  Rule -> RDef {cons\("RDef"\)} ) s
+5 617 M
+(    Identifier \("\(" {Identifier ","}* "\)"\)? "::" Rule -> RDef {cons\("RDef"\)} ) s
+_R
+S
+%%Page: (1) 9
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Signatures.sdf) def
+/fdir () def
+/ftail (Stratego-Signatures.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Signatures) s
+5 705 M
+(exports) s
+5 694 M
+(  %%sorts Signature BSig SortDecl OpDecl Type) s
+5 683 M
+(  context-free syntax) s
+5 672 M
+(    "signature"  BSig*                     -> Signature {cons\("Signature"\)}) s
+5 661 M
+(    "sorts"      SortDecl*                 -> BSig      {cons\("Sorts"\)}) s
+5 650 M
+(    "operations" OpDecl*                   -> BSig      {cons\("Operations"\)}) s
+5 628 M
+(    Identifier \("\(" {Identifier ","}* "\)"\)? -> SortDecl {cons\("Sort"\)}) s
+5 606 M
+(    Identifier ":" Type                    -> OpDecl   {cons\("OpDecl"\)}) s
+5 595 M
+(    Term                                   -> Type     {cons\("ConstType"\)}) s
+5 584 M
+(    {Term "*"}* "->" Term                  -> Type     {cons\("FunType"\)}) s
+_R
+S
+%%Page: (1) 10
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Specifications.sdf) def
+/fdir () def
+/ftail (Stratego-Specifications.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Specifications) s
+5 705 M
+(imports Stratego-Signatures Stratego-Overlays ) s
+5 694 M
+(        Stratego-Rules Stratego-Strategies) s
+5 683 M
+(exports) s
+5 672 M
+(  %%sorts BSpec Spec) s
+5 661 M
+(  context-free syntax) s
+5 650 M
+(    "signature"     BSig*    -> BSpec {cons\("Signature"\)}) s
+5 639 M
+(    "overlays"      Overlay* -> BSpec {cons\("Overlays"\)}) s
+5 628 M
+(    "rules"         RDef*    -> BSpec {cons\("Rules"\)}) s
+5 617 M
+(    "strategies"    SDef*    -> BSpec {cons\("Strategies"\)}) s
+5 606 M
+(    "specification" BSpec*   -> Spec  {cons\("Specification"\)}) s
+_R
+S
+%%Page: (1) 11
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Strategies.sdf) def
+/fdir () def
+/ftail (Stratego-Strategies.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Strategies) s
+5 705 M
+(imports Stratego-Terms) s
+5 694 M
+(exports) s
+5 683 M
+(  %%sorts Strat SVar) s
+5 672 M
+(  context-free syntax) s
+5 661 M
+(    "\(" Strat "\)"                       -> Strat {bracket}) s
+5 639 M
+(    %% sequential non-deterministic programming) s
+5 617 M
+(    "id"                                -> Strat {cons\("Id"\)}) s
+5 606 M
+(    "fail"                              -> Strat {cons\("Fail"\)}) s
+5 595 M
+(    "test" "\(" Strat "\)"                -> Strat {cons\("Test"\)}) s
+5 584 M
+(    "not"  "\(" Strat "\)"                -> Strat {cons\("Not"\)}) s
+5 573 M
+(    Strat ";" Strat                     -> Strat {cons\("Seq"\), left}) s
+5 562 M
+(    Strat "+" Strat                     -> Strat {cons\("Choice"\), left}) s
+5 551 M
+(    Strat "<+" Strat                    -> Strat {cons\("LChoice"\), left}) s
+5 540 M
+(    "rec" SVar "\(" Strat "\)"            -> Strat {cons\("Rec"\)}) s
+5 518 M
+(    %% traversal) s
+5 496 M
+(    %%Identifier "\(" {Strat ","}* "\)"     -> Strat {cons\("Cong"\)}) s
+5 485 M
+(    String                              -> Strat {cons\("StrCong"\)}) s
+5 474 M
+(    Natural                             -> Strat {cons\("IntCong"\)}) s
+5 463 M
+(    "\(" Strat "," {Strat ","}+ "\)"      -> Strat {cons\("TupleCong"\)}) s
+5 452 M
+(    "[" {Strat ","}* "]"                -> Strat {cons\("ListCong"\)}) s
+5 430 M
+(    Natural    "\(" Strat "\)"            -> Strat {cons\("Path"\)}) s
+5 419 M
+(    "one"      "\(" Strat "\)"            -> Strat {cons\("One"\)}) s
+5 408 M
+(    "some"     "\(" Strat "\)"            -> Strat {cons\("Some"\)}) s
+5 397 M
+(    "all"      "\(" Strat "\)"            -> Strat {cons\("All"\)}) s
+5 386 M
+(    "thread"   "\(" Strat "\)"            -> Strat {cons\("Thread"\)}) s
+5 364 M
+(    "kids"                              -> Strat {cons\("Kids"\)}) s
+5 342 M
+(    %% variables) s
+5 320 M
+(    "?" Term                            -> Strat {cons\("Match"\)}) s
+5 309 M
+(    "!" Term                            -> Strat {cons\("Build"\)}) s
+5 298 M
+(    "{" {Identifier ","}+ ":" Strat "}" -> Strat {cons\("Scope"\)}) s
+5 287 M
+(    "where" "\(" Strat "\)"               -> Strat {cons\("Where"\)}) s
+5 265 M
+(    %% abstraction) s
+5 243 M
+(    "let" SDef "in" Strat               -> Strat {cons\("Let"\)}) s
+5 232 M
+(    SVar \("\(" {Strat ","}* "\)"\)?        -> Strat {cons\("Call"\)}) s
+5 221 M
+(    Identifier                          -> SVar  {cons\("SVar"\)}) s
+5 199 M
+(    Identifier "\(" {Identifier ","}* "\)" ) s
+5 188 M
+(                              "=" Strat -> SDef  {cons\("SDef"\)}) s
+5 177 M
+(    Identifier "=" Strat                -> SDef) s
+5 155 M
+(  context-free priorities) s
+5 144 M
+(     Strat ";" Strat  -> Strat) s
+5 133 M
+(  > {left: ) s
+5 122 M
+(     Strat "+" Strat  -> Strat ) s
+5 111 M
+(     Strat "<+" Strat -> Strat } ) s
+_R
+S
+%%Page: (1) 12
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Sugar.sdf) def
+/fdir () def
+/ftail (Stratego-Sugar.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Sugar) s
+5 705 M
+(imports Stratego-Strategies) s
+5 694 M
+(exports) s
+5 683 M
+(  context-free syntax) s
+5 672 M
+(    "[" {Term ","}* "]"                     -> Term    {cons\("List"\)}) s
+5 661 M
+(    "\(" {Term ","}* "\)"                     -> Term    {cons\("Tuple"\)}) s
+5 650 M
+(    Identifier "[" Term "]" \("\(" SVar "\)"\)? -> Term    {cons\("Con"\)}) s
+5 639 M
+(    "<" Strat ">" Term                      -> Term    {cons\("App"\)}) s
+5 617 M
+(    Strat "=>" Term                         -> Strat   {cons\("AM"\)}) s
+5 606 M
+(    "<" StratAux ">" Term                   -> Strat   {cons\("BA"\)}) s
+5 595 M
+(    Strat                                   -> StratAux) s
+5 573 M
+(    "<<" Rule ">>"                          -> Strat   {cons\("SRule"\)}) s
+5 562 M
+(  context-free priorities) s
+5 551 M
+(    "<" StratAux ">" Term -> Strat >) s
+5 540 M
+(    Strat "=>" Term -> Strat >) s
+5 529 M
+(    Strat ";" Strat -> Strat) s
+5 518 M
+(   ) s
+_R
+S
+%%Page: (1) 13
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Syntax.sdf) def
+/fdir () def
+/ftail (Stratego-Syntax.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Syntax) s
+5 705 M
+(imports Stratego-Layout0) s
+5 694 M
+(        Stratego-Lexicals) s
+5 683 M
+(        Stratego-Terms  ) s
+5 672 M
+(        Stratego-Strategies ) s
+5 661 M
+(        Stratego-Sugar   ) s
+5 650 M
+(        Stratego-Signatures  ) s
+5 639 M
+(        Stratego-Rules    ) s
+5 628 M
+(        Stratego-Modules ) s
+_R
+S
+%%Page: (1) 14
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego-Terms.sdf) def
+/fdir () def
+/ftail (Stratego-Terms.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 22:23:22 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego-Terms) s
+5 705 M
+(imports Stratego-Lexicals) s
+5 694 M
+(exports) s
+5 683 M
+(  %%sorts Term) s
+5 672 M
+(  context-free syntax) s
+5 661 M
+(    "_"                            -> Term {cons\("Wld"\)}) s
+5 650 M
+(    Identifier                     -> Term {cons\("Var"\)}) s
+5 639 M
+(    String                         -> Term {cons\("Str"\)}) s
+5 628 M
+(    Natural                        -> Term {cons\("Int"\)}) s
+5 617 M
+(    Identifier "\(" {Term ","}* "\)" -> Term {cons\("Op"\)}) s
+_R
+S
+%%Page: (1) 15
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 1 def
+/fname (Stratego.sdf) def
+/fdir () def
+/ftail (Stratego.sdf) def
+% User defined strings:
+/fmodstr (Wed May 10 18:49:03 2000) def
+/pagenumstr (1) def
+/user_header_p false def
+%%EndPageSetup
+do_header
+5 716 M
+(module Stratego) s
+5 705 M
+(imports Stratego-Syntax %%InstantiateLayout) s
+_R
+S
+%%Trailer
+%%Pages: 15
+%%DocumentNeededResources: font Courier-Bold Courier 
+%%EOF

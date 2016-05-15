@@ -1,0 +1,1 @@
+[SDef("main",[],Seq(Build(Op("TCons",[Op("stdout",[]),Op("TCons",[Op("Cons",[Str("a"),Op("Cons",[Str("b"),Op("Bla",[Op("Cons",[Str("c"),Op("Cons",[Str("d"),Op("Nil",[])])])])])]),Op("TNil",[])])])),Call(SVar("a_0"),[]))),SDef("a_0",[],Prim("_ST_WriteToTextFile"))]

@@ -1,0 +1,39 @@
+frontend.o: frontend.c ../rts/stratego.h \
+ /usr/local/meta/include/aterm2.h /usr/local/meta/include/aterm1.h \
+ /usr/include/stdio.h /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/gnu/stubs.h \
+ /usr/lib/gcc-lib/i386-redhat-linux/egcs-2.91.66/include/stddef.h \
+ /usr/lib/gcc-lib/i386-redhat-linux/egcs-2.91.66/include/stdarg.h \
+ /usr/include/bits/types.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/bits/stdio_lim.h \
+ /usr/local/meta/include/encoding.h /usr/local/meta/include/abool.h \
+ /usr/local/meta/include/afun.h ../rts/aterm-extension.h \
+ ../rts/debug.h /usr/include/assert.h ../rts/util.h \
+ /usr/include/string.h ../rts/options.h ../rts/svm.h \
+ ../lib/stratego/src/stratego-lib.h ../lib/stratego/src/stratego-ext.h
+frontend.c :
+../rts/stratego.h :
+/usr/local/meta/include/aterm2.h :
+/usr/local/meta/include/aterm1.h :
+/usr/include/stdio.h :
+/usr/include/features.h :
+/usr/include/sys/cdefs.h :
+/usr/include/gnu/stubs.h :
+/usr/lib/gcc-lib/i386-redhat-linux/egcs-2.91.66/include/stddef.h :
+/usr/lib/gcc-lib/i386-redhat-linux/egcs-2.91.66/include/stdarg.h :
+/usr/include/bits/types.h :
+/usr/include/libio.h :
+/usr/include/_G_config.h :
+/usr/include/bits/stdio_lim.h :
+/usr/local/meta/include/encoding.h :
+/usr/local/meta/include/abool.h :
+/usr/local/meta/include/afun.h :
+../rts/aterm-extension.h :
+../rts/debug.h :
+/usr/include/assert.h :
+../rts/util.h :
+/usr/include/string.h :
+../rts/options.h :
+../rts/svm.h :
+../lib/stratego/src/stratego-lib.h :
+../lib/stratego/src/stratego-ext.h :

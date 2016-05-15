@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Generically Traversing Terms
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual012.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual014.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.5&nbsp;&nbsp; Generically Traversing Terms</H3>	<blockquote><hr>
+	Congruences define traversals over known
+	constructors. Stratego also provides several operators to
+	define traversals generically.
+	<hr></blockquote><BR>
+<BR>
+	
+<H5> Path</H5> If <CODE>s</CODE> is a strategy, then <CODE>n(s)</CODE>
+	(with <CODE>n</CODE> a natural number) is the strategy that applies
+	<CODE>s</CODE> to the <I>n</I>-th argument of the term. It fails if the
+	term has less then <I>n</I> arguments, or if <CODE>s</CODE> fails on the
+	<I>n</I>-th argument.<BR>
+<BR>
+	
+<H5> All</H5> If <CODE>s</CODE> is a strategy, then <CODE>all(s)</CODE>
+	is the strategy that applies <CODE>s</CODE> to each of the children
+	of the root of the term. It succeeds if each of these
+	applications succeeds and fails otherwise. In particular,
+	<CODE>all(s)</CODE> succeeds on a term that has no arguments (a
+	constant). For example, the following strategies apply a
+	strategy <CODE>s</CODE> to each node in a term, in preorder
+	(top-down), postorder (bottom-up) and a combination of pre-
+	and postorder (downup):
+<PRE>
+  bottomup(s) = rec x(all(x); s)
+  topdown(s)  = rec x(s; all(x))
+  downup(s)   = rec x(s; all(x); s)
+</PRE>	A typical usage of these operators is the strategy
+<PRE>
+  bottomup(try(s))
+</PRE>	that tries to apply <CODE>s</CODE> at each node of a term.<BR>
+<BR>
+	
+<H5> One</H5> The strategy <CODE>one(s)</CODE> applies <CODE>s</CODE>
+	non-deterministically to one direct subterm. It fails if there
+	is no subterm for which it succeeds. In particular, it fails
+	for constants, since they have no child for which <CODE>s</CODE> can
+	succeed. As we did with <CODE>all</CODE> we can construct bottom-up
+	and top-down traversals with <CODE>one</CODE>:
+<PRE>
+  oncebu(s) = rec x(one(x) &lt;+ s)
+  oncetd(s) = rec x(s &lt;+ one(x))
+</PRE>	These strategies succeed if they find a single node in the
+	term where the application of <CODE>s</CODE> is successful. The
+	first one searches the term in bottom-up order: it first tries
+	to find a succesfull application in one of the children
+	<CODE>one(x)</CODE> and otherwise tries <CODE>s</CODE> at the root.<BR>
+<BR>
+	
+<H5> Some</H5> The strategy <CODE>some(s)</CODE> applies <CODE>s</CODE>
+	to as many children as possible, but at least to one.<BR>
+<BR>
+	Examples of the use of <CODE>some</CODE> are:
+<PRE>
+  somebu(s)     = rec x(some(x); try(s) &lt;+ s)
+  sometd(s)     = rec x(s; all(try(x)) &lt;+ some(x))
+  somedownup(s) = rec x(s; all(x); try(s) &lt;+ some(x); try(s))
+</PRE>	
+<H5> Thread</H5>	threading environments through a traversal<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 16: Syntax of generic traversal operators</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Traversal
+exports
+  context-free syntax
+    Natural  "(" Strat ")"  -&gt; Strat {cons("Path")}
+    "one"    "(" Strat ")"  -&gt; Strat {cons("One")}
+    "some"   "(" Strat ")"  -&gt; Strat {cons("Some")}
+    "all"    "(" Strat ")"  -&gt; Strat {cons("All")}
+    "thread" "(" Strat ")"  -&gt; Strat {cons("Thread")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual012.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual014.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

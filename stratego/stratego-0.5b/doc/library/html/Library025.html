@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  LIST-ZIP
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library024.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library026.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.3.9&nbsp;&nbsp;  LIST-ZIP</H3>	<blockquote><hr><BR>
+<BR>
+	Zipping two lists into a list of pairs is a useful operation
+	in many situations. There are many variants of zipping, for
+	instance in the way lists of unequal length are treated. This
+	module defines a collection of zip-like strategies for lists
+	based on one underlying control scheme.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module list-zip
+imports list-cons
+imports tuple
+rules
+
+  Zip1   : ([],[]) -&gt; []
+  Zip1a' : ([],_) -&gt; []
+  Zip1b' : (_,[]) -&gt; []
+  Zip1c  : ([],x) -&gt; x
+  Zip1c' : (x,[]) -&gt; x
+  Zip1d  : ([],[_|_]) -&gt; []
+  Zip2   : ([x|xs],[y|ys]) -&gt; ((x, y), (xs, ys))
+
+  LZip2  : ([x|xs], y) -&gt; ((x, y), (xs, y))
+  RZip2  : (x, [y|ys]) -&gt; ((x, y), (x, ys))
+
+  Zip3   : (x, xs) -&gt; [x|xs]
+
+  UnZip1 : [] -&gt; ([], [])
+  UnZip2 : ((x, y), (xs, ys)) -&gt; ([x|xs], [y|ys])
+  UnZip3 : [x |  xs] -&gt; (x, xs)
+
+  NZip00 : xs -&gt; (0, xs)
+  NZip01 : xs -&gt; (1, xs)
+  NZip1  : (n, []) -&gt; []
+  NZip2  : (n, [y|ys]) -&gt; ((n, y), (&lt;plus&gt; (n, 1), ys))
+  NZip3  : (x, xs) -&gt; [x| xs]
+
+  TZip1   : (TNil, TNil) -&gt; TNil
+  TZip2   : (TCons(x, xs), TCons(y, ys)) -&gt; ((x, y), (xs, ys))
+  TZip3   : (x, xs) -&gt; TCons(x, xs)
+
+  cart(s) : (xs, ys) -&gt; 
+            &lt;map(\x -&gt; &lt;map(\y -&gt; &lt;s&gt;(x, y)\ )&gt; ys\ ); foldr(![], union)&gt; xs
+
+  Skip(s) : ([x|xs], ys) -&gt; (x, (xs, ys))
+
+strategies
+
+  genzip(a, b, c, s) = rec x(a + b; (s, x); c)
+
+  zip(s)  = genzip(Zip1,   Zip2,   Zip3,   s)
+  zip'(s) = genzip(Zip1a' &lt;+ Zip1b',   Zip2,   Zip3,   s)
+  zipl(s) = genzip(Zip1a',   Zip2,   Zip3,   s)
+  zipr(s) = genzip(Zip1b',   Zip2,   Zip3,   s)
+
+  rest-zip(s) = 
+    genzip((?([],_) + ?(_,[])); ?(tla, tlb); ![], Zip2, Zip3, s);
+    \ pairs -&gt; (tla, tlb, pairs) \
+
+  unzip    = genzip(UnZip1, UnZip3, UnZip2, id)
+  unzip(s) = genzip(UnZip1, UnZip3, UnZip2, s)
+
+  nzip0(s) = NZip00 ; genzip(NZip1,  NZip2,  NZip3,  s)
+  nzip(s)  = NZip01 ; genzip(NZip1,  NZip2,  NZip3,  s)
+  tzip(s)  = genzip(TZip1,   TZip2,   TZip3,   s)
+
+  lzip(s)  = genzip(Zip1a', LZip2, Zip3, s)
+  rzip(s)  = genzip(Zip1b', RZip2, Zip3, s)
+
+
+  zipFetch(s) = rec x(Zip2; ((s, id) &lt;+ (id, x)))
+  lzipFetch(s) = rec x(LZip2; ((s, id) &lt;+ (id, x)))
+  rzipFetch(s) = rec x(RZip2; ((s, id) &lt;+ (id, x)))
+
+  zipPad(s, padding) = 
+    rec x(Zip1 + Zip2; (s, x); Zip3 + 
+          ([], [id|id]); (![&lt;padding&gt;()|[]], id); x +
+          ([id|id], []); (id, ![&lt;padding&gt;()|[]]); x)
+
+  zip-tail = rec x(Zip1c + (Tl, Tl); x)
+  zipl-tail-match(s) = rec x(Zip1c + Zip2; (s, id); Snd; x)
+  zipr-tail-match(s) = rec x(Zip1c' + Zip2; (s, id); Snd; x)
+ 
+  zip-skip(pred, s) = 
+        rec x(Zip1 + (Skip(pred); (id, x) &lt;+ Zip2; (s, x)); Zip3)
+
+strategies
+
+  tuple-zip(s) = 
+    rec x(split(tmap(Hd), tmap(Tl)); (s, x); Zip3
+          &lt;+ tmap([]); ![])
+
+  tuple-unzip(s) =
+    rec x(split(map(Thd), map(Ttl)); (s, x); \ (a,b) -&gt; TCons(a,b) \
+          &lt;+ map(()); !())
+</PRE>	
+ 	<HR>
+<A HREF="Library024.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library026.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

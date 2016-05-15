@@ -1,0 +1,87 @@
+\section{Introduction}
+
+	This document contains the assignments for the Stratego
+	Tutorial.  The purpose of the assignments is to define several
+	transformations on Pico programs. Pico is a small imperative
+	language with nested function declarations.
+
+\section{Syntax}
+
+ \subsection{Examples}
+
+   \subsubsection{Fib}
+
+	\inputverbatim{../xmpl/fib.pico}
+
+ \subsection{Syntax Definition}
+
+	\inputverbatim{../syn/pico.def}
+
+\section{Abstract Syntax}
+
+	\inputverbatim{../spec/pico.r}
+
+\section{Pretty-Printer}
+
+	\inputverbatim{../spec/pico-pp.r}
+
+\section{Lab Environment}
+
+	\begin{itemize}
+
+	\item There is a guest account for each of you
+
+	\item Add to your path: /projects/stratego/xt/bin
+
+	\item To use the emacs mode put the following in
+	\verb|~/.emacs|:
+        \verb|(load "/projects/stratego/xt/share/stratego/stratego.el")|
+
+	\item Set up your work directory in
+	/projects/stratego/tutorial/firstname (you don't have enough
+	quota to work comfortably in your home directory)
+
+	\end{itemize}
+
+\section{Assignments}
+
+ \subsection{Algebraic Simplification (1)}
+
+	Use the well-known algebraic laws about arithmetic to simplify
+	arithmetic expressions.
+
+ \subsection{Three Address Code}
+
+	Normalize all expressions to the form \verb|x := y + z|, i.e.,
+	no complex expressions are used.
+
+ \subsection{Side-Effect Free}
+
+	Remove all side-effects from expressions, i.e., 
+\verb|x + (x := y - z)| 
+	should become 
+\verb|x + (x := y - z; x)|,
+	which should transform to
+\verb|(var a; a := x; x := y - z; a + x)|
+
+ \subsection{Desugaring}
+
+	Introduce a for loop and express it in terms of a while
+
+ \subsection{Algebraic Simplification (2)}
+
+	Simplify logical expressions using Boolean algebra.
+
+ \subsection{Mutification}
+
+	Replace move statements (:=) by operator-move statement (+=)
+	whenever possible. For example, replace \verb|x := x + e| with
+	\verb|x += e|.
+
+ \subsection{Inlining}
+
+	Replace a function call by its body.
+
+\subsection{Evaluation}
+	
+	Write an Interpreter for Pico.

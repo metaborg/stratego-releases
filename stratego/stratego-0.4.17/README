@@ -1,0 +1,162 @@
+----------------------------------------------------------------------
+            __ __ __  __    _  __ __  __  __   __
+           |__   |   |__|  /_\   |   |__ | _  |  |
+            __|  |   | \  /   \  |   |__ |__| |__|
+
+----------------------------------------------------------------------
+
+ STRATEGO : Specification of Program Transformation Systems
+
+ Version 0.4.17
+
+----------------------------------------------------------------------
+
+ Copyright (c) 1998, 1999, 2000 Eelco Visser <visser@acm.org>
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2, or (at your option)
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ 02111-1307, USA.
+
+----------------------------------------------------------------------
+ This directory contains the Stratego implementation. It consists of
+
+ - spec  	 : specification of the compiler components
+	
+ - src		 : bootstrapped compiler components
+
+ - doc 		 : reference manual, tutorial, library and compiler
+                   documentation
+
+ - share/tex	 : LaTeX packages
+
+ - share/bib	 : BibTeX files
+
+ - utils	 : Stratego programming utilities
+
+ - www		 : Stratego web page
+
+ installation creates the following directories
+
+ - share/stratego : installed Stratego library
+
+ - bin		 : installed executables
+
+ - include	 : installed include files
+
+ - lib		 : installed binary libraries
+
+----------------------------------------------------------------------
+ ATERM LIBRARY
+
+ For the installation of Stratego, the ATerm library is required. The
+ ATerm library can be obtained from
+ 
+   http://www.cwi.nl/projects/MetaEnv/aterm/
+ 
+ For installation do the following
+ 
+ > cd /path/to/aterm
+ > tar zxf aterm-x.y.tar.gz
+ > cd aterm-x.y
+ > ./configure --prefix=/aterm/install/directory --with-dbg
+ > gmake
+ > gmake install
+ 
+ After installation with this configuration, the library is installed
+ in /aterm/install/directory/lib, the executables in
+ /aterm/install/directory/bin, and the include files in
+ /aterm/install/directory/include.
+ 
+ For further information about installion see the aterm README.
+ 
+----------------------------------------------------------------------
+ USER CONFIGURATION
+ 
+ If you only intend to use the Stratego compiler and not work on its
+ development set prefix to any appropriate value when installing, e.g.,
+ 
+ > ./configure --prefix=/usr/local \
+               --with-aterm=/aterm/install/directory
+ 
+ This will cause executables to be installed in /usr/local/bin,
+ libraries in /usr/local/lib, include files in /usr/local/include and
+ the Stratego library in /usr/local/share/stratego.
+ 
+ Note that the --with-aterm option should point to the directory
+ containing the bin, lib and include directories with the aterm
+ installation.
+ 
+----------------------------------------------------------------------
+ DEVELOPER CONFIGURATION
+ 
+ If you intend to change the compiler specification in spec/ and
+ bootstrap the compiler, you need to set prefix to the local directory.
+ Or at least a directory where you have write permissions such that it
+ is easy to re-install the compiler. This is the what I usually do:
+ 
+ > ./configure --prefix=`pwd` \
+               --with-aterm=/aterm/install/directory
+ 
+ This entails that you need to include `pwd`/bin in your PATH.
+ 
+----------------------------------------------------------------------
+ INSTALLATION
+ 
+ For both kinds of configurations, make the compiler by
+ 
+ > gmake
+ > gmake install
+ 
+----------------------------------------------------------------------
+ BOOTSTRAPPING
+ 
+ To create a new version of the compiler, edit the appropriate files in
+ the spec/* directories. Then do the following
+ 
+ > cd spec
+ > gmake
+ > gmake install
+ 
+ Then use the generated compiler to compile some test specifications.
+ If that seems to work, try to bootstrap by
+ 
+ > gmake bootstrap
+ 
+ This will compile the compiler components with itself.
+ 
+ If this goes wrong at some point, you'll have to reinstall the stable
+ compiler in the src/ tree:
+ 
+ > cd ..
+ > gmake install
+ 
+ It can be useful to have two installations of the compiler, one of
+ them the stable compiler from src. To achieve this do the following.
+ 
+ 1) Make a user configuration as described above and make and install
+ the compiler with this configuration. This puts a stable version of
+ the compiler in a standard place like /usr/local/bin.
+ 
+ 2) Make a developer configuration as described above.
+ 
+ 3) In one terminal use the stable compiler to compile the compiler
+ components, i.e., PATH = /usr/local/bin:...
+ 
+ 4) In another terminal use the newly compiled compiler to test
+ your changes i.e., PATH = /path/to/stratego/bin:...
+ 
+ Now if something goes wrong in 4) it is easier to recompile the
+ compiler components.
+ 
+----------------------------------------------------------------------

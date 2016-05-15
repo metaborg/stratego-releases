@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+
+   <title>Stratego: Version 0.4.*</title>
+
+   <link rel=stylesheet type="text/css" href="../style.css" title="style">
+
+</head>
+
+<body>
+
+<hr>
+    <h1>Version 0.4.*</h1>
+<hr>
+
+ released: *, 2000
+
+<h3>
+ SUMMARY of CHANGES
+</h3>
+
+    <ul>
+      <li> 
+    </ul>
+
+<h3>
+ LANGUAGE
+</h3>
+
+<ul>
+
+  <li> 		
+
+    <p>
+
+  <li> Constructors can now be overloaded. For example,
+
+<hr>
+</body>
+</html>

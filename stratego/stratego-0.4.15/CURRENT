@@ -1,0 +1,3 @@
+use getppid (see unistd.h) to rename temporary
+
+remove the file afterwards

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  TABLES
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library012.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library014.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.3.1&nbsp;&nbsp;  TABLES</H3>	An interface to the ATerm table facility. Note that these
+	primitives work by side-effect.<BR>
+<BR>
+	<CODE>&lt;create-table&gt; name</CODE> creates a table with name
+	<CODE>name</CODE>, which can be any term.<BR>
+<BR>
+	<CODE>&lt;destroy-table&gt; name</CODE> destroys it.<BR>
+<BR>
+	<CODE>&lt;table-put&gt; (name, key, value)</CODE> associates <CODE>value</CODE>
+	with <CODE>key</CODE> in the <CODE>name</CODE> table.<BR>
+<BR>
+	<CODE>&lt;table-get&gt; (name, key)</CODE> yields the value associated to
+	<CODE>key</CODE> or fails.<BR>
+<BR>
+	<CODE>&lt;table-remove&gt; (name, key)</CODE> removes the entry for
+	<CODE>key</CODE> from table <CODE>name</CODE>.<BR>
+<BR>
+	<CODE>&lt;table-keys&gt; name</CODE> produces the list of keys of table
+	<CODE>name</CODE>.<BR>
+<BR>
+<PRE>
+module tables
+strategies
+
+  table-create  = prim("_ST_create_table")
+  table-destroy = prim("_ST_destroy_table")
+  table-put     = prim("_ST_table_put")
+  table-get     = prim("_ST_table_get")
+  table-remove  = prim("_ST_table_remove")
+  table-keys    = prim("_ST_table_keys")
+
+  create-table  = 
+    where(say(!"create-table: obsolete strategy, use table-create"));
+    table-create
+
+  destroy-table = 
+    where(say(!"destroy-table: obsolete strategy, use table-destroy"));
+    table-destroy
+
+  table-getlist = 
+    ?name; table-keys; map(\ x -&gt; (x, &lt;table-get&gt; (name, x))\ )
+
+  table-putlist =
+    ?(name, list); &lt;map({x,y: ?(x, y); &lt;table-put&gt; (name, x, y)})&gt; list
+
+  set = table-put
+
+  get = table-get
+
+  push-set = 
+    ?(table, key, val); 
+    where(&lt;set&gt; (table, key, [val | &lt;get &lt;+ ![]&gt; (table, key)]))
+
+  pop-get =
+    ?(table, key);
+    where(&lt;get&gt; (table, key) =&gt; [x | xs];
+          &lt;set&gt; (table, key, xs));
+    !x
+
+  union-set = 
+    ?(table, key, val); 
+    where(&lt;set&gt; (table, key, &lt;union&gt; (val, &lt;get &lt;+ ![]&gt; (table, key))))
+
+  diff-set =
+    ?(table, key, val); 
+    where(&lt;set&gt; (table, key, &lt;diff&gt; (&lt;get &lt;+ ![]&gt; (table, key), val)))
+</PRE>
+	<HR>
+<A HREF="Library012.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library014.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

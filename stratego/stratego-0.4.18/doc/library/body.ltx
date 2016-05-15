@@ -1,0 +1,131 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\chapter{Introduction}
+
+  \section{The Entire Library}
+
+  	\input{lib.r}
+
+\chapter{Sequential Control}
+
+	\input{conditional.r}
+	\input{iteration.r}
+
+\chapter{Terms}
+
+  \section{Term Traversal}
+
+  	\input{simple-traversal.r}
+  	\input{fixpoint-traversal.r}
+  	\input{env-traversal.r}
+
+  \section{Term Construction and Deconstruction}
+
+	\input{term.r}
+	\input{share.r}
+
+\chapter{Built-in Data Types}
+
+  \section{Numbers}
+
+	\input{integers.r}
+	\input{reals.r}
+	\input{int-list.r}
+
+  \section{Strings}
+	
+ 	\input{string.r}
+
+  \section{Tables}
+
+	\input{tables.r}
+	\input{memo.r}
+
+\chapter{Standard Data Types} 
+
+  \section{Options}
+
+  	\input{option.r}
+
+  \section{Tuples}
+
+  	\input{tuple.r}
+
+  \section{Lists}
+
+  	\input{list.r}
+  	\input{list-cons.r}	
+  	\input{list-basic.r}	
+  	\input{list-index.r}	
+  	\input{list-lookup.r}	
+ 	\input{list-misc.r}	
+  	\input{list-set.r}	
+  	\input{list-sort.r}	
+ 	\input{list-zip.r}	
+ 	\input{list-filter.r}	
+	
+  \section{Binary Trees}
+
+ 	\input{bin-tree.r}	
+ 	\input{bin-tree-set.r}	
+
+\chapter{Generic Algorithms}
+
+  \section{Object Variables}
+
+	\input{free-variables.r}
+	\input{rename.r}
+	\input{substitution.r}
+	\input{unification.r}
+
+  \section{Graphs}
+
+	\input{pack-graph.r}
+	\input{pack-modules.r}
+	\input{pack.r}
+
+\chapter{System Interface}
+
+  \section{Input/Output}
+
+	\input{io.r}
+	\input{file.r}
+	\input{options.r}
+
+  \section{External Processes}
+
+	\input{exec.r}
+
+  \section{Time}
+
+	\input{time.r}
+
+\chapter{Component Interfaces}
+
+  \section{Pretty-Printing}
+
+ 	\input{abox.r}	
+ 	\input{abox-ext.r}
+ 	\input{text.r}		
+	\input{gpp.r}	
+	\input{ugly-print.r}
+
+  \section{Parsing}
+
+	\input{sglr.r}

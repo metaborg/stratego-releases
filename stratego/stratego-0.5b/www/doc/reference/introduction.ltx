@@ -1,0 +1,126 @@
+\section{Introduction}
+
+\subsection{Stratego: Specifying Program Transformation Systems Concisely}
+
+	\begin{abstract}
+	Program transformations can be described concisely by means of
+	a combination of rewrite rules that describe basic
+	transformations and rewrite strategies that describe their
+	application to a program.
+	\end{abstract}
+
+	Program transformations are often naturally described by means
+	of (term) rewrite rules. However, to achieve transformations
+	of an entire program such rules need to be applied with
+	care. Often a more fine grained control over their application
+	is needed than is offered by standard rewriting strategies
+	such as innermost or outermost normalization. 
+
+	One solution to this problem is to encode the transformation
+	strategy in the rules. However, this leads to large
+	specifications in which traversal over the syntax structure of
+	a program needs to be spelled out explicitly. This is not
+	necessary in `pure' rewriting, since the built-in strategy
+	finds out where to apply a rule.  In addition this style leads
+	to a loss of reusability of transformation rules.  
+
+	Another solution is to make strategies programmable artifacts
+	of a transformation system.  Stratego is a language for the
+	specification of transformation rules and transformation
+	strategies. 
+
+	The main features of Stratego are summarized in
+	Figure~\ref{Fig:features}.
+
+	\paragraph{Audience}
+
+	This reference manual describes the Stratego language from
+	first principles. That means that it is organized along the
+	lines of the design of the language rather than along the
+	lines of learning the language. Therefore, it is aimed at
+	Stratego programmers and implementers with some experience
+	with the language who want to understand the details of its
+	definition.
+
+	The Stratego Tutorial \cite{Vis99.Tutorial} gives a
+	description of the language and its programming environment by
+	means of examples and is aimed at novice users. Several
+	publications exist that explore aspects of the language and
+	its applications; see the bibliography.
+
+	\newpage
+
+	\begin{boxedfigure}{features}{Features of Stratego}
+
+	\begin{itemize}
+	\item Program represented by means of abstract syntax trees (terms)
+	\item Basic transformations expressed as rewrite rules
+	\item Programmable strategies for control over application of rules
+	\item Matching and building patterns are first-class citizens
+	\item Organization of specifications into modules
+	\item Primitives for connection to the system
+	\end{itemize}
+
+
+	\end{boxedfigure}
+
+\subsection{Transforming Programs with Stratego}
+
+	\begin{abstract}
+	Program transformation systems defined in Stratego are
+	combined with parsers and pretty-printers to create
+	source-to-source transformation systems.
+	\end{abstract}
+
+	A transformation system defined by a Stratego specification
+	constitutes a program that transforms a term to another term
+	or fails.
+
+	Stratego programs define transformations on abstract syntax
+	trees. In order to transform programs that are represented as
+	texts, it is necessary to define a parser that transforms a
+	program text to an abstract syntax tree and a pretty-printer
+	that transforms an abstract syntax tree to text
+	(Figure~\ref{Fig:architecture}).
+
+	This manual will not go into the details of implementing such
+	tools. There is a wide range of possibilities for definining
+	parsers and pretty-printers.  One possibility is the use of
+	SDF for parsing and the Box language of the GPP package for
+	pretty-printing. These packages are combined in the XT bundle
+	of transformation tools \cite{WWW-XT}.
+
+	\newpage
+
+	\begin{boxedfigure}{architecture}{(** Architecture of program
+	transformation systems **)}
+
+	program (text)
+
+	parser
+
+	abstract syntax tree (term)
+
+	transformer (generated from Stratego specification)
+
+	transformed abstract syntax tree (term)
+
+	pretty-printer
+
+	transformed program (text)
+
+	\end{boxedfigure}
+
+\subsection{Describing Stratego with SDF}
+
+	\begin{abstract}
+	This reference manual describes Stratego by means of a formal
+	syntax definition in the syntax definition formalism SDF2.
+	The semantics of the language is described informally.
+	\end{abstract}
+
+	\newpage
+
+	\begin{boxedfigure}{}{}
+
+	\end{boxedfigure}

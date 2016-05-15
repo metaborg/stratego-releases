@@ -1,0 +1,30 @@
+[SDef("main",[],
+
+Rec("x_0",
+Seq(All(Call(SVar("x_0"),[])),
+
+Rec("c_1",LChoice(
+
+Choice(
+
+Scope(["y_0"],Seq(Match(Op("Plus",[Op("Zero",[]),Var("y_0")])),Build(Var("y_0")))),
+
+Scope(["z_0","a_1"],Scope(["b_1"],
+
+Seq(Match(Op("Plus",[Op("Succ",[Var("z_0")]),Var("a_1")])),
+
+Seq(Where(Seq(Build(Var("a_1")),Match(Var("b_1")))),
+
+Seq(Scope(["h_0"],
+Seq(Seq(Scope(["i_0"],
+    Seq(Seq(Build(Var("b_1")),
+        Seq(Rec("d_1",Seq(All(Call(SVar("d_1"),[])),Call(SVar("c_1"),[]))),
+            Seq(Match(Var("i_0")),Id))),
+        Build(Op("Plus",[Var("z_0"),Var("i_0")])))),
+
+Seq(Call(SVar("c_1"),[]),
+Seq(Match(Var("h_0")),Id))),
+    Build(Op("Succ",[Var("h_0")])))),
+Call(SVar("c_1"),[]))))))
+
+),Id)))))]

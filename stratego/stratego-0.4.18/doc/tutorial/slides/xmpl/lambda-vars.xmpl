@@ -1,0 +1,9 @@
+  lvars = free-vars(LVars, LBnd)
+
+  LVars : Var(x,t) -> [(x,t)]
+
+  LBnd  : Abs(x, t, e) -> [(x,t)]
+  LBnd  : Let(x, t, e1, e2) -> [(x,t)]
+  LBnd  : Letrec(fdecs, e) -> 
+            <map(\Fdec(f,t,xs,e) -> (f,t)\)> fdecs
+  LBnd  : Fdec(f, Arrow(ts,t), xs, e) -> <zip(id)> (xs,ts)

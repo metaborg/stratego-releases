@@ -1,0 +1,39 @@
+ Release 0.4.18 of the Stratego compiler is now available from 
+
+	http://www.stratego-language.org/
+
+ This release features several refactorings of the compiler. 
+
+ COMPILER
+
+ * Format checkers are used to describe and guard the interfaces
+   between components.
+
+ * A new implementation of pattern matching based on the ideas of
+   Mikael Pettersson in his paper "A Term Pattern-Match Compiler
+   Inspired by Finite Automat Theory". This new implementation is
+   not fundamentally different, but it is much simpler and solves
+   an obscure bug that went unnoticed for a long time. It is also 
+   a nice example of compilation by transformation; patterns from
+   different strategies that are combined with + or <+ are merged
+   into a single automaton.
+
+ * Strategy definitions are compiled to separate C functions. In 
+   previous versions one function with internal labels for each
+   definition were used. Surprisingly gcc has managed to compile
+   these long lists of instructions until now, but it started to
+   give scaling problems. This change makes gcc much less memory
+   hungry.
+
+ * Constructor symbols are cached in global variables. In previous
+   versions constructor symbols were matched by string comparison.
+   This is now replaced with a comparison of the AFun, an integer.
+   This should reduce run-time of specifications.
+
+ * The SDF2 definition of Stratego can be found in spec/sdf
+
+ LIBRARY
+
+ * The tables modules has been extended with a number of useful 
+   strategies for table management that can be used for instance 
+   in symbol tables.

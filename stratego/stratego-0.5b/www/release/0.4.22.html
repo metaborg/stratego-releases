@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+
+   <title>Stratego: Version 0.4.21</title>
+
+   <link rel=stylesheet type="text/css" href="../style.css" title="style">
+
+</head>
+
+<body>
+
+<hr>
+    <h1>Version 0.4.22</h1>
+<hr>
+
+ released: January 20, 2001
+
+
+<h3>
+      COMPILER
+</h3>
+
+<ul>
+
+  <li> A new experimental optimization component has been added to the
+  compiler. The commandline option <code>--fusion</code> of
+  <code>sc</code> invokes the new component, which optimizes the
+  innermost strategy. It works fine for invocations of innermost with
+  a choice of rules. More coordination with the inliner is needed to
+  get it to work for all cases. The optimization is joint work with
+  Patty Johann. A paper about it is in preparation.
+
+    <p>
+
+	  If you are using innermost in any of your specifications let
+	  me know how the optimization behaves.
+	  
+    <p>
+
+  <li> The implementation of the inliner has been refactored in
+  preparation of better coordination with other optimizations and is
+  now much simpler. The functionality is still the same.
+    <p>
+
+</ul>
+
+<h3>
+ LIBRARY
+</h3>
+
+<ul>
+      <li> list-set.r: Renamed foldr-kids to crush,
+	   following the paper by Joost and Ralf.
+	<p>
+
+</ul>
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,1 @@
+[SDef("R1",[],Scope(["o_7","p_7","q_7","r_7"],Seq(Match(Op("F",[Var("p_7"),Op("G",[Op("A",[]),Var("q_7")])])),Seq(Where(Seq(Seq(Build(Op("A",[])),Match(Var("o_7"))),Seq(Build(Op("G",[Var("p_7"),Var("q_7")])),Match(Var("r_7"))))),Seq(Build(Op("H",[Var("o_7"),Var("r_7")])),Id))))),SDef("main",[],Scope([],Call(SVar("R1"),[])))]

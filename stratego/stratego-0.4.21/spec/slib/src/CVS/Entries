@@ -1,0 +1,21 @@
+/SL-tuples.h/1.2/Wed Jan 19 16:24:13 2000//
+/SL.h/1.2/Wed Jan 19 16:24:14 2000//
+/annotations.c/1.3/Wed Jan 19 16:24:14 2000//
+/annotations.h/1.2/Wed Jan 19 16:24:14 2000//
+/exec.c/1.5/Tue Jun  6 12:43:04 2000//
+/io.c/1.10/Sun Jun  4 14:49:40 2000//
+/prim.c/1.2/Wed Jan 19 16:24:14 2000//
+/stratego-ext.h/1.2/Wed Jan 19 16:24:14 2000//
+/stratego-lib.c/1.3/Wed Jan 19 16:24:14 2000//
+/string.c/1.2/Wed Jan 19 16:24:15 2000//
+/tables.c/1.3/Wed Oct 18 12:06:17 2000//
+/tables.h/1.2/Wed Jan 19 16:24:15 2000//
+/time.c/1.2/Wed Jan 19 16:24:15 2000//
+/tuples.c/1.3/Mon Jun 12 14:05:33 2000//
+/tuples.h/1.1/Thu Jan 27 11:21:32 2000//
+D/.deps////
+D/stratego////
+/number.c/1.6/Mon Oct 30 00:09:53 2000//
+/stratego-lib.h/1.13/Mon Oct 30 00:09:53 2000//
+/term.c/1.8/Mon Oct 30 00:09:53 2000//
+/Makefile.am/1.8/Mon Oct 30 00:26:29 2000//

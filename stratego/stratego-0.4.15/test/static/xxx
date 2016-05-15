@@ -1,0 +1,12 @@
+/usr/meta/bin/pack-stratego (0.04 secs)
+warning: in rule B: constructor ZZZ/2 not declared
+warning: in rule B: constructor BBB/1 not declared
+/usr/meta/bin/frontend (0.06 secs)
+/usr/meta/bin/optimizer (0.01 secs)
+/usr/meta/bin/matching-tree (0.00 secs)
+/usr/meta/bin/optimizer (0.02 secs)
+/usr/meta/bin/backend (0.02 secs)
+/usr/meta/bin/postprocess (0.00 secs)
+compiling
+linking
+compilation succeeded

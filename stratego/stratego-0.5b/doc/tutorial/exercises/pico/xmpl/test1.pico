@@ -1,0 +1,9 @@
+{ 
+var x;
+fun main() {
+  
+  return(x)
+};
+
+main()
+}

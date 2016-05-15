@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Organizing Specifications into Modules
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual003.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual005.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>2.1&nbsp;&nbsp; Organizing Specifications into Modules</H3>	<blockquote><hr>
+	A Stratego specification defines signatures, rules, strategies
+	and overlays. A specification can be divided into a collection
+	of modules.
+	<hr></blockquote><BR>
+<BR>
+	A specification consists of a set of basis specifications that
+	define signatures, rules, strategies and overlays
+	(Figure&nbsp;<A HREF="#Fig:Stratego-Specifications.sdf">4</A>). Each of these
+	items is introduced by one of the keywords <CODE>signature</CODE>,
+	<CODE>rules</CODE>, <CODE>strategies</CODE> and <CODE>overlays</CODE>, followed
+	by a list of basic signatures, rule definitions, strategy
+	definitions or overlays, respectively.<BR>
+<BR>
+	A specification can be divided into a collection of modules
+	(Figure&nbsp;<A HREF="#Fig:Stratego-Modules.sdf">5</A>). A module has a name
+	and combines a number of module items, which are basic
+	specifications or import declarations. A module with name
+	<CODE>Modname</CODE> is assumed to resided in a file with name
+	<CODE>Modname.r</CODE>. Note that <CODE>imports</CODE>, <CODE>signature</CODE>,
+	<CODE>rules</CODE> and <CODE>strategies</CODE> are reserved words that
+	cannot be used as module names.<BR>
+<BR>
+	An import of the form <CODE>imports m1 ... mn </CODE> denotes the
+	structural inclusion of the sections of the modules <CODE>mi</CODE>
+	into the importing module. Here structural inclusion means
+	inclusion at the level of abstract syntax as opposed to
+	textual inclusion as is in the C <CODE>#include</CODE> statement.<BR>
+<BR>
+	The complete syntax of Stratego is defined in a number of
+	modules, which are combined in module <CODE>Stratego-Syntax</CODE>
+	(Figure&nbsp;<A HREF="#Fig:Stratego-Syntax.sdf">6</A>).<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 4: Syntax of
+	Stratego specifications</DIV><BR>
+<A NAME="Fig:Stratego-Specifications.sdf"></A><BR>
+	<PRE>module Stratego-Specifications
+imports Stratego-Signatures Stratego-Overlays 
+        Stratego-Rules Stratego-Strategies
+exports
+  %%sorts BSpec Spec
+  context-free syntax
+    "specification" BSpec*   -&gt; Spec  {cons("Specification")}
+
+    "signature"     BSig*    -&gt; BSpec {cons("Signature")}
+    "rules"         RDef*    -&gt; BSpec {cons("Rules")}
+    "strategies"    SDef*    -&gt; BSpec {cons("Strategies")}
+    "overlays"      Overlay* -&gt; BSpec {cons("Overlays")}
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 5: Syntax of Stratego
+	modules</DIV><BR>
+<A NAME="Fig:Stratego-Modules.sdf"></A><BR>
+	<PRE>module Stratego-Modules
+imports Stratego-Specifications
+exports
+  sorts Module %% ModItem
+  context-free syntax
+    "module" ModName ModItem* -&gt; Module  {cons("Module")}
+    BSpec                     -&gt; ModItem
+    "imports" ModName*        -&gt; ModItem {cons("Imports")}
+
+  lexical syntax
+    [A-Za-z] [A-Za-z0-9\_\-]* -&gt; ModName
+    "imports"                 -&gt; ModName {reject}
+    "signature"               -&gt; ModName {reject}
+    "rules"                   -&gt; ModName {reject}
+    "strategies"              -&gt; ModName {reject}
+  lexical restrictions
+    ModName  -/- [A-Za-z0-9\_\'\-]</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 6: The syntax of
+	Stratego is defined in several modules.</DIV><BR>
+<A NAME="Fig:Stratego-Syntax.sdf"></A><BR>
+	<PRE>module Stratego-Syntax
+imports InstantiateLayout     
+        Stratego-Rules        Stratego-Signatures
+        Stratego-Application  Stratego-Specifications
+        Stratego-Congruences  Stratego-Strategic-Rules
+        Stratego-Contexts     Stratego-Strategies
+        Stratego-Layout       Stratego-Strategy-Definitions
+        Stratego-Lexicals     Stratego-Sugar
+        Stratego-Match-Build  Stratego-Syntax
+        Stratego-Modules      Stratego-Terms
+        Stratego-Overlays     Stratego-Traversal
+        Stratego-Primitives   
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual003.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual005.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

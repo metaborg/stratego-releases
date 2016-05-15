@@ -1,0 +1,1 @@
+StrategoDump([TCons(Var("f_0"),TCons([],TNil))],[TCons("A",TCons([SDef("A",[],Scope([],Scope(["f_0"],Seq(Match(Op("F",[Var("f_0")])),Build(Var("f_0"))))))],TNil))])

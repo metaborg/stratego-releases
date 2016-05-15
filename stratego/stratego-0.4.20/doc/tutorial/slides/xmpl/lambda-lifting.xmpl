@@ -1,0 +1,9 @@
+CloseConv : 
+  Letrec([Fdec(g,Arrow(ts,t),xs,e)], e') -> 
+  Letrec([Fdec(g',Arrow(<conc>(ts,ts'),t),<conc>(xs,ys),e)], e'')
+  where ?g' <= new;
+        ?vs <= <lvars> Fdec(g,Arrow(ts,t),xs,e);
+        ?ys' <= <map(\(y,t) -> Var(y,t)\)> vs;
+        ?(ys,ts') <= <unzip(id)> vs;
+        ?e'' <= <topdown(try(\App(g, as) -> 
+                              App(g', <conc>(as, ys'))\))> e'

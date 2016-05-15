@@ -1,0 +1,162 @@
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\def\@institute{Institute of Information and Computing Sciences\\	
+Universiteit Utrecht}
+\newcommand{\Institute}[1]{\def\@institute{#1}}
+
+\def\@cryear{1998, 1999, 2000}
+\newcommand{\CopyrightYear}[1]{\def\@cryear{#1}}
+
+\def\@address{
+	Institute of Information and Computing Sciences\\
+	Universiteit Utrecht\\
+	P.O.Box 80089\\
+	3508 TB Utrecht\\
+	email: visser@acm.org\\
+	http://www.cs.uu.nl/$\sim$visser/
+}
+\newcommand{\Address}[1]{\def\@address{#1}}
+
+\input{version.ltx}
+\long\def\maketitle{
+%\begin{iftex}
+\begin{titlepage}
+	\vspace*{2cm}
+
+ \begin{raggedleft}
+	\huge
+	\@title\\
+ \end{raggedleft}
+
+ \vspace*{3cm}
+
+ \begin{raggedleft}
+	\LARGE
+	\@author\\
+ \end{raggedleft}
+
+ \vspace*{\fill}
+
+ \begin{raggedleft}
+	\input{logo/logo.ptx}\\
+ \end{raggedleft}
+
+ \vspace*{1cm}
+
+ \begin{raggedleft}
+	\normalsize
+	For Stratego version \StrategoVersion{}\\
+ \end{raggedleft}
+
+ \vspace*{\fill}
+
+ \begin{raggedleft}
+	\large 
+	www.stratego-language.org\\
+	\ \\ 
+	\@institute
+	\ \\
+	\@date\\
+ \end{raggedleft}
+	
+\end{titlepage}
+
+\begin{titlepage}
+
+ \vspace*{\fill}
+
+ \begin{raggedright}
+ \noindent Copyright \copyright{} \@cryear{} \@author
+
+	\bigskip
+
+	Permission is granted to make and distribute verbatim copies
+	of this manual provided the copyright notice and this
+	permission notice are preserved on all copies.
+
+	Permission is granted to copy and distribute modified versions
+	of this manual under the conditions for verbatim copying,
+	provided that they are marked clearly as modified versions,
+	that the author's names and title are unchanged (though
+	subtitles and additional authors' names may be added), and
+	that other clearly marked sections held under separate
+	copyright are reproduced under the conditions given within
+	them, and that the entire resulting derived work is
+	distributed under the terms of a permission notice identical
+	to this one.
+
+	Permission is granted to copy and distribute translations of
+	this manual into another language, under the above conditions
+	for modified versions, except that this permission notice may
+	be stated in a translation approved by the Free Software
+	Foundation.
+
+ \end{raggedright}
+
+ \vspace*{1cm}
+
+ \begin{raggedright}
+	Address:\\
+	\@address
+ \end{raggedright}
+
+ \vspace*{5cm}
+
+\end{titlepage}
+
+\begin{titlepage}
+
+ \vspace*{2cm}
+
+ \begin{center}
+ {\noindent\LARGE
+ \@title\\
+ }
+ \end{center}
+
+ \vspace*{0cm}
+
+ \begin{center}
+ \noindent\Large \@author\\
+ \end{center}
+
+ \vspace*{0cm}
+
+ \begin{center}
+ \noindent \@date\\
+ \end{center}
+
+ \vspace*{0cm}
+
+	\begin{center}
+ 		{\bf Summary} 
+	\end{center}
+
+	\begin{quote}
+ 
+		\input{abstract.ltx}
+
+	\end{quote}
+
+ %\noindent {\bf Acknowledgements} 
+ %\input{ack.ltx}
+
+ \vspace*{\fill}
+
+\end{titlepage}
+}

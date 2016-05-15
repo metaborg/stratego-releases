@@ -1,0 +1,17 @@
+#!/bin/sh
+
+prefix=/home/visser/res/xt
+ATERM=/home/visser/res/xt
+VERSION=0.4.22
+
+${prefix}/bin/proto-sc \
+    $* \
+    -e ${prefix}/bin \
+    -I ${prefix}/share/stratego \
+    -CI "-I${prefix}/include" \
+    -CL "-L${prefix}/lib -lstratego.dbg" \
+    -CL "-L${prefix}/lib -lstratego-lib.dbg" \
+    -CI "-I${ATERM}/include" \
+    -CL "-L${ATERM}/lib -lATerm-dbg" \
+    -CL "-lm" \
+    @version ${VERSION}

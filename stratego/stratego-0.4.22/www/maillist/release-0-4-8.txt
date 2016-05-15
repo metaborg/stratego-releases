@@ -1,0 +1,61 @@
+
+Release 0.4.8 of the Stratego compiler has just been uploaded to the
+server. The following is new:
+
+LANGUAGE
+	
+   The syntax of lists has been extended with notation for list tails,
+   i.e., [x, y | z], where x and y are the first two elements and z is
+   the tail. This is translated to Cons/Nil notation. [x, y | z] is
+   equivalent to Cons(x, Cons(y, z)).
+
+   This entails the following equivalences:
+
+      Nil <-> []
+      Cons(x, xs) <-> [x | xs]
+      [a, b, c] <-> [a, b, c | []] <-> Cons(a, Cons(b, Cons(c, Nil)))
+
+   Of course, this syntax applies to terms as well as to congruences,
+   that is, [s1, s2 | s3] is the congruence strategy that applies s1 and
+   s2 to the first two elements of the list and s3 to the tail.
+
+   (Thanks to Otto Bagge for the suggestion)
+
+   The lexical syntax is changed such that comments can now contain *s
+   and quotes in strings are handled properly. (Thanks to Merijn de Jonge
+   for the code)
+
+LIBRARY
+
+   The io (file input/output operations) and abox (pretty-printing
+   interface) modules are now documented (see The Library). The abox
+   module has been split into abox.r for the kernel interface and 
+   abox-ext.r for extensions to the interface.
+
+   The implementation of command line option handling has been improved.
+   Instead of combining option parsing and handling, a separate option
+   parser can be used to transform the list of command line options
+   into a list of terms that can be propagated through the transformation
+   process. Module parse-options.r defines a generic parser for lists
+   of options of the form ["-i", "file", "-silent", "-o", "outfile"] to
+   terms of the form [Input("file"), Silent(), Output("outfile")].
+
+   Added call-noisy/0, which has the function of the original call/0
+   (calling an external process) and replaced call/0 by a silent version,
+   which does not print out the call.
+
+DOCUMENTATION
+
+   Added the missing files to the distribution. (Thanks Karina)
+
+EMACS
+
+   The indent on tab has been turned off because it didn't care enough
+   about the context. This part needs to be improved.
+
+INSTALLATION
+
+   The www directory contains a list of working and problematic 
+   configurations for installation. If you (try to) install Stratego
+   on a configuration not in the list please let me know whether
+   it succeeded and what the parameters of the configuration are.

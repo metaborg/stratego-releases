@@ -1,0 +1,404 @@
+
+\firstsection{Stratego Projects}
+
+	\reallyveryfullslide
+
+ 	\begin{itemize}
+	
+	\item Language
+ 	\begin{itemize}
+	\item Typeful Stratego
+	\item Functional Stratego
+	\item Compiler
+	\item StrategoScript
+	\item Library
+	\item Strategy logic
+	\end{itemize}
+
+	\item Tools
+ 	\begin{itemize}
+	\item XT: A Bundle of Transformation Tools
+	\end{itemize}
+
+	\item Applications
+ 	\begin{itemize}
+	\item Warm Fusion
+	\item CodeBoost
+	\item Tiger
+	\item CobolX
+	\item DSP Transformation 
+	\item Pan Optimizer
+	\end{itemize}
+
+	\item Events
+ 	\begin{itemize}
+	\item Stratego Users Day
+	\end{itemize}
+
+	\end{itemize}
+
+\section{The Stratego Language}
+
+	\fullslide
+
+ 	\begin{itemize}
+
+	\item Typeful Stratego
+
+ 		\begin{itemize}
+
+		\item Reconciling generic strategies with type safety
+
+		\item Ralf L\"ammel (Joost Visser)
+	
+		\item Wishlist
+
+ 		\begin{itemize}
+		\item Polymorphic, Order-sorted, Multi-level, Generic
+		\end{itemize}
+
+		\end{itemize}
+
+	\item Functional Stratego
+
+ 		\begin{itemize}
+
+		\item From second-order to higher-order
+
+		\item Design space: lazyness, sharing
+
+		\item Eelco Dolstra
+
+		\end{itemize}
+
+	\end{itemize}
+
+\section{The Stratego Compiler + Library}
+
+	\veryfullslide
+
+ 	\begin{itemize}
+
+	\item Compiler
+
+ 		\begin{itemize}
+
+		\item Bootstrapped, component-based
+
+		\item ATerm library
+
+		\item Todo: separate compilation, optimizations,
+		abstract machine to C
+
+		\end{itemize}
+
+	\item Library
+
+ 		\begin{itemize}
+	
+		\item Traversals, sequential control
+
+		\item Generic strategies: free variables, substitution, ...
+
+		\item Datatypes: tuples, lists
+
+		\item System: IO, processes, time
+
+		\item Todo: organization
+
+		\end{itemize}
+
+	\item Eelco Visser
+
+	\end{itemize}
+
+\subsection{StrategoScript}
+
+	\begin{itemize}
+
+	\item Interpreter for Stratego
+
+
+	\item Eelco Visser
+
+	\end{itemize}
+
+\section{HSX/Warm Fusion}
+
+	\veryfullslide
+
+ 	\begin{itemize}
+
+	\item Transformation of (core) Haskell programs
+
+	\item Transformations
+
+ 		\begin{itemize}
+	 	
+		\item Standard simplifications
+
+		\item Cata-build fusion
+
+		\item Build/cata transformation of functions
+
+		\end{itemize}
+
+	\item Infrastrastructure/techniques
+
+ 		\begin{itemize}
+
+		\item SDF2 syntax definition
+
+		\item Pretty-printer
+
+		\item Innermost, local transformations, composite
+		transformations, recursive strategies, generic
+		strategies
+
+		\end{itemize}
+
+	\item Patty Johann, Eelco Visser
+
+	\end{itemize}
+
+\section{XT: A Bundle of Transformation Tools}
+
+	\veryfullslide
+
+ 	\begin{itemize}
+
+	\item Component-based development of program transformations
+
+	\item Combined distribution of packages
+
+ 		\begin{itemize}
+
+		\item ATerm library
+	
+		\item SDF2: pgen, sglr
+	
+		\item Stratego
+
+		\item Grammar base: collection of SDF2 syntax definitions
+
+		\item Grammar tools
+ 		
+			\begin{itemize}
+
+			\item Graph transformation
+
+			\item Tree transformation
+			
+			\item Grammar transformation
+
+			\item Stratego meta-programming
+
+			\end{itemize}
+
+		\end{itemize}
+
+	\item Merijn de Jonge, Eelco Visser, Joost Visser
+
+	\end{itemize}
+
+\section{CodeBoost}
+
+	\veryfullslide
+
+ 	\begin{itemize}
+
+	\item Transformation on numeric C++ programs in Sophus style
+
+	\item Transformations
+
+ 		\begin{itemize}
+		\item Mutification, inlining, loop fusion
+		\item Domain-specific optimization
+		\end{itemize}
+
+	\item Transformation infrastructure
+
+ 		\begin{itemize}
+		\item Parser from OpenC++ framework
+		\item Static semantics analysis
+		\item Pretty-printer
+		\end{itemize}
+
+	\item Issues
+
+ 		\begin{itemize}
+		\item Complexity of C++ syntax
+		\end{itemize}
+
+	\item Otto Bagge, Magne Haveraaen, Jan Heering
+
+	\end{itemize}
+
+\section{CobolX}
+
+	\veryfullslide
+
+ 	\begin{itemize}
+
+	\item Transformation of COBOL programs
+
+	\item Transformation: picture widening transformation
+
+	\item Transformation infrastructure
+
+ 		\begin{itemize}
+
+		\item Syntax definition from Grammar Base
+
+		\item Generation of tools from syntax definition
+
+		\end{itemize}
+
+	\item Issues
+
+ 		\begin{itemize}
+
+		\item Layout preservation
+
+		\item Size of syntax definition
+	
+		\end{itemize}
+
+	\item Hedzer Westra
+
+	\end{itemize}
+
+\section{Tiger}
+	
+	\reallyveryfullslide
+
+ 	\begin{itemize}
+
+	\item Compilation of Tiger to MIPS assembly code
+
+ 		\begin{itemize}
+	
+		\item Based on ``Modern Compiler Implementation'' by
+		Andrew Appel
+
+		\item Used in course on High-Performance Compilers
+
+		\end{itemize}
+
+	\item Components
+
+ 		\begin{itemize}
+
+		\item Parser
+
+		\item Typechecker
+
+		\item Translation to IR
+
+		\item Canonicalization
+
+		\item Instruction selection
+
+		\item Register allocation
+
+		\end{itemize}
+
+	\item Eelco Visser + students
+
+	\end{itemize}
+
+
+\section{DSP Transformation Factory}
+
+ 	\begin{itemize}
+
+	\item Derivation of efficient DSP code from specifications
+
+	\item Motivation
+
+ 		\begin{itemize}
+
+		\item Irregular machine architecture of DSPs
+	
+		\item Currently critical code is hand coded
+
+		\end{itemize}
+
+	\item Approach
+
+ 		\begin{itemize}
+
+		\item Formalize hand coding by means of transformations
+
+		\item Use strategies to construct application-specific
+		compilers
+
+		\end{itemize}
+
+	\item Funded by/collaboration with Philips Research Laboratories
+
+	\item Karina Olmos 
+
+	\end{itemize}
+
+
+\section{Pan Optimizer}
+
+ 	\begin{itemize}
+
+	\item Optimizer for picture manipulation language of Conal Elliot
+
+	\item Issue: interaction of optimizations
+
+ 		\begin{itemize}
+
+		\item Inlining strategy (eager vs on demand)
+
+		\item Algebraic simplifications
+
+		\item Common subexpression elimination
+
+		\end{itemize}
+
+	\item Generalization to other languages
+
+	\item Arne de Bruijn / Francoise Bellegarde (OGI)
+
+	\end{itemize}
+
+\section{Logic for Strategies}
+
+ 	\begin{itemize}
+
+	\item Weakest postcondition calculus for strategies
+
+	\item Dick Kieburtz 
+
+	\end{itemize}
+
+  \paragraph{Recursive Patterns}
+
+ 	\begin{itemize}
+
+	\item Description of normal forms / intermediate representations
+
+	\end{itemize}
+
+\section{SDL Documentation Generation}
+
+ 	\begin{itemize}
+
+	\item Visualization of state transition diagrams
+
+	\item Infrastructure
+
+ 		\begin{itemize}
+
+		\item Reverse engineering of syntax definition
+
+		\end{itemize}
+
+	\item Ramin Monajemi + Ronald van Halen (Lucent), Merijn de Jonge
+
+	\end{itemize}
+

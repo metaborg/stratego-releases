@@ -1,0 +1,83 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\cd{../../spec/rts}
+
+\chapter{Run-time System}
+
+ \paragraph{Displays vs Static Links}
+
+	Dealing with static scope requires keeping track of the
+	currently enclosing scope.  In simple cases it is sufficient
+	to take an offset from the top of the environment stack.
+\begin{verbatim}
+	environment[esp - o]
+\end{verbatim}
+	But when several activations of the same scope can be created
+	due to recursion, this mechanism fails because the static
+	offsets to variables in outer scopes do not correspond to the
+	dynamic offsets on the actual stack.
+
+	Common solutions for this problem are static links, displays
+	and lambda lifting (e.g., \cite{App98}).
+
+	Displays use a global array that give for each nesting depth
+	the most recent activation record for that nesting depth. This
+	gives fast access to the stack. However, it turns out that
+	this mechanism requires a lot of bookkeeping and it does not
+	combine well with backtracking. For each entry in the display
+	a stack of previous activation records has to be maintained.
+
+	A static link is a reference to the activation record of the
+	previous nesting level. Finding a stack offset using static
+	links requires following the links until the activation record
+	of the right level is found. 
+
+	The Stratego run-time system uses static links. There is a
+	single stack that keeps track of static links. A static link
+	consists of a pointer to the environment stack, the nesting
+	depth and a pointer to the static link of the enclosing
+	activation record.
+
+ \section{stratego.h}
+
+	\verbatiminput{stratego.h}
+
+ \section{aterm-extension.h}
+
+	\verbatiminput{aterm-extension.h}
+
+ \section{debug.h}
+
+	\verbatiminput{debug.h}
+
+ \section{util.h}
+
+	\verbatiminput{util.h}
+
+ \section{options.h}
+
+	\verbatiminput{options.h}
+
+ \section{svm.h}
+
+	\verbatiminput{svm.h}
+
+ \section{stratego.c}
+
+	\verbatiminput{stratego.c}

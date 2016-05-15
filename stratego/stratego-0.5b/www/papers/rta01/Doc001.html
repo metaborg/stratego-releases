@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Introduction
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Doc002.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H2>1&nbsp;&nbsp; Introduction</H2>	Program transformation is used in many areas of software
+	engineering. Examples include compilation, optimization,
+	synthesis, refactoring, migration, normalization and
+	improvement [<A HREF="Doc007.html#OSPT"><CITE>15</CITE></A>]. Rewrite rules are a natural
+	formalism for expressing single program transformations.
+	However, using a standard strategy for normalizing a program
+	with a set of rewrite rules is not adequate for implementing
+	program transformation systems. It may be necessary to apply
+	a rule only in some phase of a transformation, to apply rules
+	in some order, or to apply a rule only to part of a
+	program. These restrictions may be necessary to avoid
+	non-termination or to choose a specific path in a
+	non-confluent rewrite system.<BR>
+<BR>
+	Stratego is a language for the specification of program
+	transformation systems based on the paradigm of rewriting
+	strategies. It supports the separation of strategies from
+	transformation rules, thus allowing careful control over the
+	application of these rules. As a result of this separation,
+	transformation rules are reusable in multiple different
+	transformations and generic strategies capturing patterns of
+	control can be described independently of the transformation
+	rules they apply. Such strategies can even be formulated
+	independently of the object language by means of the generic
+	term traversal capabilities of Stratego.<BR>
+<BR>
+	In this short paper I give a description of version 0.5 of the
+	Stratego system, discussing the features of the language
+	(Section&nbsp;<A HREF="Doc002.html#Sec:Language">2</A>), the library
+	(Section&nbsp;<A HREF="Doc003.html#Sec:Library">3</A>), the compiler
+	(Section&nbsp;<A HREF="Doc004.html#Sec:Compiler">4</A>) and some of the applications that
+	have been built (Section&nbsp;<A HREF="Doc005.html#Sec:Applications">5</A>). Stratego is
+	available as free software under the GNU General Public
+	License from <A HREF="http://www.stratego-language.org"><TT>http://www.stratego-language.org</TT></A>.<BR>
+<BR>
+<HR>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Doc002.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

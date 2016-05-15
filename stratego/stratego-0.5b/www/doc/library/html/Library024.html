@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  LIST-SORT
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library023.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library025.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.3.8&nbsp;&nbsp;  LIST-SORT</H3><PRE>
+module list-sort
+imports list-basic
+rules
+
+  SortL(s) : 
+    [x, y | l] -&gt; [y, x | l]
+    where &lt;s&gt; (x, y)
+
+  LSort(s) : 
+    [x | l] -&gt; [y, x | l']
+    where &lt;at-suffix({ys: ?[y | ys]; where(&lt;s&gt; (x, y)); !ys})&gt; l =&gt; l'
+
+  Uniq : 
+    [x | l] -&gt; l
+    where &lt;fetch(?x)&gt; l
+
+  LMerge(s) : 
+    [x | l] -&gt; [z | l']
+    where &lt;at-suffix(\ [y | ys] -&gt; ys where &lt;s&gt; (x, y) =&gt; z\ )&gt; l =&gt; l'
+
+strategies
+
+  sort-list(s) = try(rec x((s &lt;+ [id | x]); try(x)))
+
+  isort-list(s) = try(rec x(([id | x] &lt;+ s); try(x)))
+
+  jsort-list(s) = try(rec x([id | x] &lt;+ s; try(x)))
+
+  uniq = listbu(repeat(Uniq))
+</PRE>	
+ 	<HR>
+<A HREF="Library023.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library025.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

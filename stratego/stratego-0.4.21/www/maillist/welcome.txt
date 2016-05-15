@@ -1,0 +1,80 @@
+
+Welcome to the Stratego mailing list <stratego@cs.uu.nl> !
+
+You are on this list because you have shown interest in Stratego in
+the past. If your interest has faded since, please send a message to
+stratego-request@cs.uu.nl to unsubscribe.
+  
+	---------------------------------------------------------
+	The Stratego mailing list is intended for the discussion 
+	of the design, implementation and application of Stratego
+	in particular and program transformation in general. The
+	list will serve also for the announcement of new releases
+	of the Stratego compiler and related software.
+	---------------------------------------------------------
+
+On January 5, 2000 version 0.4.5 was released.  As of version 0.4.4a
+the distribution contains the complete source code of the Stratego
+compiler. The compiler is written in Stratego itself. This makes it
+possible for anyone to make extensions or improvements into the
+language and the compiler.
+
+As soon as I have decided on the license to use (probably GPL) the
+distribution will become truly open source. That is, you will be able
+to redistribute your own versions of the compiler. This will be the
+case starting with the next release.
+
+I plan to have as many releases as possible in the near future,
+incorporating a number of improvements that are on my wish list (see
+TODO list in the distribution) and others that may result from the
+feedback from the various projects in progress.
+
+The latest developments were concentrated on extending the library and
+improving the documentation.
+
++ The library of primitives (foreign functions) has been separated
+from the run-time system and integrated with the specification modules
+in the library. The compiler is now easily extensible with new
+primitives that can be linked in from user-defined libraries.
+
++ The documentation has been split into four separate documents
+
+   - The Stratego Tutorial
+   - The Stratego Reference Manual
+   - The Stratego Library
+   - The Stratego Compiler
+
+I plan to do some more refactoring of the library and the
+implementation before I undertake more drastic reimplementation
+efforts. Also the documentation, in particular the reference manual,
+needs more work.
+
+Another shortcoming of the current distribution is the lack of small
+examples and regression tests. If you happen to write some cute
+examples (or not so cute ones for that matter), I would be delighted
+to incorporate them in the examples directory (under construction).
+
+One of the possible future developments might be the compilation to
+other target languages than C. I have had requests for SML, Haskell
+and Java embeddings. Anyone interested in working with me on such
+efforts is welcome. 
+
+If you make an embedding in another language or any other extension or
+improvement of the compiler, I would be happy to merge it with my
+distribution, with due credits of course.
+
+More information on Stratego, including downloading and documentation,
+can be found on the web page:
+
+                 http://www.cs.uu.nl/~visser/stratego/
+
+cheers,
+
+-- Eelco Visser
+
+-------------------------------------------------------------------------
+Eelco Visser                 Dept. Computer Science, Universiteit Utrecht
+mail:visser@cs.uu.nl         P.O. Box 80089, 3508 TB Utrecht
+  or:visser@acm.org          The Netherlands
+http://www.cs.uu.nl/~visser/ Phone: +31-30-253 4592  Fax: +31-30-251 3791
+-------------------------------------------------------------------------

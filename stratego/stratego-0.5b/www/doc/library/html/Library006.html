@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  ENV-TRAVERSAL
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library005.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library007.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.1.3&nbsp;&nbsp;  ENV-TRAVERSAL</H3><PRE>
+module env-traversal
+rules
+
+  dist(s) : (t, env) -&gt; &lt;all(\x -&gt; &lt;s&gt;(x,env)\)&gt; t
+
+  d(s) : Pair(t, env) -&gt; &lt;s&gt; t
+
+  t(s) : Pair(t, env) -&gt; Pair(&lt;s&gt;t, env)
+
+  coll(s) : f#(xs) -&gt; (f#(ys), zs)
+            where &lt;unzip(s)&gt; xs =&gt; (ys, zs)
+
+strategies
+
+  env-alltd(s) = rec x(s &lt;+ dist(x))
+
+  env-topdown(s) = rec x(s; dist(x))
+
+  env-topdown(s, skip) = rec x(s; (skip(x) &lt;+ dist(x)))
+
+  env-bottomup(s) = rec x(split(dist(x), Snd); s)
+
+  thread-alltd(s) = rec x(s &lt;+ thread(x))
+</PRE> <HR>
+<A HREF="Library005.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library007.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

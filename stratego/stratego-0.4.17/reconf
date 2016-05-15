@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# creating default dependency files 
+
+for file in spec/back/backend.dep \
+    spec/front/frontend.dep \
+    spec/front/extract.dep \
+    spec/front/inlining.dep \
+    spec/opt/optimizer.dep \
+    spec/post/postprocess.dep \
+    spec/lib/StratLibTest.dep \
+    doc/tutorial/xmpl/disjnf.dep \
+    test/memo/twice.dep \
+    test/overloading/overloading.dep
+do
+    rm -f $file
+    touch $file
+done
+
+rm -f config.cache
+rm -f acconfig.h
+aclocal
+autoconf
+#acconfig
+autoheader
+automake -a

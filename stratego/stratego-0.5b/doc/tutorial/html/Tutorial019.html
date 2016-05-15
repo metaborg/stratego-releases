@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Debugging Stratego Programs
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Tutorial018.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="Tutorial011.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<HR>
+
+<H3>3.2.3&nbsp;&nbsp; Debugging Stratego Programs</H3>	<blockquote><hr>
+	In order to detect logical errors in specification it
+	sometimes helps to understand what goes wrong at run-time (in
+	addition to carefully reading the specification).
+	<hr></blockquote><BR>
+<BR>
+	<A NAME="toc35"></A>
+<H5> Syntactic errors with run-time manifestation</H5>	- the transformation crashes mentioning an assertion violation<BR>
+<BR>
+	- the transformation crashes with a segmentation fault
+	
+	these are caused by shortcomings in the implementation<BR>
+<BR>
+	<A NAME="toc36"></A>
+<H5> Logical errors</H5>	- the transformation fails while it is expected to succeed<BR>
+<BR>
+	- the transformation succeeds, but with a wrong result
+	
+	<A NAME="toc37"></A>
+<H5> Splitting up the Specification</H5>	Often it is useful to test components of a specification to
+	narrow down the place where the error occurs<BR>
+<BR>
+	- comment out tail end of a transformation pipeline<BR>
+<BR>
+	- narrow down the subject term <BR>
+<BR>
+	<A NAME="toc38"></A>
+<H5> The Debug Operator</H5>	The <CODE>debug</CODE> operator prints the current term to <CODE>stderr</CODE>.<BR>
+<BR>
+	<A NAME="toc39"></A>
+<H5> The PrintStack Operator</H5> 	The primitive <CODE>print-stack</CODE> prints the top n elements of
+ 	the stack if applied to an integer term (as in
+ 	<CODE>where(&lt;print-stack&gt; n)</CODE> or the entire stack if applied
+ 	to a non-integer term.<BR>
+<BR>
+<HR>
+<A HREF="Tutorial018.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="Tutorial011.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,1 @@
+Specification([Signature([Operations([])]),Rules([]),Strategies([SDef("main",[],Call(SVar("iowrap"),[Id]))])])

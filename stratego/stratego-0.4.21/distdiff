@@ -1,0 +1,109 @@
+#! /bin/sh
+# distdiff 1.0 -- a shell script to create patches from tarballs
+# Copyright (C) 2000  Otto Skrove Bagge <otto@ii.uib.no>
+#     This program is free software; you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation; either version 2 of the License, or
+#     (at your option) any later version.
+#
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with this program; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+set -e
+
+if [ $# -lt 2 -o $# -gt 3 ]; then
+  echo 'usage: distdiff [dir1/]dist-old.tar.gz [dir2/]dist-new.tar.gz [new-suffix]'
+  
+  if [ "$1" = "-h" -o "$1" = "--help" ]; then
+     cat <<EOF
+
+ This shell script creates a patch to turn one version of a tarball
+ distribution into another.  If you have two distributions with the same
+ name and version number, but with minor differences, you can create a patch
+ by placing the distributions in separate directories, and use the
+ "new-suffix" argument to differentiate the versions in the patch.  The
+ directory names will be stripped from the package name, and "new-suffix" will
+ be appended to the version number of the new distribution.
+
+ distdiff unpacks the tarballs into a temporary directory in $TMPDIR (which
+ defaults to the current directory), and leaves a plain and a gzipped patch
+ file in the current directory.
+
+ Example:
+
+   distdiff myprogram-1.0.tar.gz myprogram-1.1.tar.gz
+
+ => you get "myprogram-1.0-1.1.diff[.gz]"
+EOF
+  else
+    echo "  For help, type \`distdiff -h'"
+  fi
+  exit 1
+fi
+
+if [ "$TMPDIR" = "" ]; then
+  TMPDIR=`pwd`
+fi
+
+if [ `echo $1 | sed -e 's/^\(.*\/\)\?[^-]\+-.\+\.tar\.gz$/OK/'` != OK ]; then
+  echo \`$1\' does not match '<name>-<version>.tar.gz'
+  exit 1
+fi
+
+if [ `echo $2 | sed -e 's/^\(.*\/\)\?[^-]\+-.\+\.tar\.gz$/OK/'` != OK ]; then
+  echo \`$2\' does not match '<name>-<version>.tar.gz'
+  exit 1
+fi
+
+
+PACKAGE=`echo $1 | sed -e 's/^\(.*\/\)\?//' -e 's/-.*$//'`
+OLDVERSION=`echo $1 | sed -e 's/^\(.*\/\)\?[^-]*-//' -e 's/\.tar\.gz$//'`
+NEWVERSION=`echo $2 | sed -e 's/^\(.*\/\)\?[^-]*-//' -e 's/\.tar\.gz$//'`
+
+if [ "$3" != "" ]; then
+  SUFFIX=$3
+else
+  SUFFIX=""
+fi
+
+echo Making diff of $PACKAGE, version $OLDVERSION '->' $NEWVERSION$SUFFIX...
+
+trap "rm -rf $TMPDIR/distdiff-$$; echo diffing failed" EXIT 
+WD=`pwd`
+mkdir $TMPDIR/distdiff-$$
+cd $TMPDIR/distdiff-$$
+
+tar xzf $WD/$1
+tar xzf $WD/$2
+
+if [ "$SUFFIX" != "" ]; then
+  mv $PACKAGE-$NEWVERSION $PACKAGE-$NEWVERSION$SUFFIX
+fi
+
+DIFFILE=$PACKAGE-$OLDVERSION-$NEWVERSION$SUFFIX.diff
+
+diff -ru $PACKAGE-$OLDVERSION $PACKAGE-$NEWVERSION$SUFFIX > $WD/$DIFFILE ||true
+
+gzip -9 -c $WD/$DIFFILE > $WD/$DIFFILE.gz
+
+echo diff created:
+cd $WD
+du -sh $DIFFILE $DIFFILE.gz
+
+echo "To apply the patch, do"
+echo "  tar xzf $1"
+echo "  mv $PACKAGE-$OLDVERSION $PACKAGE-$NEWVERSION$SUFFIX"
+echo "  cd $PACKAGE-$NEWVERSION$SUFFIX"
+echo "  patch -p1 <../$DIFFILE"
+  
+rm -rf $TMPDIR/distdiff-$$
+
+trap EXIT
+
+

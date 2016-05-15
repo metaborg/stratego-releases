@@ -1,0 +1,331 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\chapter{Introduction}
+	\label{Chap:Introduction}
+
+	\paragraph{DRAFT}
+
+	This is a draft. Any comments or questions regarding Stratego
+	and/or this document are welcome.
+
+	\section{Overview}
+
+	\paragraph{What is Stratego?}
+
+	Stratego is a language for the specification of transformation
+	systems. The design of Stratego is based on the concept of
+	\emph{rewriting strategies}, hence its name. A rewriting
+	strategy is a program in a language of strategy operators that
+	deal with sequential programming (choice, sequential
+	composition, recursion), term traversal, pattern matching and
+	pattern instantiation.
+
+	A Stratego specification consists of a collection of modules
+	that define the abstract syntax of the object language(s) of
+	the transformation, transformation rules and strategies for
+	applying the rules. The Stratego compiler translates
+	specifications to C code.  Together with the Stratego run-time
+	system these generated programs implement the transformation
+	that was specified.
+
+	\paragraph{Why Use Stratego?}
+
+	Stratego is designed for usage in the following application
+	areas: 
+\begin{itemize}
+
+	\item Application generation: translation of application
+	program to implementation program.
+
+	\item Source to source transformation: simplification,
+	optimization, etc.
+
+	\item Code generation
+
+\end{itemize}
+
+	Stratego is a very expressive language that has the following
+	properties:
+\begin{itemize}
+	
+	\item Modular specification of transformation systems
+
+	\item Separation of rules and strategies
+
+	\item Reuse of rules
+
+	\item Primitive operators of rewriting
+
+	\item Concise specification of term traversals
+	
+	\item Administration of failure 
+
+\end{itemize}
+
+	\paragraph{Outline}
+
+	This document gives a tutorial for Stratego.  Part~I explains
+	the basics of Stratego.  Chapter~2 introduces the constructs
+	of the language. Chapter~3 explains the library
+	specifications.  Part~II explains how to apply Stratego to
+	actual transformation problems. Chapter~4 discusses several
+	architectures for structuring transformation systems. In
+	particular, it discusses how to combine the transformation
+	components built with Stratego with components such as parsers
+	and pretty-printers built by other means. Chapter~5 surveys
+	paradigms for designing the actual transformation and gives
+	concrete examples. Finally, Chapter~6 gives guidelines for
+	installing and using the Stratego compiler.
+
+	\paragraph{Related Work}
+
+	For discussions of related work, definitions of semantics, and
+	applications we refer to other publications on Stratego such
+	as \cite{JV99.tr,LV97,Vis99,VB98,VBT98}.  A technical
+	documentation of the compiler can be found in
+	\cite{Vis99.compiler}. These references and other information
+	on Stratego can also be found on the Stratego web page:
+\begin{verbatim}
+   http://www.cs.uu.nl/~visser/stratego/
+\end{verbatim}
+
+
+ \section{Quick Start}
+
+	The basic idea of Stratego specifications is fairly simple:
+	write a signature describing the structure of the language,
+	write rules that define the steps of the transformation, and
+	write strategies that combine the rules in a transformation
+	system. Compile the specification with the Stratego compiler
+	\emph{sc} and you're ready to transform.
+
+	The rest of this tutorial discusses the ins and outs of
+	Stratego.  In this section we give a basic example of a
+	Stratego specification and the steps needed to compile it to a
+	program transformation system. This should get you started
+	writing simple specifications without reading the rest of this
+	tutorial. Keep in mind however that this example is not
+	representative of the language; it allows much more
+	sophisticated specifications. Check the next chapters to learn
+	more techniques.
+
+ \subsection{Step 1: Writing a Specification}
+
+	A specification consists of a collection of modules that
+	define signatures, rules and strategies. All these elements
+	can be mixed in any order in a module. However, it is often a
+	good idea to divide a specification over several modules: one
+	defining the language, several definining various sorts of
+	transformation rules and one definining the main strategy that
+	applies these rules.
+
+	In this section we define a small specification that defines
+	the transformation of propositional formulae (Boolean
+	expressions) to disjunctive normal form. The structure of
+	propositional formalae is defined in module \verb|prop| in
+	file \verb|prop.r|. 
+
+	\rfile{prop.r}
+
+	The signature defines the sort \verb|Prop| of propositional
+	formulae. The operations or constructors of the language are
+	\verb|Atom| that constructs propositional letters, \verb|Not|
+	for negation, \verb|And| for conjunction, \verb|Or| for
+	disjunction. The term in file \verb|prop.trm| is an example
+	of a formula over this signature.
+
+	\rfile{prop.trm}
+	
+	Propositional formulae can be simplified using well-known
+	rules such as De Morgan and distribution. Some of these
+	simplification rules are defined in module
+	\verb|prop-simplify| in file \verb|prop-simplify.r|. Note that
+	the module imports module \verb|prop|.
+
+	\rfile{prop-simplify.r}
+
+	A rule consists of a label (e.g., \verb|A2|), a left-hand side
+	term pattern (e.g, {\tt Not(And(x, y))}) and a right-hand side
+	term pattern (e.g., \verb|Or(Not(x), Not(y))|. A term pattern
+	is a term over the signature with variables. Variables do not
+	have to be declared; all nullary constructors that are not
+	declared in the signature are variables.
+
+	A rule defines a one-step transformation at the root of a
+	term. For example, rule \verb|A2| transforms the term in file
+	\verb|prop.trm| to
+\begin{verbatim}
+Or(Not(Not(Or(Atom("A"),Not(And(Atom("B"),Atom("C")))))),
+   Not(Atom("D")))
+\end{verbatim}
+	
+	A strategy is a program that combines rules to apply them in
+	some order throughout a term. In module \verb|prop-main| the
+	rules from module \verb|prop-simplify| are combined into a
+	strategy that transforms propositional formulae to disjunctive
+	normal form. A formula is in disjunctive normal form when it
+	is a disjunction of conjunctions of atoms or negations of
+	atoms.
+
+	\rfile{prop-main.r}
+
+	Module \verb|prop-main| defines the strategy \verb|main|,
+	which indicates the transformation to be applied. It defines a
+	traversal over a term that pushes nots inwards on the way down
+	and pushes ands inwards on the way up. Note that not all rules
+	are included in the choice; one can choose which rules to use
+	or to exclude in a strategy.
+
+	This completes the specification.
+
+ \subsection{Step 2: Compiling the Specification}
+	
+	To generate a transformation system from the specfication,
+	type in the specification as shown above and compile it.
+
+	First check that the compiler is installed by typing
+\begin{verbatim}
+> which sc
+\end{verbatim}
+	which should return something like
+\begin{verbatim}
+/home/visser/stratego-0.2a/implementation/boot/sc
+\end{verbatim}
+	If the compiler has not been not installed on your system, see
+	Chapter~\ref{Chap:Pragmatics} for instructions on getting and
+	installing Stratego.
+	
+	Compile the specification with \emph{sc}
+\begin{verbatim}
+> sc prop-main
+\end{verbatim}
+	Note that the suffix \verb|.r| is not included in the name
+	provided to the compiler.  During compilation the compiler
+	gives diagnostic output to indicate the progress of the
+	compilation process.
+\begin{verbatim}
+compiling prop-main
+parsing specification
+frontend
+  ...
+  rewriting succeeded
+optimizer
+  ...
+compiling C code
+  ...
+linking
+done
+\end{verbatim}
+	If compilation succeeds the result is the executable program
+	\verb|prop-main.comp|. Proceed with Step~3 to use the program.
+
+	If compilation fails there is something wrong with the
+	specification.  The compiler should give an error message to
+	indicate what is wrong. The following types of errors may
+	occur.
+
+	\paragraph{Undefined Operator}
+	
+	If we forget the import of the library module {\tt simple\-traversal},
+	we get the error message
+\begin{verbatim}
+  Error(["operator ","topdown"," undefined "])
+\end{verbatim}
+	that indicates that the strategy operator \verb|topdown| is
+	not defined.
+
+	\paragraph{Unbound Variable}
+
+	If in rule \verb|A9| we would make a typo:
+\begin{verbatim}
+  A9 : Or(Or(x, y), z) -> Or(x, Or(y, s))
+\end{verbatim}
+	i.e., \verb|s| instead of \verb|z| in the right-hand side, we get
+	the error message
+\begin{verbatim}
+  [Error(["in rule ","A9"," : ",
+         ["variable ","s",": used, but not bound"]])]
+\end{verbatim}
+	that indicates that the rule is trying to build a term with an
+	uninstantiated variable.
+
+ \subsection{Step 3: Using the Transformer}
+
+	If compilation was succesfull there should be an executable
+	file {\tt prop-main.comp} in the directory where the
+	specification was compiled. (The \verb|comp| suffix indicates
+	that it is a `component'.) This program can be applied to a term
+	to transform it. For example, the formula in file \verb|prop.trm|
+	is transformed by typing:
+\begin{verbatim}
+> prop-main.comp -i prop.trm
+  ATerm Library, version 0.7, built: Fri Mar 19 12:04:53 CET 1999
+
+Or(Or(Atom("A"),Or(Not(Atom("B")),Not(Atom("C")))),Not(Atom("D")))
+
+  statistics      : 0.00 seconds, 19 steps
+  rewriting succeeded
+\end{verbatim}
+
+	The output tells us (1) some information about the version of
+	the ATerm library, (2) the transformed term, (3) some
+	statistics about duration of the transformation (don't put too
+	much significance to the number of steps), and (4) that
+	rewriting succeeded. If rewriting fails the output would read
+\begin{verbatim}
+  rewriting failed
+\end{verbatim}
+
+	\paragraph{Commandline Options}
+	
+	The generated transformer supports the following command line options:
+\begin{description}
+
+	\item[-silent] Prevents the output of the ATerm version message.
+
+	\item[-i file] Read the term from \verb|file|. In absence of
+	this option input is read from \verb|stdin|.
+
+	\item[-o file] Write the transformed term to \verb|file|. In
+	absence of this option output is written to \verb|stdout|.
+
+	\item[-help $|$ -h] Show a usage message.
+
+	\item[-stats] Shows the use-count of the rules in the specification.
+\end{description}
+
+ \subsection{Step 4: Extending the Transformer}
+
+	a parsing front-end 
+
+	a pretty-printing back-end 
+
+	summary, picture of architecture
+
+ \subsection{Other Features}
+
+	using the library
+
+	importing modules in different directories
+
+ \section{Background}
+
+	(*** equations in algebraic data type specifications ***)
+
+\input{in-short.ltx}

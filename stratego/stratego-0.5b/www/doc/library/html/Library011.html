@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  INT-LIST
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library010.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library012.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.1.3&nbsp;&nbsp;  INT-LIST</H3><PRE>
+module int-list
+imports list integers
+strategies
+
+  sum = foldr(!0, add)
+
+  average = split(sum, length); div
+
+  list-min = list-accum(min)
+
+  list-max = list-accum(max)
+
+  list-accum(s) = split(Tl, Hd); foldl(s)
+
+  add-lists = list-accum(zip(add &lt;+ !""))
+
+  averages = 
+  { len: where(length =&gt; len);
+    add-lists;
+    map(try(sect(div, !len)))
+  }
+
+  round-list = map(test(sect(leq, !100)) &lt;+ int)
+</PRE> <HR>
+<A HREF="Library010.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library012.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

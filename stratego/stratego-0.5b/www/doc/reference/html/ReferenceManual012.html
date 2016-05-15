@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Traversing Terms
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual011.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual013.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.4&nbsp;&nbsp; Traversing Terms</H3>	<blockquote><hr>
+	To apply transformations below the root of a term it is
+	necessary to traverse it. Stratego provides a number of
+	traversal operators.
+	<hr></blockquote><BR>
+<BR>
+	The operators defined above combine strategies that apply
+	transformations to the root of a term into strategies that
+	repeatedly apply transformations to the root of a term. In
+	order to achieve transformations throughout a term we need
+	operators to traverse the term.<BR>
+<BR>
+	
+<H5> Congruence</H5> 	If <CODE>C</CODE> is an <I>n</I>-ary operator defined in the signature,
+	and <CODE>s1</CODE>, ..., <CODE>sn</CODE> are strategies, then
+	<CODE>C(s1,...,sn)</CODE> is a strategy that only applies to
+	<CODE>C</CODE> terms and then applies <CODE>si</CODE> to the <I>i</I>-th. For
+	example, consider the following signature defining the list
+	constructors <CODE>Nil</CODE> and <CODE>Cons</CODE>:
+<PRE> 
+  signature
+    operations
+      Nil  : List(a)
+      Cons : a * List(a) -&gt; List(a)
+</PRE>	The strategy <CODE>Nil</CODE> applies to the term <CODE>Nil</CODE> without
+	any change and fails for all other terms. The strategy
+	<CODE>Cons(s1, s2)</CODE> applies to a term <CODE>Cons(t1, t2)</CODE> if
+	<CODE>si</CODE> applies to <CODE>ti</CODE> with result <CODE>ti'</CODE> and has
+	as result <CODE>Cons(t1', t2')</CODE>. Using these operators we can
+	define the operator <CODE>map</CODE> as:
+<PRE>
+  map(s) = rec x(Nil + Cons(s, x))
+</PRE>	The strategy <CODE>map(s)</CODE> applies a strategy <CODE>s</CODE> to each
+	element of a list. Observe how recursion is used to apply the
+	strategy to the tail of the list.<BR>
+<BR>
+	
+<H5> Congruences on Strings and Numbers</H5>	each string and numeric constant is congruence on itself<BR>
+<BR>
+	
+<H5> Congruences on Lists</H5>	list congruences can also be defined using the <CODE>[]</CODE> syntax
+	for lists.<BR>
+<BR>
+	for example,
+<PRE>
+  map(s) = rec x([] + [s|x])
+</PRE>	
+<H5> Congruences on Tuples</H5>	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 15: Syntax of congruence traversal operators</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Congruences
+exports
+  context-free syntax
+    String                         -&gt; Strat {cons("StrCong")}
+    Natural                        -&gt; Strat {cons("IntCong")}
+    "(" Strat "," {Strat ","}+ ")" -&gt; Strat {cons("TupleCong")}
+    "[" {Strat ","}* "]"           -&gt; Strat {cons("ListCong")}
+
+    SVar "^" Id "("(" {Strat ","}* ")")? -&gt; Strat {cons("CallModified")}
+
+    %% Note: for each constructor there is a corresponding 
+    %% congruence operator with the following syntax:
+    %%
+    %% Identifier "(" {Strat ","}* ")" -&gt; Strat {cons("Cong")}
+    %%
+    %% since this syntax overlaps with the syntax for strategy
+    %% operator applications, congruences are defined implicitly
+    %% by means of strategy definitions:
+    %%
+    %% strategies
+    %%   C(s1,...,sn) = Cong(C)(s1,...,sn)
+    %% 
+    %% where Cong(S) is a construct in the abstract syntax only.
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual011.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual013.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

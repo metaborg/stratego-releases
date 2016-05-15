@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  ABOX
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library040.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library042.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>8.1.1&nbsp;&nbsp;  ABOX</H3>	<blockquote><hr><BR>
+<BR>
+	It is often desirable to format a (program) text in various output
+	formats such as plain text, L<sup>A</sup>T<sub>E</sub>X, or HTML.
+	This module provides an abstract-syntax interface to Merijn de
+	Jonge's Box format for generic pretty-printing. The <CODE>gpp</CODE>
+	package
+	provides formatters that translate boxes to ASCII text, HTML and
+	L<sup>A</sup>T<sub>E</sub>X. This interface can be used to format a program by transforming
+	its abstract syntax tree to a Box term and then formatting that with
+	one of the formatters from <CODE>gpp</CODE>.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	
+<H5> Kernel</H5>	The basic constructor for boxes is the <CODE>S</CODE> operator that
+	creates a string box. The box <CODE>S("string")</CODE> denotes the
+	literal text <CODE>string</CODE>.<BR>
+<BR>
+	The fundamental constructors for composing boxes from other
+	boxes are <CODE>H</CODE> that places boxes horizontally next to
+	each other and <CODE>V</CODE> that places boxes vertically above
+	each other. The box <CODE>H([],[S("a"),S("b")])</CODE> denotes the
+	text <CODE>a b</CODE>, the box <CODE>V([],[S("a"),S("b")])</CODE> denotes
+	the text
+<PRE>
+a
+b
+</PRE>	The constructor <CODE>HV</CODE> is a less rigid combination of horizontal
+	and vertical composition. It places boxes horizontally as long as
+	there is space and then continues placing boxes on the next
+	line. The constructor <CODE>ALT</CODE> chooses the argument box which
+	fits best.<BR>
+<BR>
+<PRE>
+module abox
+imports list-cons tuple
+signature
+  sorts Box
+  constructors
+    S     : String -&gt; Box
+    H     : List(S-Option) * List(Box) -&gt; Box
+    V     : List(S-Option) * List(Box) -&gt; Box
+    HV    : List(S-Option) * List(Box) -&gt; Box
+    ALT   : Box * Box -&gt; Box
+</PRE>	
+<H5> Space Options</H5>	The first argument of the Box operators above is a list of 
+	space options that determine the horizontal or vertical spacing
+	between the elements composed by the operator. An option
+	<CODE>SOpt(HS,1)</CODE> determines a horizontal spacing of 1 between
+	boxes. If no space option is specified a default spacing is
+	applied. For <CODE>H</CODE> the default is a horizontal spacing of
+	1 and for <CODE>V</CODE> the default is a horizontal spacing of 0.<BR>
+<BR>
+<PRE>
+    SOpt  : Space-Symbol * Int -&gt; S-Option
+    SOptb : Space-Symbol * Box -&gt; SOptb
+    VS    : Space-Symbol
+    HS    : Space-Symbol
+    IS    : Space-Symbol
+</PRE>	
+<H5> Alignments</H5>	The alignment operator can be used to produce tables.<BR>
+<BR>
+<PRE>
+    A     : List(A-Option) * List(S-Option) * List(Box) -&gt; Box
+    R     : List(S-Option) * List(Box) -&gt; Box
+    AL    : List(S-Option) -&gt; A-Option
+    AC    : List(S-Option) -&gt; A-Option
+    AR    : List(S-Option) -&gt; A-Option
+</PRE>	
+<H5> Fonts</H5>	The box constructor <CODE>FBOX</CODE> can be used to declare the
+	font to be used in the argument box. The scope of the font
+	declaration reaches until the enclosed font constructors.
+	The parameters <CODE>KW</CODE>, <CODE>VAR</CODE>, <CODE>NUM</CODE> and <CODE>MATH</CODE>
+	declare abstract fonts for the categories keyword, variable, 
+	number and mathematical expression.<BR>
+<BR>
+<PRE>
+    FBOX  : Font-Operator * Box -&gt; Box
+    F     : List(F-Option) -&gt; Font-Operator
+
+    FInt  : Font-Param * Int -&gt; F-Option
+    FFID  : Font-Param * FID -&gt; F-Option
+    FN    : Font-Param
+    FM    : Font-Param
+    SE    : Font-Param
+    SH    : Font-Param
+    SZ    : Font-Param
+    CL    : Font-Param
+
+    KW    : Font-Operator
+    VAR   : Font-Operator
+    NUM   : Font-Operator
+    MATH  : Font-Operator
+</PRE>	
+<H5> Crossreferences</H5>	The constructors <CODE>LBL</CODE> and <CODE>REF</CODE> define labels and
+	crossreferences to these labels, respetively.<BR>
+<BR>
+<PRE>
+    LBL   : String * Box -&gt; Box
+    REF   : String * Box -&gt; Box
+
+    C     : List(S-Option) * List(Box) -&gt; Box
+    L     : Box * Box -&gt; Box
+    LINT  : Int * Box -&gt; Box
+</PRE>	
+<H5> Pretty-Print Tables</H5><PRE>
+    Arg   : Int       -&gt; Box
+    Arg2  : Int * Int -&gt; Box
+</PRE>	
+ 	<HR>
+<A HREF="Library040.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library042.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

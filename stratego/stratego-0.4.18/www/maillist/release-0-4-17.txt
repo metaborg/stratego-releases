@@ -1,0 +1,39 @@
+ Release 0.4.17 of the Stratego compiler is now available from 
+
+	http://www.stratego-language.org/
+
+ TOOLS
+
+ * A new directory utils/ has been added to the Stratego distribution,
+   which is intended for Stratego programming utilities. The first utility
+   stratego-metrics.sh computes some simple metrics of Stratego modules.
+   Currently it measures number of constructors, rules and strategies in
+   each of a list of modules and adds these figures together. Ideas for
+   other metrics are welcome.
+
+ LIBRARY
+
+ * SUnit, the Stratego Unit testing framework, has been extended with 
+   several new testing modes, including apply-and-fail and
+   apply-and-check.
+
+ * In addition to the generic unification strategy there is now also
+   a generic equality testing strategy that is parameterized with
+   a filter indicating parts of the structure that should be ignored
+   in the equality comparison. (For pure syntactic equality a non-linear
+   match is of course still sufficient.)
+
+ * The strategy ugly-print in module ugly-print.r maps an ATerm to a
+   Box expression such that sub-terms are indented with respect to
+   their parent, for better readability. Can be used as a generic,
+   dumb pretty-printer. (This should be combined with specific
+   pretty-printers to provide defaults.)
+
+ * Several library modules provide new strategies: string (escape),
+   list-zip (rest-zip), io (open, save), abox-ext (post-commas,
+   hpost-sep-list changed!), list-basic (split-fetch).
+
+ COMPILER
+
+ * The compiler has been refactored to use the new versions of the
+   generic substitution and renaming algorithms.

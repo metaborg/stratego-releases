@@ -1,0 +1,7 @@
+  Var    : String * Type -> Exp
+  App    : Exp * List(Exp) -> Exp
+  If     : Exp * Exp * Exp -> Exp
+  Abs    : String * Type * Exp -> Exp
+  Let    : String * Type * Exp * Exp -> Exp
+  Letrec : List(Fdec) * Exp -> Exp
+  Fdec   : String * Type * List(String) * Exp -> Fdec

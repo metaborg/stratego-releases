@@ -1,0 +1,12 @@
+module Stratego-Syntax
+imports InstantiateLayout.sdf     
+	Stratego-Rules.sdf	  Stratego-Signatures.sdf
+	Stratego-Application.sdf  Stratego-Specifications.sdf
+	Stratego-Congruences.sdf  Stratego-Strategic-Rules.sdf
+	Stratego-Contexts.sdf     Stratego-Strategies.sdf
+	Stratego-Layout.sdf       Stratego-Strategy-Definitions.sdf
+	Stratego-Lexicals.sdf     Stratego-Sugar.sdf
+	Stratego-Match-Build.sdf  Stratego-Syntax.sdf
+	Stratego-Modules.sdf      Stratego-Terms.sdf
+	Stratego-Overlays.sdf     Stratego-Traversal.sdf
+	Stratego-Primitives.sdf   

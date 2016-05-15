@@ -1,0 +1,57 @@
+\newcommand{\StrategoVersion}{0.5a}
+
+% verbatim
+
+\input{moreverb.hva}
+\newcommand{\code}{\verbatimtab}
+\newcommand{\endcode}{\endverbatimtab}
+\newcommand{verbatiminput}[1]{\inputverbatim{#1}}
+\newcommand{\inputverbatim}{\verbatimtabinput}
+
+% cutting
+
+%\renewcommand{\cuttingunit}{section}
+%\setcounter{cuttingdepth}{1}
+\newcommand{\cd}[1]{}
+
+% figures
+
+\renewcommand{\@figrule}{\begin{center}\@hr{\linewidth}{2pt}\end{center}}
+
+\renewenvironment{figure}[1][]{%
+\@forcecommand{\caption}[1]{\par\refstepcounter{figure}\begin{center}Figure \thefigure\iffrench~\fi: ##1\end{center}\par}%
+%\@open{BLOCKQUOTE}{}
+\@figrule}
+{\@figrule%\@close{BLOCKQUOTE}
+}
+
+\newcommand{\boxedfigure}[2]{\figure\caption{#2}\label{Fig:#1}}
+\newcommand{\endboxedfigure}{\endfigure}
+
+% literate programming
+
+\newcommand{\literate}[1]{\section{#1}}
+\newcommand{\endliterate}{}
+\newcommand{\btt}{}
+
+% STOP: thesis sentence
+
+\renewcommand{\abstract}{\begin{rawhtml}<blockquote><hr>\end{rawhtml}}
+\renewcommand{\endabstract}{\begin{rawhtml}<hr></blockquote>\end{rawhtml}}
+
+% STOP: two page spread
+
+\def\leftpage#1\rightpage#2\spreadend{
+\begin{rawhtml}
+<table >
+<tr><td valign=top>
+\end{rawhtml}
+#1
+\begin{rawhtml}
+</td><td valign=top>
+\end{rawhtml}
+#2
+\begin{rawhtml}
+</td></tr></table>
+\end{rawhtml}
+}

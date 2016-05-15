@@ -1,0 +1,139 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+.PS
+
+linewid = 0.2
+lineht = 0.2
+ellipsewid = 0.7
+ellipseht = 0.35
+boxwid = 0.7
+boxht = 0.35
+
+	down
+
+	box "Stratego" "specification"
+	
+	arrow
+
+P:	ellipse "Stratego" "parser"
+
+	arrow
+
+	box "Stratego" "AST"
+
+	arrow
+
+F:	ellipse "front-end"
+	
+	arrow
+
+	box "SSE"
+
+	arrow
+
+O:	ellipse "optimizer"
+	
+	arrow
+
+	box "SSE"
+
+	arrow
+
+M:	ellipse "matching" "tree"
+	
+	arrow
+
+	box "SSE"
+
+	arrow
+
+O2:	ellipse "optimizer"
+	
+	arrow
+
+	box "SSE"
+
+	arrow
+
+B:	ellipse "back-end"
+
+	arrow
+
+	box "AMI (= C)"
+
+# zoom out frontend
+
+	move to P.n
+	right
+	move 1.5
+	down
+NS:	ellipse "normalize-" "spec"
+	arrow
+        ellipse "spec-" "to-sdefs"
+	arrow
+	ellipse "needed-defs"
+	arrow
+	ellipse "desugar-" "spec"
+	arrow
+INL:	ellipse "inline"
+
+FE:	box wid 0.9 ht 2.8 with .n at NS.n + (0,0.1) 
+
+	line dashed from F.ne to FE.nw
+	line dashed from F.se to FE.sw
+
+# generation of component
+
+linewid = 0.3
+
+	move to P.w
+	left
+	arrow <- dashed
+	box wid 0.8 "Stratego in" "LEX/YACC"
+
+	move to F.w
+	left
+	arrow <- dashed
+	ellipse wid 0.3 "sc"
+	arrow <- dashed
+	box "frontend.r"
+
+	move to O.w
+	left
+	arrow <- dashed
+	ellipse wid 0.3 "sc"
+	arrow <- dashed
+	box "optimizer.r"
+
+	move to M.w
+	left
+	arrow <- dashed
+	ellipse wid 0.3 "sc"
+	arrow <- dashed
+	box wid 0.9 "matching-tree.r"
+
+	move to B.w
+	left
+	arrow <- dashed
+	ellipse wid 0.3 "sc"
+	arrow <- dashed
+	box "back-end.r"
+
+.PE
+$$\box\graph$$

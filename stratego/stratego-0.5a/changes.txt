@@ -1,0 +1,6 @@
+
+	* spec/slib/spec/unification.r: Added a new equality
+	strategy with an additional filter that can be used for
+	checking equality modulo alpha renaming. The filter applies
+	to the entire pair and can change something in one
+	term based on the other term.

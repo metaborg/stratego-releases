@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+
+   <title>Stratego: Version 0.4.17</title>
+
+   <link rel=stylesheet type="text/css" href="../style.css" title="style">
+
+</head>
+
+<body>
+
+<hr>
+    <h1>Version 0.4.17</h1>
+<hr>
+
+ released: August 27, 2000
+
+
+<h3>
+ TOOLS
+</h3>
+
+<ul>
+
+  <li> A new directory utils/ has been added to the Stratego
+  distribution, which is intended for Stratego programming
+  utilities. The first utility stratego-metrics.sh computes some
+  simple metrics of Stratego modules.  Currently it measures number of
+  constructors, rules and strategies in each of a list of modules and
+  adds these figures together. Ideas for other metrics are welcome.
+  <p> 
+
+</ul>
+
+<h3>
+ LIBRARY
+</h3>
+
+<ul>
+
+      <li> SUnit, the Stratego Unit testing framework, has been
+      extended with several new testing modes, including
+      apply-and-fail and apply-and-check. <p>
+
+      <li> In addition to the generic unification strategy there is
+      now also a generic equality testing strategy that is
+      parameterized with a filter indicating parts of the structure
+      that should be ignored in the equality comparison. (For pure
+      syntactic equality a non-linear match is of course still
+      sufficient.)<p>
+
+      <li> The strategy ugly-print in module ugly-print.r maps an
+      ATerm to a Box expression such that sub-terms are indented with
+      respect to their parent, for better readability. Can be used as
+      a generic, dumb pretty-printer. (This should be combined with
+      specific pretty-printers to provide defaults.)<p>
+
+      <li> Several library modules provide new strategies: string
+      (escape), list-zip (rest-zip), io (open, save), abox-ext
+      (post-commas, hpost-sep-list changed!), list-basic
+      (split-fetch).  <p>
+
+</ul>
+<h3>
+ COMPILER
+</h3>
+
+<ul>
+
+  <li> The compiler has been refactored to use the new versions of the
+  generic substitution and renaming algorithms.  <p>
+
+</ul>
+
+<hr> 
+
+</body> 
+
+</html>

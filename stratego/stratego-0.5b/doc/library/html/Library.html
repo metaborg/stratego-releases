@@ -1,0 +1,2944 @@
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD><TITLE>The Stratego Library</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"></HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<!--HEVEA command line is: hevea -exec xxdate.exe doc.ltx -I ../../share//tex -I ../../spec/slib/spec/ -o html/Library.html -->
+<!--HTMLHEAD-->
+<!--ENDHTML-->
+<!--CUT DEF subsection 1 -->
+
+
+ 
+    <A HREF="../../reference/html/index.html">
+       <IMG SRC ="previous_motif.gif" ALT="Next"></A>
+    <A HREF="../../index.html">
+       <IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+    <!--A HREF="../../compiler/html/index.html">
+       <IMG SRC ="next_motif.gif" ALT="Next"></A-->
+    <hr>
+  
+ 
+<H1 ALIGN=center>The Stratego Library</H1>
+
+<H3 ALIGN=center>Eelco Visser</H3>
+
+<H3 ALIGN=center>February 25, 2001</H3>
+ <hr>This document is also available in <A HREF="../../Library.ps">Postscript</A>.
+ <hr>
+ 
+ 
+<BR>
+<BR>
+<!--TOC chapter Introduction-->
+
+<H1>Chapter&nbsp;1&nbsp;&nbsp; Introduction</H1><!--SEC END -->
+ <!--TOC section The Entire Library-->
+
+<H2>1.1&nbsp;&nbsp; The Entire Library</H2><!--SEC END -->
+ 	<!--TOC subsection  LIB-->
+
+<H3>1.1.1&nbsp;&nbsp;  LIB</H3><!--SEC END -->
+
+	
+<BR>
+<BR>
+	All modules in the library are imported in <CODE>lib</CODE>. <BR>
+<BR>
+<PRE>
+module lib
+imports 
+
+ (* sequential control *)
+
+        conditional
+        iteration
+
+ (* traversal *)
+
+        simple-traversal
+        fixpoint-traversal
+        env-traversal
+
+ (* data types *)
+
+        list
+        tuple
+        option
+        string
+        term
+        int-list
+        integers
+        reals
+
+ (* system *)
+
+        io
+        file
+        memo
+        options
+        parse-options
+        exec
+        tables
+
+ (* object variables *)
+
+        substitution
+        rename
+        unification
+        free-variables
+
+</PRE><!--TOC chapter Sequential Control-->
+
+<H1>Chapter&nbsp;2&nbsp;&nbsp; Sequential Control</H1><!--SEC END -->
+	<!--TOC subsection <TT>CONDITIONAL</TT>-->
+
+<H3>2.0.2&nbsp;&nbsp; <TT>CONDITIONAL</TT></H3><!--SEC END -->
+<PRE>
+module conditional
+strategies
+
+  try(s) = s &lt;+ id
+
+  if(c, b) = try(c; b)
+
+  if(c, b1, b2) = (c; b1) &lt;+ b2
+
+  ior(a, b) = (a; try(b)) &lt;+ b
+
+  eq = {x: ?(x, x)}
+
+  FAIL = {x: ?x; ?(x, x)}
+</PRE>
+	<!--TOC subsection  ITERATION-->
+
+<H3>2.0.3&nbsp;&nbsp;  ITERATION</H3><!--SEC END -->
+	<CODE>repeat(s,c)</CODE> repeats <CODE>s</CODE> as long as possible and
+	finishes with <CODE>c</CODE><BR>
+<BR>
+	<CODE>repeat1(s,c)</CODE> applies <CODE>s</CODE> at least once.<BR>
+<BR>
+<PRE>
+module iteration
+strategies
+
+  repeat(s, c)       = rec x(s; x &lt;+ c)
+  repeat(s)          = repeat(s, id)
+
+  repeat1(s, c)      = rec x(s; (x &lt;+ c))
+  repeat1(s)         = repeat1(s, id)
+
+  repeat-until(s, c) = rec x(s; (c &lt;+ x))
+
+  while(c, s)        = rec x(try(c; s; x))
+  do-while(s, c)     = rec x(s; try(c; x))
+
+  while-not(c, s)    = rec x(c &lt;+ s; x)   
+
+  for(i, c, s)       = i; repeat-until(s, c)
+</PRE><!--TOC chapter Terms-->
+
+<H1>Chapter&nbsp;3&nbsp;&nbsp; Terms</H1><!--SEC END -->
+ <!--TOC section Term Traversal-->
+
+<H2>3.1&nbsp;&nbsp; Term Traversal</H2><!--SEC END -->
+ 	<!--TOC subsection  SIMPLE-TRAVERSAL: One Pass Traversal-->
+
+<H3>3.1.1&nbsp;&nbsp;  SIMPLE-TRAVERSAL: One Pass Traversal</H3><!--SEC END -->
+	<blockquote><hr>
+	
+	The primitive term traversal operators of Stratego (all, some, one)
+	can be combined with the other control operators in a wide
+	variety of ways to define full term traversals.
+	This module defines 
+	a collection of the most common generic one-pass traversals
+	over terms.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module simple-traversal
+imports conditional
+strategies
+</PRE>	Term traversals can be categorized into classes according to
+	how much of the term they traverse and to which parts
+	of the term they modify.<BR>
+<BR>
+	<!--TOC paragraph Everywhere-->
+
+<H5> Everywhere</H5><!--SEC END -->
+	The most general class of traversals visits every node
+	of a term and applies a transformation to it. The following
+	operators define traversals that apply a strategy <CODE>s</CODE>
+	to all nodes of a term.<BR>
+<BR>
+<PRE>
+  topdown(s)       = rec x(s; all(x))
+  bottomup(s)      = rec x(all(x); s)
+  downup(s)        = rec x(s; all(x); s)
+  downup(s1, s2)   = rec x(s1; all(x); s2)
+  downup2(s1, s2)  = rec x(s1; all(x); s2)
+</PRE>	
+	The traversals above go through all constructors. If it
+	is not necessary to traverse the entire tree, the following
+	versions of the traversals can be used. They are parameterized
+	with a strategy operator <CODE>stop</CODE> that <BR>
+<BR>
+<PRE>
+  topdownS(s, stop)     = rec x(s; (stop(x) &lt;+ all(x)))
+  bottomupS(s, stop)    = rec x((stop(x) &lt;+ all(x)); s)
+  downupS(s, stop)      = rec x(s; (stop(x) &lt;+ all(x)); s)
+  downupS(s1, s2, stop) = rec x(s1; (stop(x) &lt;+ all(x)); s2)
+</PRE>	The strategy <CODE>don't-stop</CODE> is a unit for these traversals,
+	i.e., <CODE>topdown(s)</CODE> is equivalent
+	to <CODE>topdown(s,don't-stop)</CODE>.<BR>
+<BR>
+<PRE>
+  don't-stop(s) = fail
+</PRE>	<!--TOC paragraph Along a Spine-->
+
+<H5> Along a Spine</H5><!--SEC END -->
+	A spine of a term is a chain of nodes from the root to some
+	subterm.
+	<CODE>spinetd</CODE> goes down one spine and applies <CODE>s</CODE> along
+	the way to each node on the spine. The traversal stops when
+	<CODE>s</CODE> fails for all children of a node.<BR>
+<BR>
+<PRE>
+  spinetd(s) = rec x(s; try(one(x)))
+  spinebu(s) = rec x(try(one(x)); s)
+
+  spinetd'(s) = rec x(s; (one(x) + all(fail)))
+  spinebu'(s) = rec x((one(x) + all(fail)); s)
+</PRE>	<!--TOC paragraph Along all Spines-->
+
+<H5> Along all Spines</H5><!--SEC END -->
+	Apply <CODE>s</CODE> everywhere along al spines where <CODE>s</CODE> applies.<BR>
+<BR>
+<PRE>
+  somespinetd(s) = rec x(s; try(some(x)))
+  somespinebu(s) = rec x(try(some(x)); s)
+
+  spinetd'(s) = rec x(s; (one(x) + all(fail)))
+  spinebu'(s) = rec x((one(x) + all(fail)); s)
+</PRE>	<!--TOC paragraph Once-->
+
+<H5> Once</H5><!--SEC END -->
+	Apply s at one position. One s application has to succeed.<BR>
+<BR>
+<PRE>
+  oncetd(s) = rec x(s &lt;+ one(x))
+  oncebu(s) = rec x(one(x) &lt;+ s)
+
+  oncetd-stop(s, stop) = rec x(s &lt;+ not(stop); one(x))
+</PRE>	<!--TOC paragraph At Least Once-->
+
+<H5> At Least Once</H5><!--SEC END -->
+	Apply s at some positions, but at least one. As soon as one is
+	found, searching is stopped, i.e., in the top-down case
+	searching in subtrees is stopped, in bottom-up case, searching
+	in upper spine is stopped.
+	
+<PRE>
+  sometd(s) = rec x(s &lt;+ some(x))
+  somebu(s) = rec x(some(x) &lt;+ s)
+</PRE>	<!--TOC paragraph Frontier-->
+
+<H5> Frontier</H5><!--SEC END -->
+	Find all topmost applications of <CODE>s</CODE>;<BR>
+<BR>
+<PRE>
+  alltd(s)           = rec x(s &lt;+ all(x))
+  alldownup2(s1, s2) = rec x((s1 &lt;+ all(x)); s2)
+
+  downup2'-obsolete(s1, s2) = rec x((s1 &lt;+ all(x)); s2)
+
+  alltd-fold(s1, s2) = rec x(s1 &lt;+ all(x); s2)
+</PRE>	
+	<!--TOC paragraph Leaves-->
+
+<H5> Leaves</H5><!--SEC END -->
+<PRE>
+  leaves(s, is-leaf, skip) = 
+    rec x((is-leaf; s) &lt;+ skip(x) &lt;+ all(x))
+
+  leaves(s, is-leaf) =
+    rec x((is-leaf; s) &lt;+ all(x))
+
+  is-leaf = not(one(id))
+</PRE>	<!--TOC paragraph Many-->
+
+<H5> Many</H5><!--SEC END -->
+	Find as many applications as possible, but at least one.<BR>
+<BR>
+<PRE>
+  manybu(s) = rec x(some(x); try(s) &lt;+ s)
+  manytd(s) = rec x(s; all(try(x)) &lt;+ some(x))
+</PRE><PRE>
+  somedownup(s) = rec x(s ; all(x) ; try(s) &lt;+ some(x) ; try(s))
+</PRE><PRE>
+  breadthfirst(s) = rec x(all(s); all(x))
+</PRE>
+ 	<!--TOC subsection  FIXPOINT-TRAVERSAL-->
+
+<H3>3.1.2&nbsp;&nbsp;  FIXPOINT-TRAVERSAL</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	A collection of strategies that keeps traversing a term until
+	no more applications of some strategy to the nodes can be
+	found.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module fixpoint-traversal
+imports iteration simple-traversal
+strategies
+
+  reduce(s)     = repeat(rec x(some(x) + s))
+
+  outermost(s)  = repeat(oncetd(s))
+
+  innermost'(s) = repeat(oncebu(s))
+
+  innermost(s)  = rec x(all(x); (s; x &lt;+ id))
+
+  pseudo-innermost3(s) =
+        rec x(all(x); rec y(try(s; all(all(all(y); y); y); y)))
+</PRE>
+ 	<!--TOC subsection  ENV-TRAVERSAL-->
+
+<H3>3.1.3&nbsp;&nbsp;  ENV-TRAVERSAL</H3><!--SEC END -->
+<PRE>
+module env-traversal
+rules
+
+  dist(s) : (t, env) -&gt; &lt;all(\x -&gt; &lt;s&gt;(x,env)\)&gt; t
+
+  d(s) : Pair(t, env) -&gt; &lt;s&gt; t
+
+  t(s) : Pair(t, env) -&gt; Pair(&lt;s&gt;t, env)
+
+  coll(s) : f#(xs) -&gt; (f#(ys), zs)
+            where &lt;unzip(s)&gt; xs =&gt; (ys, zs)
+
+strategies
+
+  env-alltd(s) = rec x(s &lt;+ dist(x))
+
+  env-topdown(s) = rec x(s; dist(x))
+
+  env-topdown(s, skip) = rec x(s; (skip(x) &lt;+ dist(x)))
+
+  env-bottomup(s) = rec x(split(dist(x), Snd); s)
+
+  thread-alltd(s) = rec x(s &lt;+ thread(x))
+</PRE> <!--TOC section Term Construction and Deconstruction-->
+
+<H2>3.2&nbsp;&nbsp; Term Construction and Deconstruction</H2><!--SEC END -->
+	<!--TOC subsection  TERM-->
+
+<H3>3.2.1&nbsp;&nbsp;  TERM</H3><!--SEC END -->
+	Some primitives for the manipulation of terms.<BR>
+<BR>
+	<CODE>&lt;mkterm&gt; (f, [t1,...,tn])</CODE> builds the constructor application
+	<CODE>f(t1,...,tn)</CODE><BR>
+<BR>
+	<CODE>&lt;explode-term&gt; f(t1,...,tn)</CODE> is the inverse of <CODE>mkterm</CODE>
+	and produces <CODE>(f, [t1,...,tn])</CODE><BR>
+<BR>
+	Note: the primitive strategies <CODE>mkterm</CODE> and <CODE>explode-term</CODE>
+	have been turned into language constructs. The pattern
+	<CODE>f#(xs)</CODE> denotes
+	the decomposition of a term into its function symbol <CODE>f</CODE> and
+	its <EM>list</EM> of arguments <CODE>xs</CODE>. This pattern can be
+	used in matching <CODE>?f#(xs)</CODE> and building <CODE>!f#(xs)</CODE>
+	terms (so also in left- and right-hand sides of rules) and also
+	as a congruence <CODE>s1#(s2)</CODE>.<BR>
+<BR>
+	<CODE>&lt;address-lt&gt; (t1, t2)</CODE> compares the address of two terms
+	and succeeds if the address of the first is smaller than the
+	address of the second. This predicate induces a total ordering
+	on terms and can be used to sort terms. Note that this
+	relation is valid in one session (but what happens after
+	rehashing), but not necessarily between two sessions.<BR>
+<BR>
+	<CODE>&lt;address&gt; t</CODE> replaces <CODE>t</CODE> with its address (an integer).
+	This can be used to obtain a unique symbolic reference to a term.<BR>
+<BR>
+<PRE>
+module term
+strategies
+
+  mkterm       = prim("_ST_mkterm")
+  explode-term = prim("_ST_explode_term")
+  address-lt   = prim("_ST_address_lt")
+  address      = prim("_ST_address")
+</PRE>
+	<!--TOC subsection  SHARE-->
+
+<H3>3.2.2&nbsp;&nbsp;  SHARE</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	The ATerm library preserves maximal sharing of subterms
+	through hash-consing. This sharing is not directly available
+	to the user of an ATerm. For some applications it is necessary
+	to make the implicit sharing in terms explicit in the form of
+	a let construct in which all occurences of a shared subterm
+	are replaced by a symbolic pointer (variable).<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module share
+imports list-set term
+</PRE>	The strategy <CODE>share</CODE> defined in this module achieves such
+	an explicit sharing for arbitrary terms. The approach used by
+	the strategy is to first turn the term into its underlying
+	graph and then inlining those subterms that are not shared
+	(only occur once) or that cannot be shared in this way (upto
+	the needs of an application).<BR>
+<BR>
+<PRE>
+strategies
+
+  share(mkvar, always, mklet) = 
+        graph(mkvar); 
+        inline-graph(always, mklet)
+</PRE>	The graph of a term is obtained by turning each node
+	<CODE>F(t1,...,tn)</CODE> into an edge <CODE>(a, F(a1,...,an))</CODE>,
+	where <CODE>a</CODE> is the address of the node and the <CODE>ai</CODE>
+	are the addresses of its direct subterms. The <CODE>mkvar</CODE>
+	parameter is used to embed the address in some constructor.
+	(If <CODE>mkvar</CODE> is <CODE>id</CODE>, nothing is done.)<BR>
+<BR>
+<PRE>
+strategies
+
+  edge(mkvar)      = split(address; mkvar, all(address; mkvar))
+  list-edge(mkvar) = split(address; mkvar, map(address; mkvar))
+
+  graph(mkvar) = 
+    rec x(is-list; split(list-edge(mkvar), map(x); unions); MkCons
+                &lt;+ split(edge(mkvar), Kids; map(x); unions); MkCons)
+</PRE>	The first edge in the graph is the root of the tree. By
+	definition it is never shared. The graph can be turned into
+	one big let-expression with the root as its body. That is what
+	the first line of the definition of <CODE>inline-graph</CODE>
+	accomplishes. <BR>
+<BR>
+	Subsequently, nodes that are not shared, i.e., a pointer to
+	which only occurs once, can be inlined. Some nodes may always
+	have to be inlined (for application specific reasons). The
+	shape of such nodes is specified by the parameter
+	<CODE>always</CODE>. Edges that cannot be inlined are turned into a
+	let-binding the form of which is determined by the parameter
+	<CODE>mklet</CODE>.<BR>
+<BR>
+	After all graph edges have either been inlined or turned into
+	let-bindings the, now empty, <CODE>GraphLet</CODE> is discarded and
+	replaced by its body.
+	
+<PRE>
+signature
+  constructors
+    GraphLet : List(Product([Int, Term])) * Term -&gt; Term
+
+strategies
+
+  inline-graph(always, mklet) = 
+        \ Cons((a, t), graph) -&gt; GraphLet(graph, t) \ ;
+        repeat(
+          inline; (GraphLet(Cons((id,always),id),id) + dead) &lt;+ 
+          dead &lt;+
+          dont-inline(mklet));
+        \ GraphLet([], t) -&gt; t \
+</PRE><PRE>
+rules
+
+  inline : 
+        GraphLet(Cons((a, skel), graph), t[a]) -&gt;
+        GraphLet(Cons((a, skel), graph), t[skel])
+
+  dead : 
+        GraphLet(Cons((a, skel), graph), t) -&gt; 
+        GraphLet(graph, t)
+        where &lt;not(in)&gt; (a, t)
+
+  dont-inline(mklet) : 
+        GraphLet(Cons((a, skel), graph), t) -&gt; 
+        GraphLet(graph, &lt;mklet&gt;(a, skel, t))
+</PRE><!--TOC chapter Built-in Data Types-->
+
+<H1>Chapter&nbsp;4&nbsp;&nbsp; Built-in Data Types</H1><!--SEC END -->
+ <!--TOC section Numbers-->
+
+<H2>4.1&nbsp;&nbsp; Numbers</H2><!--SEC END -->
+	<!--TOC subsection  INTEGERS-->
+
+<H3>4.1.1&nbsp;&nbsp;  INTEGERS</H3><!--SEC END -->
+<PRE>
+module integers
+strategies
+
+  is-int = prim("_ST_is_int")
+
+  minus = prim("_ST_minus")
+  plus  = prim("_ST_plus")
+
+  add   = prim("_ST_add")
+  subt  = prim("_ST_subt")
+  mul   = prim("_ST_mul")
+  div   = prim("_ST_div")
+  mod   = prim("_ST_mod")
+  
+  geq   = prim("_ST_geq")
+  gt    = prim("_ST_gt")
+  lt    = not(geq)
+  leq   = not(gt)
+
+  max   = prim("_ST_max")
+  min   = prim("_ST_min")
+
+  int   = prim("_ST_int")
+</PRE>
+	<!--TOC subsection  REALS-->
+
+<H3>4.1.2&nbsp;&nbsp;  REALS</H3><!--SEC END -->
+<PRE>
+module integers
+strategies
+
+  is-real = prim("_ST_is_real")
+
+  cos   = prim("_ST_cos")
+  sin   = prim("_ST_sin")
+  sqrt  = prim("_ST_sqrt")
+</PRE>
+	<!--TOC subsection  INT-LIST-->
+
+<H3>4.1.3&nbsp;&nbsp;  INT-LIST</H3><!--SEC END -->
+<PRE>
+module int-list
+imports list integers
+strategies
+
+  sum = foldr(!0, add)
+
+  average = split(sum, length); div
+
+  list-min = list-accum(min)
+
+  list-max = list-accum(max)
+
+  list-accum(s) = split(Tl, Hd); foldl(s)
+
+  add-lists = list-accum(zip(add &lt;+ !""))
+
+  averages = 
+  { len: where(length =&gt; len);
+    add-lists;
+    map(try(sect(div, !len)))
+  }
+
+  round-list = map(test(sect(leq, !100)) &lt;+ int)
+</PRE> <!--TOC section Strings-->
+
+<H2>4.2&nbsp;&nbsp; Strings</H2><!--SEC END -->
+
+	
+ 	<!--TOC subsection  STRING-->
+
+<H3>4.2.1&nbsp;&nbsp;  STRING</H3><!--SEC END -->
+	This module defines some operations on strings, including
+	conversions to and from numbers.<BR>
+<BR>
+<PRE>
+module string
+imports list conditional iteration
+
+rules
+
+  sect(op, arg) : x -&gt; &lt;op&gt; (x, &lt;arg&gt;())
+
+strategies
+  
+  new = prim("_ST_new")
+
+  is-string = prim("_ST_is_string")
+
+  implode-string = prim("_ST_implode_string")
+  explode-string = prim("_ST_explode_string")
+
+  conc-strings = (explode-string, explode-string); conc; implode-string
+
+  concat-strings = map(explode-string); concat; implode-string
+
+  int-to-string = 
+    rec x(split(sect(mod, !10); sect(add, !48), sect(div, !10); int);
+          (id, ?0; ![] &lt;+ x); MkCons );
+    reverse;
+    implode-string
+
+  string-to-int =
+    explode-string;
+    split(!0, id);
+    repeat(S2I2); 
+    S2I1
+
+  escape = 
+    explode-string;
+    rec x(Escape; [id, id | x] &lt;+ [id | x] &lt;+ []);
+    implode-string
+
+  unescape = 
+    explode-string;
+    rec x(try(UnEscape); ([id | x] &lt;+ []));
+    implode-string
+
+  string-length =
+    explode-string;
+    length
+
+rules
+
+  Escape : [34 | cs] -&gt; [92, 34 | cs]
+  Escape : [92 | cs] -&gt; [92, 92 | cs]
+  Escape : [10 | cs] -&gt; [92, 110 | cs]
+
+  UnEscape : [92, 34 | cs]  -&gt; [34 | cs]
+  UnEscape : [92, 92 | cs]  -&gt; [92 | cs]
+  UnEscape : [92, 110 | cs] -&gt; [10 | cs]
+
+  S2I1 : (n, [])         -&gt; n
+
+  S2I2 : (n, [m|ms]) -&gt; (&lt;add&gt;(&lt;mul&gt;(10, n), &lt;subt&gt;(m, 48)), ms)
+         where &lt;geq&gt;(m, 48); &lt;leq&gt;(m, 57)
+
+  S2D0 : (n, [46|ys])  -&gt; (n, 10, ys)
+
+  S2D1 : (n, f, []) -&gt; n
+
+  S2D2 : (n, f, [m|ms]) -&gt; 
+         (&lt;add&gt;(n, &lt;div&gt;(&lt;subt&gt;(m, 48), f)), &lt;mul&gt;(f, 10), ms)
+         where &lt;geq&gt;(m, 48); &lt;leq&gt;(m, 57)
+
+strategies
+
+  string-to-num =
+    explode-string;
+    split(!0, id);
+    repeat(S2I2);
+    ( S2I1
+    + S2D0;
+      repeat(S2D2);
+      S2D1
+    )
+
+strategies
+
+  lower-case = 
+    explode-string;
+    map(lc);
+    implode-string
+
+   lc = try(where(sect(geq, !65)); where(sect(leq, !90)); sect(add, !32))
+
+rules
+
+  SplitInit : x -&gt; ([], [], x)
+
+  SplitExit : 
+        (xs, cs, []) -&gt; 
+        &lt;reverse&gt; [&lt;reverse; implode-string&gt; cs|xs]
+
+  SplitNext : 
+        (xs, cs, [32|ys]) -&gt; 
+        (Cons(&lt;reverse; implode-string&gt; cs, xs), [], ys)
+
+  SplitNext : 
+        (xs, cs, [y|ys]) -&gt; (xs, [y|cs], ys)
+        where &lt;not(eq)&gt; (y, 32)
+
+strategies
+
+  split-at-space =
+    explode-string;
+    SplitInit;
+    rec x(SplitExit &lt;+ SplitNext; x)  
+
+  basename =
+    explode-string;
+    try(rec x([id|x] &lt;+ ?[46 | _]; ![]));
+    implode-string
+
+  basename(ext) =
+    explode-string;
+    try(rec x([id|x] &lt;+ [46 | ext]; ![]));
+    implode-string
+
+  guarantee-extension(ext) =
+    basename;
+    split(id, &lt;ext&gt;());
+    add-extension
+
+rules
+
+  add-extension : (name, ext) -&gt; &lt;concat-strings&gt; [name, ".", ext]
+</PRE> <!--TOC section Tables-->
+
+<H2>4.3&nbsp;&nbsp; Tables</H2><!--SEC END -->
+	<!--TOC subsection  TABLES-->
+
+<H3>4.3.1&nbsp;&nbsp;  TABLES</H3><!--SEC END -->
+	An interface to the ATerm table facility. Note that these
+	primitives work by side-effect.<BR>
+<BR>
+	<CODE>&lt;create-table&gt; name</CODE> creates a table with name
+	<CODE>name</CODE>, which can be any term.<BR>
+<BR>
+	<CODE>&lt;destroy-table&gt; name</CODE> destroys it.<BR>
+<BR>
+	<CODE>&lt;table-put&gt; (name, key, value)</CODE> associates <CODE>value</CODE>
+	with <CODE>key</CODE> in the <CODE>name</CODE> table.<BR>
+<BR>
+	<CODE>&lt;table-get&gt; (name, key)</CODE> yields the value associated to
+	<CODE>key</CODE> or fails.<BR>
+<BR>
+	<CODE>&lt;table-remove&gt; (name, key)</CODE> removes the entry for
+	<CODE>key</CODE> from table <CODE>name</CODE>.<BR>
+<BR>
+	<CODE>&lt;table-keys&gt; name</CODE> produces the list of keys of table
+	<CODE>name</CODE>.<BR>
+<BR>
+<PRE>
+module tables
+strategies
+
+  table-create  = prim("_ST_create_table")
+  table-destroy = prim("_ST_destroy_table")
+  table-put     = prim("_ST_table_put")
+  table-get     = prim("_ST_table_get")
+  table-remove  = prim("_ST_table_remove")
+  table-keys    = prim("_ST_table_keys")
+
+  create-table  = 
+    where(say(!"create-table: obsolete strategy, use table-create"));
+    table-create
+
+  destroy-table = 
+    where(say(!"destroy-table: obsolete strategy, use table-destroy"));
+    table-destroy
+
+  table-getlist = 
+    ?name; table-keys; map(\ x -&gt; (x, &lt;table-get&gt; (name, x))\ )
+
+  table-putlist =
+    ?(name, list); &lt;map({x,y: ?(x, y); &lt;table-put&gt; (name, x, y)})&gt; list
+
+  set = table-put
+
+  get = table-get
+
+  push-set = 
+    ?(table, key, val); 
+    where(&lt;set&gt; (table, key, [val | &lt;get &lt;+ ![]&gt; (table, key)]))
+
+  pop-get =
+    ?(table, key);
+    where(&lt;get&gt; (table, key) =&gt; [x | xs];
+          &lt;set&gt; (table, key, xs));
+    !x
+
+  union-set = 
+    ?(table, key, val); 
+    where(&lt;set&gt; (table, key, &lt;union&gt; (val, &lt;get &lt;+ ![]&gt; (table, key))))
+
+  diff-set =
+    ?(table, key, val); 
+    where(&lt;set&gt; (table, key, &lt;diff&gt; (&lt;get &lt;+ ![]&gt; (table, key), val)))
+</PRE>
+	<!--TOC subsection  MEMO-->
+
+<H3>4.3.2&nbsp;&nbsp;  MEMO</H3><!--SEC END -->
+ 	The memo operator makes a strategy
+ 	into a memoizing strategy that looks up the term to be transformed
+ 	in a memo table and only computes the transformation if the
+ 	term is not found.<BR>
+<BR>
+ <CODE>&lt;memo-init&gt; tbl</CODE> creates a new memo table and
+	<CODE>&lt;memo-purge&gt; tbl</CODE> destroys it.<BR>
+<BR>
+ <CODE>&lt;memo(tbl, s)&gt; t</CODE> first looks up the term <CODE>t</CODE> in
+	the memo table. If present the association in the table is
+	produced, else the result of <CODE>&lt;s&gt; t</CODE> is computed and
+	stored in the table.<BR>
+<BR>
+<PRE>
+module memo
+imports tables
+
+strategies
+
+  memo-init  = create-table
+
+  memo-purge = destroy-table
+
+rules
+
+  memo(name, s) :
+        t -&gt; t'
+        where (&lt;table-get&gt; (&lt;name&gt;(), t) =&gt; t')
+              &lt;+ (&lt;s&gt; t =&gt; t'; &lt;table-put&gt; (&lt;name&gt;(), t, t'))
+</PRE><!--TOC chapter Standard Data Types-->
+
+<H1>Chapter&nbsp;5&nbsp;&nbsp; Standard Data Types</H1><!--SEC END -->
+  <!--TOC section Options-->
+
+<H2>5.1&nbsp;&nbsp; Options</H2><!--SEC END -->
+ 	<!--TOC subsection  OPTION-->
+
+<H3>5.1.1&nbsp;&nbsp;  OPTION</H3><!--SEC END -->
+<PRE>
+module option
+signature
+  sorts Option(a)
+  constructors
+    None : Option(a)
+    Some : a -&gt; Option(a)
+strategies
+
+  option(s) = None + Some(s)
+</PRE> <!--TOC section Tuples-->
+
+<H2>5.2&nbsp;&nbsp; Tuples</H2><!--SEC END -->
+ 	<!--TOC subsection  TUPLE-->
+
+<H3>5.2.1&nbsp;&nbsp;  TUPLE</H3><!--SEC END -->
+
+	
+<BR>
+<BR>
+	tindex: get the nth element of a tuple<BR>
+<BR>
+	tmap: apply a strategy to each element of a tuple<BR>
+<BR>
+	Tuple Concat: concatenate the lists in a tuple of lists, where the
+	concatenation strategy s is a parameter.<BR>
+<BR>
+<PRE>
+module tuple
+imports list-cons
+signature
+  sorts Prod(ListType)
+  constructors
+    TNil  : Prod([])
+    TCons : a * Prod(lt) -&gt; Prod(Cons(a, lt))
+
+    Pair  : a * b -&gt; Prod([a,b])
+rules
+  Fst   : TCons(x, tp) -&gt; x
+  Snd   : TCons(x, TCons(y, tp)) -&gt; y
+  Third : TCons(x, TCons(y, TCons(z, tp))) -&gt; z
+  TInd1 : (1, TCons(x, tp)) -&gt; x
+  TInd2 : (n, TCons(x, tp)) -&gt; (&lt;minus&gt; (n, 1), tp)
+
+  Dupl  : x -&gt; (x, x)
+
+  split(f, g)     : x -&gt; (&lt;f&gt; x, &lt;g&gt; x)
+  split3(f, g, h) : x -&gt; (&lt;f&gt; x, &lt;g&gt; x, &lt;h&gt; x)
+
+  Swap : (x, y) -&gt; (y, x)
+
+  Thd : TCons(x, xs) -&gt; x
+  Ttl : TCons(x, xs) -&gt; xs
+
+strategies
+
+  tindex = rec x(TInd1 &lt;+ TInd2 ; x)
+
+  tmap(s) = rec x(TNil + TCons(s, x))
+
+  tconcat(s) = rec y(\ TNil -&gt; Nil\ 
+                     + \ TCons(x, xs) -&gt; (x, &lt;y&gt; xs)\ ; s)
+
+  tconcat'(s1, s2) = 
+    rec y(TNil; s1
+          + \ TCons(x, xs) -&gt; (x, &lt;y&gt; xs)\ ; s2)
+
+  at_tsuffix(s) = rec x(s &lt;+ TCons(id, x))
+
+  tcata(s1, s2) = rec y(TNil; s1 &lt;+
+                        \ TCons(x, xs) -&gt; (x, &lt;y&gt; xs)\ ; s2)
+</PRE> <!--TOC section Lists-->
+
+<H2>5.3&nbsp;&nbsp; Lists</H2><!--SEC END -->
+ 	<!--TOC subsection  LIST-->
+
+<H3>5.3.1&nbsp;&nbsp;  LIST</H3><!--SEC END -->
+<PRE>
+module list
+imports simple-traversal
+        tuple
+        list-cons
+        list-basic
+        list-index
+        list-zip
+        list-sort
+        list-set
+        list-lookup
+        list-misc
+        list-filter
+</PRE>
+ 	<!--TOC subsection  LIST-CONS-->
+
+<H3>5.3.2&nbsp;&nbsp;  LIST-CONS</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	Lists are represented by means of the constructors <CODE>Nil</CODE>
+	and <CODE>Cons</CODE>.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module list-cons
+signature
+  sorts List(Type)
+  constructors
+    Nil  : List(a)
+    Cons : a * List(a) -&gt; List(a)
+</PRE>	
+ 	<!--TOC subsection  LIST-BASIC-->
+
+<H3>5.3.3&nbsp;&nbsp;  LIST-BASIC</H3><!--SEC END -->
+	Basic functionality on lists. <BR>
+<BR>
+	Map: Apply strategy to each element of a list<BR>
+<BR>
+	Length of a list<BR>
+<BR>
+	Fetch: Find first list element for which s succeeds<BR>
+<BR>
+	At tail: apply a strategy to the tail of a list<BR>
+<BR>
+	At suffix: apply a strategy to some suffix of a list<BR>
+<BR>
+<PRE>
+module list-basic
+imports list-cons
+rules
+  Hd     : [x | l] -&gt; x
+  Tl     : [x | l] -&gt; l
+  Last   : [x] -&gt; x
+  MkCons : (x, []) -&gt; [x]
+  MkCons : (x, [y| z]) -&gt; [x, y | z]
+  MkSingleton : x -&gt; [x]
+strategies
+
+  is-list = [] + [id| id]
+
+  map(s) = rec x([] + [s| x])
+
+  list(s) = rec x([] + [s| x])
+
+  list-some(s) =
+    rec x([s| id]; [id| list(try(s))] &lt;+ [id| x])
+
+  list-some-filter(s) =
+    rec x([s| id]; [id| filter(s)] &lt;+ [id| x]; Tl)
+
+  length = rec x([]; !0 + Tl; x; \n -&gt; &lt;add&gt; (n, 1)\ )
+
+  fetch(s) = rec x([s | id] &lt;+ [id | x])
+
+  // split-fetch, splits a list in two at the point 
+  // where the argument strategy succeeds.
+
+  split-fetch(s) =
+    at-suffix([s|id];[id|?tl];![]); split(id, !tl)
+
+  at-tail(s) = [id | s]
+
+  at_tail(s) = 
+    obsolete(!"at_tail -&gt; at-tail");
+    [id | s]
+
+  at-end(s) = rec x([id | x] + []; s)
+  at_end(s) = 
+    obsolete(!"at_end -&gt; at-end");
+    rec x([id | x] + []; s)
+
+  at-suffix(s) = rec x(s &lt;+ [id | x])
+  at_suffix(s) = 
+    obsolete(!"at_suffix -&gt; at-suffix");
+    rec x(s &lt;+ [id | x])
+
+  at_last(s) = 
+    obsolete(!"at_last -&gt; at-last");
+    rec x([id]; s &lt;+ [id | x])
+
+  at-last(s) = rec x([id]; s &lt;+ [id | x])
+
+  listbu(s)       = rec x(([] + [id| x]); s)
+  listtd(s)       = rec x(s; ([] + [id| x]))
+  listdu(s)       = rec x(s; ([] + [id| x]); s)
+  listdu2(s1, s2) = rec x(s1; ([] + [id| x]); s2)
+
+rules
+
+  RevInit : xs -&gt; (xs, [])
+  Rev     : ([x| xs], ys) -&gt; (xs, [x| ys])
+  RevExit : ([], ys) -&gt; ys
+
+strategies
+
+  reverse = RevInit; repeat(Rev); RevExit
+
+rules
+
+  UptoInit : i -&gt; (i, [])
+  UptoExit : (i, xs) -&gt; xs where &lt;lt&gt; (i, 0)
+  UptoStep : (i, xs) -&gt; (&lt;minus&gt; (i, 1), [i| xs])
+
+strategies
+
+  upto = UptoInit; rec x(UptoExit &lt;+ UptoStep; x)
+
+rules
+
+  conc : (l1, l2) -&gt; &lt;at-end(!l2)&gt; l1
+  //Concat(x) : [l | ls] -&gt; &lt;at-end(&lt;x&gt; ls)&gt; l
+
+strategies
+
+  concat = rec x([] + \ [l | ls] -&gt; &lt;at-end(&lt;x&gt; ls)&gt; l\ )
+
+rules
+
+  Sep(s) : [x| xs] -&gt; [&lt;s&gt;(), x | xs]
+
+strategies
+
+  separate-by(s) = 
+    [] + [id| rec x([] + [id| x]; Sep(s))]
+</PRE>	
+ 	<!--TOC subsection  LIST-INDEX-->
+
+<H3>5.3.4&nbsp;&nbsp;  LIST-INDEX</H3><!--SEC END -->
+<PRE>
+module list-index
+imports list-cons simple-traversal
+rules
+
+  Ind1   : (1, [x | xs]) -&gt; x
+  Ind2   : (n, [x | xs]) -&gt; (&lt;minus&gt; (n, 1), xs) where &lt;geq&gt; (n, 2)
+
+  Gind0  : (x, ys) -&gt; (1, x, ys)
+  Gind1  : (n, x, [x | xs]) -&gt; n
+  Gind2  : (n, y, [x | xs]) -&gt; (&lt;plus&gt; (n, 1), y, xs)
+
+strategies
+
+(* Index: Get the n-th element of a list *)
+
+  index = repeat(Ind2) ; Ind1
+
+(* Get-index: get index of element in list *)
+
+   get_index = Gind0 ; rec x(Gind1 &lt;+ Gind2 ; x)
+   get-index = Gind0 ; rec x(Gind1 &lt;+ Gind2 ; x)
+
+   get-index0(s) = at-suffix([s | id]; ![]); length
+</PRE>	
+ 	<!--TOC subsection  LIST-LOOKUP-->
+
+<H3>5.3.5&nbsp;&nbsp;  LIST-LOOKUP</H3><!--SEC END -->
+	Lookup: find value associated to key <BR>
+<BR>
+	Find first element of a list to which a strategy s applies <BR>
+<BR>
+	An alternative formulation of lookup is the following. The
+	advantage over lookup is that it does not construct
+	intermediate pairs.<BR>
+<BR>
+<PRE>
+module list-lookup
+imports list-basic
+rules
+
+  Look1 : (x, [(x, y)|_]) -&gt; y
+  Look2 : (x, [_|xs]) -&gt; (x, xs)
+
+  Look1'(keyeq) : (x, [y|_]) -&gt; y where &lt;keyeq&gt; (x, y)
+
+strategies
+
+   lookup = rec x(Look1 &lt;+ Look2 ; x)
+
+   getfirst(s) = rec x(Hd; s &lt;+ Tl; x)
+
+   lookup' = {x, xs: ?(x, xs) ; &lt;getfirst({y: ?(x, y); !y})&gt; xs}
+
+   lookup(keyeq) = rec x((Look1'(keyeq) &lt;+ Look2; x))
+</PRE>	
+ 	<!--TOC subsection  LIST-MISC-->
+
+<H3>5.3.6&nbsp;&nbsp;  LIST-MISC</H3><!--SEC END -->
+<PRE>
+module list-misc
+imports list-cons list-basic
+strategies
+
+  member = (?x, fetch(?x))
+
+rules
+
+  FoldR1   : [x, y] -&gt; (x, y)
+  FoldR    : [x | xs] -&gt; (x, xs)
+  TFoldR   : TCons(x, xs) -&gt; (x, xs)
+
+  FoldL(s) : ([x | xs], y) -&gt; (xs, &lt;s&gt; (x, y))
+  FoldL(s) : ([], y) -&gt; y
+
+  lsplit(f, g) : x -&gt; [&lt;f&gt; x, &lt;g&gt; x]
+
+strategies
+
+  foldr1(s1,s2) = rec x([id]; s1 &lt;+ FoldR; (id, x); s2)
+
+  foldr1(s) = rec x((FoldR1 &lt;+ FoldR; (id, x)); s)
+
+  foldr(s1, s2)     = rec x([]; s1 + FoldR; (id, x); s2)
+
+  (* foldr(s1, s2, f)  = rec x([]; s1 + FoldR; (f, x); s2) *)
+
+  foldr(s1, s2, f)  = rec x([]; s1 + \ [y|ys] -&gt; (&lt;f&gt;y, &lt;x&gt;ys) \ ; s2)
+
+  tfoldr(s1, s2)    = rec x(TNil; s1 + TFoldR; (id, x); s2)
+
+  foldl(s) = repeat(FoldL(s))
+
+  mapfoldr(s1, s2, s3) = 
+    rec x([]; s1 &lt;+ [s2|x]; \ [a|b]-&gt;(a,b)\; s3)
+
+  mapfoldr1(s1, s2, s3) = 
+    rec x([id]; s1 &lt;+ [s2|x]; \ [a|b]-&gt;(a,b)\; s3)
+
+  last = rec x(Last &lt;+ Tl; x)
+
+  init = at-last(Tl)
+
+  copy = for(\ (n,t) -&gt; (n,t,[]) \
+            ,\ (0,t,ts) -&gt; ts \
+            ,\ (n,t,ts) -&gt; (&lt;subt&gt;(n,1), t, [t|ts]) where &lt;geq&gt;(n,1) \ )
+
+  copy(s) = for(\ (n,t) -&gt; (n,t,[]) \
+            ,\ (0,t,ts) -&gt; ts \
+            ,\ (n,t,ts) -&gt; (&lt;subt&gt;(n,1), t, [&lt;s&gt; t|ts]) where &lt;geq&gt;(n,1) \ )
+
+  thread-map(s) = 
+    rec x(Cons^T(s, x) + Nil^T)
+
+  take-while(s) = at-suffix([] + ([not(s)|id];![]))
+
+  take-until(s) = at-suffix([] + ([s|id];![]))
+
+  take(isn) = nzip0(id); take-until((isn,id)); map(Snd)
+
+  drop-while(s) = at-suffix([] + ([not(s)|id];?xs)); !xs
+
+  drop-until(s) = at-suffix([] + ([s|id];?xs)); !xs
+
+  drop(isn) = nzip0(id); drop-until((isn,id)); map(Snd)
+
+</PRE>	
+ 	<!--TOC subsection  LIST-SET-->
+
+<H3>5.3.7&nbsp;&nbsp;  LIST-SET</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	Lists can be used to represent sets of terms. Using the
+	notion of sets we can define the collection of a set of
+	subterms corresponding to some criterion.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module list-set
+imports list-basic term
+
+rules
+ 
+  HdMember(mklst) : Cons(x, xs) -&gt; xs where mklst; fetch(?x)
+
+  HdMember'(eq, mklst) : 
+     Cons(x, xs) -&gt; xs 
+     where mklst; fetch(\y -&gt; &lt;eq&gt; (x, y)\)
+</PRE>	Union: Concatenation of two lists, only those elements in the
+	first list are added that are not already in the second list.<BR>
+<BR>
+<PRE>
+rules
+
+  union : (l1, l2) -&gt; 
+          &lt;rec x([]; !l2 &lt;+ HdMember(!l2); x &lt;+ [id | x])&gt; l1
+</PRE><PRE>
+strategies
+
+  unions = foldr(![], union)
+
+</PRE>	Diff: Difference of two lists<BR>
+<BR>
+<PRE>
+rules
+
+  diff : (l1, l2) -&gt;
+         &lt;rec x([] &lt;+ HdMember(!l2); x &lt;+ [id | x])&gt; l1 
+</PRE><PRE>
+rules
+
+  diff'(eq) :
+        (l1, l2) -&gt; 
+        &lt;rec x([] &lt;+ HdMember'(eq, !l2); x &lt;+ [id | x])&gt; l1
+
+strategies
+
+  diff(eq) = diff'(eq)
+</PRE>	Intersection is defined in terms of difference.<BR>
+<BR>
+<PRE>
+rules
+
+  isect : (l1, l2) -&gt; &lt;diff&gt; (l1, &lt;diff&gt; (l1, l2))
+
+</PRE>	<!--TOC paragraph Collection-->
+
+<H5> Collection</H5><!--SEC END -->
+	Strategy <CODE>collect(s)</CODE> produces a collection of all
+	<EM>outermost</EM> subterms for which <CODE>s</CODE> succeeds.<BR>
+<BR>
+	Strategy <CODE>collect-split(f, g)</CODE> reduces terms with
+	<CODE>f</CODE> and extracts information with <CODE>g</CODE> resulting in a
+	pair <CODE>(t, xs)</CODE> of a reduced term and the list of
+	extracted subterms.<BR>
+<BR>
+<PRE>
+imports tuple
+
+rules
+
+  crush(nul, sum) : _#(xs) -&gt; &lt;foldr(nul,sum)&gt; xs
+
+  crush(nul, sum, s) : _#(xs) -&gt; &lt;foldr(nul,sum, s)&gt; xs
+
+  foldr-kids(nul,sum)    : _#(xs) -&gt; &lt;foldr(nul,sum)&gt; xs
+
+  foldr-kids(zero,sum,s) : _#(xs) -&gt; &lt;foldr(zero, sum, s)&gt; xs
+
+strategies
+
+  collect-kids(s) = crush(![],union,s)
+
+  collect(s) =
+    rec x(s; \y -&gt; [y]\ 
+          &lt;+ crush(![],union,x))
+
+  collect(s, skip) =
+    rec x(s; \y -&gt; [y]\
+          &lt;+ skip(x,![]); collect-kids(id)
+          &lt;+ collect-kids(x))
+
+  bu-collect(s) =
+    rec x(some(x); collect-kids([s|id] &lt;+ ![])
+          &lt;+ s; \y -&gt; [y]\ )
+    &lt;+ ![]
+
+  collect-split(f, g) = 
+    rec x((is-string + is-int); split(try(f), g &lt;+ ![])
+          &lt;+ CollectSplit(x, f, g))
+
+rules
+
+  CollectSplit(s, f, g) :
+    c#(as) -&gt; (t, &lt;union&gt; (ys, &lt;unions&gt; xs))
+    where &lt;list(s); unzip&gt; as =&gt; (bs, xs);
+          &lt;split(try(f), g &lt;+ ![])&gt; c#(bs) =&gt; (t, ys)
+</PRE>	<!--TOC paragraph Occurence Counting-->
+
+<H5> Occurence Counting</H5><!--SEC END -->
+<PRE>
+strategies
+
+  nrofoccs(s) = rec count(s; !1 &lt;+ crush(0,add,count))
+
+  twicetd(s) = oncetd(explode-term; 
+                      (id, at-suffix(Cons(oncetd(s), oncetd(s))));
+                      mkterm)
+
+  atmostonce(s) = not(twicetd(s))
+
+  atmostonce'(s) = {n : nrofoccs(s) =&gt; n; &lt;leq&gt; (n, 1)}
+</PRE>	
+	
+ 	<!--TOC subsection  LIST-SORT-->
+
+<H3>5.3.8&nbsp;&nbsp;  LIST-SORT</H3><!--SEC END -->
+<PRE>
+module list-sort
+imports list-basic
+rules
+
+  SortL(s) : 
+    [x, y | l] -&gt; [y, x | l]
+    where &lt;s&gt; (x, y)
+
+  LSort(s) : 
+    [x | l] -&gt; [y, x | l']
+    where &lt;at-suffix({ys: ?[y | ys]; where(&lt;s&gt; (x, y)); !ys})&gt; l =&gt; l'
+
+  Uniq : 
+    [x | l] -&gt; l
+    where &lt;fetch(?x)&gt; l
+
+  LMerge(s) : 
+    [x | l] -&gt; [z | l']
+    where &lt;at-suffix(\ [y | ys] -&gt; ys where &lt;s&gt; (x, y) =&gt; z\ )&gt; l =&gt; l'
+
+strategies
+
+  sort-list(s) = try(rec x((s &lt;+ [id | x]); try(x)))
+
+  isort-list(s) = try(rec x(([id | x] &lt;+ s); try(x)))
+
+  jsort-list(s) = try(rec x([id | x] &lt;+ s; try(x)))
+
+  uniq = listbu(repeat(Uniq))
+</PRE>	
+ 	<!--TOC subsection  LIST-ZIP-->
+
+<H3>5.3.9&nbsp;&nbsp;  LIST-ZIP</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	Zipping two lists into a list of pairs is a useful operation
+	in many situations. There are many variants of zipping, for
+	instance in the way lists of unequal length are treated. This
+	module defines a collection of zip-like strategies for lists
+	based on one underlying control scheme.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module list-zip
+imports list-cons
+imports tuple
+rules
+
+  Zip1   : ([],[]) -&gt; []
+  Zip1a' : ([],_) -&gt; []
+  Zip1b' : (_,[]) -&gt; []
+  Zip1c  : ([],x) -&gt; x
+  Zip1c' : (x,[]) -&gt; x
+  Zip1d  : ([],[_|_]) -&gt; []
+  Zip2   : ([x|xs],[y|ys]) -&gt; ((x, y), (xs, ys))
+
+  LZip2  : ([x|xs], y) -&gt; ((x, y), (xs, y))
+  RZip2  : (x, [y|ys]) -&gt; ((x, y), (x, ys))
+
+  Zip3   : (x, xs) -&gt; [x|xs]
+
+  UnZip1 : [] -&gt; ([], [])
+  UnZip2 : ((x, y), (xs, ys)) -&gt; ([x|xs], [y|ys])
+  UnZip3 : [x |  xs] -&gt; (x, xs)
+
+  NZip00 : xs -&gt; (0, xs)
+  NZip01 : xs -&gt; (1, xs)
+  NZip1  : (n, []) -&gt; []
+  NZip2  : (n, [y|ys]) -&gt; ((n, y), (&lt;plus&gt; (n, 1), ys))
+  NZip3  : (x, xs) -&gt; [x| xs]
+
+  TZip1   : (TNil, TNil) -&gt; TNil
+  TZip2   : (TCons(x, xs), TCons(y, ys)) -&gt; ((x, y), (xs, ys))
+  TZip3   : (x, xs) -&gt; TCons(x, xs)
+
+  cart(s) : (xs, ys) -&gt; 
+            &lt;map(\x -&gt; &lt;map(\y -&gt; &lt;s&gt;(x, y)\ )&gt; ys\ ); foldr(![], union)&gt; xs
+
+  Skip(s) : ([x|xs], ys) -&gt; (x, (xs, ys))
+
+strategies
+
+  genzip(a, b, c, s) = rec x(a + b; (s, x); c)
+
+  zip(s)  = genzip(Zip1,   Zip2,   Zip3,   s)
+  zip'(s) = genzip(Zip1a' &lt;+ Zip1b',   Zip2,   Zip3,   s)
+  zipl(s) = genzip(Zip1a',   Zip2,   Zip3,   s)
+  zipr(s) = genzip(Zip1b',   Zip2,   Zip3,   s)
+
+  rest-zip(s) = 
+    genzip((?([],_) + ?(_,[])); ?(tla, tlb); ![], Zip2, Zip3, s);
+    \ pairs -&gt; (tla, tlb, pairs) \
+
+  unzip    = genzip(UnZip1, UnZip3, UnZip2, id)
+  unzip(s) = genzip(UnZip1, UnZip3, UnZip2, s)
+
+  nzip0(s) = NZip00 ; genzip(NZip1,  NZip2,  NZip3,  s)
+  nzip(s)  = NZip01 ; genzip(NZip1,  NZip2,  NZip3,  s)
+  tzip(s)  = genzip(TZip1,   TZip2,   TZip3,   s)
+
+  lzip(s)  = genzip(Zip1a', LZip2, Zip3, s)
+  rzip(s)  = genzip(Zip1b', RZip2, Zip3, s)
+
+
+  zipFetch(s) = rec x(Zip2; ((s, id) &lt;+ (id, x)))
+  lzipFetch(s) = rec x(LZip2; ((s, id) &lt;+ (id, x)))
+  rzipFetch(s) = rec x(RZip2; ((s, id) &lt;+ (id, x)))
+
+  zipPad(s, padding) = 
+    rec x(Zip1 + Zip2; (s, x); Zip3 + 
+          ([], [id|id]); (![&lt;padding&gt;()|[]], id); x +
+          ([id|id], []); (id, ![&lt;padding&gt;()|[]]); x)
+
+  zip-tail = rec x(Zip1c + (Tl, Tl); x)
+  zipl-tail-match(s) = rec x(Zip1c + Zip2; (s, id); Snd; x)
+  zipr-tail-match(s) = rec x(Zip1c' + Zip2; (s, id); Snd; x)
+ 
+  zip-skip(pred, s) = 
+        rec x(Zip1 + (Skip(pred); (id, x) &lt;+ Zip2; (s, x)); Zip3)
+
+strategies
+
+  tuple-zip(s) = 
+    rec x(split(tmap(Hd), tmap(Tl)); (s, x); Zip3
+          &lt;+ tmap([]); ![])
+
+  tuple-unzip(s) =
+    rec x(split(map(Thd), map(Ttl)); (s, x); \ (a,b) -&gt; TCons(a,b) \
+          &lt;+ map(()); !())
+</PRE>	
+ 	<!--TOC subsection  LIST-FILTER-->
+
+<H3>5.3.10&nbsp;&nbsp;  LIST-FILTER</H3><!--SEC END -->
+<PRE>
+module list-filter
+imports list
+strategies
+
+  filter(s) = rec x(Nil + (Cons(s, x) &lt;+ Tl; x))
+
+  filter-gen(pred, cont) =
+        rec x(Nil + (pred; cont(x)) &lt;+ Tl; x)
+
+  (* filter(s) = filter-gen(Cons(s,id), at-tail) *)
+
+  skip1(s) = at-tail(s)
+  skip2(s) = at-tail(at-tail(s))
+
+  filter-option-args(flag) = filter-gen(Cons(flag,id);Tl, skip1)
+
+  filter-options(flag) = filter-gen(Cons(flag,id), skip2)
+</PRE>	
+	
+ <!--TOC section Binary Trees-->
+
+<H2>5.4&nbsp;&nbsp; Binary Trees</H2><!--SEC END -->
+ 	<!--TOC subsection  BIN-TREE-->
+
+<H3>5.4.1&nbsp;&nbsp;  BIN-TREE</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	Binary trees are represented by the constructors <CODE>EmptyNode</CODE>
+	and <CODE>BinNode</CODE>.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module bin-tree
+signature
+  sorts BinTree(a)
+  constructors
+    EmptyNode : BinTree(a)
+    BinNode   : a * BinTree(a) * BinTree(a) -&gt; BinTree(a)
+</PRE> 	
+ 	<!--TOC subsection  BIN-TREE-SET-->
+
+<H3>5.4.2&nbsp;&nbsp;  BIN-TREE-SET</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	Binary trees are efficient representations of sets of elements
+	in terms of lookup. Based on the unique addresses of terms
+	under hash-consing, efficient representations of sets of terms
+	can be made with binary terms.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module bin-tree-set
+imports bin-tree
+strategies
+
+  branch(mky, lt, gt, et) = 
+        BinNode(where(\x -&gt; &lt;eq&gt;(x, &lt;mky&gt;())\), id, id) &lt;+
+        BinNode(where(\x -&gt; &lt;address-lt&gt;(&lt;mky&gt;(), x)\), lt, id) &lt;+
+        BinNode(where(\x -&gt; &lt;address-lt&gt;(x, &lt;mky&gt;())\), id, gt) &lt;+
+        EmptyNode; et
+
+rules
+
+  bin-add : 
+        (a, t) -&gt; 
+        &lt;rec x(branch(!a, x, x, !BinNode(a, EmptyNode, EmptyNode)))&gt; t
+
+  Merge(s) : 
+        (EmptyNode, x) -&gt; x
+  
+  Merge(s) : 
+        (x, EmptyNode) -&gt; x
+
+  Merge(s) : 
+        (BinNode(x, l1, r1), BinNode(x, l2, r2)) -&gt;
+        BinNode(x, &lt;s&gt; (l1, l2), &lt;s&gt; (r1, r2))
+
+  Merge(s) : 
+        (BinNode(x, l1, EmptyNode), BinNode(y, l2, r2)) -&gt;
+        BinNode(y, &lt;s&gt; (BinNode(x, l1, EmptyNode), l2), r2)
+        where &lt;address-lt&gt; (x, y)
+
+  Merge(s) : 
+        (BinNode(x, EmptyNode, r1), BinNode(y, l2, r2)) -&gt;
+        BinNode(y, l2, &lt;s&gt; (BinNode(x, EmptyNode, r1), r2))
+        where &lt;address-lt&gt; (y, x)
+
+  Merge(s) : 
+        (BinNode(x, l1, r1), BinNode(y, l2, r2)) -&gt;
+        &lt;s&gt; (r1, BinNode(y, &lt;s&gt; (BinNode(x, l1, EmptyNode), l2), r2))
+        where &lt;address-lt&gt; (x, y)
+
+  Merge(s) : 
+        (BinNode(x, l1, r1), BinNode(y, l2, r2)) -&gt;
+        &lt;s&gt; (r2, BinNode(x, &lt;s&gt; (BinNode(y, l2, EmptyNode), l1), r1))
+        where &lt;address-lt&gt; (y, x)
+
+strategies
+
+  merge = rec x(Merge(x))
+
+  mkbinset = foldr(!EmptyNode, bin-add)
+</PRE> 	<BR>
+<BR>
+<!--TOC chapter Generic Algorithms-->
+
+<H1>Chapter&nbsp;6&nbsp;&nbsp; Generic Algorithms</H1><!--SEC END -->
+ <!--TOC section Object Variables-->
+
+<H2>6.1&nbsp;&nbsp; Object Variables</H2><!--SEC END -->
+	<!--TOC subsection  FREE-VARIABLES-->
+
+<H3>6.1.1&nbsp;&nbsp;  FREE-VARIABLES</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	Extraction of free variables from an expression is governed
+	by the shape of variables and the shape of variable bindings.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module free-variables
+imports list
+</PRE>	<!--TOC paragraph Parameters of Free Variable Extraction-->
+
+<H5> Parameters of Free Variable Extraction</H5><!--SEC END -->
+	the following aspects determine the extraction of
+	free variables from expressions<BR>
+<BR>
+	<UL>
+<LI><BR>
+<BR>
+	 shape of variables<BR>
+<BR>
+	
+<LI> variables bound by a binding construct<BR>
+<BR>
+	
+<LI> arguments of the binding constructs where variables are
+	bound<BR>
+<BR>
+	</UL>	In addition can variable constructs contain other variables, 
+	or in other words, whether variables are leaves or non-leaves.<BR>
+<BR>
+	<!--TOC paragraph Variables are Leaves-->
+
+<H5> Variables are Leaves</H5><!--SEC END -->
+	In the first style of free variable extraction, variables are
+	leaves of abstract syntax trees.<BR>
+<BR>
+	Free variables of a term; The first argument s1 is a strategy
+	that transforms variables into lists of variables, e.g.,
+	<CODE>Var(x) -&gt; [x]</CODE>; The second argument s2 is a strategy
+	that maps binding constructs to the list of bound variables,
+	e.g., <CODE>Scope(xs, s) -&gt; xs</CODE>;<BR>
+<BR>
+<PRE>
+strategies
+
+  free-vars(getvars, boundvars) = 
+    rec x(getvars 
+          &lt;+ split(collect-kids(x), boundvars &lt;+ ![]); diff)
+
+  free-vars(getvars, boundvars, boundin) = 
+    rec x(getvars 
+          &lt;+ {vs: where(boundvars =&gt; vs); 
+                  boundin(split(x, !vs); diff, x, ![])};
+             collect-kids(id)
+          &lt;+ collect-kids(x))
+
+(* // if we had strategy abstraction /\(x1,...,xn) -&gt; s
+
+  free-vars(getvars, boundvars, boundin) = 
+    collect(getvars
+           ,/\ (x,nil) -&gt; 
+            {vs: where(boundvars =&gt; vs); 
+                 boundin(split(x, !vs); diff, x, nil)})
+*)
+
+  free-vars(getvars, boundvars, boundin, eq) = 
+    rec x(getvars 
+          &lt;+ {vs: where(boundvars =&gt; vs); 
+                  boundin(split(x, !vs); diff(eq), x, ![])};
+             collect-kids(id)
+          &lt;+ collect-kids(x))
+</PRE>	<!--TOC paragraph Variables are not Leafs-->
+
+<H5> Variables are not Leafs</H5><!--SEC END -->
+	In a more complicated style of free variable extraction,
+	variables are not leaves of abstract syntax trees, but can
+	contain subterms that again contain variables.<BR>
+<BR>
+<PRE>
+strategies
+
+  free-vars2(getvars, boundvars) = 
+    rec x(split(getvars &lt;+ ![],
+                split(collect-kids(x), boundvars &lt;+ ![]); diff); 
+          union)
+
+  free-vars2(getvars, boundvars, boundin) = 
+    rec x(split(getvars &lt;+ ![],
+                ({vs: where(boundvars =&gt; vs); 
+                      boundin(split(x, !vs); diff, x, ![])};
+                 collect-kids(id)
+                 &lt;+ collect-kids(x)));
+          union)
+
+  free-vars2(getvars, boundvars, boundin, eq) = 
+    rec x(split(getvars &lt;+ ![]
+               ,{vs: where(boundvars =&gt; vs);
+                     boundin(split(x, !vs); diff(eq), x, ![]);
+                     collect-kids(id)}
+                &lt;+ collect-kids(x)
+               ); union)
+</PRE>
+	<!--TOC subsection  RENAME: Renaming Bound Variables-->
+
+<H3>6.1.2&nbsp;&nbsp;  RENAME: Renaming Bound Variables</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	Renaming of bound variables is determined by the shape of
+	variables and binding constructs. Three generic strategies
+	are defined that cater for different complexities of binding
+	constructs.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	Variable binding constructs protect variables from clashing
+	with variables in other parts of a program when their names
+	are the same. To prevent the introduction of name clashes
+	during program transformation it can be useful to give 
+	all variable bindings a unique name. This module defines three
+	generic strategies for bound variable renaming all based on
+	the same idea, but dealing with increasingly complex variable
+	binding models.<BR>
+<BR>
+	Renaming depends <EM>only</EM> on the shape of variable bindings
+	and variable occurences. Other language constructs are irrelevant.<BR>
+<BR>
+	In the generic strategies the following assumptions about
+	binding constructs are made: (1)
+	There is a subtree that covers the scope in which the
+	variables are bound. (2) variables are atomic, i.e., do not
+	contain subterms that are
+	variables or binding constructs.<BR>
+<BR>
+	Approach: indicate shape of variable occurences and variable
+	binders<BR>
+<BR>
+	The strategy <CODE>rename(isvar, mkvar, bnd)</CODE> renames all
+	bound variables in a term to fresh variables;<BR>
+<BR>
+	Parameters:<BR>
+<BR>
+ 	isvar: Succeeds if applied to a variable<BR>
+<BR>
+ 	newvar: Takes a string and builds a variable<BR>
+<BR>
+ 	bnd: Maps a binding construct to the list of bound variables<BR>
+<BR>
+ 	apply(a, b, c): reconstruct the binding construct with fresh
+ 	variables;<BR>
+<BR>
+	- a should be applied to the subterm containing the
+	variable(s)<BR>
+<BR>
+	- b should be applied to the subterms in which the variables
+	are bound<BR>
+<BR>
+	- c should be applied to the subterms in which the variables
+	are not bound;<BR>
+<BR>
+<PRE>
+module rename
+imports simple-traversal tuple list env-traversal
+rules
+
+  RnVar(isvar) :
+    (t, env) -&gt; &lt;isvar(split(id, !env); lookup)&gt; t
+
+  RnBinding(bndvrs) :
+    (t, env1) -&gt; (t, env1, env2)
+    where &lt;bndvrs&gt; t =&gt; xs; map(new) =&gt; ys; 
+          &lt;conc&gt;(&lt;zip(id)&gt;(xs,ys), env1) =&gt; env2
+
+  DistBinding(s) :
+    (t, env1, env2) -&gt; &lt;all( \x -&gt; &lt;s&gt;(x, env2)\ )&gt; t
+
+strategies
+
+  // renaming bound variables assuming that variables are bound
+  // in all subterms of a binding construct
+  // variable declarations in binding constructs are assumed to
+  // have the same shape as variable uses 
+
+  rename(isvar, bndvars) = 
+    \ t -&gt; (t, []) \ ;
+    rec x(env-alltd(RnVar(isvar)
+                    &lt;+ RnBinding(bndvars);
+                       DistBinding(x)))
+
+rules
+
+  DistBinding(s, boundin) :
+    (t, env1, env2) -&gt; &lt;boundin(\x -&gt; &lt;s&gt;(x, env2)\
+                               ,\x -&gt; &lt;s&gt;(x, env1)\
+                               ,id)&gt; t
+
+strategies
+
+  // renaming while making a distinction between subterms
+  // in which the variables are bound or not
+  // variables at binding sites are assumed to have
+  // the same shape as other variable occurences
+
+  rename(isvar, bndvars, boundin) = 
+    \ t -&gt; (t, []) \ ;
+    rec x(env-alltd(RnVar(isvar)
+                    &lt;+ RnBinding(bndvars);
+                       DistBinding(x, boundin)))
+
+rules
+
+  RnBinding(bndvrs, paste) :
+    (t, env1) -&gt; (&lt;paste(!ys)&gt; t, env1, env2)
+    where &lt;bndvrs&gt; t =&gt; xs; map(new) =&gt; ys; 
+          &lt;conc&gt;(&lt;zip(id)&gt;(xs,ys), env1) =&gt; env2
+
+
+strategies
+
+  rename(isvar, bndvars, boundin, paste) = 
+    \ t -&gt; (t, []) \ ;
+    rec x(env-alltd(RnVar(isvar)
+                    &lt;+ RnBinding(bndvars, paste);
+                       DistBinding(x, boundin)))
+</PRE><DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 6.1: Example: Untyped lambda calculus</DIV><BR>
+<A NAME="Fig:"></A>
+<PRE>
+signature
+  sorts Exp
+  constructors
+    Abs : String * Exp -&gt; Exp
+    Var : String -&gt; Exp
+rules
+
+  Bnd : Abs(x, e) -&gt; [x]
+
+strategies
+
+  ern_apply(nwvars, bndvars, ubndvars) =
+ Abs(nwvars; Hd, bndvars)
+
+  erename = rename''(Var, Bnd, ern_apply)
+</PRE><DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 6.2: Example: Typed lambda calculus</DIV><BR>
+<A NAME="Fig:"></A>
+<PRE>
+signature
+  sorts Exp
+  constructors
+    Abs    : String * Type * Exp -&gt; Exp
+    Var    : String * Type -&gt; Exp
+    Letrec : List(Fdec) * Exp -&gt; Exp
+    Fdec   : String * Type * Exp -&gt; Fdec
+rules
+
+  Bnd : Abs(x, t, e) -&gt; [x]
+  Bnd : Letrec(fdecs, e) -&gt; &lt;map(Name)&gt; fdecs
+
+  Name : Fdec(f, t, e) -&gt; f
+
+strategies
+
+  is-var(s) = Var(s, id)
+
+  ern_apply(nwvars, bndvars, ubndvars) =
+ Abs(nwvars; Hd, bndvars) +
+ Letrec(split(id,nwvars); zip(f(bndvars)), bndvars)
+
+  f(bndvars) : (Fdec(f, t, e), g) -&gt; Fdec(g, t, &lt;bndvars&gt; e)
+
+  erename = rename''(is-var, Bnd, ern_apply)
+</PRE><DIV ALIGN=center><HR SIZE=2></DIV><BR>
+
+	<!--TOC subsection  SUBSTITUTION-->
+
+<H3>6.1.3&nbsp;&nbsp;  SUBSTITUTION</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	Substituting terms for variables depends mainly on
+	the shape of variables.
+	This module implements several generic strategies for different
+	styles of parallel substitution, including ones that rename
+	bound variables to prevent name capture.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	A substitution is a mapping from variables to terms. Given a
+	substitution the strategy <CODE>substitute(...)</CODE> traverses
+	a term and replaces variables in the domain of the mapping by
+	their associated term.
+	The strategy can be applied in two ways; (1) to a pair of a
+	substitution and a term
+<CODE>&lt;substitute(...)&gt; (sbs, t)</CODE>
+	and (2) to a triple of a list of variables, a list of (equal
+	length) of terms and a term
+<CODE>&lt;substitute(...)&gt; (xs, ts, t)</CODE>. This entails that the type of
+	<CODE>substitute(...)</CODE> is either 
+<CODE>Prod([List(Prod([a,b])),b]) -&gt; b</CODE>
+	or
+<CODE>Prod([List(a),List(b),b]) -&gt; b</CODE>, with <CODE>a</CODE> the type of variables
+	and <CODE>b</CODE> the type of terms.<BR>
+<BR>
+	There are four versions of the substitution strategy that
+	depend on two factors; (1) renaming of bound variables in
+	terms substituted for variables (2) renaming of bound
+	variables in the context of substituted variables.<BR>
+<BR>
+	All versions are parameterized with a strategy <CODE>isvar</CODE>
+	recognizing variables and mapping them to a substitution key,
+	which can be the entire variable structure or just its
+	name. That is, <CODE>isvar</CODE> should have type <CODE>b -&gt; a</CODE>.<BR>
+<BR>
+	The substitution strategy can be parameterized with a variable
+	renaming strategy <CODE>ren</CODE> (of type <CODE>b -&gt; b</CODE>) that will
+	be applied to each term after it is substituted for a
+	variable. This
+	can be used to ensure that all bound variables are unique throughout
+	an abstract syntax tree and thus prevent free variable
+	capture.<BR>
+<BR>
+	A better way to ensure that free variables are not captured
+	when substituting under bindings requires renaming the bound variables
+	in the context of the variables that are substituted for. This
+	is achieved by combining the generic bound variable renaming techniques
+	from module <CODE>rename</CODE> with replacing a variable by a term.
+	For this purpose there are two variants of the
+	substitution strategy that are parameterized with strategies indicating
+	shape of variables, the bound variables, the arguments
+	that they are binding in and a replacement strategy.
+	See module <CODE>rename</CODE> for an explanation of these parameters.<BR>
+<BR>
+<PRE>
+module substitution
+imports simple-traversal tuple list rename
+
+strategies
+
+  // substitutions accept two types of input 
+  // 1) a pair of a substitution (is list of pairs) and a term
+  // 2) a triple of a list of variables, a list of terms that should
+  //    replace them, and a term
+
+  subs-args = 
+    ?(sbs, t) &lt;+ \ (xs, ys, t) -&gt; (&lt;zip(id)&gt; (xs, ys), t) \
+
+rules
+
+  // replacing a variable with its value in the substitution
+
+  SubsVar(isvar, mksbs) :
+    t -&gt; &lt;lookup&gt; (x, sbs)
+    where &lt;isvar&gt; t =&gt; x; mksbs =&gt; sbs
+
+strategies  
+
+  // substitute variables, no regard for variable bindings, and
+  // rename bound variables in substituted terms
+
+  substitute(isvar, ren) =
+    subs-args =&gt; (sbs,t); !t;
+    alltd(SubsVar(isvar, !sbs); ren)
+
+  // substitute variables, no regard for variable bindings
+
+  substitute(isvar) =
+    substitute(isvar, id)
+
+  // substitute all variables, rename bound variables on the way down,
+  // and rename the bound variables in the terms that are substituted
+  // for variables using the renaming strategy ren
+
+  substitute(isvar, varshape, bndvars, boundin, paste, ren) =
+    subs-args =&gt; (sbs,t); !(t, []);
+    rec x(env-alltd(RnVar(varshape)
+                    &lt;+ Fst; SubsVar(isvar, !sbs); ren
+                    &lt;+ RnBinding(bndvars, paste);
+                       DistBinding(x,boundin)))
+
+  // substitute variables and rename bound variables encountered
+  // on the way to prevent variable capture, don't rename
+  // substituted terms
+
+  substitute(isvar, varshape, bndvars, boundin, paste) =
+    substitute(isvar, varshape, bndvars, boundin, paste, id)
+</PRE>
+	<!--TOC subsection  UNIFICATION-->
+
+<H3>6.1.4&nbsp;&nbsp;  UNIFICATION</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	Syntactic unification, no variable bindings are taken into
+	account.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module unification
+imports list term substitution
+</PRE>	<CODE>&lt;unify(isvar)&gt; [(t1,t2),(t3,t4),...] =&gt; [(x1,p1),(x2,p2),...]</CODE> <BR>
+<BR>
+	The strategy <CODE>unify</CODE> unifies a list of pairs of terms and
+	creates the
+	most general unifier for them. The strategy is parameterized
+	by a strategy <CODE>isvar</CODE> that determines the shape of variables.
+	The result is a list of pairs <CODE>(x1,p1)</CODE>, where <CODE>x1</CODE> is
+	a term for which <CODE>isvar</CODE> succeeds and <CODE>p1</CODE> is the term
+	it should be substituted with to unify the terms.<BR>
+<BR>
+<PRE>
+strategies
+  
+  equal = 
+    for(id ,[], UfIdem &lt;+ UfDecompose
+                //&lt;+ debug(!"not equal: "); FAIL
+    )
+
+rules 
+
+  UfIdem : 
+    [(x,x) | ps] -&gt; ps
+
+  UfDecompose : 
+    [(f#(xs), f#(ys)) | ps] -&gt; &lt;conc&gt;(&lt;zip(id)&gt;(xs, ys), ps)
+
+strategies
+
+  diff =  
+    for(\ ps -&gt; ([],ps) \ , (id,[]), (id, UfIdem &lt;+ UfDecompose) &lt;+ UfShift)
+
+rules
+
+  UfShift :
+    (ps1, [p | ps2]) -&gt; ([p | ps1], ps2)
+    
+strategies
+
+  pattern-match(isvar) = 
+    for(\ pairs -&gt; (pairs, []) \
+       ,\ ([], sbs) -&gt; sbs \
+       ,(UfIdem, id) &lt;+ MatchVar(isvar) + (UfDecompose, id))
+
+rules
+
+  MatchVar(isvar) : 
+    ([(x,y) | ps], sbs) -&gt; (ps, [(x, y) | sbs])
+    where &lt;isvar&gt; x; &lt;not(fetch({z: ?(x,z); &lt;not(eq)&gt; (y, z)}))&gt; sbs
+
+strategies
+
+  unify(isvar) =
+    for(\ pairs -&gt; (pairs, []) \
+       ,\ ([], sbs) -&gt; sbs \
+       ,(UfIdem, id) &lt;+ UfVar(isvar) + UfSwap(isvar) &lt;+ (UfDecompose, id))
+
+rules
+
+  UfVar(isvar) : 
+        ([(x,y) | ps], sbs) -&gt; (ps', [(x, y) | sbs''])
+        where &lt;isvar&gt; x; &lt;not('in)&gt;(x,y); 
+              &lt;substitute(isvar)&gt; ([(x,y)], (sbs, ps)) =&gt; (sbs'', ps')
+
+  UfSwap(isvar) : 
+        ([(x,y) | ps], sbs) -&gt; ([(y,x) | ps], sbs)
+        where &lt;not(isvar)&gt; x; &lt;isvar&gt; y
+
+rules
+
+  // Test occurrence of a in b 
+
+  'in : (a, t) -&gt; &lt;oncetd(?a)&gt; t
+
+strategies
+
+  equal(fltr) =
+    for(id ,[], UfIdem 
+                &lt;+ try([(fltr,fltr)|id]); UfDecompose
+                //&lt;+ debug(!"not equal: "); FAIL
+    )
+
+strategies
+
+  // The following equality strategy has an additional filter 
+  // that can be used for checking equality modulo alpha renaming. 
+  // The filter applies to the entire pair and can change something 
+  // in one term based on the other term.
+
+  equal(fltr1, fltr2) =
+    for(id ,[], UfIdem 
+                &lt;+ [(try(fltr1),try(fltr1)); try(fltr2)|id]; UfDecompose
+                //&lt;+ debug(!"not equal: "); FAIL
+    )
+</PRE> <!--TOC section Graphs-->
+
+<H2>6.2&nbsp;&nbsp; Graphs</H2><!--SEC END -->
+	<!--TOC subsection  PACK-GRAPH-->
+
+<H3>6.2.1&nbsp;&nbsp;  PACK-GRAPH</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	The strategy 'graph-nodes' is a generic
+ 	algorithm for mapping a graph to a collection of nodes reachable
+ 	from a given root node. The algorithm is parameterized with the
+ 	following notions: 'get-node' maps a node name and a graph to the
+ 	node itself, 'out-edges' maps a node to the names of its out
+ 	edges, 'add-node' that adds a name and its corresponding node to a
+ 	collection of nodes.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	
+<PRE>
+module pack
+imports string list
+</PRE>	
+	Basic idea: configuration of the form <CODE>(todo, done, files)</CODE><BR>
+<BR>
+	keep adding files corresponding to the names in <CODE>todo</CODE> until
+	empty<BR>
+<BR>
+	<CODE>&lt;worklist(get, next, add)&gt; (root, source, target)</CODE> 
+	produces a target to which all things reachable from <CODE>root</CODE>
+	via the <CODE>next</CODE> relation are <CODE>add</CODE>ed. The things
+	are obtained via <CODE>&lt;get&gt;(name,source)</CODE>.<BR>
+<BR>
+<PRE>
+     get-node  :: name * graph -&gt; node 
+     out-edges :: node -&gt; List(name)
+     add-node  :: name * node * nodes -&gt; nodes
+</PRE>	
+<PRE>
+rules
+
+  GnInit : 
+    (root, graph, nodes) -&gt; ([root], [root], graph, nodes, [])
+
+  GnInitRoots : 
+    (roots, graph, nodes) -&gt; (roots, roots, graph, nodes, [])
+
+  GnNext(get-node, out-edges, add-node) : 
+    ([name | todo], done, graph, nodes, undef) -&gt;
+    (&lt;conc&gt; (todo', todo), &lt;conc&gt; (todo', done), 
+     graph, &lt;add-node&gt; (name, node, nodes), undef)
+    where &lt;get-node&gt; (name, graph) =&gt; node;
+          &lt;out-edges&gt; node =&gt; names;
+          &lt;diff&gt; (names, done) =&gt; todo'
+
+  GnUndefined :
+    ([name | todo], done, graph, nodes, undef) -&gt;
+    (todo, done, graph, nodes, [name | undef])
+
+  GnExit : 
+    ([], done, graph, nodes, undef) -&gt; (nodes, undef)
+
+strategies
+
+  graph-nodes-undef-roots(get-node, out-edges, add-node) =
+    for(GnInitRoots, GnExit, GnNext(get-node, out-edges, add-node)
+                             &lt;+ GnUndefined)
+
+  graph-nodes-undef(get-node, out-edges, add-node) =
+    for(GnInit, GnExit, GnNext(get-node, out-edges, add-node)
+                        &lt;+ GnUndefined)
+
+  graph-nodes(get-node, out-edges, add-node) =
+    graph-nodes-undef(get-node, out-edges, add-node);
+    \ (nodes, undef) -&gt; nodes \
+</PRE>
+	<!--TOC subsection  PACK-MODULES-->
+
+<H3>6.2.2&nbsp;&nbsp;  PACK-MODULES</H3><!--SEC END -->
+CHANGES (by Joost Visser)
+ * Strategy pack-modules(pack, dep-base) now takes two additonal 
+ options:
+ -dep target
+ -nodep
+ The first one specifies the maketarget and basename of the
+ dependency file that is created. If this option is not passed,
+ the argument dep-base is used instead. Finally, the -nodep option
+ can be used to disable this and prevent any dependency file to
+ be created. Note that -dep takes precendence over -nodep.
+ * An additional strategy pack-modules(pack) was added that behaves
+ like pack-modules, except no default for the dependency file 
+ base name needs to be specified. Hence, only the command line
+ options are relevant.<BR>
+<BR>
+<PRE>
+module pack-modules
+imports options pack-graph
+
+strategies
+
+  pack-module-options =
+    parse-options( io-options 
+                 + ArgOption("-I"  , \x -&gt; Include(x)\ )
+                 + Option   ("-nodep",     !NoDependency )
+                 + ArgOption("-dep", \x -&gt; Dependency(x)\ )
+                 )
+
+  pack-modules(pack)
+    = pack-modules(pack,fail)
+      &lt;+ &lt;fatal-error&gt; ["  packing failed"]
+
+  pack-modules(pack, dep-base) =
+    pack-module-options =&gt; options;
+    try(need-help(pack-modules-usage));
+    list(try( ?Program(prog)
+            + ?Input('in) + ?Output(out) //+ ?Binary;!bin
+            + ?Dependency(dep)
+            ));
+    filter( \Include(p)-&gt;p\ ) =&gt; path;
+    (!'in &lt;+ !stdin) =&gt; infile;
+    (!out &lt;+ !stdout) =&gt; outfile;
+    &lt;pack(!path)&gt; infile =&gt; (files, spec);
+    !options;
+    (
+       option-defined(?Binary);
+       &lt;WriteToBinaryFile&gt;(outfile, spec)
+    &lt;+
+       &lt;WriteToTextFile&gt;(outfile, spec)
+    );
+    try((!dep &lt;+ (not(&lt;option-defined(?NoDependency())&gt; options);
+                      dep-base)) =&gt; depfile;
+        &lt;create-dep-file(!depfile)&gt; (outfile, files)
+    );
+    dtime =&gt; time;
+    &lt;printnl&gt;(stderr, [prog, " (", time, " secs)"])
+
+  pack-modules-usage =
+    option-defined(?Program(prog));
+    &lt;printnl&gt; (stderr,
+               ["usage : ", prog, 
+                " [-S] [-I dir] [-i file]",
+                " [-o file] [-b] [-s] [--help|-h|-?]",
+                " [-dep target | -nodep]" ]);
+    &lt;exit&gt; 1
+
+rules
+  
+  create-dep-file(dep-base) :
+        (outfile, files) -&gt; (outfile, files)
+        where
+          &lt;dep-base&gt; outfile =&gt; out;  
+          &lt;add-extension; open-file&gt; (out, "dep") =&gt; dep;
+          &lt;printnl&gt;(dep, &lt;separate-by(!" ")&gt; [out, ":" | files])
+
+signature
+  constructors
+    NoDependency :         Option
+    Dependency : String -&gt; Option
+</PRE>
+	<!--TOC subsection  PACK: Packing and Flattening Modules-->
+
+<H3>6.2.3&nbsp;&nbsp;  PACK: Packing and Flattening Modules</H3><!--SEC END -->
+	<blockquote><hr>
+	
+	Module systems allow the definition of a program to be
+	split into separate units stored in separate files. For
+	languages that do not support separate compilation (such
+	as grammar formalisms) these separate units need to be
+	combined to create the whole program.
+	This module defines generic strategies for packing a
+	set of modules reachable from a root module and for
+	flattening a set of modules into a single program.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<!--TOC paragraph Analysis-->
+
+<H5> Analysis</H5><!--SEC END -->
+	Aspects of module packing and flattening<BR>
+<BR>
+	<OL type=1>
+<LI><BR>
+<BR>
+	 finding the module associated with the module name<BR>
+<BR>
+	
+<LI> doing something with the module, i.e., adding it
+	to the result<BR>
+<BR>
+	
+<LI> finding the imports in a module<BR>
+<BR>
+	
+<LI> keeping track of which modules have already been inlined<BR>
+<BR>
+	</OL>
+	
+<PRE>
+module pack
+imports string pack-graph
+</PRE>	
+<!--TOC paragraph Packing-->
+
+<H5> Packing</H5><!--SEC END -->
+	Packing a module consists of collecting all modules into
+	a single file.<BR>
+<BR>
+<PRE>
+rules
+
+  PackInit : root -&gt; (root, (), [])
+
+strategies
+
+  pack(parser, imp) = 
+        PackInit; 
+        graph-nodes(Fst; parser, get-imports(imp), \ (n,x,xs) -&gt; [x|xs] \ )
+
+  get-imports(imp) =
+        collect(imp); 
+        concat
+</PRE><!--TOC paragraph Unpacking-->
+
+<H5> Unpacking</H5><!--SEC END -->
+
+	
+	Unpacking is the reverse of packing, i.e., writing each module
+	in a list of modules to a separate file.<BR>
+<BR>
+<PRE>
+rules
+
+  WriteMod(getname, write, ext) : 
+    mod -&gt; &lt;write&gt;(&lt;add-extension&gt;(&lt;getname&gt;mod, &lt;ext&gt;()), mod)
+
+strategies
+
+  unpack(wrapper, getname, ext) = 
+        wrapper(WriteMod(getname, WriteToTextFile, ext))
+</PRE><!--TOC paragraph Flatten-->
+
+<H5> Flatten</H5><!--SEC END -->
+	<CODE>&lt;flatten&gt; (root, mods)</CODE> produces a flattened version
+	of the root module.<BR>
+<BR>
+<PRE>
+strategies
+
+  flatten(imp, nameeq, getcontent) = 
+        FlattenInit;
+        graph-nodes(lookup(nameeq),
+                 get-imports(imp), 
+                 Ttl; (getcontent, id); conc)
+
+rules
+
+  FlattenInit : (root, mods) -&gt; (root, mods, [])
+</PRE><!--TOC chapter System Interface-->
+
+<H1>Chapter&nbsp;7&nbsp;&nbsp; System Interface</H1><!--SEC END -->
+ <!--TOC section Input/Output-->
+
+<H2>7.1&nbsp;&nbsp; Input/Output</H2><!--SEC END -->
+	<!--TOC subsection  IO: Input and Output-->
+
+<H3>7.1.1&nbsp;&nbsp;  IO: Input and Output</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	A transformation system needs to input terms to transform
+	and output transformed terms. Instead of providing a single
+	fixed mechanism for IO, this module
+	defines primitives for file input and output of
+	terms and strings. These primitives can be used in a variety
+	of ways to define customized IO.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	A compiled Stratego specification applies the strategy
+	<CODE>main</CODE> to the command line options that it gets. When
+	interpreting these it will probably be necessary to read in
+	a term from file and later write the transformed term back
+	to (another) file. This module provides the primitives for
+	doing file input and output. Module <CODE>options</CODE> defines
+	strategies to parse and analyze the command line options.<BR>
+<BR>
+<PRE>
+module io
+imports list string tuple integers time exec
+</PRE>	A <CODE>file</CODE> can be a string or one of the terms
+	<CODE>stdin</CODE>, <CODE>stdout</CODE>, <CODE>stderr</CODE>.<BR>
+<BR>
+<PRE>
+signature
+  sorts File
+  constructors
+    stdin  : File
+    stdout : File
+    stderr : File
+</PRE>	<CODE>&lt;ReadFromFile&gt; file</CODE> reads the term in <CODE>file</CODE>. The
+	<CODE>file</CODE> needs to be in textual or binary ATerm format.<BR>
+<BR>
+	<CODE>&lt;WriteToTextFile&gt; (file, term)</CODE> writes <CODE>term</CODE> to
+	file in textual ATerm format.<BR>
+<BR>
+	<CODE>&lt;WriteToBinaryFile&gt; (file, term)</CODE> writes <CODE>term</CODE> to
+	file in BAF format.<BR>
+<BR>
+ 	<CODE>&lt;print&gt; (file, [t1,...,tn])</CODE> prints the terms <CODE>ti</CODE>
+	to file. If <CODE>ti</CODE> is a string it is printed without quotes,
+	otherwise it is printed as a term. <CODE>printnl</CODE> has the same
+	behaviour, but also prints a newline after <CODE>tn</CODE>.<BR>
+<BR>
+	Before printing to a file the file should be opened using
+	<CODE>&lt;open-file&gt; filename</CODE>, which truncates the file, or creates
+	it if it doesn't exist. To append to a file, open the file
+	with <CODE>&lt;append-file&gt; filename</CODE>. The file is created if it
+	doesn't exist.<BR>
+<BR>
+<PRE>
+strategies
+
+  print             = prim("_ST_print")
+  printnl           = prim("_ST_printnl")
+  printascii        = prim("_ST_printascii")
+
+  file-exists       = prim("_ST_file_exists")
+  open-file         = prim("_ST_open_file")
+  append-file       = prim("_ST_append_file")
+  close-file        = prim("_ST_close_file")
+
+  ReadFromFile      = prim("_ST_ReadFromFile")
+  WriteToBinaryFile = prim("_ST_WriteToBinaryFile")
+  WriteToTextFile   = prim("_ST_WriteToTextFile")
+</PRE> 	The primitive <CODE>print-stack</CODE> prints the top n elements of
+ 	the stack if applied as <CODE>&lt;print-stack&gt;</CODE> n or the entire
+	stack if
+ 	applied to a non-integer term.<BR>
+<BR>
+<PRE>
+  print-stack       = prim("_ST_PrintStack")
+</PRE>	The strategy <CODE>debug</CODE> prints the
+	current term to <CODE>stderr</CODE> without changing it. This is
+	a useful strategy for debugging specifications (hence its
+	name).<BR>
+<BR>
+<PRE>
+strategies
+
+  open(file) = file; ReadFromFile
+
+  save(file) = split(file, id); WriteToTextFile
+
+  debug      = where(split(!stderr, \x -&gt; [x]\); printnl)
+  debug(msg) = where(split(!stderr, \x -&gt; [&lt;msg&gt;(),x]\); printnl)
+
+  say(msg)   = where(msg; debug)
+
+  echo       = where(split(!stdout, \x -&gt; [x]\); printnl)
+  echo(msg)  = where(split(!stdout, \x -&gt; [&lt;msg&gt;(),x]\); printnl)
+
+  debug-stdout(msg) = 
+    say(!"debug-stdout obsolete; use echo");
+    where(split(!stdout, \x -&gt; [&lt;msg&gt;(),x]\); printnl)
+
+  trace(msg,s) =
+    debug(msg); (s; debug(!"succeeded: ") &lt;+ debug(!"failed: "))
+
+  error = where(split(!stderr, id); printnl)
+
+  fatal-error = where(error; &lt;exit&gt; 1)
+
+  giving-up   = &lt;fatal-error&gt;["giving-up"]
+
+  printchar   = where(split(!stdout, \x -&gt; [x]\ ); printascii)
+
+  printstring = where(split(!stdout, \x -&gt; [x]\ ); print)
+
+  print-strings-nl(out) = where(split(out, id); printnl)
+
+  obsolete(msg) = where(&lt;debug(msg)&gt; ": obsolete library strategy")
+</PRE>	The operator <CODE>stdio</CODE> implements a simple user-interface
+	for transformers. A term is read from standard input,
+	transformed with parameter strategy <CODE>s</CODE> and then written
+	to standard output. If the transformation failed the text
+	<CODE>rewriting failed</CODE> is written to standard error.<BR>
+<BR>
+<PRE>
+strategies
+
+  stdio(s) = &lt;ReadFromFile&gt; stdin;
+             s; 
+             split(!stdout, id); WriteToTextFile
+          &lt;+ &lt;fatal-error&gt; ["** rewriting failed"]
+</PRE>	A variant of this strategy provides a pair of the command-line
+	options and the input file to the strategy.<BR>
+<BR>
+<PRE>
+strategies
+
+  stdioO(s) = split(id, &lt;ReadFromFile&gt; stdin); 
+              s;
+              split(!stdout, id); WriteToTextFile
+           &lt;+ &lt;fatal-error&gt; ["** rewriting failed"]
+</PRE>
+	<!--TOC subsection  FILE-->
+
+<H3>7.1.2&nbsp;&nbsp;  FILE</H3><!--SEC END -->
+<PRE>
+module file
+imports io
+
+rules
+
+  find-in-path :
+    (file, path) -&gt; 
+    &lt;rec x(\ [dir|_] -&gt; &lt;concat-strings; file-exists&gt; [dir,"/",file] \
+           &lt;+ Tl; x)&gt; path
+
+strategies
+
+  find-in-path(mkpath) =
+        file-exists 
+        &lt;+ split(id, mkpath); find-in-path
+        &lt;+ \ x -&gt; &lt;fatal-error&gt; ["no such file: ", x] \
+
+  find-file(mkpath, ext) =
+        guarantee-extension(ext);
+        find-in-path(mkpath)
+</PRE>
+	<!--TOC subsection  OPTIONS-->
+
+<H3>7.1.3&nbsp;&nbsp;  OPTIONS</H3><!--SEC END -->
+<PRE>
+module options
+imports io parse-options
+signature
+  constructors
+    Silent      : Option
+    Verbose     : Option
+    Version     : Option
+    Input       : String -&gt; Option
+    Output      : String -&gt; Option
+    Binary      : Option
+    Statistics  : Option
+    Help        : Option
+    Runtime     : Real   -&gt; Option
+    DeclVersion : String -&gt; Option
+</PRE>	The operator <CODE>iowrap</CODE> defines a default wrapper around a
+	strategy that handles processing of options and reading and
+	writing of terms from and to files.<BR>
+<BR>
+<PRE>
+strategies
+
+  iowrap(strat) = iowrapO((id, strat), fail)
+
+  iowrapO(strat, extra-options) =
+        (parse-options(extra-options &lt;+ io-options));
+        (need-help
+         &lt;+ input-file';
+            apply-strategy(strat);
+            output-file';
+            report-success
+         &lt;+ report-failure
+        )
+
+  iowrapNoOutput(strat, extra-options) =
+        (parse-options(extra-options &lt;+ io-options));
+        (need-help
+         &lt;+ input-file';
+            apply-strategy(strat);
+            report-success
+         &lt;+ report-failure
+        )
+</PRE>	Handling of options<BR>
+<BR>
+<PRE>
+strategies
+
+  io-options =
+        Option("-S",            !Silent())
+        + Option("--silent",    !Silent())
+        + Option("--verbose",   !Verbose())
+        + Option("-v",          !Version())
+        + Option("--version",   !Version())
+        + ArgOption("@version",  \x -&gt; DeclVersion(x)\ )
+        + ArgOption("-i",       \x -&gt; Input(x)\ )
+        + ArgOption("--input",  \x -&gt; Input(x)\ )
+        + ArgOption("-o",       \x -&gt; Output(x)\ )
+        + ArgOption("--output", \x -&gt; Output(x)\ )
+        + Option("-b",          !Binary())
+        + Option("-s",          !Statistics())
+        + Option("--help",      !Help())
+        + Option("-h",          !Help())
+        + Option("-?",          !Help())
+
+  usage' =
+         where(option-defined(?Program(prog));
+               &lt;printnl&gt;
+               (stderr,
+                ["usage : ", prog, 
+                 " [-S] [-i file] [-o file] [-b] [-s] [--help|-h|-?]"]);
+               &lt;exit&gt; 1)
+
+  need-help =
+        option-defined(Help + Undefined(id)); 
+        usage'
+
+  need-help(u) =
+        option-defined(Help + Undefined(id) + Version); u
+</PRE>	Input, strategy application and output<BR>
+<BR>
+<PRE>
+  input-file' =
+         where((option-defined(?Input(infile)) &lt;+ !stdin =&gt; infile));
+         split(id, &lt;ReadFromFile&gt; infile)
+
+  apply-strategy(strat) =
+         where(dtime);
+         strat;
+         where(dtime =&gt; runtime);
+         \(options, trm) -&gt; ([Runtime(runtime) | options], trm)\
+
+  output-file' =
+         where((option-defined(?Output(outfile)) &lt;+ !stdout =&gt; outfile, id)); 
+         (id, split(!outfile, id));
+         ((option-defined(?Binary()), WriteToBinaryFile)
+          &lt;+ (id, WriteToTextFile))
+
+  report-success =
+         where(try((not(option-defined(?Silent())), id);
+                   (option-defined(?Runtime(runtime)), id);
+                   (option-defined(?Program(prog)), id);
+                   &lt;printnl&gt; (stderr,
+                              [prog, " (", runtime, " secs)"])));
+         &lt;exit&gt; 0
+
+  report-failure =
+        &lt;printnl&gt; (stderr, ["rewriting failed"]); 
+        &lt;exit&gt; 1
+</PRE> <!--TOC section External Processes-->
+
+<H2>7.2&nbsp;&nbsp; External Processes</H2><!--SEC END -->
+	<!--TOC subsection  EXEC-->
+
+<H3>7.2.1&nbsp;&nbsp;  EXEC</H3><!--SEC END -->
+	<blockquote><hr>
+	
+	Transformation systems often consist of multiple components, e.g.,
+	parsers, pretty-printers and several actual transformation
+	components.
+	To glue these components together this module defines the
+	process
+	control primitive <CODE>call</CODE>.<BR>
+<BR>
+	<hr></blockquote>
+	<BR>
+<BR>
+	The strategy <CODE>&lt;call&gt; (prog, args)</CODE> executes the program
+	with name <CODE>prog</CODE> and passes the list
+	of arguments <CODE>args</CODE> to it.<BR>
+<BR>
+	The strategy
+	<CODE>&lt;transform-file(s, suf)&gt; (base, ext)</CODE> reads in the
+	term from file "base.ext", applies strategy <CODE>s</CODE> to
+	it and write the result to the concatenation of the
+	strings <CODE>(base, &lt;suf&gt;())</CODE>.<BR>
+<BR>
+<PRE>
+module exec.r
+strategies
+
+  exit       = prim("_ST_exit")
+  call       = prim("_ST_call")
+  call-noisy = prim("_ST_call_noisy")
+
+  get-pid    = prim("_ST_get_pid")
+
+  rm-files = ?files; where(&lt;call&gt; ("rm", ["-f" | files]))
+
+  pipe(c, suf2) = pipe'(c, suf2, ![])
+
+  pipe'(c, suf2, args) = 
+    where(conc-strings =&gt; 'in);
+    (id, suf2);
+    where(conc-strings =&gt; out);
+    // where(&lt;debug(!"calling : ")&gt; [&lt;c&gt;(), 'in, out]);
+    where(&lt;call&gt; (&lt;c&gt;(), &lt;conc&gt; (&lt;args&gt;(), ["-i", 'in, "-o", out])))
+
+  transform-file(s, suf) =
+    where(conc-strings =&gt; 'in);
+    (id, suf);
+    where(conc-strings =&gt; out);
+    where(&lt;apply-to-file(s)&gt; ('in, out))
+
+  apply-to-file(s) =
+    ?('in, out);
+    where(&lt;ReadFromFile; s&gt; 'in =&gt; trm);
+    where(&lt;WriteToBinaryFile&gt; (out, trm))
+
+  copy-file(s, new-base, new-suf) =
+    ?(base, suf);
+    (new-base, new-suf); 
+    ?(nbase, nsuf);
+    where(&lt;apply-to-file(s)&gt; 
+            (&lt;conc-strings&gt; (base, suf),
+             &lt;conc-strings&gt; (nbase, nsuf)))
+</PRE> <!--TOC section Time-->
+
+<H2>7.3&nbsp;&nbsp; Time</H2><!--SEC END -->
+	<!--TOC subsection  Time-->
+
+<H3>7.3.1&nbsp;&nbsp;  Time</H3><!--SEC END -->
+	The primitive <CODE>dtime</CODE> returns the CPU time in seconds
+	since the last call to <CODE>dtime</CODE>. Can be used to time
+	strategies.<BR>
+<BR>
+<PRE>
+module time
+strategies
+
+  dtime = prim("_ST_dtime")
+</PRE><!--TOC chapter Component Interfaces-->
+
+<H1>Chapter&nbsp;8&nbsp;&nbsp; Component Interfaces</H1><!--SEC END -->
+ <!--TOC section Pretty-Printing-->
+
+<H2>8.1&nbsp;&nbsp; Pretty-Printing</H2><!--SEC END -->
+ 	<!--TOC subsection  ABOX-->
+
+<H3>8.1.1&nbsp;&nbsp;  ABOX</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	It is often desirable to format a (program) text in various output
+	formats such as plain text, L<sup>A</sup>T<sub>E</sub>X, or HTML.
+	This module provides an abstract-syntax interface to Merijn de
+	Jonge's Box format for generic pretty-printing. The <CODE>gpp</CODE>
+	package
+	provides formatters that translate boxes to ASCII text, HTML and
+	L<sup>A</sup>T<sub>E</sub>X. This interface can be used to format a program by transforming
+	its abstract syntax tree to a Box term and then formatting that with
+	one of the formatters from <CODE>gpp</CODE>.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	<!--TOC paragraph Kernel-->
+
+<H5> Kernel</H5><!--SEC END -->
+	The basic constructor for boxes is the <CODE>S</CODE> operator that
+	creates a string box. The box <CODE>S("string")</CODE> denotes the
+	literal text <CODE>string</CODE>.<BR>
+<BR>
+	The fundamental constructors for composing boxes from other
+	boxes are <CODE>H</CODE> that places boxes horizontally next to
+	each other and <CODE>V</CODE> that places boxes vertically above
+	each other. The box <CODE>H([],[S("a"),S("b")])</CODE> denotes the
+	text <CODE>a b</CODE>, the box <CODE>V([],[S("a"),S("b")])</CODE> denotes
+	the text
+<PRE>
+a
+b
+</PRE>	The constructor <CODE>HV</CODE> is a less rigid combination of horizontal
+	and vertical composition. It places boxes horizontally as long as
+	there is space and then continues placing boxes on the next
+	line. The constructor <CODE>ALT</CODE> chooses the argument box which
+	fits best.<BR>
+<BR>
+<PRE>
+module abox
+imports list-cons tuple
+signature
+  sorts Box
+  constructors
+    S     : String -&gt; Box
+    H     : List(S-Option) * List(Box) -&gt; Box
+    V     : List(S-Option) * List(Box) -&gt; Box
+    HV    : List(S-Option) * List(Box) -&gt; Box
+    ALT   : Box * Box -&gt; Box
+</PRE>	<!--TOC paragraph Space Options-->
+
+<H5> Space Options</H5><!--SEC END -->
+	The first argument of the Box operators above is a list of 
+	space options that determine the horizontal or vertical spacing
+	between the elements composed by the operator. An option
+	<CODE>SOpt(HS,1)</CODE> determines a horizontal spacing of 1 between
+	boxes. If no space option is specified a default spacing is
+	applied. For <CODE>H</CODE> the default is a horizontal spacing of
+	1 and for <CODE>V</CODE> the default is a horizontal spacing of 0.<BR>
+<BR>
+<PRE>
+    SOpt  : Space-Symbol * Int -&gt; S-Option
+    SOptb : Space-Symbol * Box -&gt; SOptb
+    VS    : Space-Symbol
+    HS    : Space-Symbol
+    IS    : Space-Symbol
+</PRE>	<!--TOC paragraph Alignments-->
+
+<H5> Alignments</H5><!--SEC END -->
+	The alignment operator can be used to produce tables.<BR>
+<BR>
+<PRE>
+    A     : List(A-Option) * List(S-Option) * List(Box) -&gt; Box
+    R     : List(S-Option) * List(Box) -&gt; Box
+    AL    : List(S-Option) -&gt; A-Option
+    AC    : List(S-Option) -&gt; A-Option
+    AR    : List(S-Option) -&gt; A-Option
+</PRE>	<!--TOC paragraph Fonts-->
+
+<H5> Fonts</H5><!--SEC END -->
+	The box constructor <CODE>FBOX</CODE> can be used to declare the
+	font to be used in the argument box. The scope of the font
+	declaration reaches until the enclosed font constructors.
+	The parameters <CODE>KW</CODE>, <CODE>VAR</CODE>, <CODE>NUM</CODE> and <CODE>MATH</CODE>
+	declare abstract fonts for the categories keyword, variable, 
+	number and mathematical expression.<BR>
+<BR>
+<PRE>
+    FBOX  : Font-Operator * Box -&gt; Box
+    F     : List(F-Option) -&gt; Font-Operator
+
+    FInt  : Font-Param * Int -&gt; F-Option
+    FFID  : Font-Param * FID -&gt; F-Option
+    FN    : Font-Param
+    FM    : Font-Param
+    SE    : Font-Param
+    SH    : Font-Param
+    SZ    : Font-Param
+    CL    : Font-Param
+
+    KW    : Font-Operator
+    VAR   : Font-Operator
+    NUM   : Font-Operator
+    MATH  : Font-Operator
+</PRE>	<!--TOC paragraph Crossreferences-->
+
+<H5> Crossreferences</H5><!--SEC END -->
+	The constructors <CODE>LBL</CODE> and <CODE>REF</CODE> define labels and
+	crossreferences to these labels, respetively.<BR>
+<BR>
+<PRE>
+    LBL   : String * Box -&gt; Box
+    REF   : String * Box -&gt; Box
+
+    C     : List(S-Option) * List(Box) -&gt; Box
+    L     : Box * Box -&gt; Box
+    LINT  : Int * Box -&gt; Box
+</PRE>	<!--TOC paragraph Pretty-Print Tables-->
+
+<H5> Pretty-Print Tables</H5><!--SEC END -->
+<PRE>
+    Arg   : Int       -&gt; Box
+    Arg2  : Int * Int -&gt; Box
+</PRE>	
+ 	<!--TOC subsection  ABOX-EXT: Extension to ABox Interface-->
+
+<H3>8.1.2&nbsp;&nbsp;  ABOX-EXT: Extension to ABox Interface</H3><!--SEC END -->
+	<blockquote><hr><BR>
+<BR>
+	This module provides abstractions on top of the ABox interface
+	defined in module <CODE>abox</CODE>.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module abox-ext
+imports abox
+</PRE>	<!--TOC paragraph Overlays-->
+
+<H5> Overlays</H5><!--SEC END -->
+	The following overlays define abbreviations of frequently used
+	constructs.<BR>
+<BR>
+<PRE>
+overlays
+
+  EmptyBox = H([],[])
+
+  H0(xs)  = H([SOpt(HS(),0)],xs)
+  H1(xs)  = H([],xs)
+  H2(xs)  = H([SOpt(HS(),2)],xs)
+
+  V0(xs)  = V([SOpt(VS(),0)],xs)
+  V1(xs)  = V([SOpt(VS(),1)],xs)
+
+  HV1(xs) = HV([],xs)
+
+  Keyword(x) = FBOX(KW(), x)
+  Parens(x)  = H0([S("("), x, S(")")])
+  Indent(x)  = H0([S("  "), x])
+</PRE>	<!--TOC paragraph Constructor Strategies-->
+
+<H5> Constructor Strategies</H5><!--SEC END -->
+<PRE>
+rules
+
+  MkS : x -&gt; S(x)
+  MkParens : x -&gt; Parens(x)
+</PRE>	<!--TOC paragraph Separator Lists-->
+
+<H5> Separator Lists</H5><!--SEC END -->
+
+	
+	The following strategies define various ways to format
+	lists with separators.<BR>
+<BR>
+	(*** These need to be cleaned up ***)<BR>
+<BR>
+<PRE>
+strategies
+
+  sep-list(s1, s2) = map(s1); separate-by(!S(&lt;s2&gt;()))
+
+  hpref-sep-list(s1, s2, s3) = 
+        map(s1); 
+        ([] + [ \ x -&gt; H1([&lt;s2&gt;(), x]) \ | hpref(s3)])
+
+  hpref(s) = map(\ x -&gt; H1([&lt;s&gt;(), x]) \)
+
+  hpost-sep-list(s1, s2) = 
+    rec y([] + [s1] &lt;+ [\ x -&gt; H0([&lt;s1&gt; x, &lt;s2&gt;()]) \ | y])
+
+  semicolons = hpost-sep-list(id,!S(";"))
+
+  presemicolons(s) = hpref-sep-list(id, s, !S(";"))
+  prebars(s)       = hpref-sep-list(id, s, !S("|"))
+
+  commas = sep-list(id,!",")
+  post-commas = hpost-sep-list(id,!S(","))
+
+rules
+
+  HPost(s) : [x | xs] -&gt; [H0([x, &lt;s&gt;()]) | xs]
+
+  Quote : x -&gt; H0([S(quote), x, S(quote)])
+          where &lt;implode-string&gt; [34] =&gt; quote
+
+  Quote' : x -&gt; H0([S(quote), x, S(quote)])
+          where &lt;implode-string&gt; [92, 34] =&gt; quote
+
+  CommaList(s) : x -&gt; H0(&lt;sep-list(s,!", ")&gt; x)
+
+  MkParens : x -&gt; Parens(x)
+</PRE>
+	<!--TOC subsection  UGLY-PRINT-->
+
+<H3>8.1.3&nbsp;&nbsp;  UGLY-PRINT</H3><!--SEC END -->
+<PRE>
+module ugly-print
+imports abox-ext
+strategies
+
+  ugly-print = 
+  rec x(try(
+        UP-Int 
+        &lt;+ UP-Str
+        &lt;+ UP-Cnst      
+        &lt;+ UP-Lst(x) 
+        &lt;+ UP-App(x)
+  ))
+
+rules
+
+  UP-Cnst : 
+    f#([]) -&gt; S(f)
+
+  UP-App(s) : 
+    f#(xs) -&gt; H0([S(f), Parens(V0(&lt;map(s); post-commas&gt; xs))])
+
+  UP-Str :
+    x -&gt; &lt;Quote&gt; S(x) where &lt;is-string&gt; x
+
+  UP-Int :
+    x -&gt; S(&lt;int-to-string&gt; x) where &lt;is-int&gt; x
+
+  UP-Lst(s) :
+    [] -&gt; S("[]")
+
+  UP-Lst(s) :
+    l @ [x | xs] -&gt; H0([S("["), V0(&lt;map(s); post-commas&gt; l), S("]")])
+</PRE>
+ 
+ 
+<!--TOC chapter References-->
+
+<H1>References</H1><!--SEC END -->
+<DL COMPACT=compact>
+<DT><A NAME="Vis99.refman"><FONT COLOR=purple>[1]</FONT></A><DD>
+Eelco Visser.
+<EM>The </EM><EM>Stratego</EM><EM> Reference Manual</EM>.
+Institute of Information and Computing Sciences, Universiteit
+ Utrecht, Utrecht, The Netherlands, 1999.<BR>
+<BR>
+
+<DT><A NAME="Vis99.tutorial"><FONT COLOR=purple>[2]</FONT></A><DD>
+Eelco Visser.
+<EM>The </EM><EM>Stratego</EM><EM> Tutorial</EM>.
+Institute of Information and Computing Sciences, Universiteit
+ Utrecht, Utrecht, The Netherlands, 1999.</DL>
+
+<!--HTMLFOOT-->
+<!--ENDHTML-->
+
+<!--FOOTER-->
+<HR SIZE=2>
+<BLOCKQUOTE><EM>This document was translated from L<sup>A</sup>T<sub>E</sub>X by
+</EM><A HREF="http://pauillac.inria.fr/~maranget/hevea/index.html"><EM>H</EM><EM><FONT SIZE=2><sup>E</sup></FONT></EM><EM>V</EM><EM><FONT SIZE=2><sup>E</sup></FONT></EM><EM>A</EM></A><EM>.
+</EM></BLOCKQUOTE></BODY>
+</HTML>
+

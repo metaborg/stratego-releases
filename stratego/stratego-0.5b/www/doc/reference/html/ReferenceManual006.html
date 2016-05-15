@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Representing Programs by means of Terms
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual005.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual007.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.1&nbsp;&nbsp; Representing Programs by means of Terms</H3>	<blockquote><hr>
+	Programs are represented by means of first-order terms.
+	<hr></blockquote><BR>
+<BR>
+	The abstract syntax of programs to be transformed is represented
+	by means of terms (Figure&nbsp;<A HREF="#Fig:Stratego-Terms.sdf">9</A>).<BR>
+<BR>
+	a constructor is an identifier<BR>
+<BR>
+	constructor application <CODE>Succ(Zero())</CODE><BR>
+<BR>
+	constant (parentheses) <CODE>Succ(Zero)</CODE><BR>
+<BR>
+	strings <CODE>App(Abs("x", "x"), Var("y"))</CODE>
+	
+	natural number <CODE>App(Abs(Var(1)), Var(2))</CODE><BR>
+<BR>
+	
+<H5> Lists</H5>	lists abbreviations for Cons/Nil lists<BR>
+<BR>
+	<CODE>[a,b,c|[]]</CODE> <FONT FACE=symbol>º</FONT> <CODE>[a,b,c]</CODE><BR>
+<BR>
+	
+<H5> Tuples</H5>	tuples are abbreviations for ...<BR>
+<BR>
+	
+<H5> ATerms</H5>	Stratego terms are implemented by means of ATerms<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 9: Syntax of terms</DIV><BR>
+<A NAME="Fig:Stratego-Terms.sdf"></A><BR>
+	<PRE>module Stratego-Terms
+imports Stratego-Lexicals
+exports
+  %%sorts Term
+  context-free syntax
+    Identifier                      -&gt; Term {cons("Var")}
+    Identifier "(" {Term ","}* ")"  -&gt; Term {cons("Op")}
+    String                          -&gt; Term {cons("Str")}
+    Natural                         -&gt; Term {cons("Int")}
+    "[" {Term ","}* ("|" Term)? "]" -&gt; Term {cons("List")}
+    "(" {Term ","}* ")"             -&gt; Term {cons("Tuple")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual005.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual007.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

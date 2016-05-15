@@ -1,0 +1,83 @@
+ Hi,
+
+ Release 0.4.10 of the Stratego compiler is now available from 
+
+	http://www.cs.uu.nl/~visser/stratego/
+
+ SUMMARY of CHANGES
+
+ - new syntax for comments
+ - commandline option for indicating main strategy
+ - keyword change: operations -> constructors
+ - constructors used in rules/strategies are matched against signature;
+   only warnings are generated now
+
+ LANGUAGE
+
+ * In addition to the (* ... *) multiline comments, you can now also write
+   a // comments.
+
+ * Signatures currently use the keyword "operations" as in 
+
+     signature
+       sorts Exp
+       operations
+         Var : String -> Exp
+
+   Since operations are really constructors in Stratego, the keyword has
+   been changed to "constructors":
+
+     signature
+       sorts Exp
+       constructors
+         Var : String -> Exp
+
+   The old syntax will still be supported for a while, but it is advised
+   to change to the new syntax.
+
+ COMPILER
+
+ * As Joost Visser complained, the requirement to define a "main" strategy
+   to indicate the strategy to apply impedes reuse of specifications. The
+   commandline option -m or --main can now be used to pass the name of the 
+   main strategy to compile:
+
+	    sc --main transform-it -i transform.r
+
+   or
+	    sc -m transform-it -i transform.r
+
+   makes "transform-it" into the main strategy. If the option is not passed 
+   "main" is assumed to be the main strategy. 	
+
+   Note that the main strategy needs to handle its own IO as usual, that is, 
+   it should probably look like 
+
+	    transform-it = stdio(transform)
+   or
+
+	    transform-it = iowrap(transform)
+
+  * Constructors used in rules and strategies are now matched against
+    the signature. Currently only a warning is generated if a constructor
+    is not declared. In the future constructor declaration will be
+    enforced. Therefore it is advised to act on the warnings generated
+    by the compiler and declare all constructors.
+
+    Note that only constructors that are actually used in the specification 
+    need to be declared. Anonymous constructors that are only traversed 
+    need not be declared.
+
+    Note that the library has not yet been cleaned up. Therefore the
+    compiler can generated quite a few warnings for which you are not
+    to blame. This will be repaired as soon as possible.
+
+ LIBRARY
+
+ * The strategy <transform-file(s, suf)> (base, ext) reads in the term 
+   from file "base.ext", applies strategy | to it and writes the result 
+   to the concatenation of the strings (base, <suf>()).
+
+ * There was a glitch in the io library module that caused the 0.4.9
+   version of the compiler to leave to many files open giving problems
+   on some systems. This should now have been repaired.

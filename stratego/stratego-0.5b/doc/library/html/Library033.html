@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  PACK-GRAPH
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library032.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library034.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>6.2.1&nbsp;&nbsp;  PACK-GRAPH</H3>	<blockquote><hr><BR>
+<BR>
+	The strategy 'graph-nodes' is a generic
+ 	algorithm for mapping a graph to a collection of nodes reachable
+ 	from a given root node. The algorithm is parameterized with the
+ 	following notions: 'get-node' maps a node name and a graph to the
+ 	node itself, 'out-edges' maps a node to the names of its out
+ 	edges, 'add-node' that adds a name and its corresponding node to a
+ 	collection of nodes.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+	
+<PRE>
+module pack
+imports string list
+</PRE>	
+	Basic idea: configuration of the form <CODE>(todo, done, files)</CODE><BR>
+<BR>
+	keep adding files corresponding to the names in <CODE>todo</CODE> until
+	empty<BR>
+<BR>
+	<CODE>&lt;worklist(get, next, add)&gt; (root, source, target)</CODE> 
+	produces a target to which all things reachable from <CODE>root</CODE>
+	via the <CODE>next</CODE> relation are <CODE>add</CODE>ed. The things
+	are obtained via <CODE>&lt;get&gt;(name,source)</CODE>.<BR>
+<BR>
+<PRE>
+     get-node  :: name * graph -&gt; node 
+     out-edges :: node -&gt; List(name)
+     add-node  :: name * node * nodes -&gt; nodes
+</PRE>	
+<PRE>
+rules
+
+  GnInit : 
+    (root, graph, nodes) -&gt; ([root], [root], graph, nodes, [])
+
+  GnInitRoots : 
+    (roots, graph, nodes) -&gt; (roots, roots, graph, nodes, [])
+
+  GnNext(get-node, out-edges, add-node) : 
+    ([name | todo], done, graph, nodes, undef) -&gt;
+    (&lt;conc&gt; (todo', todo), &lt;conc&gt; (todo', done), 
+     graph, &lt;add-node&gt; (name, node, nodes), undef)
+    where &lt;get-node&gt; (name, graph) =&gt; node;
+          &lt;out-edges&gt; node =&gt; names;
+          &lt;diff&gt; (names, done) =&gt; todo'
+
+  GnUndefined :
+    ([name | todo], done, graph, nodes, undef) -&gt;
+    (todo, done, graph, nodes, [name | undef])
+
+  GnExit : 
+    ([], done, graph, nodes, undef) -&gt; (nodes, undef)
+
+strategies
+
+  graph-nodes-undef-roots(get-node, out-edges, add-node) =
+    for(GnInitRoots, GnExit, GnNext(get-node, out-edges, add-node)
+                             &lt;+ GnUndefined)
+
+  graph-nodes-undef(get-node, out-edges, add-node) =
+    for(GnInit, GnExit, GnNext(get-node, out-edges, add-node)
+                        &lt;+ GnUndefined)
+
+  graph-nodes(get-node, out-edges, add-node) =
+    graph-nodes-undef(get-node, out-edges, add-node);
+    \ (nodes, undef) -&gt; nodes \
+</PRE>
+	<HR>
+<A HREF="Library032.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library034.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,395 @@
+\section{Strategies}
+
+\subsection{Naming Transformations with Strategy Definitions}
+
+	\begin{abstract}
+	A specification defines a strategy for transforming terms.
+	Strategies can be named by means of strategy definitions.
+	\end{abstract}
+
+	The purpose of a Stratego specification is the definition of a
+	\emph{strategy}, i.e., a program that transforms a term into
+	another term (or fails). Strategies are are built from
+	primitive transformations using strategy operators. There are
+	a number of standard operators. Other operators can be defined
+	in terms of the primitive operators by means of strategy
+	definitions.
+
+	A strategy section of a specification has the form
+\begin{verbatim}
+   strategies 
+     StrategyDefinition*
+\end{verbatim}
+	and consists of a list of strategy definitions that give
+	names to strategy expressions.
+
+	A strategy definition has the form
+\begin{verbatim}
+   Id(Id1,...,Idn) = Strategy 
+\end{verbatim}
+	Here \verb|Id| is the strategy operator defined by the
+	definition, the \verb|Idi| are strategy arguments to the
+	operator and \verb|Strategy| is the body of the definition. A
+	call \verb|Id(s1,...,sn)| to this operator is equivalent to
+	the body of the definition with the \verb|si| substituted for
+	the \verb|Idi|.  Definitions cannot be recursive. Recursion is
+	defined using the recursion operator.
+
+	For example,
+\begin{verbatim}
+  strategies
+    repeat(s) = rec x(s; x <+ id)
+\end{verbatim}
+	defines the operator \verb|repeat|.
+
+	A defined operator can be used by calling it 
+
+
+	\paragraph{(** Overloading **)}
+
+	Operators can be overloaded
+
+	\paragraph{(** Multiple Definitions **)}
+
+	in case of multiple definitions for operators \emph{with the
+	same arity} the bodies are shared.
+
+	\begin{boxedfigure}{Stratego-Strategy-Definitions.sdf}{Syntax
+	of strategy definitions}
+
+	\inputverbatim{\sdfdir/Stratego-Strategy-Definitions.sdf}
+
+	\end{boxedfigure}
+
+\subsection{The Primitives of Transformation are Matching and 
+	Building Patterns}
+
+	\begin{abstract}
+	Rewrite rules are defined in terms of more primitive actions,
+	i.e., matching terms against patterns and building
+	instantiations of patterns.
+	\end{abstract}
+
+	a strategy transforms a term
+
+	there is always a term that is the subject of transformation
+
+	a term pattern is a term with variables
+
+	\paragraph{Match}
+
+	\verb|?t| matches the subject term against the pattern \verb|t|
+
+	if \verb|t| is a ground term, this entails that the subject
+	term is equal to \verb|t|
+
+	if \verb|t| contains variables, this means that the subject
+	term corresponds to \verb|t| as far as the pattern goes. at
+	the positions where \verb|t| has variables any term can
+	occur. the variable are bound to the terms at the
+	corresponding positions in the subject term.
+
+	Example: \verb|?App(Abs(x, e1), e2)|
+
+	\paragraph{Build}
+
+	\verb|!t| builds an instantiation of the term pattern \verb|t|, i.e.,
+	the subject term is replaced by (an instantiation of) \verb|t|.
+
+	if \verb|t| contains no variables then the subject term is replaced
+	by \verb|t|
+
+	if \verb|t| contains variables then the subject term is
+	replaced by \verb|t|, where the variables in \verb|t| are
+	replaced by there bindings
+
+	Example: \verb|!Let(x, e2, e1)|
+
+	\paragraph{Transformation Rules}
+
+	A transformation rule first matches the subject term against a
+	pattern and then replaces it with the instantiatio of another
+	pattern. This can be formulated as the sequential composition
+	of a match and a build. For example,
+
+\begin{verbatim}
+  strategies
+    Beta = ?App(Abs(x, e1), e2); !Let(x, e2, e1)
+\end{verbatim}
+
+	\paragraph{Scope}
+
+	In the definition above the variables \verb|x|, \verb|e1| and
+	\verb|e2| are implicitly scoped by definition
+
+	variable scope: \verb|{x1,...,xn: s}|
+
+	For example, definition with explicit scope
+\begin{verbatim}
+  strategies
+    Beta = {x, e1, e2: ?App(Abs(x, e1), e2); !Let(x, e2, e1)}
+\end{verbatim}
+
+	\begin{boxedfigure}{}{Syntax of match and build primitives}
+
+	\inputverbatim{\sdfdir/Stratego-Match-Build.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Combining Strategies}
+
+	\begin{abstract}
+	Basic strategies can be combined into more complex strategies
+	by means of a number of primitive strategy operators.
+	\end{abstract}
+
+	\paragraph{Success and Failure} The operator \verb|id| always
+	succeeds without any transformation. The operator \verb|fail|
+	always fails.
+
+	\paragraph{Sequential Composition} If \verb|s1| and \verb|s2|
+	are strategies, then \verb|s1 ; s2| is the strategy that first
+	applies \verb|s1| and if that succeeds applies \verb|s2| to
+	the result.
+
+	\paragraph{Non-deterministic Choice} If \verb|s1| and \verb|s2| are
+	strategies, then \verb|s1 + s2| is the strategy that chooses
+	either \verb|s1| or \verb|s2|, but such that the strategy
+	chosen succeeds.
+
+	\paragraph{Deterministic Choice} If \verb|s1| and \verb|s2|
+	are strategies, then \verb|s1 <+ s2| is the strategy that
+	first tries \verb|s1| and if that succeeds is done. If
+	\verb|s1| fails, then \verb|s2| is applied to the original
+	term.  The operator is also called \emph{left choice} because
+	it prefers its left argument.  An example of the use of left
+	choice is the definition of \verb|try|:
+\begin{verbatim}
+  try(s) = s <+ id
+\end{verbatim}
+	The strategy \verb|try(s)| succeeds with the result of
+	\verb|s| if \verb|s| succeeds. Otherwise, if \verb|s| fails,
+	\verb|s| succeeds without any effect.
+	
+	\paragraph{Recursion} If \verb|s| is a strategy, then
+	\verb|rec x. s| is the strategy that at each point in \verb|s|
+	where the strategy variable \verb|x| is called, calls itself.
+	An example of the use of recursion is the definition of
+	\verb|repeat|:
+\begin{verbatim}
+  repeat(s)  = rec x ((s; x) <+ id)
+\end{verbatim}
+	The strategy \verb|repeat(s)| applies the strategy \verb|s|
+	as long as it succeeds.
+
+	\paragraph{Test} If \verb|s| is a strategy, then
+	\verb|test(s)| is the strategy that succeeds if \verb|s|
+	succeeds, but throws away the effect of its transformation.
+
+	\paragraph{Negation} If \verb|s| is a strategy, then
+	\verb|not(s)| is the strategy that fails if \verb|s| succeeds
+	and succeeds if \verb|s| fails.
+
+	\paragraph{Operator Precedence}
+
+	Operators in decreasing binding strength
+	\begin{itemize}
+	\item \verb|;|
+	\item \verb|+|, \verb|<+| (mutually right associative)
+	\end{itemize}
+
+	In other words 
+\verb|a ; b + c <+ d ; e| 
+	is parsed as 
+\verb|(a ; b) + (c <+ (d ; e))|
+
+	\begin{boxedfigure}{}{Syntax of sequential programming operators}
+
+	\inputverbatim{\sdfdir/Stratego-Strategies.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Traversing Terms}
+
+	\begin{abstract}
+	To apply transformations below the root of a term it is
+	necessary to traverse it. Stratego provides a number of
+	traversal operators.
+	\end{abstract}
+
+	The operators defined above combine strategies that apply
+	transformations to the root of a term into strategies that
+	repeatedly apply transformations to the root of a term.  In
+	order to achieve transformations throughout a term we need
+	operators to traverse the term.
+
+	\paragraph{Congruence} 
+
+	If \verb|C| is an $n$-ary operator defined in the signature,
+	and \verb|s1|, ..., \verb|sn| are strategies, then
+	\verb|C(s1,...,sn)| is a strategy that only applies to
+	\verb|C| terms and then applies \verb|si| to the $i$-th.  For
+	example, consider the following signature defining the list
+	constructors \verb|Nil| and \verb|Cons|:
+\begin{verbatim} 
+  signature
+    operations
+      Nil  : List(a)
+      Cons : a * List(a) -> List(a)
+\end{verbatim}
+	The strategy \verb|Nil| applies to the term \verb|Nil| without
+	any change and fails for all other terms.  The strategy
+	\verb|Cons(s1, s2)| applies to a term \verb|Cons(t1, t2)| if
+	\verb|si| applies to \verb|ti| with result \verb|ti'| and has
+	as result \verb|Cons(t1', t2')|.  Using these operators we can
+	define the operator \verb|map| as:
+\begin{verbatim}
+  map(s) = rec x(Nil + Cons(s, x))
+\end{verbatim}
+	The strategy \verb|map(s)| applies a strategy \verb|s| to each
+	element of a list. Observe how recursion is used to apply the
+	strategy to the tail of the list.
+
+	\paragraph{Congruences on Strings and Numbers}
+
+	each string and numeric constant is congruence on itself
+
+	\paragraph{Congruences on Lists}
+
+	list congruences can also be defined using the \verb|[]| syntax
+	for lists.
+
+	for example,
+\begin{verbatim}
+  map(s) = rec x([] + [s|x])
+\end{verbatim}
+
+
+	\paragraph{Congruences on Tuples}
+
+
+	\newpage
+
+	\begin{boxedfigure}{}{Syntax of congruence traversal operators}
+
+	\inputverbatim{\sdfdir/Stratego-Congruences.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Generically Traversing Terms}
+
+	\begin{abstract}
+	Congruences define traversals over known
+	constructors. Stratego also provides several operators to
+	define traversals generically.
+	\end{abstract}
+
+	\paragraph{Path} If \verb|s| is a strategy, then \verb|n(s)|
+	(with \verb|n| a natural number) is the strategy that applies
+	\verb|s| to the $n$-th argument of the term. It fails if the
+	term has less then $n$ arguments, or if \verb|s| fails on the
+	$n$-th argument.
+
+	\paragraph{All} If \verb|s| is a strategy, then \verb|all(s)|
+	is the strategy that applies \verb|s| to each of the children
+	of the root of the term. It succeeds if each of these
+	applications succeeds and fails otherwise. In particular,
+	\verb|all(s)| succeeds on a term that has no arguments (a
+	constant).  For example, the following strategies apply a
+	strategy \verb|s| to each node in a term, in preorder
+	(top-down), postorder (bottom-up) and a combination of pre-
+	and postorder (downup):
+\begin{verbatim}
+  bottomup(s) = rec x(all(x); s)
+  topdown(s)  = rec x(s; all(x))
+  downup(s)   = rec x(s; all(x); s)
+\end{verbatim}
+	A typical usage of these operators is the strategy
+\begin{verbatim}
+  bottomup(try(s))
+\end{verbatim}
+	that tries to apply \verb|s| at each node of a term.
+
+	\paragraph{One} The strategy \verb|one(s)| applies \verb|s|
+	non-deterministically to one direct subterm. It fails if there
+	is no subterm for which it succeeds. In particular, it fails
+	for constants, since they have no child for which \verb|s| can
+	succeed. As we did with \verb|all| we can construct bottom-up
+	and top-down traversals with \verb|one|:
+\begin{verbatim}
+  oncebu(s) = rec x(one(x) <+ s)
+  oncetd(s) = rec x(s <+ one(x))
+\end{verbatim}
+	These strategies succeed if they find a single node in the
+	term where the application of \verb|s| is successful. The
+	first one searches the term in bottom-up order: it first tries
+	to find a succesfull application in one of the children
+	\verb|one(x)| and otherwise tries \verb|s| at the root.
+
+	\paragraph{Some} The strategy \verb|some(s)| applies \verb|s|
+	to as many children as possible, but at least to one.
+
+	Examples of the use of \verb|some| are:
+\begin{verbatim}
+  somebu(s)     = rec x(some(x); try(s) <+ s)
+  sometd(s)     = rec x(s; all(try(x)) <+ some(x))
+  somedownup(s) = rec x(s; all(x); try(s) <+ some(x); try(s))
+\end{verbatim}
+
+	\paragraph{Thread}
+
+	threading environments through a traversal
+
+	\begin{boxedfigure}{}{Syntax of generic traversal operators}
+
+	\inputverbatim{\sdfdir/Stratego-Traversal.sdf}
+
+	\end{boxedfigure}
+
+\subsection{Carrying Information along a Traversal}
+
+	\begin{abstract}
+	Environment distribution and threading congruences
+	\end{abstract}
+
+	Distributing congruences: for each constructor c there is a
+	corresponding distributing congruence operator \verb|c^D|
+	defined according to the following scheme:
+
+\begin{verbatim}
+  Pair(t1,e) -- s1 --> t1'    ...    Pair(tn,e) -- sn --> tn'
+  -----------------------------------------------------------
+  Pair(F(t1,....,tn),e) -- F^D(s1,...,sn) --> F(t1',...,tn')
+\end{verbatim}
+
+	Threading congruences: for each constructor c there is a
+	corresponding threading congruence operator \verb|c^T| defined
+	according to the following scheme:
+
+\begin{verbatim}
+  Pair(t1,e1) -- s1 --> Pair(t1',e2) ... Pair(tn,en) -- sn --> Pair(tn',e')
+  -------------------------------------------------------------------------
+  Pair(F(t1,....,tn),e1) -- F^T(s1,...,sn) --> Pair(F(t1',...,tn'),e')
+\end{verbatim}
+
+	\paragraph{Implementation}
+
+  	These congruences can be generated at compile time by need,
+  	i.e., whenever there is a call to \verb|D(F)| or \verb|T(F)|,
+  	the instantation of the schemes above should be
+  	generated. This can be done during needed definition
+  	computation.
+
+\begin{verbatim}
+	c^D(s1,...,sn) : Pair(c(x1,...,xn),env) -> c(y1,...,yn)
+        where <s1> Pair(x1,env) => y1;
+              ...;
+              <sn> Pair(xn, envn) => yn
+\end{verbatim}
+
+\begin{verbatim}
+	c^T(s1,...,sn) : Pair(c(x1,...,xn),e1) -> Pair(c(y1,...,yn), e-last)
+        where <s1> Pair(x1,e1) => Pair(y1,e2);
+              ...
+              <sn> Pair(xn, en) => Pair(yn, e-last)
+\end{verbatim}

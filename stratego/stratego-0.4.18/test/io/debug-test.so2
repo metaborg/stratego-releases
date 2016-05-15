@@ -1,0 +1,6 @@
+[SDef("main",[],
+Seq(Build(Str("term")),
+Where(Scope(["l_0"],
+Seq(Assign(Var("l_0")),
+Seq(Build(Op("TCons",[Op("stderr",[]),Op("TCons",[Op("Cons",[Str("message: "),Op("Cons",[Var("l_0"),Op("Nil",[])])]),Op("TNil",[])])])),
+Call(SVar("h_0"),[]))))))),SDef("h_0",[],Prim("_ST_printnl"))]

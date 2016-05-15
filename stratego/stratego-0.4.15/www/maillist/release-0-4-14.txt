@@ -1,0 +1,188 @@
+ Release 0.4.14 of the Stratego compiler is now available from 
+
+	http://www.stratego-language.org/
+
+ SUMMARY of CHANGES
+
+ * In this version the language is extended with a couple of new language
+   constructs and some existing constructs have been generalized and made
+   more robust.
+
+   - keyword quoting ('id, 'module)
+   - overloading of constructors
+   - as patterns (x @ t)
+   - overloading of overlays and default build terms in overlays (_ t)
+   - distributing and threading congruences (C^D(s1,...,sn) and C^T(s1,...,sn))
+   - several new strategies in the library
+   - translation Cons/Nil lists to ATerm lists more robust
+
+ LANGUAGE
+
+ * Keywords (and all other identifiers) of the language can be used by quoting
+   them. For example, to use the constructors module and id in a specification
+   write 'module and 'id. These correspond to module and id in ATerms.
+
+ * Constructors can now be overloaded. For example,
+
+   signature
+     constructors
+       True   : Exp
+       False  : Exp
+       Var    : String -> Exp
+       Assign : String * Exp -> Stat
+       Skip   : Stat
+       If     : Exp * Stat -> Stat
+       If     : Exp * Stat * Stat -> Stat
+   rules
+     Eval1 : If(True,  x) -> x
+     Eval2 : If(False, x) -> Skip
+     Eval3 : If(True,  x, y) -> x
+     Eval4 : If(False, x, y) -> y
+
+ * As patterns of the form x @ t can be used to deconstruct a term using
+   pattern matching and at the same time bind the entire term to the variable 
+   x. For example, given the rule
+
+       rules
+         R : F(x, y @ G(A, z)) -> H(x, y, z)
+
+   we have that
+
+       <R> F(B, G(A, C)) => H(B, G(A, C), C)
+
+ * Recall that overlays can be used to abstract from complex term patterns.
+   For example, the following overlays define a term language on top of
+   AsFixTerms:
+
+   overlays
+
+     DefaultLayout = " "
+
+     BinOp(o) = 
+       prod([sort("E"), layout, lit(o), layout, sort("E")], sort("E"), [])
+
+     BinExp(x, l1, o, l2, y) = 
+       appl(BinOp(o), [x, l1, lit(o), l2, y])
+
+     Add(x, l1, l2, y) = BinExp(x, l1, "+", l2, y) 
+     Mul(x, l1, l2, y) = BinExp(x, l1, "*", l2, y) 
+     Var(x) = appl(prod([lex(sort("Id"))], sort("E"), []), [x])
+
+   This makes it possible to write rules over AsFixTerms in terms of
+   these higher level pseudo constructors:
+
+   rules
+
+     Dist : Mul(x, l1, l2, Add(y, l3, l4, z)) -> 
+            Add(Mul(x, l1, l2, y), l3, l4, Mul(x, z))
+
+   Note that AsFixTerms preserve layout from the source code and that
+   the rule Dist defines how to preserve layout through transformations.
+
+   Two limitations of overlays have been resolved:
+
+ * Overlays can be overloaded and can define default build terms. In the
+   example above, we would like to further abstract and also provide
+   pseudo constructors that do not care about layout:
+
+   overlays 
+     Add(x, y) = BinExp(x, "+", y)
+     Mul(x, y) = BinExp(x, "*", y)
+
+   So that we can write
+
+   rules
+
+     Dist : Mul(x, Add(y, z)) -> Add(Mul(x, y), Mul(x, z))
+
+   This is now possible because overlays can be overloaded, i.e., overlays
+   with the same name but different arity can be defined.
+
+   To define BinExp/3 it is necessary to do something with the layout,
+   for example:
+
+   overlays
+     BinExp(x, o, y) =   
+       appl(BinOp(o), [x, DefaultLayout, lit(o), DefaultLayout, y])
+
+   This requires that all layout has the form DefaultLayout (i.e., " ")
+   when matching and traversing the term with a congruence. 
+
+ * Overlays can use build default terms to indicate subterms that can be
+   ignored during matching and in traversal, but need a default value
+   when constructing an instance. 
+
+     BinExp(x, o, y) =   
+       appl(BinOp(o), [x, _ DefaultLayout, lit(o), _ DefaultLayout, y])
+
+   The last definition uses the pattern _ DefaultLayout to indicate that
+   the terms at those positions can be ignored during matching and during
+   congruence traversal. That is, the overlay definition has the following
+   meaning
+	
+      ?BinExp(x, o, y) -> 
+         ?appl(BinOp(o), [x, _, lit(o), _, y])
+
+      !BinExp(x, o, y) -> 
+         !appl(BinOp(o), [x, DefaultLayout, lit(o), DefaultLayout, y])
+
+      BinExp(x, o, y) -> // as congruence
+         appl(BinOp(o), [x, id, lit(o), id, y])
+
+
+ * Distributing congruences: for each constructor c there is a corresponding 
+   distributing congruence operator c^D defined according to the following 
+   scheme:
+
+   c^D(s1,...,sn) : Pair(c(x1,...,xn),env) -> c(y1,...,yn)
+                    where <s1> Pair(x1,env) => y1;
+                          ...
+                          <sn> Pair(xn, envn) => yn
+
+   For example,
+
+	<If^D(id,id,id)> Pair(If(Id,Id,Id),[]) 
+	              => If(Pair(Id,[]),Pair(Id,[]),Pair(Id,[]))
+
+ * Threading congruences: for each constructor c there is a corresponding 
+   threading congruence operator c^T defined according to the following 
+   scheme:
+
+   c^T(s1,...,sn) : Pair(c(x1,...,xn),e1) -> Pair(c(y1,...,yn), e-last)
+                    where <s1> Pair(x1,e1) => Pair(y1,e2);
+                    ...
+                    <sn> Pair(xn, en) => Pair(yn, e-last)
+
+   For example, if we have
+
+      rules
+  	add-one : Pair(Id,x) -> Pair(Id,Succ(x))
+
+   then
+
+        <If^T(add-one,add-one,add-one)> Pair(If(Id,Id,Id),Zero)
+	             => Pair(If(Id,Id,Id),Succ(Succ(Succ(Zero))))
+
+ LIBRARY
+
+ * tuple-zip and tuple-unzip are generalizations of zipping and
+   unzipping tuples of arbitrary length.
+
+ * copy with argument can be used to apply a strategy to each copy
+   that is produced. This can be useful when generating a fresh list
+   of variables: <copy(new)> (n, ())
+
+ * error prints an error message (without exiting such as fatal-error does)
+
+ * graph-nodes-undef is a generalization of graph-nodes that also returns
+   the list of nodes that are not defined.
+
+ COMPILER
+
+ * ATerm lists of the form [a,b,c] are represented internally by means
+   of Cons/Nil lists. The translation of Cons/Nil lists back to ATerm lists
+   ([...]) is now more robust and does not cause a segmentation fault on 
+   improper Cons/Nil lists. This means that if there is a bug in the
+   specification that causes a list of the form Cons("a", "b") to be 
+   constructed, it will just output that term and will not try to 
+   translate it.

@@ -1,0 +1,4 @@
+\renewcommand{\@bodyargs}{TEXT=black BGCOLOR=white}
+ 
+\let\oldmeta=\@meta
+\renewcommand{\@meta}{\oldmeta\begin{rawhtml}<META name="Author" content="Eelco Visser">\end{rawhtml}}

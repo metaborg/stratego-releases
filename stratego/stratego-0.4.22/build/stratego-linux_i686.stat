@@ -1,0 +1,7 @@
+Build status linux_i686: Mon 06 Nov 2000 11:34:33 AM CET
+   unpack -- failed
+   configure -- not performed because "unpack" failed.
+   build -- not performed because "configure" failed.
+   install -- not performed because "build" failed.
+   check -- not performed because "install" failed.
+Build finished: Mon 06 Nov 2000 11:34:42 AM CET

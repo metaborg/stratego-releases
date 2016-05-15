@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  TUPLE
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library015.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library017.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.2.1&nbsp;&nbsp;  TUPLE</H3>
+	
+<BR>
+<BR>
+	tindex: get the nth element of a tuple<BR>
+<BR>
+	tmap: apply a strategy to each element of a tuple<BR>
+<BR>
+	Tuple Concat: concatenate the lists in a tuple of lists, where the
+	concatenation strategy s is a parameter.<BR>
+<BR>
+<PRE>
+module tuple
+imports list-cons
+signature
+  sorts Prod(ListType)
+  constructors
+    TNil  : Prod([])
+    TCons : a * Prod(lt) -&gt; Prod(Cons(a, lt))
+
+    Pair  : a * b -&gt; Prod([a,b])
+rules
+  Fst   : TCons(x, tp) -&gt; x
+  Snd   : TCons(x, TCons(y, tp)) -&gt; y
+  Third : TCons(x, TCons(y, TCons(z, tp))) -&gt; z
+  TInd1 : (1, TCons(x, tp)) -&gt; x
+  TInd2 : (n, TCons(x, tp)) -&gt; (&lt;minus&gt; (n, 1), tp)
+
+  Dupl  : x -&gt; (x, x)
+
+  split(f, g)     : x -&gt; (&lt;f&gt; x, &lt;g&gt; x)
+  split3(f, g, h) : x -&gt; (&lt;f&gt; x, &lt;g&gt; x, &lt;h&gt; x)
+
+  Swap : (x, y) -&gt; (y, x)
+
+  Thd : TCons(x, xs) -&gt; x
+  Ttl : TCons(x, xs) -&gt; xs
+
+strategies
+
+  tindex = rec x(TInd1 &lt;+ TInd2 ; x)
+
+  tmap(s) = rec x(TNil + TCons(s, x))
+
+  tconcat(s) = rec y(\ TNil -&gt; Nil\ 
+                     + \ TCons(x, xs) -&gt; (x, &lt;y&gt; xs)\ ; s)
+
+  tconcat'(s1, s2) = 
+    rec y(TNil; s1
+          + \ TCons(x, xs) -&gt; (x, &lt;y&gt; xs)\ ; s2)
+
+  at_tsuffix(s) = rec x(s &lt;+ TCons(id, x))
+
+  tcata(s1, s2) = rec y(TNil; s1 &lt;+
+                        \ TCons(x, xs) -&gt; (x, &lt;y&gt; xs)\ ; s2)
+</PRE> <HR>
+<A HREF="Library015.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library017.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

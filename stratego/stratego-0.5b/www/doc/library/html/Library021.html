@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  LIST-LOOKUP
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library020.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library022.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.3.5&nbsp;&nbsp;  LIST-LOOKUP</H3>	Lookup: find value associated to key <BR>
+<BR>
+	Find first element of a list to which a strategy s applies <BR>
+<BR>
+	An alternative formulation of lookup is the following. The
+	advantage over lookup is that it does not construct
+	intermediate pairs.<BR>
+<BR>
+<PRE>
+module list-lookup
+imports list-basic
+rules
+
+  Look1 : (x, [(x, y)|_]) -&gt; y
+  Look2 : (x, [_|xs]) -&gt; (x, xs)
+
+  Look1'(keyeq) : (x, [y|_]) -&gt; y where &lt;keyeq&gt; (x, y)
+
+strategies
+
+   lookup = rec x(Look1 &lt;+ Look2 ; x)
+
+   getfirst(s) = rec x(Hd; s &lt;+ Tl; x)
+
+   lookup' = {x, xs: ?(x, xs) ; &lt;getfirst({y: ?(x, y); !y})&gt; xs}
+
+   lookup(keyeq) = rec x((Look1'(keyeq) &lt;+ Look2; x))
+</PRE>	
+ 	<HR>
+<A HREF="Library020.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library022.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

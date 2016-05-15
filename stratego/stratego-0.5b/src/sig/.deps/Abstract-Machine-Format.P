@@ -1,0 +1,48 @@
+Abstract-Machine-Format.o: Abstract-Machine-Format.c \
+ ../../src/rts/stratego.h /home/visser/res/xt/include/aterm2.h \
+ /home/visser/res/xt/include/aterm1.h /usr/include/stdio.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/gnu/stubs.h \
+ /usr/lib/gcc-lib/i586-mandrake-linux/2.95.3/include/stddef.h \
+ /usr/lib/gcc-lib/i586-mandrake-linux/2.95.3/include/stdarg.h \
+ /usr/include/bits/types.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/bits/stdio_lim.h \
+ /home/visser/res/xt/include/encoding.h \
+ /home/visser/res/xt/include/abool.h \
+ /home/visser/res/xt/include/afun.h \
+ /home/visser/res/xt/include/atypes.h \
+ ../../src/rts/stratego/aterm-extension.h \
+ ../../src/rts/stratego/debug.h /usr/include/assert.h \
+ ../../src/rts/stratego/util.h /usr/include/string.h \
+ ../../src/rts/stratego/options.h ../../src/rts/stratego/svm.h \
+ ../../src/slib/src/stratego-lib.h \
+ ../../src/slib/src/stratego/tables.h \
+ ../../src/slib/src/stratego-ext.h
+Abstract-Machine-Format.c :
+../../src/rts/stratego.h :
+/home/visser/res/xt/include/aterm2.h :
+/home/visser/res/xt/include/aterm1.h :
+/usr/include/stdio.h :
+/usr/include/features.h :
+/usr/include/sys/cdefs.h :
+/usr/include/gnu/stubs.h :
+/usr/lib/gcc-lib/i586-mandrake-linux/2.95.3/include/stddef.h :
+/usr/lib/gcc-lib/i586-mandrake-linux/2.95.3/include/stdarg.h :
+/usr/include/bits/types.h :
+/usr/include/libio.h :
+/usr/include/_G_config.h :
+/usr/include/bits/stdio_lim.h :
+/home/visser/res/xt/include/encoding.h :
+/home/visser/res/xt/include/abool.h :
+/home/visser/res/xt/include/afun.h :
+/home/visser/res/xt/include/atypes.h :
+../../src/rts/stratego/aterm-extension.h :
+../../src/rts/stratego/debug.h :
+/usr/include/assert.h :
+../../src/rts/stratego/util.h :
+/usr/include/string.h :
+../../src/rts/stratego/options.h :
+../../src/rts/stratego/svm.h :
+../../src/slib/src/stratego-lib.h :
+../../src/slib/src/stratego/tables.h :
+../../src/slib/src/stratego-ext.h :

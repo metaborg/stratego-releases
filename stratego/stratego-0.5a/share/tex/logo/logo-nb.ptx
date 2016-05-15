@@ -1,0 +1,59 @@
+\expandafter\ifx\csname graph\endcsname\relax \csname newbox\endcsname\graph\fi
+\expandafter\ifx\csname graphtemp\endcsname\relax \csname newdimen\endcsname\graphtemp\fi
+\setbox\graph=\vtop{\vskip 0pt\hbox{%
+    \special{pn 8}%
+    \special{pa 675 0}%
+    \special{pa 0 1169}%
+    \special{fp}%
+    \special{pa 675 0}%
+    \special{pa 1350 1169}%
+    \special{fp}%
+    \special{pa 1350 1169}%
+    \special{pa 0 1169}%
+    \special{fp}%
+    \special{pa 675 0}%
+    \special{pa 675 779}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 726 712}%
+    \special{pa 675 779}%
+    \special{pa 624 712}%
+    \special{pa 726 712}%
+    \special{fp}%
+    \special{pa 675 779}%
+    \special{pa 450 1169}%
+    \special{fp}%
+    \special{pa 675 779}%
+    \special{pa 900 1169}%
+    \special{fp}%
+    \special{pa 450 1169}%
+    \special{pa 225 779}%
+    \special{fp}%
+    \special{pa 675 0}%
+    \special{pa 225 779}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 303 746}%
+    \special{pa 225 779}%
+    \special{pa 215 696}%
+    \special{pa 303 746}%
+    \special{fp}%
+    \special{pa 900 1169}%
+    \special{pa 1125 779}%
+    \special{fp}%
+    \special{pa 675 0}%
+    \special{pa 1125 779}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 1135 696}%
+    \special{pa 1125 779}%
+    \special{pa 1047 746}%
+    \special{pa 1135 696}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 1.372in
+    \rlap{\kern 0.675in\lower\graphtemp\hbox to 0pt{\hss {\huge\bf\sf STRATEGO}\hss}}%
+    \hbox{\vrule depth1.473in width0pt height 0pt}%
+    \kern 1.350in
+  }%
+}%
+  $\box\graph$

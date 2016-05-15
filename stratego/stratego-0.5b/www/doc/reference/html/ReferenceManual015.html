@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Defining Basic Transformations with Rules
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual014.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual016.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.1&nbsp;&nbsp; Defining Basic Transformations with Rules</H3>	<blockquote><hr>
+	Standard rewrite rules are a notation for a special kind
+	of strategies.
+	<hr></blockquote><BR>
+<BR>
+	A rule section has the form
+<PRE>
+  rules 
+    Rule*
+</PRE>	A rule has the form
+<PRE>
+  Label : Term -&gt; Term 
+</PRE>	An example is the following rule that defines beta-reduction
+	on lambda expressions.
+<PRE>
+  rules
+    Beta : Apply(Lambda(x, e1), e2) -&gt; Subs(e2, x, e1)
+</PRE>	denotes
+<PRE>
+  strategies
+    Beta = ?App(Abs(x, e1), e2); !Let(x, e2, e1)
+</PRE>	A rewrite rule defines a one step transformation on terms. If
+	the term matches the left-hand side of the rule it is replaced
+	by the appropriately instantiated right-hand side of the rule.
+	This transformation happens at the root of a term. Later on we
+	will introduce ways to apply rules to the subterms of a term.<BR>
+<BR>
+	
+<H5> Conditional Rules</H5>	The simple rules that we introduced above apply if the
+	left-hand side of the rule matches the root of the
+	term. Sometimes we want to restrict the applicability of a
+	rule to a subset of terms that match the pattern of the
+	left-hand side. A conditional rule of the form
+<PRE>
+  Label : Term -&gt; Term where Strategy
+</PRE>	applies if the left-hand side matches and in addition the
+	strategy in the where clause succeeds when applied to the
+	term.
+	
+	For example, let <CODE>in</CODE> be the strategy that when applied
+	to a pair <CODE>(t1, t2)</CODE> of terms, determines whether
+	<CODE>t1</CODE> occurs as a subterm of <CODE>t2</CODE>, then the following
+	conditional rule defines eta reduction of a lambda term:
+<PRE>
+  Eta : Lambda(x, Apply(e, Var(x))) -&gt; e
+        where &lt;not(in)&gt; (Var(x), e)
+</PRE>	The notation 
+<PRE>
+   &lt;Strategy&gt; Term
+</PRE>	is used to build an intermediate term to which the testing
+	strategy should be applied.
+	
+	If more than one condition has to hold, they can be composed
+	using the strategy operators introduced in previous sections.<BR>
+<BR>
+	
+<H5> Anonymous Rules</H5>	sometimes useful to define rule without a name<BR>
+<BR>
+	<CODE>\ t1 -&gt; t2 where s \ </CODE><BR>
+<BR>
+	
+<H5> Parameterized and Overloaded Rules</H5>	follows mapping to strategy definitions<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 17: Syntax of rules</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Rules
+imports Stratego-Strategies
+exports
+  %%sorts Rule RDef
+  context-free syntax
+    "rules" RDef*    -&gt; BSpec {cons("Rules")}
+
+    %% parameterized rule definition
+
+    Identifier ("(" {Identifier ","}* ")")? 
+      ":"  Rule -&gt; RDef {cons("RDef")} 
+
+    %% standard rewrite rule
+
+    Term "-&gt;" Term ("where" Strat)? -&gt; Rule {cons("Rule")}
+
+    %% anonymous rule
+
+    "\\" Rule "\\" -&gt; Strat {cons("LRule")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual014.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual016.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

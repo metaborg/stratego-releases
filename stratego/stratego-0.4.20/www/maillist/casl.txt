@@ -1,0 +1,32 @@
+
+Subject: Stratego: The ATerm programming language
+
+Since ATerms are the interchange format for CASL tooling I would like
+to point you to Stratego, the ultimate ATerm programming language.
+
+Stratego is a language for the specification of program transformation
+systems based on rewriting strategies.
+
+The Stratego compiler produces C code that transforms ATerms to ATerms.
+
+* light weight
+* powerful traversal primitives
+
+* large library with generic strategies
+* open source
+
+* requires only the ATerm libary + standard GNU tools
+* easy to install
+
+
+More information on Stratego, including downloading, documentation,
+papers and the address of the mailing list can be found on the web
+page:
+
+                 http://www.cs.uu.nl/~visser/stratego/
+
+I would be happy to assist anyone with using Stratego. 
+
+regards,
+
+-- Eelco Visser

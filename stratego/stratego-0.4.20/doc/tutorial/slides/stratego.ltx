@@ -1,0 +1,127 @@
+\section{Stratego: Sequential Programming}
+
+	\begin{itemize}
+
+	\item Transformation
+
+		\begin{itemize}
+
+		\item \verb|<?F(x,y)> F(A,B) ==> F(A,B) / [(x,A),(y,B)]|
+
+		\item \verb|<!F(x,y)> G(C,D) / [(x,A),(y,B)] ==> F(A,B)|
+
+		\item \verb|<{x: s}> t / [(x,A)] ==> <s> t / []|
+
+		\end{itemize}
+
+	\item Control flow
+
+		\begin{itemize}
+
+		\item \verb|<id> t ==> t|
+
+		\item \verb|<s1; s2> t ==> <s2> <s1> t|
+
+		\item \verb|<s1 <+ s2> t ==> <s1> t or <s2> t|
+
+		\item \verb|<s1 + s2> t ==> <s1> t or <s2> t| \\
+	  	(order undefined)
+
+		\item \verb|<rec x(s[x])> t ==> <s[rec x(s)]> t|
+
+		\end{itemize}
+
+	\end{itemize}
+
+\section{Stratego: Term Traversal}
+
+	\begin{itemize}
+
+	\item Generic traversal
+
+		\begin{itemize}
+
+		\item \verb|<all(s)> F(A,B) ==> F(<s>A, <s>B)|
+
+		\item \verb|<one(s)> F(A,B) ==> F(<s>A,B) or F(A,<s>B)|
+
+		\item {\tt <some(s)> F(A,B) ==> F(<s>A, <s>B) \\
+		or F(<s>A,B) or F(A,<s>B)}
+
+		\end{itemize}
+
+	\item Specific traversal (congruence)
+
+		\begin{itemize}
+
+		\item \verb|<F(s1,s2)> F(A,B) ==> F(<s1>A, <s2>B)|
+
+		\end{itemize}
+
+	\item Term de-/con-struction 
+
+		\begin{itemize}
+
+		\item \verb|<explode-term> F(A,B) ==> ("F", [A, B])|
+
+		\item \verb|<mkterm> ("F", [A, B]) ==> F(A,B)|
+
+		\end{itemize}
+
+	\end{itemize}
+
+\subsection{Stratego: Syntactic Sugar}
+
+	\begin{itemize}
+	
+	\item Strategy Definitions
+
+		\begin{itemize}
+
+		\item \verb|f(x) = s|
+
+		\end{itemize}
+
+	\item Rules
+
+		\begin{itemize}
+
+		\item \verb|R : t1 -> t2 where s| \\
+		$\equiv$ \verb|R = {xs : ?t1; where(s); !t2}|
+
+		\item \verb|\ t1 -> t2 \| 
+		$\equiv$ \verb|{xs : ?t1; !t2}|
+
+		\end{itemize}
+
+	\item Build, apply and match
+
+		\begin{itemize}
+	
+		\item \verb|<s> t| $\equiv$ \verb|!t; s|
+
+		\item \verb|s => t| $\equiv$ \verb|s; ?t|
+
+		\item \verb|?t <= s| $\equiv$ \verb|s; ?t|
+
+		\end{itemize}
+
+	\end{itemize}
+
+\subsection{Stratego: Data Types} 
+
+	\begin{itemize}
+
+	\item Lists
+
+	\begin{itemize}
+
+	\item \verb|[x, y, z]| \\
+	$\equiv$ \verb|Cons(x, Cons(y, Cons(z, Nil)))|
+
+	\item \verb+[x, y | z]+ \\
+	$\equiv$ \verb|Cons(x, Cons(y, z))|
+
+	\end{itemize}
+
+	\end{itemize}

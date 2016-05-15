@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  LIST-SET
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library022.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library024.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.3.7&nbsp;&nbsp;  LIST-SET</H3>	<blockquote><hr><BR>
+<BR>
+	Lists can be used to represent sets of terms. Using the
+	notion of sets we can define the collection of a set of
+	subterms corresponding to some criterion.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module list-set
+imports list-basic term
+
+rules
+ 
+  HdMember(mklst) : Cons(x, xs) -&gt; xs where mklst; fetch(?x)
+
+  HdMember'(eq, mklst) : 
+     Cons(x, xs) -&gt; xs 
+     where mklst; fetch(\y -&gt; &lt;eq&gt; (x, y)\)
+</PRE>	Union: Concatenation of two lists, only those elements in the
+	first list are added that are not already in the second list.<BR>
+<BR>
+<PRE>
+rules
+
+  union : (l1, l2) -&gt; 
+          &lt;rec x([]; !l2 &lt;+ HdMember(!l2); x &lt;+ [id | x])&gt; l1
+</PRE><PRE>
+strategies
+
+  unions = foldr(![], union)
+
+</PRE>	Diff: Difference of two lists<BR>
+<BR>
+<PRE>
+rules
+
+  diff : (l1, l2) -&gt;
+         &lt;rec x([] &lt;+ HdMember(!l2); x &lt;+ [id | x])&gt; l1 
+</PRE><PRE>
+rules
+
+  diff'(eq) :
+        (l1, l2) -&gt; 
+        &lt;rec x([] &lt;+ HdMember'(eq, !l2); x &lt;+ [id | x])&gt; l1
+
+strategies
+
+  diff(eq) = diff'(eq)
+</PRE>	Intersection is defined in terms of difference.<BR>
+<BR>
+<PRE>
+rules
+
+  isect : (l1, l2) -&gt; &lt;diff&gt; (l1, &lt;diff&gt; (l1, l2))
+
+</PRE>	
+<H5> Collection</H5>	Strategy <CODE>collect(s)</CODE> produces a collection of all
+	<EM>outermost</EM> subterms for which <CODE>s</CODE> succeeds.<BR>
+<BR>
+	Strategy <CODE>collect-split(f, g)</CODE> reduces terms with
+	<CODE>f</CODE> and extracts information with <CODE>g</CODE> resulting in a
+	pair <CODE>(t, xs)</CODE> of a reduced term and the list of
+	extracted subterms.<BR>
+<BR>
+<PRE>
+imports tuple
+
+rules
+
+  crush(nul, sum) : _#(xs) -&gt; &lt;foldr(nul,sum)&gt; xs
+
+  crush(nul, sum, s) : _#(xs) -&gt; &lt;foldr(nul,sum, s)&gt; xs
+
+  foldr-kids(nul,sum)    : _#(xs) -&gt; &lt;foldr(nul,sum)&gt; xs
+
+  foldr-kids(zero,sum,s) : _#(xs) -&gt; &lt;foldr(zero, sum, s)&gt; xs
+
+strategies
+
+  collect-kids(s) = crush(![],union,s)
+
+  collect(s) =
+    rec x(s; \y -&gt; [y]\ 
+          &lt;+ crush(![],union,x))
+
+  collect(s, skip) =
+    rec x(s; \y -&gt; [y]\
+          &lt;+ skip(x,![]); collect-kids(id)
+          &lt;+ collect-kids(x))
+
+  bu-collect(s) =
+    rec x(some(x); collect-kids([s|id] &lt;+ ![])
+          &lt;+ s; \y -&gt; [y]\ )
+    &lt;+ ![]
+
+  collect-split(f, g) = 
+    rec x((is-string + is-int); split(try(f), g &lt;+ ![])
+          &lt;+ CollectSplit(x, f, g))
+
+rules
+
+  CollectSplit(s, f, g) :
+    c#(as) -&gt; (t, &lt;union&gt; (ys, &lt;unions&gt; xs))
+    where &lt;list(s); unzip&gt; as =&gt; (bs, xs);
+          &lt;split(try(f), g &lt;+ ![])&gt; c#(bs) =&gt; (t, ys)
+</PRE>	
+<H5> Occurence Counting</H5><PRE>
+strategies
+
+  nrofoccs(s) = rec count(s; !1 &lt;+ crush(0,add,count))
+
+  twicetd(s) = oncetd(explode-term; 
+                      (id, at-suffix(Cons(oncetd(s), oncetd(s))));
+                      mkterm)
+
+  atmostonce(s) = not(twicetd(s))
+
+  atmostonce'(s) = {n : nrofoccs(s) =&gt; n; &lt;leq&gt; (n, 1)}
+</PRE>	
+	
+ 	<HR>
+<A HREF="Library022.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library024.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

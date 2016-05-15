@@ -1,0 +1,71 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\chapter{Architectures for Transformation Systems}
+
+\subsection{Organizing Transformation Systems}
+
+	A transformation specified in Stratego is not all you need to
+	build a transformation system. The transformer needs to
+	interact with other compiler components such as parsers and
+	pretty-printers.
+
+	A transformation tool is usually divided into a number of
+	components that each handle a part of the transformation task.
+	This subdivision usually follows a well-known pattern. In
+	designing a transformation system it is useful to use standard
+	patterns.  In this section we discuss several common
+	architectures for transformation systems. These can be used as
+	ideas for setting up a transformation system. We also discuss
+	a number of concrete examples of architectures of actual
+	transformations systems specified in Stratego.
+
+ \subsection{Basic Architecture}
+
+	\begin{itemize}
+	\item Parser (generated from grammar --- YACC, SDF2)
+	\item Transformer (Stratego)
+	\item Pretty-printer (...)
+	\end{itemize}
+
+ \subsection{Pipelines}
+
+ \subsection{Typed Intermediate Representation}
+
+	\begin{itemize}
+	\item Parser 
+	\item Typechecker (Stratego)
+	\item Transformer (Stratego)
+	\item Pretty-printer 
+	\end{itemize}
+
+ \subsection{Concrete Examples}
+	
+	Stratego compiler
+	\begin{itemize}
+	\item Parser for Stratego
+	\item Frontend (Stratego)
+	\item Optimizer
+	\item Matching-tree
+	\item Optimizer
+	\item Backend
+	\item Postprocess
+	\item Pretty-printer for instructions
+	\end{itemize}
+
+ \subsection{Makefiles}

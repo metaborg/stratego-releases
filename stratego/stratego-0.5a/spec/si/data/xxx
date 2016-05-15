@@ -1,0 +1,3 @@
+["si","-I","/home/visser/res/xt/share/stratego","@version","0.5a","--args","./options.ss","-i","x"]
+TCons(["si","-I","/home/visser/res/xt/share/stratego","@version","0.5a"],TCons(["./options.ss","-i","x"],TNil))
+--------------------------------------------------------------------

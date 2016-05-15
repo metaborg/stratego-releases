@@ -1,0 +1,65 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\section{Concluding Remarks}
+	
+	Stragego is a domain-specific language for expressing tree
+	transformations
+
+	maybe optimization for special cases
+
+	The ability for low-level control 
+
+	look and feel: no need for total functions as in functional
+	programming; more plug and play feeling; do not deal/handle
+	all cases, just those you want transformed
+
+	tension between declarative / operational programming:
+	strategies allow low-level control
+
+	flexible approach to compilation
+
+	easy to add or remove transformations
+
+	
+	currently working on improving the compiler to add more optimizations
+
+	now
+
+	- straightforward translation to abstract machine instructions
+
+	- matching tree automata for sums of strategies guarded by a match
+	operation
+
+	- simple algebraic laws
+
+	- simple tail recursion elimination
+
+	- experiments with specialized compilation
+
+
+	some ideas for future work that I am currently working on
+
+	- fusion of traversals
+
+	- propagation of match knowledge through other operators than
+	choice
+
+
+
+	

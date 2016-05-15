@@ -1,0 +1,122 @@
+{x: ?F(A,x); !A} + {y: ?F(y,G(B,C)); !B}
+
+
+translation to case statements
+
+  case e of
+    F(a0, a1) => case a0 of 
+                 y@A => case a1 of
+                          x@G(b0, b1) => case b0 of
+                                           B => case b1 of 
+                                                  C => pattern1_2
+                          x => pattern1
+                   y => case a1 of 
+                          G(b0, b1) => case b0 of
+                                         B => case b1 of
+                                                C => pattern2
+
+translation to C
+
+  t = e;
+  if(topsym(t) == F) {
+    a0 = arg(t, 0);
+    a1 = arg(t, 1);
+    y = a0;
+    if(topsym(a0) == A) {
+      x = a1;
+      if(topsym(a1) == G) {
+        b0 = arg(a1, 0);
+	b1 = arg(a1, 1);
+        if(topsym(b0) == B)
+          if(topsym(b1 == C))
+	    goto pattern1_2;
+      }
+      laba :
+	goto pattern1;
+    }
+    if(topsym(a1) == G) {
+	b0 = arg(a1, 0);
+	b1 = arg(a1, 1);
+        if(topsym(b0) == B)
+          if(topsym(b1 == C))
+	    goto pattern2;
+    }
+  }
+
+------------------------------------------------------------------------------------
+translation of a choice to case statements
+
+  {xs: ?pat1; rhs1 + ... + ?patn; rhsn}
+
+->
+
+  x = Ttop;
+  let r1 = rhs1; ... rn = rhsn
+   in case x of
+        pat1 => r1
+        ...
+        patn => rn
+
+
+simplification of case statements
+
+  F(t1,...,tn) => e
+
+->
+
+  F(x1,...,xn) => case x1 of 
+                    t1 => case x2 of
+                            t2 ... => case xn of 
+                                        tn => e
+    
+merging patterns
+
+  case x of
+    ...
+    F(x1,...,xn) => e1
+
+  case y of 
+    ...
+    F(y1,...,yn) => e2
+
+->
+
+  case x of 
+    ...
+    F(x1,...,xn) => 
+
+translation of a pattern to case statements:
+------------------------------------------------------------------------------------
+
+  {xs: ?pat1; rhs1 + ... + ?patn; rhsn}
+
+->
+
+  let r1 = rhs1; ... rn = rhsn
+   in ?x; (pat1; r1 + ... + patn; rn)
+
+
+   x == pat1 /\ r1 \/
+   ... \/
+   x == patn /\ rn
+
+
+   x == F(t1,...,tn) /\ b
+->
+   x == F(x1,...,xn) /\ x1 == t1 /\ ... /\ xn = tn /\ b
+
+
+   x == F(x1,...,xn) /\ b  \/  x == F(y1,...,yn) /\ c
+->
+   x == F(x1,...xn)  /\  (b \/ [x1/y1 ... xn/yn]c)
+
+
+   x == y /\ b  \/  x == e /\ c
+->
+   x == y /\ b  \/  x == y@e /\ (b \/ c)
+
+
+
+
+
+------------------------------------------------------------------------------------

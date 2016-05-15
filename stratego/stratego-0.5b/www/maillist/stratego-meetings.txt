@@ -1,0 +1,126 @@
+To: Arne de Bruijn <arbruijn@cs.uu.nl>, Eelco Dolstra
+<edolstra@students.cs.uu.nl>, Eelco Visser <visser@acm.org>, Hedzer
+Westra <hhwestra@cs.uu.nl>, Jan Heering <jan@cwi.nl>, Joost Visser
+<Joost.Visser@cwi.nl>, Karina Olmos <karina@cs.uu.nl>, Karl Trygve
+Kalleberg <karltk@picasso.uib.no>, Magne Haveraaen
+<Magne.Haveraaen@ii.uib.no>, Merijn de Jonge <M.de.Jonge@cwi.nl>, Otto
+Bagge <otto@ii.uib.no>, Ralf Laemmel <Ralf.Laemmel@cwi.nl>, Ronald van
+Halen <haalen@lucent.com>
+
+------
+
+Hi Strategists,
+
+Here are the details for the various Stratego meetings the coming
+days.  I have made lunch reservations for the participants listed for
+each event.
+
+-----------------------------------------------------------------------
+Stratego Tutorial
+-----------------------------------------------------------------------
+
+Venue: CGN C104
+Start: 9:45
+Program
+
+   9:45 - 12:30 : Stratego by example
+  12:30 - 14:00 : Lunch
+  14:00 - 17:00 : Doing it yourself
+
+Participants: 
+              Eelco Visser
+              Karina Olmos
+              Karl Trygve Kalleberg
+              Magne Haveraaen
+              Otto Bagge
+
+-----------------------------------------------------------------------
+Stratego User's Day
+-----------------------------------------------------------------------
+
+Venue: CGZ E241
+Start: 10:00
+Program: see below
+Dinner: 19:00 (please let me know whether you would like to join, so
+that I can make reservations)
+
+Participants: 
+              Arne de Bruijn
+              Eelco Dolstra
+              Eelco Visser
+              Hedzer Westra
+              Joost Visser
+              Karina Olmos
+              Karl Trygve Kalleberg
+              Magne Haveraaen
+              Merijn de Jonge
+              Otto Bagge
+              Ralf Laemmel
+              Ronald van Halen
+	      
+-----------------------------------------------------------------------
+CodeBoost Meeting
+-----------------------------------------------------------------------
+
+Venue: Kruytgebouw 0103
+Start: 10:00
+Program: tba
+
+Participants: 
+              Eelco Dolstra
+              Eelco Visser
+              Jan Heering
+              Karl Trygve Kalleberg
+              Magne Haveraaen
+              Otto Bagge
+
+-----------------------------------------------------------------------
+Stratego User's Day Program
+-----------------------------------------------------------------------
+
+10:00 coffee
+
+10:15 opening
+
+Session 1: Language Design (chair Eelco Visser)
+
+10:30 Towards Typeful Stratego 
+      by Ralf Laemmel (CWI, VU)
+
+11:30 Functional Stratego 
+      by Eelco Dolstra (Universiteit Utrecht)
+
+12:15 lunch
+
+Session 2: Programming Techniques (chair Joost Visser)
+
+13:45 Ready, Steady, Stratego. Running Stratego Specifications 
+      with StrategoScript
+      by Eelco Visser (Universiteit Utrecht)
+
+14:30 break
+
+Session 3: Tools (chair Ralf Laemmel)
+
+14:45 XT Capita Selecta
+      by Merijn de Jonge and Joost Visser (CWI)
+
+15:45 break
+
+Session 4: Applications (chair Merijn de Jonge)
+
+16:00 SDL Documentation Generation
+      by Ronald van Halen (Lucent Technologies)
+
+16:30 CobolX: Transformations for Improving COBOL Programs 
+      by Hedzer Westra (Universiteit Utrecht)
+
+17:00 CodeBoost: A Framework for Transforming C++ Programs 
+      by Otto Skrove Bagge (University of Bergen, Norway)
+
+17:30 Optimizing Pan Programs
+      by Arne de Bruijn (Universiteit Utrecht)
+
+19:00 Dinner
+
+-----------------------------------------------------------------------

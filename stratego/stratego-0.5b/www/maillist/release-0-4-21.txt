@@ -1,0 +1,36 @@
+ Release 0.4.21 of the Stratego compiler is now available from 
+
+	http://www.stratego-language.org
+
+ COMPILER
+
+ * Handling of real constants in compiler was not correct because of
+   erroneous use of ATmatch; replacedby ATgetType.
+
+ * Threading congruences were not defined for 0-ary constructors.
+
+ * Since version 0.4.18 building of constructor applications with more
+   than 6 arguments was broken. (Thanks Otto Bagge for solving this.)
+
+ * The header files in the Stratego run-time system and the library
+   that are not directly included by programs are now installed at
+   $(prefix)/include/stratego in order to avoid name clashes with other
+   packages. (Thanks Otto Bagge for the suggestion)
+
+ LIBRARY
+
+ * list-misc: thread-map threads an environment through a list and
+   applies a strategy to each element paired with the environment.
+
+ * pack-modules: Bugs in option handling fixed by Merijn de Jonge.
+
+ * list-basic: Strategies at_last, at_tail, at_suffix, and at_end have
+   been renamed to at-last, at-tail, at-suffix and at-end. The old
+   version are still available, but print a message that the strategy
+   is obsolete.
+
+ UTILITIES
+
+ * The utilities directory utils/ in the distribution has been removed
+   because it was causing problems in building the distribution. The
+   utilities will possibly be distributed as a separate package.

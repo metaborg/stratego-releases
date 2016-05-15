@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Specifying Program Transformation Systems with Stratego
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial002.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>1.1&nbsp;&nbsp; Specifying Program Transformation Systems with Stratego</H3>
+	<blockquote><hr>
+	Stratego is a language for the specification of program
+	transformation systems based on the paradigm of rewriting
+	strategies. Stratego specifications give rise to term
+	transformers that read a term and output a transformed
+	term. Such transformation components can easily be composed
+	into transformation pipelines.
+	<hr></blockquote><BR>
+<BR>
+	
+<H5> Term Transformation Systems</H5>	Stratego is a language for the specification of automatic
+	program transformation systems. In the Stratego model, a
+	program transformation system is a program that reads a
+	program, applies a transformation to it, and, if that
+	succeeds, spits out the transformed program or otherwise
+	states that it failed (Figure&nbsp;<A HREF="#Fig:BasicArch">1</A>). Programs
+	are supposed to be represented by means of abstract syntax
+	trees or <EM>terms</EM>. A transformation system is thus a
+	program that transforms terms to terms.<BR>
+<BR>
+	Transformation components can be composed into pipelines that
+	interface by means of intermediate terms
+	(Figure&nbsp;<A HREF="#Fig:CompArch">2</A>). In this fashion large program
+	transformation systems can be built from small reusable
+	components, provided that the components synchronize on the
+	intermediate languages used.<BR>
+<BR>
+	
+<H5> Specifying Transformations with Rewriting Strategies</H5>	Basic transformation rules can be expressed as <EM>term
+	rewrite rules</EM> of the form <CODE>l -&gt; r</CODE> that transform a term
+	matching <CODE>l</CODE> to an instantiation of <CODE>r</CODE>.<BR>
+<BR>
+	Pure rewrite rules with a standard evaluation strategy are not
+	sufficient for most program transformation jobs, because more
+	fine grained control over their application is needed. Usually
+	such control is encoded in the rewrite rules themselves,
+	leading to bad reusability of rules and a large overhead for
+	expressing traversals over the abstract syntax tree.<BR>
+<BR>
+	Instead Stratego offers a language of user-definable
+	<EM>rewriting strategies</EM> that provide control over the
+	application of transformation rules. This is achieved by a
+	set of operators for the expression of generic traversals over
+	abstract syntax trees (Figure&nbsp;<A HREF="#Fig:Traversal">3</A>). The basic
+	operators can be combined to achieve a wide range of traversal
+	algorithms.<BR>
+<BR>
+	The use of strategies greatly reduces the overhead caused by
+	explicitly programming term traversals. Furthermore, since
+	individual transformation rules are freed from the burden of
+	encoding traversals, they can be reused in other situations.
+	Finally, the strategy operators turn out to be an interesting
+	new programming paradigm that allow one to reach deep into
+	terms without much effort.
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 1: 
+	Basic architecture of a transformation system
+	</DIV><BR>
+<A NAME="Fig:BasicArch"></A><BR>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial001.gif">
+	</DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 2: 
+	Composition of transformation systems
+	</DIV><BR>
+<A NAME="Fig:CompArch"></A><BR>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial002.gif">
+	</DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 3: 
+	Generic term traversal
+	</DIV><BR>
+<A NAME="Fig:Traversal"></A><BR>
+	<DIV ALIGN=center>
+		<IMG SRC="../html/Tutorial003.gif">
+	</DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV>
+<HR>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial002.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Stratego: Specifying Program Transformation Systems Concisely
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual002.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>1.1&nbsp;&nbsp; Stratego: Specifying Program Transformation Systems Concisely</H3>	<blockquote><hr>
+	Program transformations can be described concisely by means of
+	a combination of rewrite rules that describe basic
+	transformations and rewrite strategies that describe their
+	application to a program.
+	<hr></blockquote><BR>
+<BR>
+	Program transformations are often naturally described by means
+	of (term) rewrite rules. However, to achieve transformations
+	of an entire program such rules need to be applied with
+	care. Often a more fine grained control over their application
+	is needed than is offered by standard rewriting strategies
+	such as innermost or outermost normalization. <BR>
+<BR>
+	One solution to this problem is to encode the transformation
+	strategy in the rules. However, this leads to large
+	specifications in which traversal over the syntax structure of
+	a program needs to be spelled out explicitly. This is not
+	necessary in `pure' rewriting, since the built-in strategy
+	finds out where to apply a rule. In addition this style leads
+	to a loss of reusability of transformation rules. <BR>
+<BR>
+	Another solution is to make strategies programmable artifacts
+	of a transformation system. Stratego is a language for the
+	specification of transformation rules and transformation
+	strategies. <BR>
+<BR>
+	The main features of Stratego are summarized in
+	Figure&nbsp;<A HREF="#Fig:features">1</A>.<BR>
+<BR>
+	
+<H5> Audience</H5>	This reference manual describes the Stratego language from
+	first principles. That means that it is organized along the
+	lines of the design of the language rather than along the
+	lines of learning the language. Therefore, it is aimed at
+	Stratego programmers and implementers with some experience
+	with the language who want to understand the details of its
+	definition.<BR>
+<BR>
+	The Stratego Tutorial [<A HREF="index.html#Vis99.Tutorial"><CITE>11</CITE></A>] gives a
+	description of the language and its programming environment by
+	means of examples and is aimed at novice users. Several
+	publications exist that explore aspects of the language and
+	its applications; see the bibliography.<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 1: Features of Stratego</DIV><BR>
+<A NAME="Fig:features"></A><BR>
+	<UL>
+<LI>
+	 Program represented by means of abstract syntax trees (terms)
+	
+<LI> Basic transformations expressed as rewrite rules
+	
+<LI> Programmable strategies for control over application of rules
+	
+<LI> Matching and building patterns are first-class citizens
+	
+<LI> Organization of specifications into modules
+	
+<LI> Primitives for connection to the system
+	</UL>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual002.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,7 @@
+Instr(
+
+Scope(["x",[0]],Seq(Assign(Var([0])),Seq(Assign(Var("x"),Var([0])),Scope([[0],[0,0],[1,0],[0,1,0],[1,1,0]],Let(SDef("b_0",[],Scope(["w_9"],Seq(Assign(Var("w_9"),Var([1,0])),Build(Var("w_9"))))),Let(SDef("c_0",[],Scope(["x_9"],Seq(Assign(Var("x_9"),Var([0,0])),Seq(Assign(Var("x_9"),Var([1,1,0])),Build(Op("B",[])))))),Seq(Assign(Var([0])),Case(Var([0]),[Alt(Fun("F",2),[Var([0,0]),Var([1,0])],Case(Var([1,0]),[Alt(Fun("G",2),[Var([0,1,0]),Var([1,1,0])],Case(Var([0,1,0]),[Alt(Fun("B",0),[],Case(Var([0,0]),[Alt(Fun("A",0),[],Choice(Call(SVar("b_0"),[]),Call(SVar("c_0"),[])))],Call(SVar("c_0"),[])))],Case(Var([0,0]),[Alt(Fun("A",0),[],Call(SVar("b_0"),[]))],Fail)))],Case(Var([0,0]),[Alt(Fun("A",0),[],Call(SVar("b_0"),[]))],Fail)))],Fail))))))))
+
+, []
+, 0
+)

@@ -1,0 +1,1 @@
+App(Let([SDef("repeat",["s"],Rec("x",LChoice(Seq(Call(SVar("s"),[]),Call(SVar("x"),[])),Id))),SDef("A",[],Scope(["x"],Seq(Match(Op("F",[Var("x")])),Build(Var("x")))))],Call(SVar("repeat"),[Call(SVar("A"),[])])),Op("F",[Op("F",[Op("F",[Op("B",[])])])]))

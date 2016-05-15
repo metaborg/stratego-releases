@@ -1,0 +1,13 @@
+ Release 0.4.19 of the Stratego compiler is now available from 
+
+	http://www.cs.uu.nl/~visser/stratego/
+
+ This release contains the changes in the table module that were
+ supposed to be part of 0.4.18.
+
+ LIBRARY
+
+ * The tables modules has been extended with a number of useful 
+   strategies for table management that can be used for instance 
+   in symbol tables. The limitation on the maximum number of tables
+   has been removed.

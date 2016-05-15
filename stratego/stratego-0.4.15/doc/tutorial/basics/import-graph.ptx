@@ -1,0 +1,163 @@
+
+% Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+% 
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2, or (at your option)
+% any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+% 02111-1307, USA.
+
+\expandafter\ifx\csname graph\endcsname\relax \csname newbox\endcsname\graph\fi
+\expandafter\ifx\csname graphtemp\endcsname\relax \csname newdimen\endcsname\graphtemp\fi
+\setbox\graph=\vtop{\vskip 0pt\hbox{%
+    \special{pn 8}%
+    \special{pa 1475 500}%
+    \special{pa 2225 500}%
+    \special{pa 2225 0}%
+    \special{pa 1475 0}%
+    \special{pa 1475 500}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 0.250in
+    \rlap{\kern 1.850in\lower\graphtemp\hbox to 0pt{\hss disjnf\hss}}%
+    \special{pa 1850 500}%
+    \special{pa 1850 1000}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 1875 900}%
+    \special{pa 1850 1000}%
+    \special{pa 1825 900}%
+    \special{pa 1875 900}%
+    \special{fp}%
+    \special{pa 1475 1500}%
+    \special{pa 2225 1500}%
+    \special{pa 2225 1000}%
+    \special{pa 1475 1000}%
+    \special{pa 1475 1500}%
+    \special{fp}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 1.250in
+    \rlap{\kern 1.850in\lower\graphtemp\hbox to 0pt{\hss prop-\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 1.250in
+    \rlap{\kern 1.850in\lower\graphtemp\hbox to 0pt{\hss simplify\hss}}%
+    \special{pa 1850 1500}%
+    \special{pa 1350 2000}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 1438 1947}%
+    \special{pa 1350 2000}%
+    \special{pa 1403 1912}%
+    \special{pa 1438 1947}%
+    \special{fp}%
+    \special{pa 975 2500}%
+    \special{pa 1725 2500}%
+    \special{pa 1725 2000}%
+    \special{pa 975 2000}%
+    \special{pa 975 2500}%
+    \special{fp}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 2.250in
+    \rlap{\kern 1.350in\lower\graphtemp\hbox to 0pt{\hss prop-\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 2.250in
+    \rlap{\kern 1.350in\lower\graphtemp\hbox to 0pt{\hss laws\hss}}%
+    \special{pa 1350 2500}%
+    \special{pa 1850 3000}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 1797 2912}%
+    \special{pa 1850 3000}%
+    \special{pa 1762 2947}%
+    \special{pa 1797 2912}%
+    \special{fp}%
+    \special{pa 1475 3500}%
+    \special{pa 2225 3500}%
+    \special{pa 2225 3000}%
+    \special{pa 1475 3000}%
+    \special{pa 1475 3500}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 3.250in
+    \rlap{\kern 1.850in\lower\graphtemp\hbox to 0pt{\hss prop\hss}}%
+    \special{pa 1850 1500}%
+    \special{pa 2350 2000}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 2297 1912}%
+    \special{pa 2350 2000}%
+    \special{pa 2262 1947}%
+    \special{pa 2297 1912}%
+    \special{fp}%
+    \special{pa 1975 2500}%
+    \special{pa 2725 2500}%
+    \special{pa 2725 2000}%
+    \special{pa 1975 2000}%
+    \special{pa 1975 2500}%
+    \special{fp}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 2.250in
+    \rlap{\kern 2.350in\lower\graphtemp\hbox to 0pt{\hss prop-\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 2.250in
+    \rlap{\kern 2.350in\lower\graphtemp\hbox to 0pt{\hss truth\hss}}%
+    \special{pa 2350 2500}%
+    \special{pa 1850 3000}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 1938 2947}%
+    \special{pa 1850 3000}%
+    \special{pa 1903 2912}%
+    \special{pa 1938 2947}%
+    \special{fp}%
+    \special{pa 1475 1500}%
+    \special{pa 375 2000}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 476 1981}%
+    \special{pa 375 2000}%
+    \special{pa 456 1936}%
+    \special{pa 476 1981}%
+    \special{fp}%
+    \special{pa 0 2500}%
+    \special{pa 750 2500}%
+    \special{pa 750 2000}%
+    \special{pa 0 2000}%
+    \special{pa 0 2500}%
+    \special{fp}%
+    \graphtemp=\baselineskip\multiply\graphtemp by -1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 2.250in
+    \rlap{\kern 0.375in\lower\graphtemp\hbox to 0pt{\hss simple-\hss}}%
+    \graphtemp=\baselineskip\multiply\graphtemp by 1\divide\graphtemp by 2
+    \advance\graphtemp by .5ex\advance\graphtemp by 2.250in
+    \rlap{\kern 0.375in\lower\graphtemp\hbox to 0pt{\hss traversal\hss}}%
+    \special{pa 2225 500}%
+    \special{pa 3225 1000}%
+    \special{fp}%
+    \special{sh 1.000}%
+    \special{pa 3147 933}%
+    \special{pa 3225 1000}%
+    \special{pa 3124 978}%
+    \special{pa 3147 933}%
+    \special{fp}%
+    \special{pa 2850 1500}%
+    \special{pa 3600 1500}%
+    \special{pa 3600 1000}%
+    \special{pa 2850 1000}%
+    \special{pa 2850 1500}%
+    \special{fp}%
+    \graphtemp=.5ex\advance\graphtemp by 1.250in
+    \rlap{\kern 3.225in\lower\graphtemp\hbox to 0pt{\hss io\hss}}%
+    \hbox{\vrule depth3.500in width0pt height 0pt}%
+    \kern 3.600in
+  }%
+}%
+$$\box\graph$$
+   

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Naming Transformations with Strategy Definitions
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual008.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual010.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.1&nbsp;&nbsp; Naming Transformations with Strategy Definitions</H3>	<blockquote><hr>
+	A specification defines a strategy for transforming terms.
+	Strategies can be named by means of strategy definitions.
+	<hr></blockquote><BR>
+<BR>
+	The purpose of a Stratego specification is the definition of a
+	<EM>strategy</EM>, i.e., a program that transforms a term into
+	another term (or fails). Strategies are are built from
+	primitive transformations using strategy operators. There are
+	a number of standard operators. Other operators can be defined
+	in terms of the primitive operators by means of strategy
+	definitions.<BR>
+<BR>
+	A strategy section of a specification has the form
+<PRE>
+   strategies 
+     StrategyDefinition*
+</PRE>	and consists of a list of strategy definitions that give
+	names to strategy expressions.<BR>
+<BR>
+	A strategy definition has the form
+<PRE>
+   Id(Id1,...,Idn) = Strategy 
+</PRE>	Here <CODE>Id</CODE> is the strategy operator defined by the
+	definition, the <CODE>Idi</CODE> are strategy arguments to the
+	operator and <CODE>Strategy</CODE> is the body of the definition. A
+	call <CODE>Id(s1,...,sn)</CODE> to this operator is equivalent to
+	the body of the definition with the <CODE>si</CODE> substituted for
+	the <CODE>Idi</CODE>. Definitions cannot be recursive. Recursion is
+	defined using the recursion operator.<BR>
+<BR>
+	For example,
+<PRE>
+  strategies
+    repeat(s) = rec x(s; x &lt;+ id)
+</PRE>	defines the operator <CODE>repeat</CODE>.<BR>
+<BR>
+	A defined operator can be used by calling it <BR>
+<BR>
+	
+<H5> (** Overloading **)</H5>	Operators can be overloaded<BR>
+<BR>
+	
+<H5> (** Multiple Definitions **)</H5>	in case of multiple definitions for operators <EM>with the
+	same arity</EM> the bodies are shared.<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 12: Syntax
+	of strategy definitions</DIV><BR>
+<A NAME="Fig:Stratego-Strategy-Definitions.sdf"></A><BR>
+	<PRE>module Stratego-Strategy-Definitions
+exports
+  context-free syntax
+
+    "strategies" SDef* -&gt; BSpec {cons("Strategies")}
+
+    %% calling a strategy
+
+    Identifier                   -&gt; SVar  {cons("SVar")}
+    SVar ("(" {Strat ","}* ")")? -&gt; Strat {cons("Call")}
+
+    %% definition of a nullary strategy operators
+
+    Identifier "=" Strat -&gt; SDef
+
+    %% definition of a parameterized strategy operators
+
+    Identifier "(" {Identifier ","}* ")" 
+                                =" Strat -&gt; SDef  {cons("SDef")}
+
+    %% local strategy definition
+    %% Note: not yet supported in stratego-0.4.*
+
+    "let" SDef "in" Strat  -&gt; Strat {cons("Let")}</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual008.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual010.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,8 @@
+[SDef("main",[],
+Seq(Build(Str("term")),
+Where(Scope(["l_0"],
+Seq(Assign(Var("l_0")),
+Seq(Build(Op("stderr",[])),
+Seq(Scope(["n_0"],
+Seq(Asssign(Var("n_0"),
+Op("stderr",[])),Seq(Build(Var("l_0")),Scope(["p_0"],Seq(Asssign(Var("p_0"),Var("l_0")),Seq(Build(Str("message: ")),Seq(Scope(["s_0"],Seq(Asssign(Var("s_0"),Str("message: ")),Build(Op("Cons",[Var("s_0"),Op("Cons",[Var("p_0"),Op("Nil",[])])])))),Scope(["u_0"],Seq(Assign(Var("u_0")),Scope(["q_0"],Seq(Assign(Var("q_0"),Var("u_0")),Build(Op("TCons",[Var("n_0"),Op("TCons",[Var("q_0"),Op("TNil",[])])]))))))))))))),Call(SVar("h_0"),[])))))))),SDef("h_0",[],Prim("_ST_printnl"))]

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  MEMO
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library013.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library015.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.3.2&nbsp;&nbsp;  MEMO</H3> 	The memo operator makes a strategy
+ 	into a memoizing strategy that looks up the term to be transformed
+ 	in a memo table and only computes the transformation if the
+ 	term is not found.<BR>
+<BR>
+ <CODE>&lt;memo-init&gt; tbl</CODE> creates a new memo table and
+	<CODE>&lt;memo-purge&gt; tbl</CODE> destroys it.<BR>
+<BR>
+ <CODE>&lt;memo(tbl, s)&gt; t</CODE> first looks up the term <CODE>t</CODE> in
+	the memo table. If present the association in the table is
+	produced, else the result of <CODE>&lt;s&gt; t</CODE> is computed and
+	stored in the table.<BR>
+<BR>
+<PRE>
+module memo
+imports tables
+
+strategies
+
+  memo-init  = create-table
+
+  memo-purge = destroy-table
+
+rules
+
+  memo(name, s) :
+        t -&gt; t'
+        where (&lt;table-get&gt; (&lt;name&gt;(), t) =&gt; t')
+              &lt;+ (&lt;s&gt; t =&gt; t'; &lt;table-put&gt; (&lt;name&gt;(), t, t'))
+</PRE><HR>
+<A HREF="Library013.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library015.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

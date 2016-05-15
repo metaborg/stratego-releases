@@ -1,0 +1,26 @@
+Release 0.4.22 of the Stratego compiler is now available from 
+
+	http://www.stratego-language.org
+
+COMPILER 
+
+ * A new experimental optimization component has been added to the
+   compiler. The commandline option --fusion of sc invokes the new
+   component, which optimizes the innermost strategy. It works fine for
+   invocations of innermost with a choice of rules. More coordination
+   with the inliner is needed to get it to work for all cases. The
+   optimization is joint work with Patty Johann. A paper about it is in
+   preparation.
+
+   If you are using innermost in any of your specifications let me know
+   how the optimization behaves.
+
+ * The implementation of the inliner has been refactored in preparation
+   of better coordination with other optimizations and is now much
+   simpler. The functionality is still the same.
+
+LIBRARY 
+
+ * list-set.r: Renamed foldr-kids to crush, following the paper by
+   Joost and Ralf.
+

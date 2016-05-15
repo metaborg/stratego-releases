@@ -1,0 +1,352 @@
+
+<!--
+
+Copyright (C) 1998, 1999 Eelco Visser <visser@acm.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+02111-1307, USA.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+
+   <title>Stratego: Publications</title>
+
+   <link rel=stylesheet type="text/css" href="style.css" title="style">
+
+</head>
+
+<body>
+
+    <table width = "100%">
+      <tr>
+	<td>
+	  <hr size =0>
+	  <h1>Publications</h1>
+	  <hr size =0>
+	</td>
+      </tr>
+    </table>
+
+<UL>
+      <LI>
+	<B>A C++ Transformation Framework (Abstract)</B>
+
+	<BR>Otto Skrove Bagge, Magne Haveraaen and Eelco Visser.
+	Nordic Workshop on Programming Theory (NWPT2000), Bergen,
+	Norway, October 2000<p></p>
+      </LI>
+
+      <LI>
+	<B>Warm Fusion in Stratego: A Case Study in Generation of
+	Program Transformation Systems</B>
+
+	<BR>Patricia Johann and Eelco Visser. Annals of Mathematics
+	and Artificial Intelligence (To appear) <p></p>
+      </LI>
+
+      <li>
+	<b>Language Independent Traversals for Program Transformation</b>
+	<br>
+	Eelco Visser.  <a
+	href="http://www.cs.uu.nl/~johanj/wgp2000/wgp2000cfp.html">Workshop
+	on Generic Programming</a>, July 2000. Ponte de Lima,
+	Portugal. [<A
+	HREF="http://www.cs.uu.nl/~visser/ftp/Vis2000.ps.gz">Postscript</A>]
+	<P></P>
+      </li>
+
+      <LI>
+	<B>Strategic Pattern Matching</B>
+
+	<BR>Eelco Visser. In Rewriting Techniques and Applications
+	(RTA'99), volume 1631 of Lecture Notes in Computer Science,
+	pages 30-44, Trento, Italy. July 1999.  [<A
+	HREF="http://www.cs.uu.nl/~visser/ftp/Vis99.ps.gz">Postscript</A>]
+	<P></P>
+
+      </LI>
+
+      <LI>
+	<B>Building Program Optimizers with Rewriting Strategies</B>
+
+	<BR>Eelco Visser, Zine-el-Abidine Benaissa and Andrew
+	Tolmach. In International Conference on Functional Programming
+	(ICFP'98), Baltimore, Maryland. ACM SIGPLAN, September,
+	1998. pages 13--26 [<A
+	HREF="http://www.cs.uu.nl/~visser/ftp/VBT98.ps.gz">Postscript</A>] <P></P>
+      </LI>
+
+      <LI>
+	<B>A Core Language for Rewriting</B>
+
+	<BR>Eelco Visser and Zine-el-Abidine Benaissa . In C. Kirchner
+	and H. Kirchner (editors) Second International Workshop on
+	Rewriting Logic and its Applications (WRLA'98). Electronic
+	Notes in Theoretical Computer Science. Elsevier,
+	Pont-a-Mousson, France. September, 1998. [<A
+	HREF="http://www.cs.uu.nl/~visser/ftp/VB98.ps.gz">Postscript</A>] <P></P>
+      </LI>
+
+      <LI>
+	<B>Specification of Rewriting Strategies</B>
+
+	<BR>Bas Luttik and Eelco Visser. In Alex Sellink (editor)
+	Second International Workshop on the Theory and Practice of
+	Algebraic Specification (ASF+SDF97).  Electronic Workshops in
+	Computing, Springer-Verlag, Berlin, November, 1997.  [<A
+	HREF="http://www.cs.uu.nl/~visser/ftp/LV97.ps.gz">Postscript</A>]
+
+	<p>
+
+	The paper also appeared as technical report P9710 from the
+	University of Amsterdam with somewhat nicer typesetting: [<A
+	HREF="http://www.cs.uu.nl/~visser/ftp/P9710.ps.gz">Postscript</A>]
+	<P></P>
+      </LI>
+
+
+      <li>
+	BibTeX references: <a href="stratego.bib">stratego.bib</a>
+      </li>
+
+</UL>
+
+<A NAME="Technical Reports"></A>
+
+<HR SIZE=10 WIDTH="100%"><B>Technical Reports</B>
+
+<UL>
+
+      <LI>
+	<B>Warm Fusion in Stratego: A Case Study in Generation of
+	Program Transformation Systems</B>
+
+	<BR>Patricia Johann and Eelco Visser. Technical
+	Report. Department of Computer Science, Universiteit Utrecht,
+	March, 1999. 
+      <p></p>
+
+      </LI>
+
+
+</UL>
+<A NAME="Abstracts"></A>
+
+<HR SIZE=10 WIDTH="100%"><B>Abstracts</B>
+
+      <p></p>
+
+<b>Language Independent Traversals for Program Transformation (WGP2000)</b>
+
+    <blockquote>
+
+	Many language processing operations have a generic underlying
+	algorithm. However, these generic algorithms either have to be
+	implemented specifically for the language under consideration
+	or the language needs to be encoded in a generic format that
+	the generic algorithm works on.  Stratego is a language for
+	program transformation that supports both specific and generic
+	views of data types.
+
+      <p></p>
+
+	A Stratego program defines a transformation on first-order
+	ground terms. Transformation rules define single
+	transformation steps. Transformation rules are combined into
+	transformation \emph{strategies} by means of combinators that
+	determine where and in what order rules are applied.  These
+	combinators include: primitives for traversal to the direct
+	subterms of a node, allowing the definition of many kinds of
+	full term traversals; full control over recursion in
+	traversals; patterns as first-class citizens; generic term
+	construction and deconstruction.
+
+      <p></p>
+
+	These features create a setting in which it is possible to
+	combine generic traversal with data type specific pattern
+	matching, and separating logic (transformation, pattern
+	matching) from control (traversal).  This makes it possible to
+	give language independent descriptions of language processing
+	operations that can be instantiated to a specific language by
+	providing the patterns of the relevant constructs. These
+	generic algorithms only touch relevant constructors and do not
+	need to know the entire datatype, making the algorithms
+	insensitive to changes in the abstract syntax that do not
+	affect the constructors relevant to the operation.
+	
+      <p></p>
+
+	Stratego is currently implemented by compilation to C code.
+	All constructs of the language are implemented directly, i.e.,
+	the compiled program is as large as the specification, in
+	contrast to approaches that rely on preprocessing or program
+	generation which may have a scaling problem when dealing with
+	large languages.
+
+      <p></p>
+
+	The approach to generic programming in Stratego is illustrated
+	by means of several small examples and two larger examples
+	i.e., free variable extraction and bound variable
+	renaming. The appendix of the technical report version of this
+	paper also shows generic algorithms for syntactic unification
+	and module flattening.
+
+    </blockquote>
+
+<P>
+
+      <B>Warm Fusion in Stratego: A Case Study in Generation of
+      Program Transformation Systems (AMAI 2000)</B> 
+
+    <UL>
+
+	Stratego is a domain-specific language for the specification
+	of program transformation systems.&nbsp; The design of
+	Stratego is based on the paradigm of rewriting strategies:
+	user-definable programs in a language of strategy operators
+	determine where and in what order transformation rules are
+	(automatically) applied to a program. The separation of rules
+	and strategies supports modularity of
+	specifications. Moreover, the language provides generic
+	features for specification of program traversals.
+
+	<P>In this paper we present a case study of Stratego as
+	applied to a non-trivial problem in program transformation. We
+	demonstrate the use of Stratego in eliminating intermediate
+	data structures from (also known as <I>deforesting</I>)
+	functional programs via the <I>warm fusion</I> algorithm of
+	Launchbury and Sheard. This algorithm has been specified in
+	Stratego and embedded in a fully automatic program
+	transformation system.
+
+    </UL>
+
+    <b>Strategic Pattern Matching (RTA'99)</B>
+
+    <UL>
+
+	Stratego is a language for the specification of transformation
+	rules and strategies for applying them. The basic actions of
+	transformations are matching and building instantiations of
+	first-order term patterns.  The language supports concise
+	formulation of generic and datatype-specific term
+	traversals. One of the unusual features of Stratego is the
+	separation of scope from matching, allowing sharing of
+	variables through traversals.  
+
+	<P>The combination of first-order patterns with strategies
+	forms an expressive formalism for pattern matching. In this
+	paper we discuss three examples of <i>strategic pattern
+	matching</I>: (1) <I>Contextual rules</I> allow matching and
+	replacement of a pattern at an arbitrary depth of a subterm of
+	the root pattern. (2) <I>Recursive patterns</I> can be used to
+	characterize concisely embedded languages, i.e., describe the
+	structure of languages that form a restriction of a larger
+	language. This is useful for describing a set of normal forms,
+	the structure of a core language, or a language represented in
+	a larger representation language. (3) <I>Overlays</I> serve to
+	hide the representation of a language in another (more
+	generic) language.  These techniques are illustrated by means
+	of specifications in Stratego.
+
+    </UL>
+
+    <b>Building Program Optimizers with Rewriting Strategies
+    (ICFP'98)</b>
+
+    <UL>
+
+	We describe a language for defining term rewriting strategies,
+	and its application to the production of program
+	optimizers. Valid transformations on program terms can be
+	described by a set of rewrite rules; rewriting strategies are
+	used to describe when and how the various rules should be
+	applied in order to obtain the desired optimization
+	effects.&nbsp; Separating rules from strategies in this
+	fashion makes it easier to reason about the behavior of the
+	optimizer as a whole,&nbsp; compared to traditional monolithic
+	optimizer implementations. We illustrate the expressiveness of
+	our language by using it to describe a simple optimizer for an
+	ML-like intermediate representation.
+
+	<P>The basic strategy language uses operators such as
+	sequential composition, choice, and recursion to build
+	transformers from a set of labeled unconditional rewrite
+	rules.&nbsp; We also define an extended language in which the
+	side-conditions and contextual rules that arise in realistic
+	optimizer specifications can themselves be expressed as
+	strategy-driven rewrites.&nbsp; We show that the features of
+	the basic and extended languages can be expressed by breaking
+	down the rewrite rules into their primitive building blocks,
+	namely matching and building terms in variable binding
+	environments. This gives us a low-level core language which
+	has a clear semantics, can be implemented straightforwardly
+	and can itself be optimized. The current implementation
+	generates C code from a strategy specification.
+
+    </UL> 
+
+
+    <b>A Core Language for Rewriting (WRLA'98)</b>
+
+    <UL>
+
+	System S is a calculus providing the basic
+	abstractions of term rewriting: matching and building terms,
+	term traversal, combining computations and handling
+	failure. The calculus forms a core language for implementation
+	of a wide variety of rewriting languages, or more generally,
+	languages for specifying tree transformations. In this paper
+	we show how a conventional rewriting language based on
+	conditional term rewriting can be implemented
+	straightforwardly in System S. Subsequently we show how this
+	implementation can be extended with features such as matching
+	conditions, negative conditions, default rules, non-strictness
+	annotations and alternative evaluation strategies.
+
+    </UL>
+	
+
+    <b>Specification of Rewriting Strategies (ASF+SDF'97)</b>
+	
+    <UL>
+
+	User-definable strategies for the application of rewrite rules
+	provide a means to construct transformation systems that apply
+	rewrite rules in a controlled way. This paper describes a
+	strategy language and its interpretation.  The language is
+	used to control the rewriting of terms using labeled rewrite
+	rules. Rule labels are atomic strategies. Compound strategies
+	are formed by means of sequential composition,
+	non-deterministic choice, sequential choice, fixed point
+	recursion, and a primitive for expressing term traversal.  The
+	traversal primitive called `push-down' applies a strategy to
+	all arguments of the outermost function symbol of a
+	term. Several complex term traversal strategies such as
+	bottom-up and top-down application and (parallel) innermost
+	and (parallel) outermost reduction can be defined in terms of
+	this primitive.  The paper contains two case studies of the
+	application of strategies.
+
+    </UL>
+
+<hr>
+</body>
+</html>
+

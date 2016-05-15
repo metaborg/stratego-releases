@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Combining Strategies
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual010.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual012.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>4.3&nbsp;&nbsp; Combining Strategies</H3>	<blockquote><hr>
+	Basic strategies can be combined into more complex strategies
+	by means of a number of primitive strategy operators.
+	<hr></blockquote><BR>
+<BR>
+	
+<H5> Success and Failure</H5> The operator <CODE>id</CODE> always
+	succeeds without any transformation. The operator <CODE>fail</CODE>
+	always fails.<BR>
+<BR>
+	
+<H5> Sequential Composition</H5> If <CODE>s1</CODE> and <CODE>s2</CODE>
+	are strategies, then <CODE>s1 ; s2</CODE> is the strategy that first
+	applies <CODE>s1</CODE> and if that succeeds applies <CODE>s2</CODE> to
+	the result.<BR>
+<BR>
+	
+<H5> Non-deterministic Choice</H5> If <CODE>s1</CODE> and <CODE>s2</CODE> are
+	strategies, then <CODE>s1 + s2</CODE> is the strategy that chooses
+	either <CODE>s1</CODE> or <CODE>s2</CODE>, but such that the strategy
+	chosen succeeds.<BR>
+<BR>
+	
+<H5> Deterministic Choice</H5> If <CODE>s1</CODE> and <CODE>s2</CODE>
+	are strategies, then <CODE>s1 &lt;+ s2</CODE> is the strategy that
+	first tries <CODE>s1</CODE> and if that succeeds is done. If
+	<CODE>s1</CODE> fails, then <CODE>s2</CODE> is applied to the original
+	term. The operator is also called <EM>left choice</EM> because
+	it prefers its left argument. An example of the use of left
+	choice is the definition of <CODE>try</CODE>:
+<PRE>
+  try(s) = s &lt;+ id
+</PRE>	The strategy <CODE>try(s)</CODE> succeeds with the result of
+	<CODE>s</CODE> if <CODE>s</CODE> succeeds. Otherwise, if <CODE>s</CODE> fails,
+	<CODE>s</CODE> succeeds without any effect.
+	
+	
+<H5> Recursion</H5> If <CODE>s</CODE> is a strategy, then
+	<CODE>rec x. s</CODE> is the strategy that at each point in <CODE>s</CODE>
+	where the strategy variable <CODE>x</CODE> is called, calls itself.
+	An example of the use of recursion is the definition of
+	<CODE>repeat</CODE>:
+<PRE>
+  repeat(s)  = rec x ((s; x) &lt;+ id)
+</PRE>	The strategy <CODE>repeat(s)</CODE> applies the strategy <CODE>s</CODE>
+	as long as it succeeds.<BR>
+<BR>
+	
+<H5> Test</H5> If <CODE>s</CODE> is a strategy, then
+	<CODE>test(s)</CODE> is the strategy that succeeds if <CODE>s</CODE>
+	succeeds, but throws away the effect of its transformation.<BR>
+<BR>
+	
+<H5> Negation</H5> If <CODE>s</CODE> is a strategy, then
+	<CODE>not(s)</CODE> is the strategy that fails if <CODE>s</CODE> succeeds
+	and succeeds if <CODE>s</CODE> fails.<BR>
+<BR>
+	
+<H5> Operator Precedence</H5>	Operators in decreasing binding strength
+	<UL>
+<LI>
+	 <CODE>;</CODE>
+	
+<LI> <CODE>+</CODE>, <CODE>&lt;+</CODE> (mutually right associative)
+	</UL>	In other words 
+<CODE>a ; b + c &lt;+ d ; e</CODE> 
+	is parsed as 
+<CODE>(a ; b) + (c &lt;+ (d ; e))</CODE><BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 14: Syntax of sequential programming operators</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Strategies
+imports Stratego-Terms
+exports
+  %%sorts Strat SVar
+  context-free syntax
+    "id"                     -&gt; Strat {cons("Id")}
+    "fail"                   -&gt; Strat {cons("Fail")}
+    "test" "(" Strat ")"     -&gt; Strat {cons("Test")}
+    "not"  "(" Strat ")"     -&gt; Strat {cons("Not")}
+    Strat ";" Strat          -&gt; Strat {cons("Seq"), left}
+    Strat "+" Strat          -&gt; Strat {cons("Choice"), left}
+    Strat "&lt;+" Strat         -&gt; Strat {cons("LChoice"), left}
+    "rec" SVar "(" Strat ")" -&gt; Strat {cons("Rec")}
+    "(" Strat ")"            -&gt; Strat {bracket}
+  context-free priorities
+     Strat ";" Strat  -&gt; Strat
+  &gt; {left: 
+     Strat "+" Strat  -&gt; Strat 
+     Strat "&lt;+" Strat -&gt; Strat }</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<HR>
+<A HREF="ReferenceManual010.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual012.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

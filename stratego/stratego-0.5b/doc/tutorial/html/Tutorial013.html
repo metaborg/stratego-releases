@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<TITLE>
+ Combining Rules into Transformation Systems with Strategies
+</TITLE>
+</HEAD>
+<BODY >
+<A HREF="Tutorial012.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial014.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>3.5&nbsp;&nbsp; Combining Rules into Transformation Systems with Strategies</H3>
+	<blockquote><hr>
+	Applying all transformation rules until none applies anymore,
+	is often not a good strategy in program transformation because
+	the transformation might not terminate or because many
+	different transformation paths are possible, one of which
+	needs to be chosen. Programmable strategies provide a way
+	to control the application of transformation rules.
+	<hr></blockquote>
+	
+	Standard term rewriting apply rules using a default strategy
+	in which all rules are applied as long as possible. Therefore,
+	for a rewrite system to be meaningful it should be terminating
+	and confluent, i.e., whatever transformation path is chosen
+	the same term results. <BR>
+<BR>
+	In general, however, given a collection of meaningful
+	transformation rules many possible transformations on a term
+	are possible. Depending on the desired outcome, different
+	rules should be applied.<BR>
+<BR>
+	For example, the rules for transformation of propositional
+	formulae can be used to transform formulae to a wide variety
+	of normal forms. Formulae in <EM>disjunctive normal form</EM>
+	are disjunctions of conjunctions of atoms or negations of
+	atoms. Furthermore, disjunctive normal forms do not contain
+	implications, equivalences or truth values. A formula in
+	<EM>conjunctive normal form</EM> is a conjunction of
+	disjunctions of atoms or negations of atoms. Finally, any
+	propositional formula can be expressed using just implication
+	and <CODE>False</CODE>.<BR>
+<BR>
+	Each of these normal forms can be achieved by combining a
+	different selection of the rules from module
+	<CODE>prop-laws</CODE> into a transformation.<BR>
+<BR>
+	
+<H5> Transformation Strategies</H5>	Stratego supports user-definable strategies for the
+	application of transformation rules. A strategy is a program
+	that specifies which rules to apply in what order to which
+	sub-terms of a term. <BR>
+<BR>
+	Rule labels are basic strategies. Strategies are composed from
+	rule labels with a number of strategy operators. For example,
+	the specification in Figure&nbsp;<A HREF="#Fig:prop-simplify.r">21</A> uses
+	non-deterministic choice (<CODE>+</CODE>), sequential composition
+	(<CODE>;</CODE>), and recursive closure (<CODE>rec x(s)</CODE>). 
+	Application of transformations below the root of a
+	term is achieved by means of traversal operators such as
+	<CODE>all(s)</CODE>, which applies the strategy <CODE>s</CODE> to all
+	direct sub-terms of the term to which it is applied.<BR>
+<BR>
+	In module <CODE>prop-simplify</CODE> the rules from modules
+	<CODE>prop-laws</CODE> and <CODE>prop-truth</CODE> are combined into
+	strategies that simplify formulae. Strategy <CODE>disjnf</CODE>
+	transforms propositional formulae to disjunctive normal form.
+	It defines a traversal over a term that pushes <CODE>Not</CODE>s
+	inwards on the way down and pushes <CODE>And</CODE>s inwards on the
+	way up. Strategy <CODE>conjnf</CODE> transforms formulae to
+	conjunctive normal form in a similar way, but using
+	<CODE>Or</CODE>-distributivity instead of <CODE>And</CODE>-distributivity.
+	Strategy <CODE>desugar</CODE> defines implication and equivalence in
+	terms of conjunction, disjunction, and negation. 
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 20: Simple traversal strategies. This is an
+	extract from the library module <TT>simple-traversal</TT>. See
+	the Stratego Library for more example strategies.</DIV><BR>
+<A NAME="Fig:"></A>
+	
+		<PRE>module simple-traversal
+strategies
+
+  try(s)           = s &lt;+ id
+  repeat(s)        = rec x(try(s; x))
+
+  topdown(s)       = rec x(s; all(x))
+  bottomup(s)      = rec x(all(x); s)
+  downup(s)        = rec x(s; all(x); s)
+  downup2(s1, s2)  = rec x(s1; all(x); s2)
+
+  oncetd(s)        = rec x(s &lt;+ one(x))
+  oncebu(s)        = rec x(one(x) &lt;+ s)
+
+  alltd(s)         = rec x(s &lt;+ all(x))
+
+  (* etc. *)
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 21: Simplification strategies
+	for propositional formulae.</DIV><BR>
+<A NAME="Fig:prop-simplify.r"></A><BR>
+		<PRE>module prop-simplify
+imports prop-laws prop-truth simple-traversal 
+strategies
+
+ T        = T1 + T2 + T3 + T4 + T5 + T6 + T7 + T8 + T9 + T10 +
+            T11 + T12 + T13 + T14 + T15 + T16 + T17 + T18 + T19
+
+ desugar  = topdown(try(DefI + DefE))
+ eval     = bottomup(repeat(T))
+ impl-nf  = topdown(repeat(DefN + DefA2 + DefO1 + DefE))
+
+ disj-nf  = innermost(DAOL + DAOR + DN + DMA + DMO)
+ conj-nf  = innermost(DOAL + DOAR + DN + DMA + DMO)
+
+</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV>
+<BR>
+<HR>
+<A HREF="Tutorial012.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Tutorial014.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,106 @@
+-----------------------------------------------------------------------
+		        Second Stratego Users Day
+
+		  February 8, 2001, Universiteit Utrecht 
+
+		    http://www.stratego-language.org/
+-----------------------------------------------------------------------
+
+Stratego is a language for program transformation based on the
+paradigm of rewriting strategies. The language is being used in a
+growing number of projects. To bring together designers and users, the
+Second Stratego Users Day will be held at Universiteit Utrecht on
+Thursday, February 8, 2001.
+
+[See the preliminary program at the end of this announcement]
+
+-----------------------------------------------------------------------
+Stratego Tutorial
+-----------------------------------------------------------------------
+Prior to the Users day, on Wednesday, February 7, a full day tutorial
+on Stratego will be given by Eelco Visser, the designer of
+Stratego. In the morning session an overview of the basic principles
+of Stratego is given. In the afternoon, you can apply these principles
+in the lab by writing and testing a number of simple Stratego
+programs. A basic understanding of programming languages and Unix
+tools is assumed for the tutorial. The level of assumed Stratego
+knowledge will depend on the audience.
+
+The tutorial can be attended by a minimun of 2 and a maximum of 10
+participants.
+
+-----------------------------------------------------------------------
+Venue
+-----------------------------------------------------------------------
+The Tutorial and Users Day will be held at the campus of Universiteit
+Utrecht in Utrecht.
+
+-----------------------------------------------------------------------
+Call for Participation
+-----------------------------------------------------------------------
+The Tutorial and Users Day can be attended separately. 
+
+Participation to the tutorial and the users day is free of
+charge. Lunch will be provided by the Software Technology Group at the
+Department of Information and Computing Sciences. Participants of the
+Tutorial will get a reader of Stratego documentation. Participants of
+the Users Day will get the proceedings.
+
+All participants are invited to join us for dinner in one of Utrecht's
+restaurants at the end of the day. Exact location and time will be
+announced during the day.
+
+If you want to participate to the tutorial and/or the users day,
+please register as soon as possible and before January 15, 2001 by
+sending an email to visser@cs.uu.nl with your name and email address.
+Also let me know whether or not you will join for dinner.
+
+-----------------------------------------------------------------------
+Preliminary Program
+-----------------------------------------------------------------------
+
+This is a preliminary program. The final program with definite times
+and details about the venue will be sent to registered participants
+prior to the users day.
+
+10:00 registration
+
+10:20 opening
+
+Session 1: Language Design (chair Eelco Visser)
+
+10:30 Towards Typeful Stratego 
+      by Ralf Laemmel (CWI, VU) 
+
+11:30 Functional Stratego 
+      by Eelco Dolstra (Universiteit Utrecht) 
+
+12:15 lunch
+
+Session 2: Programming Techniques (chair Joost Visser)
+
+13:45 Ready, Steady, Stratego (Some Recipes for Cooking Program
+      Transformations in 20 Minutes) by Eelco Visser 
+      (Universiteit Utrecht)
+
+14:30 break
+
+Session 3: Tools (chair Ralf Laemmel)
+
+14:45 XT Capita Selecta 
+      by Merijn de Jonge and Joost Visser (CWI) 
+
+15:45 break
+
+Session 4: Applications (chair Merijn de Jonge)
+
+16:00 SDL Documentation Generation 
+      by Ronald van Halen (Lucent Technologies) 
+
+16:30 CobolX: Transformations for Improving COBOL Programs 
+      by Hedzer Westra (Universiteit Utrecht) 
+
+17:00 CodeBoost: A Framework for Transforming C++ Programs 
+      by Otto Skrove Bagge (University of Bergen, Norway)
+
+-----------------------------------------------------------------------

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+ Laying out and Commenting Specifications
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="ReferenceManual004.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual006.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>2.2&nbsp;&nbsp; Laying out and Commenting Specifications</H3>	<blockquote><hr>
+	The tokens making up a specification can be separated by means
+	of white space and comments.
+	<hr></blockquote><BR>
+<BR>
+	Spaces, tabs and newlines can be used at will in between
+	tokens of Stratego specifications, but not within tokens
+	(identifiers, keywords, literals, etc.).	<BR>
+<BR>
+	In addition various kinds of comments are supported. A small
+	comment on a single line can be inserted after <CODE>//</CODE>. All
+	characters after <CODE>//</CODE> until the end of the line are
+	comment. <BR>
+<BR>
+	A larger comment can be written between <CODE>(*</CODE> and
+	<CODE>*)</CODE>. No nested occurences of <CODE>*)</CODE> are allowed in
+	such comments.<BR>
+<BR>
+	To write large pieces of documenting text, the literate
+	programming convention can be used. A literate Stratego module
+	starts with the keyword <CODE>\literate</CODE>. Fragments of
+	specification text are enclosed in the phrases
+	<CODE>\begin{code}</CODE> and <CODE>\end{code}</CODE>. In between pieces
+	of code one can write arbitrary text. The general structure of
+	a literate Stratego specification is:
+<PRE>
+  \literate
+     LaTeX text
+  \begin{code}
+     specification text
+  \end{code}
+     LaTeX text
+  \begin{code}
+     specification text
+  \end{code}
+</PRE>	Only the code parts of a module are interpreted by the
+	compiler. A literate Stratego specification can be
+	<CODE>\input</CODE> directly in L<sup>A</sup>T<sub>E</sub>X. The code parts are set in
+	verbatim (provided the right style-file is used), the non-code
+	parts are interpreted as regular L<sup>A</sup>T<sub>E</sub>X material.<BR>
+<BR>
+	<BR>
+<BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 7: Syntax of layout</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module InstantiateLayout
+imports Stratego-Layout
+exports
+  lexical syntax
+    Whitespace -&gt; LAYOUT
+    Comment    -&gt; LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n] | [\(].[\*]</PRE> 	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+	<DIV ALIGN=center><HR SIZE=2></DIV><BR>
+<DIV ALIGN=center>Figure 8: Syntax of layout</DIV><BR>
+<A NAME="Fig:"></A><BR>
+	<PRE>module Stratego-Layout
+exports
+  %%sorts Identifier Natural Modname Variable String
+  lexical syntax
+    [\ \t\n]                             -&gt; Whitespace
+
+    "//" ~[\n]*                          -&gt; Comment
+
+    ~[\*]                                -&gt; CommentChar
+    Asterix                              -&gt; CommentChar
+    "(*" CommentChar* "*)"               -&gt; Comment
+
+    ~[]                                  -&gt; LChar
+    "\\literate"  LChar* "\\begin{code}" -&gt; Comment
+    "\\end{code}" LChar* "\\begin{code}" -&gt; Comment
+
+  lexical restrictions
+    Asterix -/- [\)]
+    LChar+ -/- [\\].[b].[e].[g].[i].[n].[\{].[c].[o].[d].[e].[\}]</PRE>	<DIV ALIGN=center><HR SIZE=2></DIV>
+
+<HR>
+<A HREF="ReferenceManual004.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="ReferenceManual006.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>

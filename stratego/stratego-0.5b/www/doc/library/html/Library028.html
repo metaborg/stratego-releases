@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.05">
+<META name="Author" content="Eelco Visser"><TITLE>
+  BIN-TREE-SET
+</TITLE>
+</HEAD>
+<BODY TEXT=black BGCOLOR=white>
+<A HREF="Library027.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library029.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+<HR>
+
+<H3>5.4.2&nbsp;&nbsp;  BIN-TREE-SET</H3>	<blockquote><hr><BR>
+<BR>
+	Binary trees are efficient representations of sets of elements
+	in terms of lookup. Based on the unique addresses of terms
+	under hash-consing, efficient representations of sets of terms
+	can be made with binary terms.<BR>
+<BR>
+	<hr></blockquote><BR>
+<BR>
+<PRE>
+module bin-tree-set
+imports bin-tree
+strategies
+
+  branch(mky, lt, gt, et) = 
+        BinNode(where(\x -&gt; &lt;eq&gt;(x, &lt;mky&gt;())\), id, id) &lt;+
+        BinNode(where(\x -&gt; &lt;address-lt&gt;(&lt;mky&gt;(), x)\), lt, id) &lt;+
+        BinNode(where(\x -&gt; &lt;address-lt&gt;(x, &lt;mky&gt;())\), id, gt) &lt;+
+        EmptyNode; et
+
+rules
+
+  bin-add : 
+        (a, t) -&gt; 
+        &lt;rec x(branch(!a, x, x, !BinNode(a, EmptyNode, EmptyNode)))&gt; t
+
+  Merge(s) : 
+        (EmptyNode, x) -&gt; x
+  
+  Merge(s) : 
+        (x, EmptyNode) -&gt; x
+
+  Merge(s) : 
+        (BinNode(x, l1, r1), BinNode(x, l2, r2)) -&gt;
+        BinNode(x, &lt;s&gt; (l1, l2), &lt;s&gt; (r1, r2))
+
+  Merge(s) : 
+        (BinNode(x, l1, EmptyNode), BinNode(y, l2, r2)) -&gt;
+        BinNode(y, &lt;s&gt; (BinNode(x, l1, EmptyNode), l2), r2)
+        where &lt;address-lt&gt; (x, y)
+
+  Merge(s) : 
+        (BinNode(x, EmptyNode, r1), BinNode(y, l2, r2)) -&gt;
+        BinNode(y, l2, &lt;s&gt; (BinNode(x, EmptyNode, r1), r2))
+        where &lt;address-lt&gt; (y, x)
+
+  Merge(s) : 
+        (BinNode(x, l1, r1), BinNode(y, l2, r2)) -&gt;
+        &lt;s&gt; (r1, BinNode(y, &lt;s&gt; (BinNode(x, l1, EmptyNode), l2), r2))
+        where &lt;address-lt&gt; (x, y)
+
+  Merge(s) : 
+        (BinNode(x, l1, r1), BinNode(y, l2, r2)) -&gt;
+        &lt;s&gt; (r2, BinNode(x, &lt;s&gt; (BinNode(y, l2, EmptyNode), l1), r1))
+        where &lt;address-lt&gt; (y, x)
+
+strategies
+
+  merge = rec x(Merge(x))
+
+  mkbinset = foldr(!EmptyNode, bin-add)
+</PRE> 	<BR>
+<BR>
+<HR>
+<A HREF="Library027.html"><IMG SRC ="previous_motif.gif" ALT="Previous"></A>
+<A HREF="index.html"><IMG SRC ="contents_motif.gif" ALT="Contents"></A>
+<A HREF="Library029.html"><IMG SRC ="next_motif.gif" ALT="Next"></A>
+</BODY>
+</HTML>
