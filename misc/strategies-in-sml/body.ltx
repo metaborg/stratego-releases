@@ -1,0 +1,126 @@
+\section{Introduction}
+
+	This document lists the SML source code of an interpreter for
+	a rewriting strategy language.
+
+\section{Notes}
+
+	The following contains some notes on features needed.
+
+  	\inputsml{../xmpl/notes.txt}
+
+\section{Examples}
+
+ \subsection{General Strategies}
+
+  	\inputsml{../xmpl/lib.r}
+
+ \subsection{Lists}
+	
+  	\inputsml{../xmpl/list.r}
+
+ \subsection{RML}
+
+	RML is an intermediate language for compiling eager functional
+	languages such as SML developed by Tolmach \cite{}.
+
+  	\inputsml{../xmpl/rml.r}
+
+ \subsection{Optimizing Strategies}
+
+	In this section we give transformation rules on strategy
+	expressions in prefix notation. These rules can be used as
+	part of a compiler for strategies.
+	
+  	\inputsml{../xmpl/strat.r}
+
+\newpage
+
+\section{Main}
+
+  \subsection{The Interpreter}
+
+	The following file loads all core files of the interpreter.
+
+  	\inputsml{sources.cm}
+
+	The interpreter works on abstract syntax. In order to be able
+	to specify rules and strategies in a readable manner, a
+	concrete syntax interface is provided. The following file
+	loads the necessary files for the parser and provides
+	interface functions.
+
+  \subsection{User Interface: The R Shell}
+
+  	\inputsml{rshell.sml}
+
+\section{Syntax}
+
+	This section lists the syntax definition of the language in
+	ML-LEX and ML-YACC source code.
+
+ \subsection{Lexical Syntax}
+
+  	\inputsml{fol.lex}
+
+ \subsection{Context-free Syntax}
+
+  	\inputsml{fol.grm}
+
+\section{Preliminaries}
+
+	\inputsml{prelim.sml}
+
+ 	\subsection{Lists}
+
+	\inputsml{lists.sml}
+
+ 	\subsection{Tables}
+
+	\inputsml{tables.sml}
+
+ 	\subsection{Success / Fail}
+
+	\inputsml{success-fail.sml}
+
+\section{Terms}
+
+	\inputsml{terms.sml}
+
+\section{Copy}
+   
+	\subsection{Gensym}
+	\inputsml{gensym.sml}
+	\subsection{Copy}
+	\inputsml{copy.sml}
+
+\section{Rewrite Rules}
+
+	\inputsml{rules.sml}
+
+\section{Strategies}
+
+	\inputsml{basic-strategies.sml}
+
+\subsection{Defined Strategies}
+
+	\inputsml{defined-strategies.sml}
+
+\section{Contexts}
+
+	The term datastructure allows terms to have contexts,
+	i.e. variables that denote a term with a hole containing a
+	term, possibly with variables. Contexts should only be used in
+	rewrite rules (as should variables). In this section we define
+	a function that defines contexts in terms of a strategy that
+	applies a local rewrite rule.
+
+	\inputsml{contexts.sml}
+
+\section{Strategy Evaluation}
+
+	\inputsml{strategy-eval.sml}
+
+\section{Strategy Definitions}
+
+	\inputsml{strategy-defs.sml}

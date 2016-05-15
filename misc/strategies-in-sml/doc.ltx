@@ -1,0 +1,19 @@
+\documentclass{article}
+  \usepackage{moreverb}
+
+  \newcommand{\inputsml}[1]{
+   \begin{tt}\par\noindent(* file: #1 *)\end{tt}
+   \verbatimtabinput[8]{#1}}
+
+  \title{Rewrite Strategies in SML}
+  \author{Eelco Visser\\
+	  \small OGI, Portland, USA\\
+	  \small visser@acm.org}
+
+\begin{document}
+
+	\maketitle
+
+	\input{body.ltx}
+
+\end{document}

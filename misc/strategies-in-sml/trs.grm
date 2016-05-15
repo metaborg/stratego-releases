@@ -1,0 +1,258 @@
+open Rewrite
+open StrategyDefs
+open DefinedStrategies
+open Strategies
+open Rules
+open Term
+open MyList
+%%
+
+%header (functor TrsLrValsFun (structure Token : TOKEN
+                               structure Interface : INTERFACE ) : Trs_LRVALS)
+
+%term
+    EOF | DOT | COMMA | SEMICOLON | COLON
+  | LPAREN | RPAREN | LBRACK | RBRACK | LCURLY | RCURLY | LT | GT | LL | GG
+  | EQ | TILDE | BACKARROW | DOUBLEARROW | ARROW | BAR
+  | STRATEGIES | RULES | IMPORTS | WHERE
+  | PARSEPROG | PARSEQUERY
+  | MATCH | BUILD | NEW | TEST | KIDS | PRIM of string
+  | STR_GT 
+  | NOT | PLUS | LTPLUS | MU | FAIL | SUCC | SOMETOK | ALL | ONE
+  | LCID of string | UCID of string | INT of int | STRINGTOK of string
+  | OPERATIONS | SIGNATURE | SORTS | ASTERISK | UNDERSCORE | STARSTAR
+
+%nonterm 
+    start of term_or_trs
+  | rules of strategy trs
+  | rule of strategy rule
+  | rule_def of strategy rule_def
+  | termlist of strategy term list 
+  | opttermlist of strategy term list
+  | term of strategy term  
+  | id of string
+  | strategies of strategies
+  | strategy of strategy
+  | label of string
+  | varlist of string list
+  | optvarlist of string list
+  | strategy_def of string * stratDecl
+  | strategylist of strategy list
+  | hole of strategy term option
+  | decls of decl list
+  | decl of decl list
+  | optstrategylist of strategy list
+  | tvarlist of string list
+  | optcond of strategy
+  | optassign of strategy list
+  | sdecl
+  | sdecls
+  | sorts
+  | opdecls
+  | opdecl
+  | typelist
+  | type
+  | idlist of string list
+  | kinds
+  | optkind
+  | kind
+  | optcont of (strategy term * strategy * string) option
+  | opttrav of string
+
+%start start
+%eop EOF
+%pos int
+%verbose
+%pure
+%arg (strat_parser) : string -> term_or_trs
+
+%right COLON
+%right PLUS LTPLUS
+%right SEMICOLON
+%right DOUBLEARROW
+%right RBRACK
+%right SOMETOK ALL MU INT NOT TILDE WHERE TEST ONE
+
+%name Trs
+
+%%
+
+start 	: PARSEPROG decls 		(TRS(decls))
+       	| PARSEQUERY LBRACK strategy RBRACK term 
+					(TERM(strategy, term))
+
+decls	: decl	     			(decl)
+	| decls decl 			(conc decls decl)
+
+decl	:IMPORTS id			
+		(if not(member id (!Interface.imported))
+		 then
+                 let val ln = !Interface.line 
+		     val nm = !Interface.file_name
+		     val decls = 
+			 (TextIO.print("importing " ^ id ^ "\n");
+		          case strat_parser(id ^ ".r") handle Io => TRS([]) of
+		            TRS(decls) => decls
+		          | TERM(_, _) => [] )
+  		  in
+		   Interface.file_name := nm;
+		   Interface.line := ln; 
+		   Interface.next_line();
+		   Interface.imported := id :: !Interface.imported;
+		   decls
+		 end else [])
+	| RULES rules 			([Rules rules])
+	| STRATEGIES strategies 	([Strategies strategies])
+	| SIGNATURE sdecls		([])
+
+sdecls	: sdecl				()
+	| sdecls sdecl 			()
+
+sdecl	: SORTS idlist			()
+	| OPERATIONS opdecls		()
+
+idlist  : id optkind		        ([])
+	| idlist id optkind		(idlist @ [id])
+
+optkind : 				()
+	| LPAREN termlist RPAREN 	()
+
+kinds   : kind 				()
+	| kinds kind 			()
+
+kind	: ASTERISK			()
+	| STARSTAR			()
+
+opdecls : opdecls opdecl 		()
+	| opdecl			()
+
+opdecl	: UCID COLON type		()
+
+type 	: typelist ARROW term 		()
+	| term				()
+
+typelist
+	: typelist ASTERISK term 	()
+	| term				()
+
+id      : LCID 				(LCID)
+   	| UCID 				(UCID)
+
+(* Terms *)
+
+term 	: UNDERSCORE			(TWld')
+	| LCID optcont		      	(case optcont
+				  	 of NONE => TVar'(LCID)
+					  | SOME((term, optcond, trav))
+					  => TCon'(LCID, term, optcond, trav))
+	| INT			      	(TInt'(INT))
+	| STRINGTOK			(TStr'(STRINGTOK))
+     	| UCID opttermlist 		(TOp'(UCID, opttermlist))
+	| LT strategy GT term 		(TApp'(strategy, term))
+	| LBRACK termlist RBRACK	
+		(foldr (fn x => fn y => TOp'("Cons", [x, y]))
+		         (TOp'("Nil", []))
+			 termlist )
+	| LPAREN termlist RPAREN
+		(foldr (fn x => fn y => TOp'("TCons", [x, y]))
+		         (TOp'("TNil", []))
+			 termlist )
+
+optcont : 					(NONE)
+	| LBRACK term optcond RBRACK opttrav	(SOME(term, optcond, opttrav))
+
+opttrav : 				("oncetd")
+	| LPAREN id RPAREN		(id)
+
+opttermlist
+	: 				([])
+	| LPAREN termlist RPAREN 	(termlist)
+
+termlist: term				([term])
+	| term COMMA termlist  		(term :: termlist)
+        |				([])
+
+tvarlist: LCID				([LCID])
+	| LCID COMMA tvarlist  		(LCID :: tvarlist)
+        |				([])
+
+
+(* Rewrite rules *)
+
+rules 	:           			([])
+      	| rules rule_def  	(conc rules [rule_def])
+
+rule_def 
+	: id optvarlist COLON rule	((id, optvarlist, rule))
+       
+rule    : term ARROW term optcond 	(Rule(term1, term2, optcond))
+
+optcond :				(Id')
+	| WHERE strategy		(strategy)
+
+(* Strategies *)
+
+strategy
+	: id optstrategylist
+		(case optstrategylist of [] => Var'(id)
+		  | _ => Label'(id, optstrategylist))
+
+	| MATCH  LPAREN term RPAREN	(Match'(term))
+	| BUILD  LPAREN term RPAREN	(Build'(term))
+	| NEW    			(Prim'("new"))
+	| PRIM    			(Prim'(PRIM))
+	| STR_GT    			(Prim'("str_gt"))
+	| KIDS    			(Prim'("kids"))
+        | LL rule GG			(SRule'(rule))
+
+	| LT strategy GT term		(Seq'(Build'(term), strategy))
+	| strategy DOUBLEARROW term	(Seq'(strategy, Match'(term)))
+
+        | FAIL 				(Fails')
+        | SUCC 				(Id')
+        | INT strategy			(Path'(INT, strategy))
+        | NOT strategy			(Neg'(strategy)) 
+        | WHERE strategy		(Where'(strategy)) 
+        | TEST strategy			(Test'(strategy)) 
+	| LCURLY tvarlist COLON strategy RCURLY 		
+					(Scope'(tvarlist, strategy))
+	| strategy SEMICOLON strategy		(Seq'(strategy1, strategy2))
+	| strategy PLUS strategy 	(Choice'(strategy1, strategy2))
+        | strategy LTPLUS strategy   	(LChoice'(strategy1, strategy2))
+	| MU LCID LPAREN strategy RPAREN(Rec'(LCID, strategy))
+	| SOMETOK strategy		(Some'(strategy))
+	| ONE strategy			(One'(strategy))
+	| ALL strategy			(All'(strategy))
+	| LPAREN strategylist RPAREN	
+	  (case strategylist
+	     of [s] => s
+	      | ss => (foldr (fn x => fn y => Label'("TCons", [x, y]))
+		             (Label'("TNil", []))
+			     ss))
+
+optstrategylist
+	:			     ([])
+	| LPAREN strategylist RPAREN (strategylist)
+
+strategylist 
+	: 				([])
+	| strategy 			([strategy])
+	| strategy COMMA strategylist 	(strategy :: strategylist)
+
+(* Strategy definitions *)
+
+strategies 
+	:                         		([])
+	| strategies strategy_def  	(conc strategies [strategy_def])
+
+strategy_def 
+	: id optvarlist EQ strategy	((id, SDef(optvarlist, strategy)))
+
+optvarlist
+	: 				([])
+	| LPAREN varlist RPAREN 	(varlist)
+
+varlist : 				([])
+	| id				([id])
+	| id COMMA varlist 		(id :: varlist)
+

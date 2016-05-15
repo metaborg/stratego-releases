@@ -1,0 +1,57 @@
+Group is
+	
+	(* sparc version:
+	/home/projects/pacsoft/tools/smlnj-110/src/ml-yacc/lib/base.sig
+	/home/projects/pacsoft/tools/smlnj-110/src/ml-yacc/lib/join.sml
+	/home/projects/pacsoft/tools/smlnj-110/src/ml-yacc/lib/lrtable.sml
+	/home/projects/pacsoft/tools/smlnj-110/src/ml-yacc/lib/stream.sml
+	/home/projects/pacsoft/tools/smlnj-110/src/ml-yacc/lib/parser2.sml
+	*)
+
+	(* linux version *)
+	/home/local/src/smlnj-110/src/ml-yacc/lib/base.sig
+	/home/local/src/smlnj-110/src/ml-yacc/lib/join.sml
+	/home/local/src/smlnj-110/src/ml-yacc/lib/lrtable.sml
+	/home/local/src/smlnj-110/src/ml-yacc/lib/stream.sml
+	/home/local/src/smlnj-110/src/ml-yacc/lib/parser2.sml
+	(* *)
+
+
+	(* Tim's stuff *)
+	gensym.sml
+	c.sml
+	display.sml
+
+	(* datatypes *)
+
+	str.sml
+	prelim.sml
+	lists.sml
+	tables.sml
+	success-fail.sml
+
+	terms.sml
+	rules.sml
+	basic-strategies.sml
+
+	defined-strategies.sml
+	contexts.sml
+	strategy-defs.sml
+
+	copy.sml
+
+	rewrite.sml
+	strategy-eval.sml
+	toc.sml
+
+	absyn.sml
+
+	trs.grm
+	interface.sml
+	trs.lex
+	parse.sml
+	link.sml
+
+	rshell.sml
+
+	bootstrap.sml

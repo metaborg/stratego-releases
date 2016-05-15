@@ -1,0 +1,2398 @@
+4 rules not reduced
+
+warning: rule <kinds : kind > will never be reduced
+warning: rule <kinds : kinds kind > will never be reduced
+warning: rule <kind : ASTERISK > will never be reduced
+warning: rule <kind : STARSTAR > will never be reduced
+
+state 0:
+
+	start : . PARSEPROG decls 
+	start : . PARSEQUERY LBRACK strategy RBRACK term 
+
+	PARSEPROG	shift 2
+	PARSEQUERY	shift 1
+
+	start	goto 164
+
+	.	error
+
+
+state 1:
+
+	start : PARSEQUERY . LBRACK strategy RBRACK term 
+
+	LBRACK	shift 3
+
+
+	.	error
+
+
+state 2:
+
+	start : PARSEPROG . decls 
+
+	STRATEGIES	shift 9
+	RULES	shift 8
+	IMPORTS	shift 7
+	SIGNATURE	shift 6
+
+	decls	goto 5
+	decl	goto 4
+
+	.	error
+
+
+state 3:
+
+	start : PARSEQUERY LBRACK . strategy RBRACK term 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 10
+
+	.	error
+
+
+state 4:
+
+	decls : decl .  (reduce by rule 2)
+
+
+
+	.	reduce by rule 2
+
+
+state 5:
+
+	start : PARSEPROG decls .  (reduce by rule 0)
+	decls : decls . decl 
+
+	STRATEGIES	shift 9
+	RULES	shift 8
+	IMPORTS	shift 7
+	SIGNATURE	shift 6
+
+	decl	goto 34
+
+	.	reduce by rule 0
+
+
+state 6:
+
+	decl : SIGNATURE . sdecls 
+
+	OPERATIONS	shift 38
+	SORTS	shift 37
+
+	sdecl	goto 36
+	sdecls	goto 35
+
+	.	error
+
+
+state 7:
+
+	decl : IMPORTS . id 
+
+	LCID	shift 14
+	UCID	shift 13
+
+	id	goto 39
+
+	.	error
+
+
+state 8:
+
+	decl : RULES . rules 
+
+
+	rules	goto 40
+
+	.	reduce by rule 49
+
+
+state 9:
+
+	decl : STRATEGIES . strategies 
+
+
+	strategies	goto 41
+
+	.	reduce by rule 85
+
+
+state 10:
+
+	start : PARSEQUERY LBRACK strategy . RBRACK term 
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+
+	SEMICOLON	shift 46
+	RBRACK	shift 45
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	error
+
+
+state 11:
+
+	strategy : id . optstrategylist 
+
+	LPAREN	shift 48
+
+	optstrategylist	goto 47
+
+	.	reduce by rule 80
+
+
+state 12:
+
+	strategy : INT . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 49
+
+	.	error
+
+
+state 13:
+
+	id : UCID .  (reduce by rule 28)
+
+
+
+	.	reduce by rule 28
+
+
+state 14:
+
+	id : LCID .  (reduce by rule 27)
+
+
+
+	.	reduce by rule 27
+
+
+state 15:
+
+	strategy : ONE . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 50
+
+	.	error
+
+
+state 16:
+
+	strategy : ALL . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 51
+
+	.	error
+
+
+state 17:
+
+	strategy : SOMETOK . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 52
+
+	.	error
+
+
+state 18:
+
+	strategy : SUCC .  (reduce by rule 66)
+
+
+
+	.	reduce by rule 66
+
+
+state 19:
+
+	strategy : FAIL .  (reduce by rule 65)
+
+
+
+	.	reduce by rule 65
+
+
+state 20:
+
+	strategy : MU . LCID LPAREN strategy RPAREN 
+
+	LCID	shift 53
+
+
+	.	error
+
+
+state 21:
+
+	strategy : NOT . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 54
+
+	.	error
+
+
+state 22:
+
+	strategy : STR_GT .  (reduce by rule 60)
+
+
+
+	.	reduce by rule 60
+
+
+state 23:
+
+	strategy : PRIM .  (reduce by rule 59)
+
+
+
+	.	reduce by rule 59
+
+
+state 24:
+
+	strategy : KIDS .  (reduce by rule 61)
+
+
+
+	.	reduce by rule 61
+
+
+state 25:
+
+	strategy : TEST . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 55
+
+	.	error
+
+
+state 26:
+
+	strategy : NEW .  (reduce by rule 58)
+
+
+
+	.	reduce by rule 58
+
+
+state 27:
+
+	strategy : BUILD . LPAREN term RPAREN 
+
+	LPAREN	shift 56
+
+
+	.	error
+
+
+state 28:
+
+	strategy : MATCH . LPAREN term RPAREN 
+
+	LPAREN	shift 57
+
+
+	.	error
+
+
+state 29:
+
+	strategy : WHERE . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 58
+
+	.	error
+
+
+state 30:
+
+	strategy : LL . rule GG 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	rule	goto 60
+	term	goto 59
+
+	.	error
+
+
+state 31:
+
+	strategy : LT . strategy GT term 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 69
+
+	.	error
+
+
+state 32:
+
+	strategy : LCURLY . tvarlist COLON strategy RCURLY 
+
+	LCID	shift 71
+
+	tvarlist	goto 70
+
+	.	reduce by rule 48
+
+
+state 33:
+
+	strategy : LPAREN . strategylist RPAREN 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 73
+	strategylist	goto 72
+
+	.	reduce by rule 82
+
+
+state 34:
+
+	decls : decls decl .  (reduce by rule 3)
+
+
+
+	.	reduce by rule 3
+
+
+state 35:
+
+	decl : SIGNATURE sdecls .  (reduce by rule 7)
+	sdecls : sdecls . sdecl 
+
+	OPERATIONS	shift 38
+	SORTS	shift 37
+
+	sdecl	goto 74
+
+	.	reduce by rule 7
+
+
+state 36:
+
+	sdecls : sdecl .  (reduce by rule 8)
+
+
+
+	.	reduce by rule 8
+
+
+state 37:
+
+	sdecl : SORTS . idlist 
+
+	LCID	shift 14
+	UCID	shift 13
+
+	id	goto 76
+	idlist	goto 75
+
+	.	error
+
+
+state 38:
+
+	sdecl : OPERATIONS . opdecls 
+
+	UCID	shift 79
+
+	opdecls	goto 78
+	opdecl	goto 77
+
+	.	error
+
+
+state 39:
+
+	decl : IMPORTS id .  (reduce by rule 4)
+
+
+
+	.	reduce by rule 4
+
+
+state 40:
+
+	rules : rules . rule_def 
+	decl : RULES rules .  (reduce by rule 5)
+
+	LCID	shift 14
+	UCID	shift 13
+
+	rule_def	goto 81
+	id	goto 80
+
+	.	reduce by rule 5
+
+
+state 41:
+
+	strategies : strategies . strategy_def 
+	decl : STRATEGIES strategies .  (reduce by rule 6)
+
+	LCID	shift 14
+	UCID	shift 13
+
+	id	goto 83
+	strategy_def	goto 82
+
+	.	reduce by rule 6
+
+
+state 42:
+
+	strategy : strategy LTPLUS . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 84
+
+	.	error
+
+
+state 43:
+
+	strategy : strategy PLUS . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 85
+
+	.	error
+
+
+state 44:
+
+	strategy : strategy DOUBLEARROW . term 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 86
+
+	.	error
+
+
+state 45:
+
+	start : PARSEQUERY LBRACK strategy RBRACK . term 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 87
+
+	.	error
+
+
+state 46:
+
+	strategy : strategy SEMICOLON . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 88
+
+	.	error
+
+
+state 47:
+
+	strategy : id optstrategylist .  (reduce by rule 55)
+
+
+
+	.	reduce by rule 55
+
+
+state 48:
+
+	optstrategylist : LPAREN . strategylist RPAREN 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 73
+	strategylist	goto 89
+
+	.	reduce by rule 82
+
+
+state 49:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : INT strategy .  (reduce by rule 67)
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+
+
+
+	.	reduce by rule 67
+
+
+state 50:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+	strategy : ONE strategy .  (reduce by rule 77)
+
+
+
+	.	reduce by rule 77
+
+
+state 51:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+	strategy : ALL strategy .  (reduce by rule 78)
+
+
+
+	.	reduce by rule 78
+
+
+state 52:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+	strategy : SOMETOK strategy .  (reduce by rule 76)
+
+
+
+	.	reduce by rule 76
+
+
+state 53:
+
+	strategy : MU LCID . LPAREN strategy RPAREN 
+
+	LPAREN	shift 90
+
+
+	.	error
+
+
+state 54:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : NOT strategy .  (reduce by rule 68)
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+
+
+
+	.	reduce by rule 68
+
+
+state 55:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : TEST strategy .  (reduce by rule 70)
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+
+
+
+	.	reduce by rule 70
+
+
+state 56:
+
+	strategy : BUILD LPAREN . term RPAREN 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 91
+
+	.	error
+
+
+state 57:
+
+	strategy : MATCH LPAREN . term RPAREN 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 92
+
+	.	error
+
+
+state 58:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : WHERE strategy .  (reduce by rule 69)
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+
+
+
+	.	reduce by rule 69
+
+
+state 59:
+
+	rule : term . ARROW term optcond 
+
+	ARROW	shift 93
+
+
+	.	error
+
+
+state 60:
+
+	strategy : LL rule . GG 
+
+	GG	shift 94
+
+
+	.	error
+
+
+state 61:
+
+	term : UNDERSCORE .  (reduce by rule 29)
+
+
+
+	.	reduce by rule 29
+
+
+state 62:
+
+	term : STRINGTOK .  (reduce by rule 32)
+
+
+
+	.	reduce by rule 32
+
+
+state 63:
+
+	term : INT .  (reduce by rule 31)
+
+
+
+	.	reduce by rule 31
+
+
+state 64:
+
+	term : UCID . opttermlist 
+
+	LPAREN	shift 96
+
+	opttermlist	goto 95
+
+	.	reduce by rule 41
+
+
+state 65:
+
+	term : LCID . optcont 
+
+	LBRACK	shift 98
+
+	optcont	goto 97
+
+	.	reduce by rule 37
+
+
+state 66:
+
+	term : LT . strategy GT term 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 99
+
+	.	error
+
+
+state 67:
+
+	term : LBRACK . termlist RBRACK 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	termlist	goto 101
+	term	goto 100
+
+	.	reduce by rule 45
+
+
+state 68:
+
+	term : LPAREN . termlist RPAREN 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	termlist	goto 102
+	term	goto 100
+
+	.	reduce by rule 45
+
+
+state 69:
+
+	strategy : LT strategy . GT term 
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+
+	SEMICOLON	shift 46
+	GT	shift 103
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	error
+
+
+state 70:
+
+	strategy : LCURLY tvarlist . COLON strategy RCURLY 
+
+	COLON	shift 104
+
+
+	.	error
+
+
+state 71:
+
+	tvarlist : LCID .  (reduce by rule 46)
+	tvarlist : LCID . COMMA tvarlist 
+
+	COMMA	shift 105
+
+
+	.	reduce by rule 46
+
+
+state 72:
+
+	strategy : LPAREN strategylist . RPAREN 
+
+	RPAREN	shift 106
+
+
+	.	error
+
+
+state 73:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+	strategylist : strategy .  (reduce by rule 83)
+	strategylist : strategy . COMMA strategylist 
+
+	COMMA	shift 107
+	SEMICOLON	shift 46
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	reduce by rule 83
+
+
+state 74:
+
+	sdecls : sdecls sdecl .  (reduce by rule 9)
+
+
+
+	.	reduce by rule 9
+
+
+state 75:
+
+	sdecl : SORTS idlist .  (reduce by rule 10)
+	idlist : idlist . id optkind 
+
+	LCID	shift 14
+	UCID	shift 13
+
+	id	goto 108
+
+	.	reduce by rule 10
+
+
+state 76:
+
+	idlist : id . optkind 
+
+	LPAREN	shift 110
+
+	optkind	goto 109
+
+	.	reduce by rule 14
+
+
+state 77:
+
+	opdecls : opdecl .  (reduce by rule 21)
+
+
+
+	.	reduce by rule 21
+
+
+state 78:
+
+	sdecl : OPERATIONS opdecls .  (reduce by rule 11)
+	opdecls : opdecls . opdecl 
+
+	UCID	shift 79
+
+	opdecl	goto 111
+
+	.	reduce by rule 11
+
+
+state 79:
+
+	opdecl : UCID . COLON type 
+
+	COLON	shift 112
+
+
+	.	error
+
+
+state 80:
+
+	rule_def : id . optvarlist COLON rule 
+
+	LPAREN	shift 114
+
+	optvarlist	goto 113
+
+	.	reduce by rule 88
+
+
+state 81:
+
+	rules : rules rule_def .  (reduce by rule 50)
+
+
+
+	.	reduce by rule 50
+
+
+state 82:
+
+	strategies : strategies strategy_def .  (reduce by rule 86)
+
+
+
+	.	reduce by rule 86
+
+
+state 83:
+
+	strategy_def : id . optvarlist EQ strategy 
+
+	LPAREN	shift 114
+
+	optvarlist	goto 115
+
+	.	reduce by rule 88
+
+
+state 84:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+	strategy : strategy LTPLUS strategy .  (reduce by rule 74)
+
+	SEMICOLON	shift 46
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	reduce by rule 74
+
+
+state 85:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy PLUS strategy .  (reduce by rule 73)
+	strategy : strategy . LTPLUS strategy 
+
+	SEMICOLON	shift 46
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	reduce by rule 73
+
+
+state 86:
+
+	strategy : strategy DOUBLEARROW term .  (reduce by rule 64)
+
+
+
+	.	reduce by rule 64
+
+
+state 87:
+
+	start : PARSEQUERY LBRACK strategy RBRACK term .  (reduce by rule 1)
+
+
+
+	.	reduce by rule 1
+
+
+state 88:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy SEMICOLON strategy .  (reduce by rule 72)
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+
+	SEMICOLON	shift 46
+	DOUBLEARROW	shift 44
+
+
+	.	reduce by rule 72
+
+
+state 89:
+
+	optstrategylist : LPAREN strategylist . RPAREN 
+
+	RPAREN	shift 116
+
+
+	.	error
+
+
+state 90:
+
+	strategy : MU LCID LPAREN . strategy RPAREN 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 117
+
+	.	error
+
+
+state 91:
+
+	strategy : BUILD LPAREN term . RPAREN 
+
+	RPAREN	shift 118
+
+
+	.	error
+
+
+state 92:
+
+	strategy : MATCH LPAREN term . RPAREN 
+
+	RPAREN	shift 119
+
+
+	.	error
+
+
+state 93:
+
+	rule : term ARROW . term optcond 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 120
+
+	.	error
+
+
+state 94:
+
+	strategy : LL rule GG .  (reduce by rule 62)
+
+
+
+	.	reduce by rule 62
+
+
+state 95:
+
+	term : UCID opttermlist .  (reduce by rule 33)
+
+
+
+	.	reduce by rule 33
+
+
+state 96:
+
+	opttermlist : LPAREN . termlist RPAREN 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	termlist	goto 121
+	term	goto 100
+
+	.	reduce by rule 45
+
+
+state 97:
+
+	term : LCID optcont .  (reduce by rule 30)
+
+
+
+	.	reduce by rule 30
+
+
+state 98:
+
+	optcont : LBRACK . term optcond RBRACK opttrav 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 122
+
+	.	error
+
+
+state 99:
+
+	term : LT strategy . GT term 
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+
+	SEMICOLON	shift 46
+	GT	shift 123
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	error
+
+
+state 100:
+
+	termlist : term .  (reduce by rule 43)
+	termlist : term . COMMA termlist 
+
+	COMMA	shift 124
+
+
+	.	reduce by rule 43
+
+
+state 101:
+
+	term : LBRACK termlist . RBRACK 
+
+	RBRACK	shift 125
+
+
+	.	error
+
+
+state 102:
+
+	term : LPAREN termlist . RPAREN 
+
+	RPAREN	shift 126
+
+
+	.	error
+
+
+state 103:
+
+	strategy : LT strategy GT . term 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 127
+
+	.	error
+
+
+state 104:
+
+	strategy : LCURLY tvarlist COLON . strategy RCURLY 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 128
+
+	.	error
+
+
+state 105:
+
+	tvarlist : LCID COMMA . tvarlist 
+
+	LCID	shift 71
+
+	tvarlist	goto 129
+
+	.	reduce by rule 48
+
+
+state 106:
+
+	strategy : LPAREN strategylist RPAREN .  (reduce by rule 79)
+
+
+
+	.	reduce by rule 79
+
+
+state 107:
+
+	strategylist : strategy COMMA . strategylist 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 73
+	strategylist	goto 130
+
+	.	reduce by rule 82
+
+
+state 108:
+
+	idlist : idlist id . optkind 
+
+	LPAREN	shift 110
+
+	optkind	goto 131
+
+	.	reduce by rule 14
+
+
+state 109:
+
+	idlist : id optkind .  (reduce by rule 12)
+
+
+
+	.	reduce by rule 12
+
+
+state 110:
+
+	optkind : LPAREN . termlist RPAREN 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	termlist	goto 132
+	term	goto 100
+
+	.	reduce by rule 45
+
+
+state 111:
+
+	opdecls : opdecls opdecl .  (reduce by rule 20)
+
+
+
+	.	reduce by rule 20
+
+
+state 112:
+
+	opdecl : UCID COLON . type 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 135
+	typelist	goto 134
+	type	goto 133
+
+	.	error
+
+
+state 113:
+
+	rule_def : id optvarlist . COLON rule 
+
+	COLON	shift 136
+
+
+	.	error
+
+
+state 114:
+
+	optvarlist : LPAREN . varlist RPAREN 
+
+	LCID	shift 14
+	UCID	shift 13
+
+	id	goto 138
+	varlist	goto 137
+
+	.	reduce by rule 90
+
+
+state 115:
+
+	strategy_def : id optvarlist . EQ strategy 
+
+	EQ	shift 139
+
+
+	.	error
+
+
+state 116:
+
+	optstrategylist : LPAREN strategylist RPAREN .  (reduce by rule 81)
+
+
+
+	.	reduce by rule 81
+
+
+state 117:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+	strategy : MU LCID LPAREN strategy . RPAREN 
+
+	SEMICOLON	shift 46
+	RPAREN	shift 140
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	error
+
+
+state 118:
+
+	strategy : BUILD LPAREN term RPAREN .  (reduce by rule 57)
+
+
+
+	.	reduce by rule 57
+
+
+state 119:
+
+	strategy : MATCH LPAREN term RPAREN .  (reduce by rule 56)
+
+
+
+	.	reduce by rule 56
+
+
+state 120:
+
+	rule : term ARROW term . optcond 
+
+	WHERE	shift 142
+
+	optcond	goto 141
+
+	.	reduce by rule 53
+
+
+state 121:
+
+	opttermlist : LPAREN termlist . RPAREN 
+
+	RPAREN	shift 143
+
+
+	.	error
+
+
+state 122:
+
+	optcont : LBRACK term . optcond RBRACK opttrav 
+
+	WHERE	shift 142
+
+	optcond	goto 144
+
+	.	reduce by rule 53
+
+
+state 123:
+
+	term : LT strategy GT . term 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 145
+
+	.	error
+
+
+state 124:
+
+	termlist : term COMMA . termlist 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	termlist	goto 146
+	term	goto 100
+
+	.	reduce by rule 45
+
+
+state 125:
+
+	term : LBRACK termlist RBRACK .  (reduce by rule 35)
+
+
+
+	.	reduce by rule 35
+
+
+state 126:
+
+	term : LPAREN termlist RPAREN .  (reduce by rule 36)
+
+
+
+	.	reduce by rule 36
+
+
+state 127:
+
+	strategy : LT strategy GT term .  (reduce by rule 63)
+
+
+
+	.	reduce by rule 63
+
+
+state 128:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : LCURLY tvarlist COLON strategy . RCURLY 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+
+	SEMICOLON	shift 46
+	RCURLY	shift 147
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	error
+
+
+state 129:
+
+	tvarlist : LCID COMMA tvarlist .  (reduce by rule 47)
+
+
+
+	.	reduce by rule 47
+
+
+state 130:
+
+	strategylist : strategy COMMA strategylist .  (reduce by rule 84)
+
+
+
+	.	reduce by rule 84
+
+
+state 131:
+
+	idlist : idlist id optkind .  (reduce by rule 13)
+
+
+
+	.	reduce by rule 13
+
+
+state 132:
+
+	optkind : LPAREN termlist . RPAREN 
+
+	RPAREN	shift 148
+
+
+	.	error
+
+
+state 133:
+
+	opdecl : UCID COLON type .  (reduce by rule 22)
+
+
+
+	.	reduce by rule 22
+
+
+state 134:
+
+	typelist : typelist . ASTERISK term 
+	type : typelist . ARROW term 
+
+	ARROW	shift 150
+	ASTERISK	shift 149
+
+
+	.	error
+
+
+state 135:
+
+	typelist : term .  (reduce by rule 26)
+	type : term .  (reduce by rule 24)
+
+	EOF	reduce by rule 24
+	ARROW	reduce by rule 26
+	STRATEGIES	reduce by rule 24
+	RULES	reduce by rule 24
+	IMPORTS	reduce by rule 24
+	UCID	reduce by rule 24
+	OPERATIONS	reduce by rule 24
+	SIGNATURE	reduce by rule 24
+	SORTS	reduce by rule 24
+	ASTERISK	reduce by rule 26
+
+
+	.	error
+
+
+state 136:
+
+	rule_def : id optvarlist COLON . rule 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	rule	goto 151
+	term	goto 59
+
+	.	error
+
+
+state 137:
+
+	optvarlist : LPAREN varlist . RPAREN 
+
+	RPAREN	shift 152
+
+
+	.	error
+
+
+state 138:
+
+	varlist : id .  (reduce by rule 91)
+	varlist : id . COMMA varlist 
+
+	COMMA	shift 153
+
+
+	.	reduce by rule 91
+
+
+state 139:
+
+	strategy_def : id optvarlist EQ . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 154
+
+	.	error
+
+
+state 140:
+
+	strategy : MU LCID LPAREN strategy RPAREN .  (reduce by rule 75)
+
+
+
+	.	reduce by rule 75
+
+
+state 141:
+
+	rule : term ARROW term optcond .  (reduce by rule 52)
+
+
+
+	.	reduce by rule 52
+
+
+state 142:
+
+	optcond : WHERE . strategy 
+
+	LPAREN	shift 33
+	LCURLY	shift 32
+	LT	shift 31
+	LL	shift 30
+	WHERE	shift 29
+	MATCH	shift 28
+	BUILD	shift 27
+	NEW	shift 26
+	TEST	shift 25
+	KIDS	shift 24
+	PRIM	shift 23
+	STR_GT	shift 22
+	NOT	shift 21
+	MU	shift 20
+	FAIL	shift 19
+	SUCC	shift 18
+	SOMETOK	shift 17
+	ALL	shift 16
+	ONE	shift 15
+	LCID	shift 14
+	UCID	shift 13
+	INT	shift 12
+
+	id	goto 11
+	strategy	goto 155
+
+	.	error
+
+
+state 143:
+
+	opttermlist : LPAREN termlist RPAREN .  (reduce by rule 42)
+
+
+
+	.	reduce by rule 42
+
+
+state 144:
+
+	optcont : LBRACK term optcond . RBRACK opttrav 
+
+	RBRACK	shift 156
+
+
+	.	error
+
+
+state 145:
+
+	term : LT strategy GT term .  (reduce by rule 34)
+
+
+
+	.	reduce by rule 34
+
+
+state 146:
+
+	termlist : term COMMA termlist .  (reduce by rule 44)
+
+
+
+	.	reduce by rule 44
+
+
+state 147:
+
+	strategy : LCURLY tvarlist COLON strategy RCURLY .  (reduce by rule 71)
+
+
+
+	.	reduce by rule 71
+
+
+state 148:
+
+	optkind : LPAREN termlist RPAREN .  (reduce by rule 15)
+
+
+
+	.	reduce by rule 15
+
+
+state 149:
+
+	typelist : typelist ASTERISK . term 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 157
+
+	.	error
+
+
+state 150:
+
+	type : typelist ARROW . term 
+
+	LPAREN	shift 68
+	LBRACK	shift 67
+	LT	shift 66
+	LCID	shift 65
+	UCID	shift 64
+	INT	shift 63
+	STRINGTOK	shift 62
+	UNDERSCORE	shift 61
+
+	term	goto 158
+
+	.	error
+
+
+state 151:
+
+	rule_def : id optvarlist COLON rule .  (reduce by rule 51)
+
+
+
+	.	reduce by rule 51
+
+
+state 152:
+
+	optvarlist : LPAREN varlist RPAREN .  (reduce by rule 89)
+
+
+
+	.	reduce by rule 89
+
+
+state 153:
+
+	varlist : id COMMA . varlist 
+
+	LCID	shift 14
+	UCID	shift 13
+
+	id	goto 138
+	varlist	goto 159
+
+	.	reduce by rule 90
+
+
+state 154:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+	strategy_def : id optvarlist EQ strategy .  (reduce by rule 87)
+
+	SEMICOLON	shift 46
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	reduce by rule 87
+
+
+state 155:
+
+	strategy : strategy . DOUBLEARROW term 
+	strategy : strategy . SEMICOLON strategy 
+	strategy : strategy . PLUS strategy 
+	strategy : strategy . LTPLUS strategy 
+	optcond : WHERE strategy .  (reduce by rule 54)
+
+	SEMICOLON	shift 46
+	DOUBLEARROW	shift 44
+	PLUS	shift 43
+	LTPLUS	shift 42
+
+
+	.	reduce by rule 54
+
+
+state 156:
+
+	optcont : LBRACK term optcond RBRACK . opttrav 
+
+	LPAREN	shift 161
+
+	opttrav	goto 160
+
+	.	reduce by rule 39
+
+
+state 157:
+
+	typelist : typelist ASTERISK term .  (reduce by rule 25)
+
+
+
+	.	reduce by rule 25
+
+
+state 158:
+
+	type : typelist ARROW term .  (reduce by rule 23)
+
+
+
+	.	reduce by rule 23
+
+
+state 159:
+
+	varlist : id COMMA varlist .  (reduce by rule 92)
+
+
+
+	.	reduce by rule 92
+
+
+state 160:
+
+	optcont : LBRACK term optcond RBRACK opttrav .  (reduce by rule 38)
+
+
+
+	.	reduce by rule 38
+
+
+state 161:
+
+	opttrav : LPAREN . id RPAREN 
+
+	LCID	shift 14
+	UCID	shift 13
+
+	id	goto 162
+
+	.	error
+
+
+state 162:
+
+	opttrav : LPAREN id . RPAREN 
+
+	RPAREN	shift 163
+
+
+	.	error
+
+
+state 163:
+
+	opttrav : LPAREN id RPAREN .  (reduce by rule 40)
+
+
+
+	.	reduce by rule 40
+
+
+state 164:
+
+
+	EOF	accept
+
+
+	.	error
+
+180 of 879 action table entries left after compaction
+107 goto table entries
