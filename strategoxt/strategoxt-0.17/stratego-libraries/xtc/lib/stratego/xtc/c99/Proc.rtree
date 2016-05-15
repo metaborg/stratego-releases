@@ -1,0 +1,1 @@
+Module("stratego/xtc/c99/Proc",[Strategies([RDefNoArgs("read-from",Rule(NoAnnoList(Op("FILE",[Var("name")])),Var("t"),AM(BA(CallNoArgs(SVar("ReadFromFile")),Var("name")),Var("t"))))])])

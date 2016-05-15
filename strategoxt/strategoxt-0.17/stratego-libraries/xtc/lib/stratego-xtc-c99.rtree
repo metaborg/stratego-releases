@@ -1,0 +1,1 @@
+Module("stratego-xtc-c99",[Imports([Import("libstratego-lib-c99"),Import("stratego/xtc/Repository"),Import("stratego/xtc/Proc"),Import("stratego/xtc/Register"),Import("stratego/xtc/c99/Proc"),Import("stratego/xtc/c99/Repository"),Import("stratego/xtc/c99/xtc-new-file")])])

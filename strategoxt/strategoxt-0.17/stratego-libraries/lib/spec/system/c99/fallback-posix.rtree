@@ -1,0 +1,1 @@
+Module("system/c99/fallback-posix",[Strategies([SDefNoArgs("report-run-time",Id)])])

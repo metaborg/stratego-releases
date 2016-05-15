@@ -1,0 +1,1 @@
+Module("libstrategolib",[Imports([Import("libstratego-lib")])])

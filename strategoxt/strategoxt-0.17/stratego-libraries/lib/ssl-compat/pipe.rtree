@@ -1,0 +1,1 @@
+Module("pipe",[Imports([Import("system/posix/pipe")])])

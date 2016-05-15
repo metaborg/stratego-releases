@@ -1,0 +1,1 @@
+Module("posix-signal",[Imports([Import("system/posix/signal")])])

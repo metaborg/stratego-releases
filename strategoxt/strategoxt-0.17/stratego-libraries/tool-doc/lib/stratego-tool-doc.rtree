@@ -1,0 +1,1 @@
+Module("stratego-tool-doc",[Imports([Import("libstratego-sglr"),Import("stratego/tool-doc/Main"),Import("stratego/tool-doc/PrettyPrint")])])

@@ -1,0 +1,1 @@
+Module("system/io/dir",[Strategies([SDefNoArgs("remove-file",Seq(Match(Var("name")),Prim("\"SSL_remove\"",[Var("name")]))),SDefNoArgs("getenv",Seq(Match(Var("name")),Prim("\"SSL_getenv\"",[Var("name")])))]),Strategies([SDefNoArgs("home-dir",BA(CallNoArgs(SVar("getenv")),NoAnnoList(Str("\"HOME\""))))])])

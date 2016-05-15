@@ -1,0 +1,1 @@
+Module("memo",[Imports([Import("strategy/general/memo")])])

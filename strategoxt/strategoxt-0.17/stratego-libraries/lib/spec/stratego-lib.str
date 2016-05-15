@@ -1,0 +1,1 @@
+module stratego-lib imports stratego-lib-posix-xsi

@@ -1,0 +1,1 @@
+Module("system/io/process",[Strategies([SDefNoArgs("exit",Seq(Match(Var("n")),Prim("\"SSL_exit\"",[Var("n")])))])])

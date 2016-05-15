@@ -1,0 +1,1512 @@
+definition
+module Stratego-Sugar-Overlays
+imports
+  Stratego-Core-Identifiers
+  Stratego-Sugar-Terms
+
+exports
+  sorts Overlay
+  context-free syntax
+    Id 			 "=" Term 	-> Overlay {cons("OverlayNoArgs")}
+    Id "(" {Id ","}* ")" "=" Term 	-> Overlay {cons("Overlay")}
+
+module Stratego-Sugar-DynamicRules
+imports
+  Stratego-Core-Identifiers
+  Stratego-Sugar-Strategies
+  Stratego-Sugar-Rules
+
+exports
+ 
+  sorts ScopeLabels
+  context-free syntax
+
+    "{|" ScopeLabels ":" Strategy "|}" -> Strategy {cons("DynRuleScope")}
+
+    {DynRuleScopeId ","}*   -> ScopeLabels
+    "~" Term		    -> ScopeLabels {cons("ScopeLabels")}
+
+  sorts DynRuleDef DynRuleId DynRuleScopeId RuleDec
+  context-free syntax
+
+    "rules" "(" DynRuleDef* ")" -> Strategy {cons("GenDynRules")}
+
+    Id "+" Term                 -> DynRuleDef {cons("AddScopeLabel")} 
+    DynRuleId ":-"  Term        -> DynRuleDef {cons("UndefineDynRule")}
+    DynRuleId ":"   Rule        -> DynRuleDef {cons("SetDynRule")}
+    DynRuleId ":+"  Rule        -> DynRuleDef {cons("AddDynRule")}
+    DynRuleId ":"   Term        -> DynRuleDef {cons("SetDynRuleMatch")}
+
+    DynRuleId ":="  Term        -> DynRuleDef {cons("DynRuleAssign")}
+    DynRuleId ":+="  Term       -> DynRuleDef {cons("DynRuleAssignAdd")}
+
+    DynRuleId ":"   Rule "depends" "on" Term -> DynRuleDef {cons("SetDynRuleDepends")}
+
+    RuleDec "." Term            -> DynRuleId {cons("LabeledDynRuleId")}
+    RuleDec "+" Term            -> DynRuleId {cons("AddLabelDynRuleId")}
+    RuleDec                     -> DynRuleId {cons("DynRuleId")}
+
+    Id "." Term                 -> DynRuleScopeId {cons("LabeledDynRuleScopeId")}
+    Id                          -> DynRuleScopeId {cons("DynRuleScopeId")}
+
+  context-free syntax
+
+    Id                          -> RuleDec {cons("RDecNoArgs")}
+    Id "(" {Typedid ","}* ")"   -> RuleDec {cons("RDec")}
+    Id "(" {Typedid ","}* 
+       "|" {Typedid ","}* ")"   -> RuleDec {cons("RDecT")}
+
+  sorts RuleNames
+  context-free syntax
+    {Id ","}*				  -> RuleNames
+    "~" Term				  -> RuleNames {cons("RuleNames")}
+
+    "/" RuleNames "\\*" Strategy          -> Strategy {cons("DynRuleIntersectFix")}
+
+  syntax
+    %% no space after RuleNames
+    "\\" <LAYOUT?-CF> <RuleNames-CF> "/*" <LAYOUT?-CF> <Strategy-CF>
+      -> <Strategy-CF> {cons("DynRuleUnionFix")}
+
+    %% 1 space after RuleNames
+    "\\" <LAYOUT?-CF> <RuleNames-CF> " /*" <LAYOUT?-CF> <Strategy-CF>
+      -> <Strategy-CF> {cons("DynRuleUnionFix")}
+
+    %% no space after RuleNames
+    "/"  <LAYOUT?-CF> <RuleNames-CF> <LAYOUT?-CF> "\\"
+        <LAYOUT?-CF> <RuleNames-CF> "/*" <LAYOUT?-CF> <Strategy-CF>
+      -> <Strategy-CF> {cons("DynRuleIntersectUnionFix")}
+
+    %% 1 space after RuleNames
+    "/"  <LAYOUT?-CF> <RuleNames-CF> <LAYOUT?-CF> "\\"
+        <LAYOUT?-CF> <RuleNames-CF> " /*" <LAYOUT?-CF> <Strategy-CF>
+      -> <Strategy-CF> {cons("DynRuleIntersectUnionFix")}
+
+
+  context-free syntax
+    Strategy "/" RuleNames"\\" Strategy  -> Strategy {cons("DynRuleIntersect"),right}
+    Strategy "\\" RuleNames "/" Strategy  -> Strategy {cons("DynRuleUnion"),right}
+
+    Strategy "/" RuleNames "\\" 
+                 RuleNames "/"  Strategy  -> Strategy {cons("DynRuleIntersectUnion"),right}
+
+  priorities
+    <StrategyAngle-CF> <LAYOUT?-CF> <Term-CF> -> <Strategy-CF> {cons("BA")}
+  > {
+
+    %% no space after RuleNames
+    "\\" <LAYOUT?-CF> <RuleNames-CF> "/*" <LAYOUT?-CF> <Strategy-CF>
+      -> <Strategy-CF> {cons("DynRuleUnionFix")}
+
+    %% 1 space after RuleNames
+    "\\" <LAYOUT?-CF> <RuleNames-CF> " /*" <LAYOUT?-CF> <Strategy-CF>
+      -> <Strategy-CF> {cons("DynRuleUnionFix")}
+
+    %% no space after RuleNames
+    "/"  <LAYOUT?-CF> <RuleNames-CF> <LAYOUT?-CF> "\\"
+        <LAYOUT?-CF> <RuleNames-CF> "/*" <LAYOUT?-CF> <Strategy-CF>
+      -> <Strategy-CF> {cons("DynRuleIntersectUnionFix")}
+
+    %% 1 space after RuleNames
+    "/"  <LAYOUT?-CF> <RuleNames-CF> <LAYOUT?-CF> "\\"
+        <LAYOUT?-CF> <RuleNames-CF> " /*" <LAYOUT?-CF> <Strategy-CF>
+      -> <Strategy-CF> {cons("DynRuleIntersectUnionFix")}
+
+    }
+  > <Strategy-CF> <LAYOUT?-CF> "=>" <LAYOUT?-CF> <Term-CF> -> <Strategy-CF> {cons("AM")}
+
+  context-free priorities
+    StrategyAngle Term 		          -> Strategy {cons("BA")}
+  > "/" RuleNames "\\*" Strategy          -> Strategy {cons("DynRuleIntersectFix")}
+  > Strategy "=>" Term 		  	  -> Strategy {cons("AM")}
+  > Strategy "/" RuleNames "\\" Strategy  -> Strategy {cons("DynRuleIntersect"),right}
+  > Strategy "\\" RuleNames "/" Strategy  -> Strategy {cons("DynRuleUnion"),right}
+  > Strategy "/" RuleNames "\\" 
+                 RuleNames "/"  Strategy  -> Strategy {cons("DynRuleIntersectUnion"),right}
+  > Strategy ";" Strategy 		  -> Strategy {cons("Seq"),right}
+
+module Stratego-Sugar-Rules
+imports Stratego-Sugar-Strategies
+exports
+
+  sorts RuleDef
+  context-free syntax
+    Id ":" Rule 				-> RuleDef {cons("RDefNoArgs")}
+
+    Id "(" {Typedid ","}* ")" ":" Rule 		-> RuleDef {cons("RDef")}
+
+    Id "(" {Typedid ","}* 
+       "|" {Typedid ","}* ")" ":" Rule 		-> RuleDef {cons("RDefT")}
+
+  sorts Rule RuleCond
+  context-free syntax
+    Term "->" Term           	    -> Rule {cons("RuleNoCond")} %% backward comp.
+    Term "->" Term "where" Strategy -> Rule {cons("Rule")}       %% backward comp.
+    Term "->" Term RuleCond+	    -> Rule {cons("Rule"), avoid}
+
+    "where" Strategy -> RuleCond {cons("WhereClause")}
+    "with"  Strategy -> RuleCond {cons("WithClause")}
+
+module Stratego-Sugar-Strategies
+imports
+  Stratego-Core-Strategies
+  Stratego-Sugar-Terms
+  Stratego-Sugar-Constants
+  Stratego-Sugar-Signatures
+
+exports
+  context-free syntax
+    Id  		      "=" Strategy -> StrategyDef {cons("SDefNoArgs")}
+    Id "(" {Typedid ","}* ")" "=" Strategy -> StrategyDef {cons("SDef")}
+
+  context-free syntax
+    ID 				  	  -> Typedid {cons("DefaultVarDec")}
+
+  sorts Rule
+
+  sorts StrategyParen StrategyCurly StrategyAngle
+  context-free syntax
+
+    %% Abstraction
+
+    SVar "(" {Strategy ","}* ")" 	  -> Strategy {cons("Call")}
+
+    %% Match and build
+
+    "{" Strategy "}" 			  -> Strategy {cons("ScopeDefault")}
+
+     %%"<" Strategy ">" Term 		  -> Strategy {cons("BA")}
+     StrategyAngle Term 		  -> Strategy {cons("BA")}
+     "<" Strategy ">"			  -> StrategyAngle {bracket} %% {cons("AngleStrat")}
+
+    %% Combinators
+
+    Strategy "<+" Strategy 		  -> Strategy {cons("LChoice"),right}
+
+    "rec" Id "(" Strategy ")" 		  -> Strategy {cons("Rec")}
+
+    "not"   "(" Strategy ")" 		  -> Strategy {cons("Not")}
+    "where" "(" Strategy ")" 		  -> Strategy {cons("Where")}
+    "with"  "(" Strategy ")" 		  -> Strategy {cons("With"), prefer}
+    "test"  "(" Strategy ")" 		  -> Strategy {cons("Test")}
+
+    %% Primitives
+
+    "prim" "(" String ")" 		  -> Strategy {cons("PrimNoArgs")}
+    "prim" "(" String "," {Term ","}* ")" -> Strategy {cons("Prim")}
+
+    %% Congruence operators
+
+    String 				  -> Strategy {cons("StrCong")}
+    Int 				  -> Strategy {cons("IntCong")}
+    Real 				  -> Strategy {cons("RealCong")}
+    Char 			 	  -> Strategy {cons("CharCong")}
+
+    String "(" {Strategy ","}* ")" 	  -> Strategy {cons("CongQ")}
+
+    %%"(" {Strategy ","}* ")" 		  -> Strategy {cons("TupleCong"),avoid}
+
+    Strategy StrategyCurly		  -> Strategy {cons("AnnoCong")}
+    "{" Strategy "}"		  	  -> StrategyCurly {cons("StrategyCurly")}
+
+    "("  ")" 		  		  -> Strategy {cons("EmptyTupleCong")}
+   "(" Strategy  ")" 		          -> Strategy {bracket}
+    "(" Strategy "," {Strategy ","}+ ")"  -> Strategy {cons("TupleCong")}
+
+%%    Mod 	  			  -> Strategy {cons("ModCongNoArgs")}
+%%    Mod "(" {Strategy ","}* ")"	  	  -> Strategy {cons("ModCong")}
+%%    Id "^" Id				  -> Mod {cons("Mod")}
+    "[" {Strategy ","}* "]" 		  -> Strategy {cons("ListCongNoTail")}
+    "[" {Strategy ","}* "|" Strategy "]"  -> Strategy {cons("ListCong")}
+
+%%    Strategy "#" "(" StrategyInj ")" 	  -> Strategy {cons("ExplodeCong")}
+%%    Strategy "#" "(" Strategy ")" 	  -> Strategy {cons("ExplodeCong")}
+    Strategy "#" StrategyParen	  	  -> Strategy {cons("ExplodeCong")}
+
+  %% Syntactic sugar sugar
+
+  sorts SwitchCase
+  context-free syntax
+
+    SVar  		  		  -> Strategy {cons("CallNoArgs")}
+    "\\" Rule "\\" 			  -> Strategy {cons("LRule")}
+    "(" Rule ")" 			  -> Strategy {cons("SRule")}
+    Strategy "+" Strategy 		  -> Strategy {cons("Choice"),right} 
+    Strategy "+>" Strategy 		  -> Strategy {cons("RChoice"),right}
+
+    "if" Strategy "then" Strategy 
+                  "else" Strategy "end"   -> Strategy {cons("CondChoice")}
+    "if" Strategy "then" Strategy "end"   -> Strategy {cons("IfThen")}
+
+    "switch" Strategy SwitchCase* "end"   -> Strategy {cons("SwitchChoiceNoOtherwise")}
+    "switch" Strategy SwitchCase*
+         "otherwise" ":" Strategy "end"   -> Strategy {cons("SwitchChoice")}
+
+    "case" Strategy ":" Strategy          -> SwitchCase {cons("SwitchCase")}
+
+    Strategy "=>" Term 		  	  -> Strategy {cons("AM")}
+
+    Term ":=" Term			  -> Strategy {cons("Assign")}
+
+  %% Priorities
+
+  context-free priorities
+    { Strategy StrategyCurly		  -> Strategy
+      Strategy "#" StrategyParen          -> Strategy
+    }
+  > { "!" Term 				  -> Strategy
+      "?" Term 				  -> Strategy
+    }
+  > StrategyAngle Term 		          -> Strategy
+  > Strategy "=>" Term 		  	  -> Strategy
+  > Strategy ";" Strategy 		  -> Strategy
+  > {right: 
+     Strategy "+" Strategy 		  -> Strategy
+     Strategy "<+" Strategy 		  -> Strategy
+     Strategy "+>" Strategy 		  -> Strategy
+     
+     Strategy "<" StrategyMid 
+              "+" Strategy 		  -> Strategy
+    }
+
+  context-free priorities
+    Strategy 				  -> StrategyMid
+  > Strategy "+" Strategy 		  -> Strategy
+
+  context-free priorities
+    { Strategy StrategyCurly      -> Strategy
+      Strategy "#" StrategyParen  -> Strategy
+    }
+    .> Term ":=" Term -> Strategy
+
+
+module Stratego-Sugar-Terms
+imports
+  Stratego-Core-Terms
+  Stratego-Sugar-Strategies
+
+exports
+  sorts LID
+  context-free syntax
+    LId 			-> LID  {cons("ListVar")}
+    LID				-> Var  {cons("Var")}
+    LID				-> ID
+
+  context-free syntax
+    "_" PreTerm 		 -> PreTerm {cons("BuildDefaultPT")}
+    "_" Term 			 -> Term {cons("BuildDefault"),prefer}
+
+    Char 			 -> PreTerm {cons("Char")}
+
+    PreTerm "{" {Term ","}* "}"	 -> Term {cons("AnnoList")}
+    PreTerm                      -> Term {cons("NoAnnoList")}
+
+    "<" Strategy ">" Term 	 -> PreTerm {cons("App")}
+    "<" Strategy ">" Term 	 -> Term {cons("App"),prefer}
+
+    StrategyAngle		 -> PreTerm {cons("RootApp")}
+    StrategyAngle		 -> Term {cons("RootApp"),prefer}
+
+    "(" {Term ","}* ")" 	 -> PreTerm {cons("Tuple")}
+    "[" {Term ","}* "]" 	 -> PreTerm {cons("List")}
+    "[" {Term ","}* "|" Term "]" -> PreTerm {cons("ListTail")}
+
+  context-free priorities
+    Term "#" "(" Term ")" 	 -> PreTerm {cons("Explode")}
+  > PreTerm "{" {Term ","}* "}"	 -> Term {cons("AnnoList")}
+  > Var "@" Term 		 -> Term {cons("As")}
+
+module Stratego-Sugar-Signatures
+imports
+  Stratego-Core-Signatures
+  Stratego-Sugar-Constants
+
+exports
+
+  sorts Sort
+  context-free syntax
+    "[" {Sort ","}* "]"		 -> Sort {cons("SortList")}
+    "[" {Sort ","}* "|" Sort "]" -> Sort {cons("SortListTl")}
+    "(" {Sort ","}* ")"		 -> Sort {cons("SortTuple")}
+
+  sorts Kind
+  context-free syntax
+    "*" 			-> Kind {cons("Star")}
+    "**" 			-> Kind {cons("StarStar")}
+
+module Stratego-Core-Signatures
+imports
+  Stratego-Core-Identifiers
+  Stratego-Core-Constants
+exports
+  sorts Sdecl
+  context-free syntax
+    "sorts" Sort* 		-> Sdecl {cons("Sorts")}
+    "constructors" Opdecl* 	-> Sdecl {cons("Constructors")}
+
+  sorts Sort
+  context-free syntax
+    LCID 			 -> Sort {cons("SortVar")}
+    UCID 			 -> Sort {cons("SortNoArgs")}
+    Id "(" {Sort ","}* ")" 	 -> Sort {cons("Sort")}
+
+  sorts Opdecl
+  context-free syntax
+    Id     ":" Type 		-> Opdecl {cons("OpDecl")}
+    String ":" Type 		-> Opdecl {cons("OpDeclQ")}
+           ":" Type 		-> Opdecl {cons("OpDeclInj")}
+
+  context-free syntax
+    "external" Id     ":" Type 	-> Opdecl {cons("ExtOpDecl")}
+    "external" String ":" Type 	-> Opdecl {cons("ExtOpDeclQ")}
+    "external"        ":" Type 	-> Opdecl {cons("ExtOpDeclInj")}
+
+  sorts Type ArgType ConstType FunType RetType
+  context-free syntax
+    Sort	                -> ConstType {cons("ConstType")}
+    {ArgType "*"}+ "->" RetType -> FunType {cons("FunType")}
+    "(" Type ")"                -> ArgType {bracket}
+    ConstType			-> ArgType
+    Type	                -> RetType
+    FunType			-> RetType {reject}
+
+    FunType			-> Type
+    ConstType			-> Type
+
+  %%%
+   %% Restriction is required for the Sort* in Sdecl: List(a) is
+   %% ambiguous.
+   %%%
+  context-free restrictions
+    Sort -/- [\(]
+
+module Stratego-Core-Terms
+imports
+  Stratego-Core-Identifiers
+  Stratego-Core-Constants
+
+exports
+  sorts ID Var Wld
+  context-free syntax
+    Id 				-> Var  {cons("Var")}
+    Id				-> ID
+    %% ":" Var                  -> Var  {cons("SeqVar")}
+
+  sorts Term PreTerm
+  context-free syntax
+    Var 			 -> PreTerm 
+    Var 			 -> Term {prefer}
+
+    "_" 			 -> Wld {cons("Wld")}
+    Wld 			 -> PreTerm
+    Wld 			 -> Term {prefer}
+
+    Int 			 -> PreTerm {cons("Int")}
+    Real 			 -> PreTerm {cons("Real")}
+    String 			 -> PreTerm {cons("Str")}
+
+    Id "(" {Term ","}* ")" 	 -> PreTerm {cons("Op")}
+    String "(" {Term ","}* ")" 	 -> PreTerm {cons("OpQ")}
+    Term "#" "(" Term ")" 	 -> PreTerm {cons("Explode")}
+
+    PreTerm "{^" PreTerm "}"	 -> Term {cons("Anno")}
+
+    Var "@" Term 		 -> Term {cons("As"),prefer}
+    Var "@" PreTerm 		 -> PreTerm {cons("As")}
+
+  context-free priorities
+    Term "#" "(" Term ")" 	 -> PreTerm {cons("Explode")}
+  > Var "@" Term 		 -> Term {cons("As")}
+
+module Stratego-Core-Strategies
+imports
+  Stratego-Core-Terms
+  Stratego-Core-Constants
+  Stratego-Core-Signatures
+
+exports
+  sorts Def
+  context-free syntax
+    StrategyDef					 -> Def 
+    Id						 -> SVar {cons("SVar")}
+    "let" Def* "in" Strategy "end"		 -> Strategy {cons("Let")}
+    SVar "(" {Strategy ","}* "|" {Term ","}* ")" -> Strategy {cons("CallT")}
+
+    "call" "(" Term "|" {Strategy ","}* "|" {Term ","}* ")" -> Strategy {cons("CallDynamic")}
+
+
+  sorts StrategyDef
+  context-free syntax
+    Id "(" {Typedid ","}* 
+       "|" {Typedid ","}* ")" "=" Strategy -> StrategyDef {cons("SDefT")}
+
+    "external"
+    Id "(" {Typedid ","}* 
+       "|" {Typedid ","}* ")" "=" Strategy -> StrategyDef {cons("ExtSDefInl")}
+
+    "external"
+    Id "(" {Typedid ","}* 
+       "|" {Typedid ","}* ")"		   -> StrategyDef {cons("ExtSDef")}
+
+
+  sorts Typedid
+  context-free syntax
+    ID ":" Type 			  -> Typedid {cons("VarDec")}
+
+
+  sorts Strategy SVar StrategyParen StrategyMid 
+  context-free syntax
+    "(" Strategy ")"			  -> StrategyParen {cons("ParenStrat")}
+
+    "fail" 				  -> Strategy {cons("Fail")}
+    "id" 				  -> Strategy {cons("Id")}
+
+    %% Match and build
+
+    "?" Term 				  -> Strategy {cons("Match")}
+    "!" Term 				  -> Strategy {cons("Build")}
+    "{" {ID ","}* ":" Strategy "}" 	  -> Strategy {cons("Scope")}
+
+    %% Combinators
+
+    Strategy ";" Strategy 		  -> Strategy {cons("Seq"),right}
+    Strategy "<" StrategyMid 
+             "+" Strategy 		  -> Strategy {cons("GuardedLChoice"),right}
+    Strategy 				  -> StrategyMid
+
+    %% Primitives
+
+    "prim" "(" String "," {Strategy ","}* "|" {Term ","}*")"  -> Strategy {cons("PrimT")}
+
+    %% Traversal
+
+    "some" "(" Strategy ")" 		  -> Strategy {cons("Some")}
+    "one" "(" Strategy ")" 		  -> Strategy {cons("One")}
+    "all" "(" Strategy ")" 		  -> Strategy {cons("All")}
+
+  %% Priorities
+
+  context-free priorities
+    { "!" Term 				  -> Strategy {cons("Build")}
+      "?" Term 				  -> Strategy {cons("Match")}
+    }
+  > Strategy ";" Strategy 		  -> Strategy {cons("Seq"),right}
+  > {right: 
+     Strategy "<" StrategyMid 
+              "+" Strategy 		  -> Strategy {cons("GuardedLChoice"),right}
+    }
+
+  context-free syntax
+    "import-term" "(" ModName ")" -> Strategy {cons("ImportTerm")}
+
+module Stratego-Core-Modules
+imports
+  Stratego-Core-Identifiers
+  Stratego-Core-Strategies
+  Stratego-Core-Signatures
+
+exports 
+  sorts Module
+  context-free syntax
+    "module" ModName Decl* 	 -> Module {cons("Module")}
+    "specification" Decl*	 -> Module {cons("Specification")}
+
+  sorts Decl 
+  context-free syntax
+    "imports" ImportModName* 	-> Decl {cons("Imports")}
+    "strategies" Def* 		-> Decl {cons("Strategies")}
+    "signature" Sdecl*  	-> Decl {cons("Signature")}
+
+  sorts ImportModName
+  context-free syntax
+    ModName              -> ImportModName {cons("Import")}
+  syntax
+    <ModName-CF> "/" "-" -> <ImportModName-CF> {cons("ImportWildcard")}
+
+module Stratego-Sugar-Modules
+imports
+  Stratego-Core-Modules
+  Stratego-Sugar-Strategies
+  Stratego-Sugar-Signatures
+  Stratego-Sugar-Overlays
+  Stratego-Sugar-Rules
+
+exports 
+
+  sorts Decl Def
+  context-free syntax
+    "rules" Def* 		-> Decl {cons("Rules")}
+    "overlays" Overlay* 	-> Decl {cons("Overlays")}
+
+    RuleDef 			-> Def 
+
+
+module Stratego-Core-Constants
+exports
+  sorts Int Real String StrChar
+  lexical syntax
+    [\-]? [0-9]+ 		-> Int
+    [\-]? [0-9]+ [\.] [0-9]+ 	-> Real
+    "\"" StrChar* "\"" 		-> String
+    ~[\"\\] 			-> StrChar
+    [\\] [\"tnr\\] 		-> StrChar
+
+
+module Stratego-Sugar-Constants
+imports Stratego-Core-Identifiers Stratego-Core-Constants
+exports
+  sorts Char CharChar
+  lexical syntax
+    "'" CharChar "'"		-> Char
+    ~[\']			-> CharChar
+    [\\] [\'ntr\ ]		-> CharChar
+    Char		 	-> Id {reject}
+
+module Stratego-Core-Identifiers
+exports
+  sorts ModName ModNamePart
+  lexical syntax
+    {ModNamePart "/"}+ -> ModName
+    [a-zA-Z\.\_] [a-zA-Z0-9\'\.\-\_]* -> ModNamePart
+  lexical restrictions
+    ModName -/- [a-zA-Z0-9\'\.\-\_]
+  lexical syntax
+    "imports" 		-> ModName {reject}
+    "overlays" 		-> ModName {reject}
+    "rules" 		-> ModName {reject}
+    "signature" 	-> ModName {reject}
+    "strategies" 	-> ModName {reject}
+
+  sorts Id LId LCID UCID Wld
+  lexical syntax
+    [a-zA-Z\_] [a-zA-Z0-9\'\-\_]*     -> Id
+    [a-zA-Z\_] [a-zA-Z0-9\'\-\_]* "*" -> LId
+    [\'] [a-z]+                       -> Id
+
+    [a-z] [a-zA-Z0-9\'\-\_]*  -> LCID
+    [A-Z] [a-zA-Z0-9\'\-\_]*  -> UCID
+
+  lexical restrictions
+    Id   -/- [a-zA-Z0-9\'\-\_\*]
+    LId  -/- [a-zA-Z0-9\'\-\_]
+    LCID -/- [a-zA-Z0-9\'\-\_]
+    UCID -/- [a-zA-Z0-9\'\-\_]
+
+  lexical syntax
+    "_"     -> Id {reject}
+    "'"     -> Id {reject}
+
+    Keyword -> Id   {reject}
+    Keyword -> LId  {reject}
+    Keyword -> LCID {reject}
+    Keyword -> UCID {reject}
+
+  lexical restrictions
+    "all"
+    "case" %% not reserved kw
+    "constructors"
+    "else" %% not reserved kw
+    "end" %% not reserved kw
+    "external" %% not reserved kw
+    "fail"
+    "id"
+    "if" %% not reserved kw
+    "in"
+    "imports" %% not reserved kw
+    "let"
+    "module"
+    "not"
+    "one"
+    "overlays"
+    "otherwise" %% not reserved kw
+    "prim"
+    "rec" %% not reserved kw
+    "rules"
+    "script"
+    "signature"
+    "some"
+    "sorts"
+    "strategies"
+    "stratego"
+    "switch" %% not reserved kw
+    "test"
+    "then" %% not reserved kw
+    "where"
+    "import-term"
+      -/- [a-zA-Z0-9\'\-\_]
+  
+  context-free restrictions
+    Wld -/- [a-zA-Z0-9\'\-\_]
+
+  sorts Keyword
+  lexical syntax
+    "all"               -> Keyword
+    "constructors" 	-> Keyword
+    "fail" 		-> Keyword
+    "id" 		-> Keyword
+    "in" 		-> Keyword
+    "let" 		-> Keyword
+    "module" 		-> Keyword
+    "not" 		-> Keyword
+    "one" 		-> Keyword
+    "overlays" 		-> Keyword
+    "prim" 		-> Keyword
+    "rules" 		-> Keyword
+    "script" 		-> Keyword
+    "signature" 	-> Keyword
+    "some" 		-> Keyword
+    "sorts" 		-> Keyword
+    "strategies" 	-> Keyword
+    "stratego" 		-> Keyword
+    "test" 		-> Keyword
+    "where" 		-> Keyword
+    "import-term"	-> Keyword
+
+
+module Stratego-Core-Layout
+exports
+  sorts Ws ShortCom LongCom CommChar Asterisk Eof 
+  lexical syntax
+    [\t\ \n\r]			-> Ws
+
+    "//" ~[\n]* ([\n] | Eof)	-> ShortCom
+    "/*" CommChar* "*/"	-> LongCom
+				-> Eof  
+
+    ~[\*]     -> CommChar
+
+    "*"       -> Asterisk
+    Asterisk  -> CommChar
+
+  lexical restrictions
+    Asterisk -/- [\/]
+    Eof      -/- ~[]
+
+  lexical syntax
+    ShortCom 	-> LAYOUT
+    LongCom 	-> LAYOUT
+    Ws 		-> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+    LAYOUT? -/- [\/].[\*]
+    LAYOUT? -/- [\/].[\/]
+
+module Stratego-Sugar-Layout
+imports Stratego-Core-Layout
+%%exports
+%%  sorts VeryLongCom Eof VLCchar Backslash
+%%  lexical syntax
+%%    "\\end{code}" VLCchar* "\\begin{code}" -> VeryLongCom
+%%    "\\begin{code}" 			   -> VeryLongCom
+%%    "\\end{code}" VLCchar* Eof 		   -> VeryLongCom
+%%    "\\literate" VLCchar* "\\begin{code}"  -> VeryLongCom
+%%    ~[\\] 				   -> VLCchar
+%%    Backslash 				   -> VLCchar
+%%    [\\] 				   -> Backslash
+
+%%  lexical restrictions
+%%    Backslash -/- [b].[e].[g].[i].[n].[\{].[c].[o].[d].[e].[\}]
+%%    Eof -/- ~[]
+
+%%  lexical syntax
+%%    VeryLongCom -> LAYOUT
+
+
+
+module Stratego-Sugar
+imports
+  Stratego-Sugar-Layout
+  Stratego-Core-Identifiers
+  Stratego-Sugar-Constants 
+  Stratego-Sugar-Modules
+  Stratego-Sugar-Signatures
+  Stratego-Sugar-Terms
+  Stratego-Sugar-Strategies
+  Stratego-Sugar-Rules
+  Stratego-Sugar-DynamicRules
+  Stratego-Sugar-Overlays
+
+hiddens
+  context-free start-symbols Module
+
+module Stratego
+imports Stratego-Sugar
+hiddens
+  context-free start-symbols Module
+
+module StrategoRenamed
+imports Stratego
+          [ RuleNames      => StrategoRuleNames
+            RuleDec        => StrategoRuleDec
+            DynRuleScopeId => StrategoDynRuleScopeId
+            DynRuleId      => StrategoDynRuleId
+            DynRuleDef     => StrategoDynRuleDef
+            ScopeLabels    => StrategoScopeLabels
+            RuleCond       => StrategoRuleCond
+            Rule           => StrategoRule
+            RuleDef        => StrategoRuleDef
+            Overlay        => StrategoOverlay
+            SwitchCase     => StrategoSwitchCase
+            StrategyCurly  => StrategoStrategyCurly
+            StrategyAngle  => StrategoStrategyAngle
+            Kind           => StrategoKind
+            LID            => StrategoLID
+            ImportModName  => StrategoImportModName
+            Decl           => StrategoDecl
+            Module         => StrategoModule
+            StrategyParen  => StrategoStrategyParen
+            Typedid        => StrategoTypedid
+            StrategyDef    => StrategoStrategyDef
+            SVar           => StrategoSVar
+            Def            => StrategoDef
+            Type           => StrategoType
+            RetType        => StrategoRetType
+            ArgType        => StrategoArgType
+            FunType        => StrategoFunType
+            ConstType      => StrategoConstType
+            Opdecl         => StrategoOpdecl
+            Sort           => StrategoSort
+            Sdecl          => StrategoSdecl
+            Wld            => StrategoWld
+            ID             => StrategoID
+            Var            => StrategoVar
+            CharChar       => StrategoCharChar
+            Char           => StrategoChar
+            StrChar        => StrategoStrChar
+            String         => StrategoString
+            Real           => StrategoReal
+            Int            => StrategoInt
+            Keyword        => StrategoKeyword
+            UCID           => StrategoUCID
+            LCID           => StrategoLCID
+            LId            => StrategoLId
+            Id             => StrategoId
+            ModNamePart    => StrategoModNamePart
+            ModName        => StrategoModName
+            Asterisk       => StrategoAsterisk
+            CommChar       => StrategoCommChar
+            Eof            => StrategoEof
+            LongCom        => StrategoLongCom
+            ShortCom       => StrategoShortCom
+            Ws             => StrategoWs
+            PreTerm        => StrategoPreTerm
+            Term           => StrategoTerm
+            StrategyMid    => StrategoStrategyMid
+            Strategy       => StrategoStrategy ]
+
+
+module C-AbstractDeclarators
+exports
+  context-free syntax
+    "*" TypeQualifier* -> Pointer {cons("PointerOf")}
+
+  context-free syntax
+    UnaryAbstractDeclarator      -> AbstractDeclarator
+    PostfixAbstractDeclarator    -> AbstractDeclarator
+    PostfixingAbstractDeclarator -> AbstractDeclarator
+
+  context-free syntax
+    Pointer+ ( PostfixAbstractDeclarator | PostfixingAbstractDeclarator )? -> UnaryAbstractDeclarator {cons("Pointer")}
+
+  context-free syntax
+    ArrayAbstractDeclarator                   -> PostfixingAbstractDeclarator
+    "(" {ParamDeclaration ","}+ "," "..." ")" -> PostfixingAbstractDeclarator {cons("ParamListVarArgs")}
+    "(" {ParamDeclaration ","}* ")"           -> PostfixingAbstractDeclarator {cons("ParamList")}
+
+  context-free syntax
+    ArrayAbstractDeclarator? "[" ConstantExp? "]" -> ArrayAbstractDeclarator {cons("ArrayDecl")}
+
+  context-free syntax
+    "(" UnaryAbstractDeclarator ")"                              -> PostfixAbstractDeclarator {cons("DeclBracket")}
+    "(" PostfixAbstractDeclarator ")"                            -> PostfixAbstractDeclarator {cons("DeclBracket")}
+    "(" PostfixingAbstractDeclarator ")"                         -> PostfixAbstractDeclarator {cons("DeclBracket")}
+    "(" UnaryAbstractDeclarator ")" PostfixingAbstractDeclarator -> PostfixAbstractDeclarator {cons("FunType")}
+
+module C-ParameterDeclarators
+exports
+  context-free syntax
+    ParamDeclTypeSpec ( AbstractDeclarator | IdDeclarator )?   -> ParamDeclaration {cons("ParamDecl")}
+    ( DeclarationSpecifier | TypeSpecifier ) TypedefDeclarator -> ParamDeclaration {cons("ParamDecl2")}
+
+    %%% TODO: These are almost the same as for FunDef ... 
+
+    TypeSpecifier             -> ParamDeclTypeSpec
+    DeclarationSpecifier      -> ParamDeclTypeSpec
+    DeclarationQualifierList  -> ParamDeclTypeSpec
+    TypeQualifier+            -> ParamDeclTypeSpec
+
+  context-free syntax
+    TypeSpecifier  AbstractDeclarator? -> TypeName {cons("TypeName")}
+    TypeQualifier+ AbstractDeclarator? -> TypeName {cons("TypeName1")}
+
+module C-Enumerators
+exports
+  context-free syntax
+    "enum" IdOrTypedefName? "{" {Enumerator ","}+ "}" -> EnumSpecifier {cons("Enum")}
+    "enum" IdOrTypedefName                            -> EnumSpecifier {cons("EnumId")}
+
+  context-free syntax
+    IdOrTypedefName EnumeratorValue? -> Enumerator {cons("Enumerator")}
+
+  context-free syntax
+    "=" ConstantExp -> EnumeratorValue {cons("EnumVal")}
+
+module C-StructsAndUnions
+exports
+  context-free syntax
+    StructSpecifier -> ElaboratedTypeName
+    UnionSpecifier  -> ElaboratedTypeName
+    EnumSpecifier   -> ElaboratedTypeName
+
+  context-free syntax
+    "struct" IdOrTypedefName? "{" MemberDeclaration+ "}" -> StructSpecifier {cons("Struct")}
+    "struct" IdOrTypedefName                             -> StructSpecifier {cons("StructId")}
+
+  context-free syntax
+    "union" IdOrTypedefName? "{" MemberDeclaration+ "}" -> UnionSpecifier {cons("Union")}
+    "union" IdOrTypedefName                             -> UnionSpecifier {cons("UnionId")}
+
+  context-free syntax
+    TypeSpecifier  {MemberDeclarator   ","}+ ";" -> MemberDeclaration {cons("MemDecl")}
+    TypeQualifier+ {MemberIdDeclarator ","}+ ";" -> MemberDeclaration {cons("MemDecl1")}
+
+  context-free syntax
+    Declarator                  -> MemberDeclarator
+    Declarator? ":" ConstantExp -> MemberDeclarator {cons("BitFieldSize")}
+
+module C-Expressions
+imports
+  C-Identifiers
+
+exports
+  sorts PrimaryExp
+  context-free syntax
+    IDENTIFIER        -> PrimaryExp
+    Constant          -> PrimaryExp
+    StringLiteralList -> PrimaryExp
+    "(" CommaExp ")"  -> PrimaryExp {bracket}
+
+  sorts PostfixExp
+  context-free syntax
+    PrimaryExp                           -> PostfixExp
+    PostfixExp "[" CommaExp "]"          -> PostfixExp {cons("ArrayIndex")}
+    PostfixExp "(" {AssignExp ","}* ")"  -> PostfixExp {cons("FunCall")}
+    PostfixExp "."  MemberName           -> PostfixExp {cons("Field")}
+    PostfixExp "->" MemberName           -> PostfixExp {cons("DerefMember")}
+    PostfixExp "++"                      -> PostfixExp {cons("PostIncr")}
+    PostfixExp "--"                      -> PostfixExp {cons("PostDecr")}
+
+  sorts MemberName
+  context-free syntax
+    IDENTIFIER  -> MemberName
+    TypedefName -> MemberName
+
+  sorts UnaryExp
+  context-free syntax
+    PostfixExp     -> UnaryExp
+    "++" UnaryExp  -> UnaryExp {cons("PreIncr")}
+    "--" UnaryExp  -> UnaryExp {cons("PreDecr")}
+    "&" CastExp    -> UnaryExp {cons("Address")}
+    "*" CastExp    -> UnaryExp {cons("Deref")}
+    "+" CastExp    -> UnaryExp {cons("Positive")}
+    "-" CastExp    -> UnaryExp {cons("Negative")}
+    "~" CastExp    -> UnaryExp {cons("Tilde")}
+    "!" CastExp    -> UnaryExp {cons("Negation")}
+
+    "sizeof" UnaryExp         -> UnaryExp {cons("SizeofExp")}
+    "sizeof" "(" TypeName ")" -> UnaryExp {cons("SizeofType")}
+
+  sorts CastExp
+  context-free syntax
+    UnaryExp                 -> CastExp
+    "(" TypeName ")" CastExp -> CastExp {cons("TypeCast")}
+
+  sorts MulExp
+  context-free syntax
+    CastExp            -> MulExp
+    MulExp "*" CastExp -> MulExp {cons("Mul")}
+    MulExp "/" CastExp -> MulExp {cons("Div")}
+    MulExp "%" CastExp -> MulExp {cons("Mod")}
+
+  sorts AddExp
+  context-free syntax
+    MulExp            -> AddExp
+    AddExp "+" MulExp -> AddExp {cons("Add")}
+    AddExp "-" MulExp -> AddExp {cons("Subt")}
+
+  sorts ShiftExp
+  context-free syntax
+    AddExp               -> ShiftExp
+    ShiftExp "<<" AddExp -> ShiftExp {cons("ShiftLeft")}
+    ShiftExp ">>" AddExp -> ShiftExp {cons("ShiftRight")}
+
+  sorts RelExp
+  context-free syntax
+    ShiftExp             -> RelExp
+    RelExp "<" ShiftExp  -> RelExp {cons("Lt")}
+    RelExp ">" ShiftExp  -> RelExp {cons("Gt")}
+    RelExp "<=" ShiftExp -> RelExp {cons("Le")}
+    RelExp ">=" ShiftExp -> RelExp {cons("Ge")}
+
+  sorts EqualityExp
+  context-free syntax
+    RelExp                  -> EqualityExp
+    EqualityExp "==" RelExp -> EqualityExp {cons("Equal")}
+    EqualityExp "!=" RelExp -> EqualityExp {cons("NotEqual")}
+
+  sorts ANDExp
+  context-free syntax
+    EqualityExp            -> ANDExp
+    EqualityExp "&" ANDExp -> ANDExp {cons("And")}
+
+  sorts ExclORExp
+  context-free syntax
+    ANDExp               -> ExclORExp
+    ANDExp "^" ExclORExp -> ExclORExp {cons("ExOr")}
+
+  sorts InclORExp
+  context-free syntax
+    ExclORExp               -> InclORExp
+    ExclORExp "|" InclORExp -> InclORExp {cons("IncOr")}
+
+  sorts LogicalANDExp
+  context-free syntax
+    InclORExp                    -> LogicalANDExp
+    LogicalANDExp "&&" InclORExp -> LogicalANDExp {cons("LAnd")}
+
+  lexical restrictions
+    "&" -/- [\&]
+
+  sorts LogicalORExp
+  context-free syntax
+    LogicalANDExp                   -> LogicalORExp
+    LogicalORExp "||" LogicalANDExp -> LogicalORExp {cons("LOr")}
+
+  sorts CondExp
+  context-free syntax
+    LogicalORExp                          -> CondExp
+    LogicalORExp "?" CommaExp ":" CondExp -> CondExp {cons("IfExp")}
+
+  sorts AssignExp
+  context-free syntax
+    CondExp                     -> AssignExp
+    UnaryExp AssignOp AssignExp -> AssignExp {cons("Assign")}
+
+  sorts AssignOp
+  context-free syntax
+    "="   -> AssignOp {cons("AssignEq")}
+    "*="  -> AssignOp {cons("AssignMul")}
+    "/="  -> AssignOp {cons("AssignDiv")}
+    "%="  -> AssignOp {cons("AssignMod")}
+    "+="  -> AssignOp {cons("AssignPlus")}
+    "-="  -> AssignOp {cons("AssignMin")}
+    "<<=" -> AssignOp {cons("AssignSL")}
+    ">>=" -> AssignOp {cons("AssignSR")}
+    "&="  -> AssignOp {cons("AssignAnd")}
+    "^="  -> AssignOp {cons("AssignExp")}
+    "|="  -> AssignOp {cons("AssignOr")}
+
+  sorts CommaExp CommaExpOpt
+  context-free syntax
+    AssignExp              -> CommaExp
+    AssignExp "," CommaExp -> CommaExp    {cons("Comma")}
+
+              -> CommaExpOpt {cons("EmptyExp")}
+    CommaExp  -> CommaExpOpt
+
+  sorts ConstantExp
+  context-free syntax
+    CondExp -> ConstantExp
+
+  lexical restrictions
+    "+" -/- [\+]
+    "-" -/- [\-]
+
+module C-Types
+imports
+  C-Expressions
+
+exports
+  context-free syntax
+    "typedef"  -> StorageClass {cons("Typedef")}
+    "extern"   -> StorageClass {cons("Extern")}
+    "static"   -> StorageClass {cons("Static")}
+    "auto"     -> StorageClass {cons("Auto")}
+    "register" -> StorageClass {cons("Register")}
+
+  context-free syntax
+    "int"      -> BasicTypeName {cons("Int")}
+    "char"     -> BasicTypeName {cons("Char")}
+    "short"    -> BasicTypeName {cons("Short")}
+    "long"     -> BasicTypeName {cons("Long")}
+    "float"    -> BasicTypeName {cons("Float")}
+    "double"   -> BasicTypeName {cons("Double")}
+    "signed"   -> BasicTypeName {cons("Signed")}
+    "unsigned" -> BasicTypeName {cons("Unsigned")}
+    "void"     -> BasicTypeName {cons("Void")}
+
+  context-free syntax
+    "const"    -> TypeQualifier {cons("Const")}
+    "volatile" -> TypeQualifier {cons("Volatile")}
+
+  context-free syntax
+    ( DeclarationQualifierList | TypeQualifier+ ) {IdDecl ","}* ";" -> Declaration {cons("Declaration")}
+    ( DeclarationSpecifier | TypeSpecifier ) {VarDecl ","}* ";"     -> Declaration {cons("Declaration2")}
+
+  context-free syntax
+    IdDeclarator                   -> IdDecl
+    IdDeclarator "=" Initializer   -> IdDecl      {cons("IdDeclInit")}
+    Declarator                     -> VarDecl
+    Declarator   "=" Initializer   -> VarDecl     {cons("DeclInit")}
+
+    "{" {Initializer ","}+ "}"     -> Initializer {cons("ArrayInit")}
+    "{" {Initializer ","}+ "," "}" -> Initializer {cons("ArrayInitIncomplete")}
+    AssignExp                      -> Initializer {cons("AssignInit")}
+
+  context-free syntax
+    TypeQualifier* TypeOrDefName (TypeQualifier | BasicTypeName)* -> TypeSpecifier {cons("TypeSpec")}
+
+  context-free syntax
+    StorageClass  -> DeclarationQualifier
+    TypeQualifier -> DeclarationQualifier
+
+  context-free syntax
+    TypeQualifier* StorageClass DeclarationQualifier*  -> DeclarationQualifierList {cons("DQualifiers")}
+
+  context-free syntax
+    TypeQualifier* StorageClass DeclarationQualifier* TypeOrDefName
+    (DeclarationQualifier | BasicTypeName)* -> DeclarationSpecifier {cons("DeclSpec")}
+
+    (BasicTypeName | ElaboratedTypeName | TypedefName) -> TypeOrDefName
+
+
+
+module C-Identifiers
+imports C-Keywords
+
+exports
+  sorts ID
+  lexical syntax
+    [a-zA-Z\_] [a-zA-Z\_0-9]* -> ID
+
+    Keyword -> ID {reject}
+
+  lexical restrictions
+    ID -/- [a-zA-Z\_0-9]
+
+  sorts IDENTIFIER
+  context-free syntax
+    ID          -> IDENTIFIER {cons("Id")}
+    ID          -> TypedefName {cons("TypeId"), avoid}
+    IDENTIFIER  -> IdOrTypedefName
+    TypedefName -> IdOrTypedefName
+
+
+
+module C-Statements
+imports
+  C-Expressions
+
+exports
+  sorts Stm
+
+  context-free syntax
+    LabeledStm    -> Stm
+    CompoundStm   -> Stm
+    ExpStm        -> Stm
+    SelectionStm  -> Stm
+    IterationStm  -> Stm
+    JumpStm       -> Stm
+
+  sorts LabeledStm
+  context-free syntax
+    IdOrTypedefName ":" Stm     -> LabeledStm {cons("Label")}
+    "case" ConstantExp ":" Stm  -> LabeledStm {cons("Case")}
+    "default" ":" Stm           -> LabeledStm {cons("Default")}
+
+  sorts CompoundStm
+  context-free syntax
+    "{" Declaration* Stm* "}" -> CompoundStm {cons("Compound")}
+
+  sorts ExpStm
+  context-free syntax
+    CommaExpOpt ";" -> ExpStm {cons("Stat")}
+
+  sorts SelectionStm
+  context-free syntax
+    "if" "(" CommaExp ")" Stm             -> SelectionStm {cons("If")}
+    "if" "(" CommaExp ")" Stm "else" Stm  -> SelectionStm {cons("IfElse")}
+    "switch" "(" CommaExp ")" Stm         -> SelectionStm {cons("Switch")}
+
+  sorts IterationStm
+  context-free syntax
+    "while" "(" CommaExp ")" Stm           -> IterationStm {cons("While")}
+    "do" Stm "while" "(" CommaExp ")" ";"  -> IterationStm {cons("DoWhile")}
+    "for" "(" CommaExpOpt ";" CommaExpOpt ";" CommaExpOpt ")" Stm -> IterationStm {cons("For")}
+
+  sorts JumpStm
+  context-free syntax
+    "goto" IdOrTypedefName ";" -> JumpStm {cons("Goto")}
+    "continue" ";"             -> JumpStm {cons("Continue")}
+    "break" ";"                -> JumpStm {cons("Break")}
+    "return" CommaExpOpt ";"   -> JumpStm {cons("Return")}
+    "exit" CommaExpOpt ";"     -> JumpStm {cons("Exit")}
+
+module C-Program
+exports
+  sorts TranslationUnit ExternalDef FunDef FunDefTypeSpec NoTypeSpecifier FunDefDecl
+
+  context-free syntax
+    ExternalDef+ -> TranslationUnit {cons("TranslationUnit")}
+
+    FunDef      -> ExternalDef
+    Declaration -> ExternalDef
+
+    FunDefTypeSpec FunDefDecl CompoundStm -> FunDef {cons("FunDef")}
+
+    FunDef -> Declaration %% injection for internal functions (a GCC extension of C)
+
+    NoTypeSpecifier           -> FunDefTypeSpec
+    TypeSpecifier             -> FunDefTypeSpec
+    DeclarationSpecifier      -> FunDefTypeSpec
+    DeclarationQualifierList  -> FunDefTypeSpec
+    TypeQualifier+            -> FunDefTypeSpec
+
+     -> NoTypeSpecifier {cons("NoTypeSpecifier")}
+
+    IdDeclarator                   -> FunDefDecl
+%%    OldFunDeclarator Declaration*  -> FunDefDecl {cons("OldFunDefDecl")}
+
+
+
+module C-Declarators
+imports
+  C-Identifiers
+
+exports
+  sorts Declarator
+  context-free syntax
+    IdDeclarator      -> Declarator
+    TypedefDeclarator -> Declarator
+
+  sorts IdDeclarator
+  context-free syntax
+    Pointer* IDENTIFIER PostfixingAbstractDeclarator?           -> IdDeclarator {cons("IdDecl")}
+    Pointer* "(" IdDeclarator ")" PostfixingAbstractDeclarator? -> IdDeclarator {cons("FunDecl")}
+
+  sorts TypedefDeclarator
+  context-free syntax
+    Pointer* TypedefName PostfixingAbstractDeclarator?               -> TypedefDeclarator {cons("TypedefDeclarator1")}
+    Pointer* "(" TypedefDeclarator ")" PostfixingAbstractDeclarator? -> TypedefDeclarator {cons("TypedefDeclarator2")}
+
+  sorts OldFunDeclarator ParenIdDeclarator 
+  context-free syntax
+    Pointer* ParenIdDeclarator "(" {IDENTIFIER ","}+ ")"         -> OldFunDeclarator     {cons("OldFunction1")}
+    Pointer* "(" OldFunDeclarator ")" PostfixingAbstractDeclarator? -> OldFunDeclarator     {cons("OldFunction2")}
+    IDENTIFIER                                                     -> ParenIdDeclarator
+    "(" ParenIdDeclarator ")"                                    -> ParenIdDeclarator {bracket}
+
+module C-Preprocessor
+exports
+  sorts TokenChar Slash Token TokWS WS TokenSeq FileName
+  lexical syntax
+    ~[\ \t\n\/]                           -> TokenChar
+    [\/]                                  -> Slash
+    Slash                                 -> TokenChar
+    TokenChar+                            -> Token
+    ( [\ \t] | ( [\\] [\n] ) | Comment )+ -> TokWS
+    ( [\ \t] | Comment )*                 -> WS
+    {Token TokWS}+                        -> TokenSeq
+    ~[\"\ \t\n\>]+                        -> FileName
+
+  lexical restrictions
+    Slash    -/- [\*]
+    Token    -/- ~[\ \t\n\/]
+    TokenSeq -/- ~[\ \t\n]
+    WS       -/- [\ \t]
+
+  sorts ControlLine ControlLineNot IfLine ElifLine ElseLine
+  lexical syntax
+    "#" WS "define" WS ID WS ( "(" WS {( ID WS ) ( "," WS )}* ")" WS )? TokenSeq? WS [\n] -> ControlLine
+
+  lexical syntax
+    "#" WS "undef" WS ID WS [\n]                                     -> ControlLine
+    "#" WS "include" WS "<" FileName ">" WS [\n]                     -> ControlLine
+    "#" WS "include" WS "\"" FileName "\"" WS [\n]                   -> ControlLine
+    "#" WS "include" WS TokenSeq WS [\n]                             -> ControlLineNot
+    "#" WS "line" WS [0-9]+ WS ( "\"" WS FileName WS "\"" )? WS [\n] -> ControlLine
+    "#" WS IntLiteral WS "\"" FileName "\"" WS {LineFlag [\ ]+}* [\n] -> ControlLine
+   
+    "#" WS "error" WS TokenSeq? WS [\n]                              -> ControlLine
+    "#" WS "pragma" WS TokenSeq? WS [\n]                             -> ControlLine
+    "#" WS "if" WS ConstantExp WS [\n]                               -> IfLine
+    "#" WS "if" WS ID WS [\n]                                        -> IfLine
+    "#" WS "if" WS ID WS "!=" WS [0-9]+ WS [\n]                      -> IfLine
+    "#" WS "ifdef" WS ID WS [\n]                                     -> IfLine
+    "#" WS "ifndef" WS ID WS [\n]                                    -> IfLine
+    "#" WS "elif" WS ConstantExp WS [\n]                             -> ElifLine
+    "#" WS "else" WS [\n]                                            -> ElseLine
+    
+    "1" -> LineFlag
+    "2" -> LineFlag
+    "3" -> LineFlag
+    "4" -> LineFlag
+
+  context-free syntax
+    ControlLine -> ExternalDef {cons("PpControl")}
+    ControlLine -> MemberDeclaration {cons("PpControl")}
+
+  context-free syntax
+    IfLine ExternalDef* 
+    ( ElifLine ExternalDef* )* 
+    ( ElseLine ExternalDef* )? 
+    "#" "endif" -> ExternalDef {cons("PpIf")}
+
+module C-Lexical
+hiddens
+  sorts Asterisk Comment
+
+exports
+  lexical syntax
+    [\ \t\n\12]                     -> LAYOUT
+    "/*" ( ~[\*] | Asterisk )* "*/" -> Comment
+    Comment                         -> LAYOUT
+    [\*]                            -> Asterisk
+    "//" ~[\n]* [\n]                -> Comment
+
+  lexical restrictions
+    Asterisk -/- [\/]
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+
+module C-Constants
+exports
+  sorts Constant StringLiteralList
+  context-free syntax
+    IntLiteral   -> Constant {cons("IntConst")}
+    HexLiteral   -> Constant {cons("HexConst")}
+    OctLiteral   -> Constant {cons("OctConst")}
+    FloatLiteral -> Constant {cons("FloatConst")}    
+    CharLiteral  -> Constant {cons("CharConst")}
+
+    %%% TODO: Why a list??
+    StringLiteral+ -> StringLiteralList {cons("StringLit")}
+
+  sorts StringLiteral CharLiteral IntLiteral HexLiteral OctLiteral FloatLiteral
+        Char StringChar OctalEsc IntFlags FloatFlags
+  lexical syntax
+    [L]? "\"" StringChar* "\"" -> StringLiteral
+    [L]? "'" Char "'"          -> CharLiteral    
+    
+    [1-9][0-9]*            IntFlags? -> IntLiteral
+    "0"                    IntFlags? -> IntLiteral
+    "0" [xX] [0-9a-fA-F]+  IntFlags? -> HexLiteral
+    "0" [0-7]+             IntFlags? -> OctLiteral    
+        
+    "." [0-9]+ ( [eE] "-"? [0-9]+ )?        FloatFlags? -> FloatLiteral
+    [0-9]+ "." [0-9]* ( [eE] "-"? [0-9]+ )? FloatFlags? -> FloatLiteral
+    [0-9]+ [eE] "-"? [0-9]+                 FloatFlags? -> FloatLiteral
+
+    ~[\\\'\n]                  -> Char
+    [\\] [ntvbrfa\\\?\'\"]     -> Char
+    [\\] [x] [0-9A-E] [0-9A-E] -> Char
+    OctalEsc                   -> Char
+
+    ~[\\\"\n]                  -> StringChar
+    [\\] [ntvbrfa\\\?\"]       -> StringChar
+    [\\] [x] [0-9A-E] [0-9A-E] -> StringChar
+    OctalEsc                   -> StringChar
+    
+    [\\] [0-7] [0-7]? [0-7]?   -> OctalEsc
+    
+    [uUlL]   -> IntFlags
+    [uU][lL] -> IntFlags
+    
+    [lLfF]   -> FloatFlags
+    [lL][fF] -> FloatFlags
+    
+  lexical restrictions
+    FloatLiteral -/- [0-9lLfF]
+    IntLiteral   -/- [0-9UuLl]
+    HexLiteral   -/- [0-9a-zA-F]
+    OctLiteral   -/- [0-9a-zA-F]
+
+module C-Keywords
+exports
+  lexical syntax
+    "auto"     -> Keyword
+    "double"   -> Keyword
+    "int"      -> Keyword
+    "struct"   -> Keyword
+    "break"    -> Keyword
+    "else"     -> Keyword
+    "long"     -> Keyword
+    "switch"   -> Keyword
+    "case"     -> Keyword
+    "enum"     -> Keyword
+    "register" -> Keyword
+    "typedef"  -> Keyword
+    "char"     -> Keyword
+    "extern"   -> Keyword
+    "return"   -> Keyword
+    "exit"     -> Keyword
+    "union"    -> Keyword
+    "const"    -> Keyword
+    "float"    -> Keyword
+    "short"    -> Keyword
+    "unsigned" -> Keyword
+    "continue" -> Keyword
+    "for"      -> Keyword
+    "signed"   -> Keyword
+    "void"     -> Keyword
+    "default"  -> Keyword
+    "goto"     -> Keyword
+    "sizeof"   -> Keyword
+    "volatile" -> Keyword
+    "do"       -> Keyword
+    "if"       -> Keyword
+    "static"   -> Keyword
+    "while"    -> Keyword
+
+  lexical restrictions
+
+    "auto"
+    "double"   
+    "int"      
+    "struct"   
+    "break"    
+    "else"     
+    "long"     
+    "switch"   
+    "case"     
+    "enum"     
+    "register" 
+    "typedef"  
+    "char"     
+    "extern"   
+    "return"   
+    "exit"     
+    "union"    
+    "const"    
+    "float"    
+    "short"    
+    "unsigned" 
+    "continue" 
+    "for"      
+    "signed"   
+    "void"     
+    "default"  
+    "goto"     
+    "sizeof"   
+    "volatile" 
+    "do"       
+    "if"       
+    "static"   
+    "while"    -/- [a-zA-Z\_0-9]
+
+module C
+imports
+    C-Keywords
+    C-Constants
+    C-Lexical
+    C-Preprocessor
+    C-Declarators
+    C-Program
+    C-Statements
+    C-Identifiers
+    C-Types
+    C-Expressions
+    C-StructsAndUnions
+    C-Enumerators
+    C-ParameterDeclarators
+    C-AbstractDeclarators
+
+hiddens
+  context-free start-symbols TranslationUnit AssignExp Stm
+
+module Stratego-C
+imports C StrategoRenamed
+hiddens
+  context-free start-symbols StrategoModule
+
+exports
+  context-free syntax
+                         "|[" TranslationUnit "]|" -> StrategoTerm {cons("ToTerm")}
+      "translation-unit" "|[" TranslationUnit "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:translation-unit" "|[" TranslationUnit "]|" -> StrategoTerm {cons("ToTerm")}
+
+    "ext-def*" "|["  ExternalDef+ "]|"-> StrategoTerm {cons("ToTerm")}
+
+            "|["  CommaExp "]|" -> StrategoTerm {cons("ToTerm")}
+      "exp" "|["  CommaExp "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:exp" "|["  CommaExp "]|" -> StrategoTerm {cons("ToTerm")}
+
+            "|["  Stm "]|" -> StrategoTerm {cons("ToTerm")}
+      "stm" "|["  Stm "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:stm" "|["  Stm "]|" -> StrategoTerm {cons("ToTerm")}
+
+      "stm*" "|[" Stm* "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:stm*" "|[" Stm* "]|" -> StrategoTerm {cons("ToTerm")}
+
+            "|["  Declaration "]|" -> StrategoTerm {cons("ToTerm")}
+      "dec" "|["  Declaration "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:dec" "|["  Declaration "]|" -> StrategoTerm {cons("ToTerm")}
+
+      "dec*" "|["  Declaration* "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:dec*" "|["  Declaration* "]|" -> StrategoTerm {cons("ToTerm")}
+
+                "|["  FunDef "]|" -> StrategoTerm {cons("ToTerm")}
+      "fun-def" "|["  FunDef "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:fun-def" "|["  FunDef "]|" -> StrategoTerm {cons("ToTerm")}
+
+                "|["  IdDeclarator "]|" -> StrategoTerm {cons("ToTerm")}
+      "id-decl" "|["  IdDeclarator "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:id-decl" "|["  IdDeclarator "]|" -> StrategoTerm {cons("ToTerm")}
+
+                "|["  MemberDeclaration "]|" -> StrategoTerm {cons("ToTerm")}
+      "mem-dec" "|["  MemberDeclaration "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:mem-dec" "|["  MemberDeclaration "]|" -> StrategoTerm {cons("ToTerm")}
+
+                  "|["  ParamDeclaration "]|" -> StrategoTerm {cons("ToTerm")}
+      "param-dec" "|["  ParamDeclaration "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:param-dec" "|["  ParamDeclaration "]|" -> StrategoTerm {cons("ToTerm")}
+
+                  "|["  TypeSpecifier "]|" -> StrategoTerm {cons("ToTerm")}
+      "type-spec" "|["  TypeSpecifier "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:type-spec" "|["  TypeSpecifier "]|" -> StrategoTerm {cons("ToTerm")}
+
+                  "|["  TypeName "]|" -> StrategoTerm {cons("ToTerm")}
+      "type-name" "|["  TypeName "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:type-name" "|["  TypeName "]|" -> StrategoTerm {cons("ToTerm")}
+
+                "|[" VarDecl "]|" -> StrategoTerm {cons("ToTerm")}
+      "var-dec" "|[" VarDecl "]|" -> StrategoTerm {cons("ToTerm")}
+    "c:var-dec" "|[" VarDecl "]|" -> StrategoTerm {cons("ToTerm")}
+
+    "~var-dec:" StrategoTerm -> VarDecl {cons("FromTerm")} 
+    "~var-dec*:" StrategoTerm -> {VarDecl ","}* {cons("FromTerm")}
+
+    "~id:"      StrategoTerm -> ID           {cons("FromTerm")}
+    "~id-decl:" StrategoTerm -> IdDeclarator {cons("FromTerm")}
+
+    "~dec:"   StrategoTerm -> Declaration  {cons("FromTerm")}
+    "~dec*:"  StrategoTerm -> Declaration+ {cons("FromTerm")}
+
+    "~stm:"  StrategoTerm -> Stm        {cons("FromTerm")}
+    "~stm*:" StrategoTerm -> Stm*       {cons("FromTerm")}
+
+    "~exp:"  StrategoTerm -> PrimaryExp {cons("FromTerm")}
+    "~exp*:" StrategoTerm -> {AssignExp ","}+ {cons("FromTerm")}
+
+    "~type-name:"  StrategoTerm -> TypeName                {cons("FromTerm")}
+
+    "~type-spec:"  StrategoTerm -> TypeSpecifier           {cons("FromTerm")}
+    "~param-dec*:" StrategoTerm -> {ParamDeclaration ","}+ {cons("FromTerm")}
+    "~mem-dec*:"   StrategoTerm -> MemberDeclaration+      {cons("FromTerm")}
+
+    "~ext-def*:"   StrategoTerm -> ExternalDef+ {cons("FromTerm")}
+
+    "~init:" StrategoTerm -> Initializer {cons("FromTerm")}
+    "~init*:" StrategoTerm -> {Initializer ","}+ {cons("FromTerm")}

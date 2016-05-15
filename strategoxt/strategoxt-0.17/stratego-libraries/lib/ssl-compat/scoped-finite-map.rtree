@@ -1,0 +1,1 @@
+Module("scoped-finite-map",[Imports([Import("collection/hash-table/scoped-finite-map")])])

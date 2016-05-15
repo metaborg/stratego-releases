@@ -1,0 +1,1 @@
+Module("stratego-sdf",[Imports([Import("stratego/sdf/desugar"),Import("stratego/sdf/parse"),Import("stratego/sdf/pretty-print"),Import("stratego/sdf/syntax")])])

@@ -1,0 +1,1 @@
+Module("stratego-gpp",[Imports([Import("libstratego-xtc"),ImportWildcard("stratego/gpp")])])

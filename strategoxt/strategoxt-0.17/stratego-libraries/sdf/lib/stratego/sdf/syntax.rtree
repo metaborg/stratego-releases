@@ -1,0 +1,1 @@
+Module("stratego/sdf/syntax",[Imports([Import("Sdf2")])])

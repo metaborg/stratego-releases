@@ -1,0 +1,1 @@
+Module("stratego-sglr",[Imports([ImportWildcard("stratego/asfix"),ImportWildcard("stratego/concrete-syntax"),ImportWildcard("stratego/error-support"),ImportWildcard("stratego/sdf"),ImportWildcard("stratego/sglr")])])

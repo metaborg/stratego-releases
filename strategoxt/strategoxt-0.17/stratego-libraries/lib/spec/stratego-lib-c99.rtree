@@ -1,0 +1,1 @@
+Module("stratego-lib-c99",[Imports([Import("stratego-lib-generic"),Import("system/c99/file"),Import("system/c99/fallback-posix")])])

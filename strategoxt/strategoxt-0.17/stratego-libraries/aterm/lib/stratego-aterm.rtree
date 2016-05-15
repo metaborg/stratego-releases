@@ -1,0 +1,1 @@
+Module("stratego-aterm",[Imports([Import("libstratego-sglr"),Import("stratego/aterm/PrettyPrint"),Import("stratego/aterm/Explode")])])

@@ -1,0 +1,1 @@
+Module("system/c99/file",[Strategies([SDefNoArgs("copy-file",Seq(Match(NoAnnoList(Tuple([Var("oldname"),Var("newname")]))),Prim("\"SSL_copy\"",[Var("oldname"),Var("newname")]))),SDefNoArgs("rename-file",Seq(Match(NoAnnoList(Tuple([Var("oldname"),Var("newname")]))),Prim("\"SSL_rename\"",[Var("oldname"),Var("newname")])))])])

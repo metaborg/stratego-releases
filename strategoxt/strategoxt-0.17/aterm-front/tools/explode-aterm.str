@@ -1,0 +1,9 @@
+/**
+ * @author  Martin Bravenboer
+ */
+module explode-aterm
+imports libstratego-lib libstratego-aterm
+strategies
+
+  io-explode-aterm =
+    io-wrap(explode-aterm)

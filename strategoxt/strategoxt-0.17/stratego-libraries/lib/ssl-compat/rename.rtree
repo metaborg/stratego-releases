@@ -1,0 +1,1 @@
+Module("rename",[Imports([Import("strategy/general/rename")])])

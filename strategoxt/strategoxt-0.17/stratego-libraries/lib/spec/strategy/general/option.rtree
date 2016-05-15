@@ -1,0 +1,1 @@
+Module("strategy/general/option",[Signature([Sorts([Sort("Option",[SortVar("a")])]),Constructors([OpDecl("None",ConstType(Sort("Option",[SortVar("a")]))),OpDecl("Some",FunType([ConstType(SortVar("a"))],ConstType(Sort("Option",[SortVar("a")]))))])]),Strategies([SDef("option",[DefaultVarDec("s")],Choice(CallNoArgs(SVar("None")),Call(SVar("Some"),[CallNoArgs(SVar("s"))])))])])

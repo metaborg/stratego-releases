@@ -1,0 +1,1 @@
+Module("stratego-xtc-posix",[Imports([Import("libstratego-lib-posix"),Import("stratego/xtc/Repository"),Import("stratego/xtc/Proc"),Import("stratego/xtc/Register"),Import("stratego/xtc/posix/Proc"),Import("stratego/xtc/posix/Repository"),Import("stratego/xtc/c99/xtc-new-file")])])

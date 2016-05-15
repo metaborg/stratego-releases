@@ -1,0 +1,1 @@
+Module("char",[Imports([Import("term/string")])])
